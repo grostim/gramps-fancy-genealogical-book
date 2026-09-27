@@ -224,12 +224,14 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 
 - Dépôt privé créé : [grostim/gramps-fancy-genealogical-book](https://github.com/grostim/gramps-fancy-genealogical-book). Branches `main` et `codex/initial-project` publiées. L’accès GitHub fonctionne via le trousseau macOS ; le précédent échec était lié au sandbox.
 - L0 en cours : [matrice des 27 scénarios](requirements.fr.md) établie et texte intégral récupéré ; originaux récupérés et maquettes consultées ; licence de distribution restant à confirmer.
-- L1 à revoir : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel. Tests locaux et CI Linux réussis ; voir le [compte rendu de validation](validation-l1.fr.md).
+- L1 prêt à fusionner après revue : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel. Tests locaux et CI Linux réussis ; voir le [compte rendu de validation](validation-l1.fr.md).
+- L2 en cours : [contrats de données](decisions/001-data-contracts.md), [revue de fondation](decisions/002-foundation-review.md), prototype LaTeX non compilé faute de ressources du moteur, recadrage média synthétique démontré et [obstacles Gramps Web](../prototypes/web-spike.md) documentés.
 - Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
 1. Revoir la fondation sur la branche dédiée avant fusion.
-2. Engager les prototypes LaTeX, médias et Gramps Web, en utilisant les maquettes comme inspiration et la v1.1 comme règle fonctionnelle.
-3. Améliorer les diagnostics utilisateur et compléter les traductions FR/EN.
-4. Construire ensuite le moteur généalogique selon les contrats validés.
+2. Fournir un environnement LuaLaTeX reproductible et compiler le prototype jusqu’à stabilisation des renvois.
+3. Résoudre le contrat de sortie Gramps Web, notamment la destination serveur et le ZIP HTML, puis l’éprouver sur une instance jetable.
+4. Étendre le prototype médias aux PDF monopage et à l’orientation EXIF.
+5. Compléter les traductions FR/EN, puis construire le moteur généalogique selon les contrats validés.

@@ -9,12 +9,13 @@ Gramps macOS 6.0.8, Python embarqué 3.13.2. Les tests utilisent exclusivement `
 ## Contrôles réalisés localement
 
 - Ruff : contrôles réussis après correction du squelette et déclaration ciblée du contexte des fichiers `.gpr.py`.
-- Pytest : huit tests réussis sur l’extraction, le modèle, l’export et le packaging.
+- Pytest : neuf tests réussis sur l’extraction, le modèle, l’export, le packaging et les références enfant invalides.
 - Packaging : deux constructions produisent les mêmes octets ; l’archive contient les fichiers nécessaires au runtime et exclut les caches.
 - Gramps réel : le rapport est découvert depuis l’archive installée, extrait les membres attendus et conserve les accents ainsi que la distinction handle/identifiant Gramps.
 - L’adaptateur représente une famille monoparentale ; le rapport rejette son utilisation comme famille centrale, conformément à AC-02 retrouvé dans la v1.1.
 - Une sélection inexistante ou explicitement vide laisse le fichier précédent intact et produit une erreur de rapport.
 - Un fichier existant reste inchangé par défaut ; `overwrite=True` permet son remplacement.
+- Le diagnostic d’un fichier existant propose maintenant une autre destination ou l’activation explicite du remplacement, sans afficher le chemin du fichier temporaire.
 - Une destination absente, un répertoire absent ou une extension incompatible produisent un diagnostic ; aucun JSON partiel ni fichier temporaire résiduel.
 
 Les erreurs de rapport peuvent laisser Gramps retourner zéro : le script contrôle donc aussi les diagnostics et les fichiers produits.
@@ -41,9 +42,9 @@ Contrôle réalisé le 27 septembre après déverrouillage, dans le profil isol�
 - Destination JSON saisie, remplacement désactivé, export validé dans la fenêtre.
 - JSON produit avec F0001 et I0001/I0002/I0003 ; accents et handles préservés.
 - Rapport rouvert : famille et destination conservées.
-- Nouvelle validation avec la même destination : dialogue « Book model export failed », fichier existant strictement inchangé (SHA-256 identique avant/après).
+- Nouvelle validation avec la même destination : erreur de rapport et fichier existant strictement inchangé (SHA-256 identique avant/après).
 
-Le message de collision fonctionne mais affiche encore une erreur système avec le chemin temporaire ; sa présentation et sa traduction devront être améliorées. Les erreurs de famille incomplète et de destination sont couvertes en CLI, pas toutes rejouées dans l’interface.
+La revue de fondation a ensuite remplacé le détail système de collision par un message exploitable, sans chemin temporaire. Les erreurs de famille incomplète et de destination sont couvertes en CLI, pas toutes rejouées dans l’interface.
 
 ## État des validations restantes
 

@@ -25,7 +25,7 @@
 | REF-09 | URL complètes et régions de médias Gramps | S2 | L2, L5–L7 | À prototyper |
 | REF-10 | BOOK_PUBLICATION, BOOK_PROFILE, BOOK_EXCLUDE, BOOK_FEATURED | S1 | L3–L5 | § 6 : étiquette de note, attribut individuel YES, étiquettes médias ; exclusion prioritaire |
 | REF-11 | Respect des droits, objets privés lisibles selon Gramps | S1 | L2–L3, L8 | Adaptateur utilisant la base fournie ; recette spécifique restante |
-| REF-12 | LaTeX/PDF, HTML et ZIP ; faisabilité Gramps Web | S1 | L2, L6–L8 | Rendus de démonstration ; sorties et compatibilité Web non validées |
+| REF-12 | LaTeX/PDF, HTML et ZIP ; faisabilité Gramps Web | S1 | L2, L6–L8 | Prototype LaTeX source préparé mais non compilé ; absence de CATEGORY_WEB/ZIP dans l’API inspectée, adaptation et preuve serveur requises |
 
 ## Décision d’intégration du premier jalon
 

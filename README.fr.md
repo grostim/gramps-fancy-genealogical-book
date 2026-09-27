@@ -1,6 +1,6 @@
 # Gramps Fancy Genealogical Book
 
-[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture](docs/architecture.md)
+[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
 
 Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille et exporte un modèle JSON commun. Les parcours généalogiques complets et les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
 
