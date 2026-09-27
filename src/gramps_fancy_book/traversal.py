@@ -411,14 +411,14 @@ def _eligible_profiles(
     }
     relevant_families.update(section.family_handle for section in family_sections)
 
-    # Contextual siblings do not become traversal roots, but their own unions can
-    # contain events that qualify them for a profile.
-    contextual_siblings = {
+    # Contextual siblings and partners do not become traversal roots, but their
+    # own unions can contain events that qualify them for a profile.
+    contextual_people = {
         occurrence.person_handle
         for occurrence in occurrences.values()
-        if "sibling" in occurrence.roles
+        if {"sibling", "partner"} & occurrence.roles
     }
-    for handle in contextual_siblings:
+    for handle in contextual_people:
         person = people.get(handle)
         if person is not None:
             relevant_families.update(person.family_handles)
@@ -483,18 +483,21 @@ def _ordered_occurrences(
         grouped[item.generation].append(item)
     generations = sorted(grouped, reverse=(part == "ancestry"))
     result: list[PersonOccurrence] = []
+    path_positions: dict[tuple[str, ...], int] = {}
     for generation in generations:
         items = sorted(
             grouped[generation],
             key=lambda item: (
                 0 if "central" in item.roles else 1,
-                _branch_hierarchy_key(item, part, people, root_order),
+                _branch_hierarchy_key(item, part, people, root_order, path_positions),
                 item.family_handle or "",
                 _birth_sort_key(people[item.person_handle], events),
                 _identity_sort_key(people[item.person_handle]),
             ),
         )
-        for item in items:
+        for position, item in enumerate(items):
+            for path in item.lineage_paths:
+                path_positions[path] = min(path_positions.get(path, position), position)
             branches = tuple(
                 sorted(item.branch_handles, key=lambda handle: (root_order.get(handle, 99), handle))
             )
@@ -520,18 +523,21 @@ def _branch_hierarchy_key(
     part: str,
     people: dict[str, Person],
     root_order: dict[str, int],
-) -> tuple[int, tuple[str, ...], int]:
-    """Order lineage occurrences by root, parent branch, then source union order."""
+    path_positions: dict[tuple[str, ...], int],
+) -> tuple[int, int]:
+    """Order lineage occurrences by displayed parent, then source union order."""
     keys = []
     for path in occurrence.lineage_paths:
         if not path:
             continue
-        root_position = root_order.get(path[0], 99)
         if len(path) == 1:
-            keys.append((root_position, (), -1))
+            keys.append((root_order.get(path[0], 99), -1))
             continue
 
         parent_path = path[:-1]
+        parent_position = path_positions.get(
+            parent_path, 1_000_000 + root_order.get(path[0], 99)
+        )
         parent = people.get(path[-2])
         if parent is None:
             union_handles = ()
@@ -543,7 +549,7 @@ def _branch_hierarchy_key(
             union_position = union_handles.index(occurrence.family_handle)
         except ValueError:
             union_position = len(union_handles)
-        keys.append((root_position, parent_path, union_position))
+        keys.append((parent_position, union_position))
 
     if keys:
         return min(keys)
@@ -551,7 +557,7 @@ def _branch_hierarchy_key(
         (root_order.get(handle, 99) for handle in occurrence.branch_handles),
         default=99,
     )
-    return branch_position, (), 99
+    return branch_position, 99
 
 
 def _birth_sort_key(person: Person, events: dict) -> tuple[int, int, int, int]:

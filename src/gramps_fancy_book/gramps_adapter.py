@@ -136,8 +136,11 @@ class GrampsDatabaseAdapter:
         if reference_family.father is None or reference_family.mother is None:
             raise ValueError("The reference family must have two known partners.")
         roots = (reference_family.father.handle, reference_family.mother.handle)
-        self._expand_ancestors(roots, max_ancestor_depth)
-        self._expand_descendants(roots, max_descendant_depth, family_handle)
+        contextual_people = self._expand_ancestors(roots, max_ancestor_depth)
+        contextual_people.update(
+            self._expand_descendants(roots, max_descendant_depth, family_handle)
+        )
+        self._load_contextual_unions(contextual_people)
         associated_people = {
             relation.person_handle
             for person in self._records["person"].values()
@@ -162,10 +165,10 @@ class GrampsDatabaseAdapter:
             diagnostics=list(self._diagnostics),
         )
 
-    def _expand_ancestors(self, roots: tuple[str, str], limit: int | None) -> None:
+    def _expand_ancestors(self, roots: tuple[str, str], limit: int | None) -> set[str]:
         queue = deque((handle, 0) for handle in dict.fromkeys(roots))
         visited: set[str] = set()
-        contextual_siblings: set[str] = set()
+        contextual_people: set[str] = set()
         while queue:
             person_handle, depth = queue.popleft()
             if person_handle in visited:
@@ -175,7 +178,12 @@ class GrampsDatabaseAdapter:
             if person is None:
                 continue
             for family_handle in person.family_handles:
-                self._family_record(family_handle, required=False)
+                family = self._family_record(family_handle, required=False)
+                if family is not None:
+                    contextual_people.update(
+                        partner.handle for partner in (family.father, family.mother)
+                        if partner is not None and partner.handle != person_handle
+                    )
             if limit is not None and depth >= limit:
                 continue
             for family_handle in person.parent_family_handles:
@@ -183,7 +191,7 @@ class GrampsDatabaseAdapter:
                 if family is None:
                     continue
                 if depth > 0:
-                    contextual_siblings.update(
+                    contextual_people.update(
                         child.handle for child in family.children
                         if child.handle != person_handle
                     )
@@ -199,23 +207,17 @@ class GrampsDatabaseAdapter:
                         continue
                     queue.append((parent.handle, depth + 1))
 
-        # Load collateral unions only for profile eligibility. Their children are
-        # materialized as family context but are never added to the ancestry queue.
-        for sibling_handle in sorted(contextual_siblings):
-            sibling = self._records["person"].get(sibling_handle)
-            if sibling is None:
-                continue
-            for family_handle in sibling.family_handles:
-                self._family_record(family_handle, required=False)
+        return contextual_people
 
     def _expand_descendants(
         self,
         roots: tuple[str, str],
         limit: int | None,
         central_family_handle: str,
-    ) -> None:
+    ) -> set[str]:
         queue = deque((handle, 0) for handle in dict.fromkeys(roots))
         visited: set[str] = set()
+        contextual_people: set[str] = set()
         while queue:
             person_handle, depth = queue.popleft()
             if person_handle in visited:
@@ -229,7 +231,13 @@ class GrampsDatabaseAdapter:
                 family_handles.append(central_family_handle)
             for family_handle in family_handles:
                 family = self._family_record(family_handle, required=False)
-                if family is None or (limit is not None and depth >= limit):
+                if family is None:
+                    continue
+                contextual_people.update(
+                    partner.handle for partner in (family.father, family.mother)
+                    if partner is not None and partner.handle != person_handle
+                )
+                if limit is not None and depth >= limit:
                     continue
                 for child in family.children:
                     relationship = next(
@@ -241,6 +249,16 @@ class GrampsDatabaseAdapter:
                     )
                     if not _child_link_is_none(family, relationship, person_handle):
                         queue.append((child.handle, depth + 1))
+        return contextual_people
+
+    def _load_contextual_unions(self, person_handles: set[str]) -> None:
+        """Load one-hop unions for profile eligibility without traversing descendants."""
+        for person_handle in sorted(person_handles):
+            person = self._records["person"].get(person_handle)
+            if person is None:
+                continue
+            for family_handle in person.family_handles:
+                self._family_record(family_handle, required=False)
 
     def _get_primary(self, kind: str, handle: str | None) -> Any:
         if not handle:
