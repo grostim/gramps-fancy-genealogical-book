@@ -1,6 +1,6 @@
 """Stable, language-independent Gramps metadata names used by the plugin."""
 
-BOOK_SCHEMA_VERSION = "0.3"
+BOOK_SCHEMA_VERSION = "0.4"
 
 BOOK_PUBLICATION = "BOOK_PUBLICATION"
 BOOK_PROFILE = "BOOK_PROFILE"

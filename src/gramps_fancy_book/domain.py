@@ -255,6 +255,7 @@ class PersonOccurrence:
     lineage_paths: tuple[tuple[str, ...], ...] = ()
     profile_anchor: str | None = None
     is_primary_profile: bool = False
+    family_section_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -276,6 +277,16 @@ class FamilySection:
     generation: int
     branch_handles: tuple[str, ...] = ()
     roles: tuple[str, ...] = ()
+    section_id: str = ""
+    partner_occurrence_ids: tuple[str, ...] = ()
+    child_occurrence_ids: tuple[str, ...] = ()
+    parent_child_links: tuple[ParentChildLink, ...] = ()
+
+
+@dataclass(frozen=True)
+class ParentChildLink:
+    parent_occurrence_id: str
+    child_occurrence_id: str
 
 
 @dataclass(frozen=True)

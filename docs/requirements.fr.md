@@ -18,8 +18,8 @@
 | REF-02 | Modèle intermédiaire indépendant et testable | S1 | L1–L3 | Tests unitaires ; JSON avec identifiants et relations |
 | REF-03 | Documentation FR/EN, code et métadonnées anglais | S1 | Tous | README FR/EN ; interface traduisible, catalogue FR restant |
 | REF-04 | Architecture en six responsabilités | S1 | L2–L7 | Frontières initiales ; moteur généalogique et livre complet à réaliser |
-| REF-05 | Ascendance par générations et descendance par branches | S2 | L4 | En cours : instantané v0.3 et occurrences par génération ; qualification AC-01, AC-03 à AC-09 restante |
-| REF-06 | Repères généalogiques en haut de page et renvois | S2 | L4–L7 | À réaliser |
+| REF-05 | Ascendance par générations et descendance par branches | S2 | L4 | En cours : modèle v0.4 avec occurrences, unions et liens vers leurs partenaires/enfants ; qualification AC-01, AC-03 à AC-09 restante |
+| REF-06 | Repères généalogiques en haut de page et renvois | S2 | L4–L7 | En cours : générations, branches, chemins et ancres présents dans le modèle ; consommation par les rendus à réaliser |
 | REF-07 | Événements de vie, portraits et photos complémentaires | S2 | L3, L5–L7 | À réaliser |
 | REF-08 | Citations partagées entre faits, annexes compactes | S2 | L3, L5–L7 | À réaliser |
 | REF-09 | URL complètes et régions de médias Gramps | S2 | L2, L5–L7 | À prototyper |

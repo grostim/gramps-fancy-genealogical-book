@@ -43,6 +43,6 @@ def test_model_is_json_serializable_shape():
     assert payload["events"] == payload["citations"] == payload["media"] == {}
     assert payload["privacy"] == {"contains_private_data": False}
     assert payload["metadata"] == {
-        "BOOK_SCHEMA_VERSION": "0.3",
+        "BOOK_SCHEMA_VERSION": "0.4",
         "BOOK_REFERENCE_FAMILY": "F0002",
     }
