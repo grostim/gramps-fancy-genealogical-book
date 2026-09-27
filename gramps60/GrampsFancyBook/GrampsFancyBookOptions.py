@@ -1,7 +1,7 @@
 """Minimal Gramps report options for the first milestone."""
 
 from gramps.gen.const import GRAMPS_LOCALE as glocale
-from gramps.gen.plug.menu import FamilyOption
+from gramps.gen.plug.menu import BooleanOption, DestinationOption, FamilyOption
 from gramps.gen.plug.report import MenuReportOptions
 
 try:
@@ -22,6 +22,10 @@ class GrampsFancyBookOptions(MenuReportOptions):
             "reference_family",
             FamilyOption(_("Reference family")),
         )
+        destination = DestinationOption(_("JSON output file"), "")
+        destination.set_extension("json")
+        menu.add_option(_("Book"), "destination", destination)
+        menu.add_option(_("Book"), "overwrite", BooleanOption(_("Replace an existing file"), False))
 
     def get_reference_family_id(self) -> str:
         option = self.menu.get_option_by_name("reference_family")
@@ -29,3 +33,12 @@ class GrampsFancyBookOptions(MenuReportOptions):
         if not family_id:
             raise ValueError(_("Select a reference family."))
         return family_id
+
+    def get_destination(self) -> str:
+        return self.menu.get_option_by_name("destination").get_value()
+
+    def get_overwrite(self) -> bool:
+        return self.menu.get_option_by_name("overwrite").get_value()
+
+    def get_subject(self) -> str:
+        return self.menu.get_option_by_name("reference_family").get_value()

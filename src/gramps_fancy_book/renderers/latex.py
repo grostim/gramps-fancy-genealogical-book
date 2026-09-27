@@ -5,5 +5,23 @@ from ..domain import BookModel
 
 def render_latex(model: BookModel) -> str:
     family = model.reference_family
-    return "\\documentclass{article}\n\\begin{document}\n" f"\\section*{{{family.handle}}}\n" "\\end{document}\n"
+    escaped = "".join(_SPECIAL.get(char, char) for char in family.handle)
+    return (
+        "\\documentclass{article}\n\\begin{document}\n"
+        f"\\section*{{{escaped}}}\n"
+        "\\end{document}\n"
+    )
 
+
+_SPECIAL = {
+    "\\": r"\textbackslash{}",
+    "{": r"\{",
+    "}": r"\}",
+    "&": r"\&",
+    "%": r"\%",
+    "$": r"\$",
+    "#": r"\#",
+    "_": r"\_",
+    "~": r"\textasciitilde{}",
+    "^": r"\textasciicircum{}",
+}

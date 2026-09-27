@@ -1,39 +1,53 @@
 # Gramps Fancy Genealogical Book
 
-A modular Gramps 6 plugin for selecting a reference family and producing a shared intermediate book model, later rendered as LaTeX/PDF and HTML.
+[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture](docs/architecture.md)
 
-This repository starts from the functional and technical specification v1.1 and the family-book mockups discussed in the design conversation. The first milestone provides a Gramps 6 report that selects a reference family and exports a testable JSON intermediate model.
+An experimental Gramps 6 add-on for a family genealogical book. The current milestone selects a reference family and exports a shared JSON model. Full genealogy traversal and publication-quality LaTeX/PDF and HTML remain future milestones.
 
-## Current milestone
+## What works now
 
-- framework-independent domain model;
-- Gramps 6 report registration and reference-family option;
-- adapter boundary for Gramps data access;
-- deterministic family selection and normalization;
-- intermediate JSON-serializable book model;
-- placeholder HTML and LaTeX renderers sharing the same model;
-- add-on packaging entry point;
-- bilingual documentation and continuous integration.
+- Native Gramps family selector and explicit JSON destination.
+- Extraction of parents and children, preserving internal handles and Gramps IDs separately.
+- Unicode JSON, failure diagnostics for unavailable records and atomic file publication.
+- Existing files preserved unless **Replace an existing file** is enabled.
+- Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
 
-The complete book composition engine is deliberately out of scope for this first milestone.
+HTML and LaTeX functions are contract demonstrations, not finished book renderers. The imported design summary is not the full specification; see [reference tracking](docs/requirements.fr.md).
 
-## Development
+## Build and install
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -e '.[dev]'
-pytest
+```sh
+python3 build_addon.py
 ```
 
-The domain package does not require Gramps to run its unit tests. The Gramps report entry point is in `gramps60/GrampsFancyBook` and delegates extraction to `GrampsDatabaseAdapter`.
+Extract `gramps60/download/GrampsFancyBook.addon.tgz` into the Gramps 6 user plugins directory, preserving its `GrampsFancyBook/` folder, then restart Gramps. Typical locations:
 
-Build a manual-install archive with:
+- macOS: `~/Library/Application Support/gramps/gramps60/plugins/`
+- Linux: `${XDG_DATA_HOME:-$HOME/.local/share}/gramps/gramps60/plugins/`
+- Isolated profile: `$GRAMPSHOME/gramps/gramps60/plugins/`
 
-```bash
-python build_addon.py
+In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. This milestone writes JSON only. Select a reference family, choose a `.json` file and leave replacement disabled unless intended. The destination directory must already exist.
+
+## CLI example
+
+```sh
+gramps -i tests/fixtures/reference-family.ged -a report \
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,destination=/absolute/path/family.json"
 ```
 
-The resulting `gramps60/download/GrampsFancyBook.addon.tgz` can be installed from Gramps' Plugin Manager. The first report output is a JSON model; PDF/HTML book composition is future work.
+Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
 
-See [README.fr.md](README.fr.md) and [docs/architecture.md](docs/architecture.md).
+## Development and validation
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/ruff check .
+.venv/bin/pytest -q
+.venv/bin/python build_addon.py
+.venv/bin/python scripts/verify_gramps.py --gramps /path/to/gramps
+```
+
+Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.8 for integration.
+
+See the [validation record (French)](docs/validation-l1.fr.md) for executed checks and remaining limitations.

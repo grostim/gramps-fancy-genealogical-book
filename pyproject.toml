@@ -24,4 +24,11 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+extend-exclude = [".work"]
 
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Gramps executes registration files with these symbols in their namespace.
+"*.gpr.py" = ["F821"]

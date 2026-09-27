@@ -2,7 +2,7 @@
 
 from typing import Protocol
 
-from .domain import Family
+from .domain import Family, Person
 
 
 class FamilySource(Protocol):
@@ -22,6 +22,7 @@ class GrampsDatabaseAdapter:
 
         return Family(
             handle=family.get_handle(),
+            gramps_id=family.get_gramps_id(),
             father=self._person(family.get_father_handle()),
             mother=self._person(family.get_mother_handle()),
             children=tuple(
@@ -32,18 +33,18 @@ class GrampsDatabaseAdapter:
         )
 
     def get_family_by_gramps_id(self, gramps_id: str) -> Family:
+        if not gramps_id:
+            raise ValueError("Select a reference family.")
         family = self.database.get_family_from_gramps_id(gramps_id)
         if family is None:
             raise LookupError(f"No family exists for Gramps ID {gramps_id!r}")
         return self.get_family(family.get_handle())
 
-    def _person(self, handle: str | None):
+    def _person(self, handle: str | None) -> Person | None:
         if not handle:
             return None
-        from .domain import Person
-
         person = self.database.get_person_from_handle(handle)
         if person is None:
-            return None
+            raise LookupError(f"Family references an unavailable person: {handle!r}")
         name = person.get_primary_name().get_name()
-        return Person(handle=handle, name=name)
+        return Person(handle=handle, name=name, gramps_id=person.get_gramps_id())

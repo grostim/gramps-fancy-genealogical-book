@@ -35,8 +35,13 @@ def test_model_is_json_serializable_shape():
     model = create_intermediate_model(InMemoryFamilySource(family), "F0002")
 
     assert model.to_dict() == {
-        "reference_family": {"handle": "F0002", "father": None, "mother": None, "children": []},
+        "reference_family": {
+            "handle": "F0002",
+            "gramps_id": "",
+            "father": None,
+            "mother": None,
+            "children": [],
+        },
         "people": [],
         "metadata": {"BOOK_SCHEMA_VERSION": "0.1", "BOOK_REFERENCE_FAMILY": "F0002"},
     }
-
