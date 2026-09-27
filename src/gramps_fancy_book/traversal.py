@@ -186,7 +186,9 @@ def build_genealogy(
         add_diagnostic,
     )
 
-    eligible_profiles = _eligible_profiles(people, families, snapshot.events, occurrences)
+    eligible_profiles = _eligible_profiles(
+        people, families, snapshot.events, occurrences, family_sections.values()
+    )
     ordered_parts: dict[str, tuple[Generation, ...]] = {}
     primary_profiles: set[str] = set()
     profile_handles: list[str] = []
@@ -398,6 +400,7 @@ def _eligible_profiles(
     families: dict[str, Family],
     events: dict,
     occurrences: dict[tuple[str, str, int, str | None], _Occurrence],
+    family_sections: Iterable[_FamilySection],
 ) -> set[str]:
     candidate_handles = {occurrence.person_handle for occurrence in occurrences.values()}
     eligible: set[str] = set()
@@ -406,6 +409,20 @@ def _eligible_profiles(
         for occurrence in occurrences.values()
         if occurrence.family_handle is not None
     }
+    relevant_families.update(section.family_handle for section in family_sections)
+
+    # Contextual siblings do not become traversal roots, but their own unions can
+    # contain events that qualify them for a profile.
+    contextual_siblings = {
+        occurrence.person_handle
+        for occurrence in occurrences.values()
+        if "sibling" in occurrence.roles
+    }
+    for handle in contextual_siblings:
+        person = people.get(handle)
+        if person is not None:
+            relevant_families.update(person.family_handles)
+
     families_by_partner: dict[str, list[Family]] = defaultdict(list)
     for family_handle in sorted(relevant_families):
         family = families.get(family_handle)

@@ -165,6 +165,7 @@ class GrampsDatabaseAdapter:
     def _expand_ancestors(self, roots: tuple[str, str], limit: int | None) -> None:
         queue = deque((handle, 0) for handle in dict.fromkeys(roots))
         visited: set[str] = set()
+        contextual_siblings: set[str] = set()
         while queue:
             person_handle, depth = queue.popleft()
             if person_handle in visited:
@@ -181,6 +182,11 @@ class GrampsDatabaseAdapter:
                 family = self._family_record(family_handle, required=False)
                 if family is None:
                     continue
+                if depth > 0:
+                    contextual_siblings.update(
+                        child.handle for child in family.children
+                        if child.handle != person_handle
+                    )
                 relationship = next(
                     (
                         item for item in family.child_relationships
@@ -192,6 +198,15 @@ class GrampsDatabaseAdapter:
                     if parent is None or _child_link_is_none(family, relationship, parent.handle):
                         continue
                     queue.append((parent.handle, depth + 1))
+
+        # Load collateral unions only for profile eligibility. Their children are
+        # materialized as family context but are never added to the ancestry queue.
+        for sibling_handle in sorted(contextual_siblings):
+            sibling = self._records["person"].get(sibling_handle)
+            if sibling is None:
+                continue
+            for family_handle in sibling.family_handles:
+                self._family_record(family_handle, required=False)
 
     def _expand_descendants(
         self,
