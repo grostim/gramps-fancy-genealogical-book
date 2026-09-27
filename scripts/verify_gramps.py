@@ -66,7 +66,40 @@ def verify(executable: str) -> None:
         assert [person["gramps_id"] for person in model["people"]] == ["I0001", "I0002", "I0003"]
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
-        print("PASS: installed add-on, family selection, Unicode, Gramps IDs and handles")
+        assert model["metadata"]["BOOK_SCHEMA_VERSION"] == "0.2"
+        assert model["reference_family"]["handle"] in model["families"]
+        assert model["reference_family"]["child_relationships"][0]["father_relation"] == "Birth"
+        assert model["reference_family"]["child_relationships"][0]["mother_relation"] == "Birth"
+        assert {event["type"] for event in model["events"].values()} >= {
+            "Birth", "Profession", "Marriage"
+        }
+        birth = next(event for event in model["events"].values() if event["type"] == "Birth")
+        assert birth["date"]["modifier"] == 3
+        assert birth["date"]["ymd"][0] == 1900
+        assert isinstance(birth["date"]["range"], list)
+        assert isinstance(birth["date"]["raw"], list)
+        assert birth["place_handle"] in model["places"]
+        person_event_types = {
+            model["events"][ref["event_handle"]]["type"]
+            for ref in model["people"][0]["links"]["events"]
+        }
+        assert person_event_types >= {"Birth", "Profession"}
+        marriage_ref = model["reference_family"]["links"]["events"][0]
+        assert marriage_ref["role"] == "Family"
+        assert model["events"][marriage_ref["event_handle"]]["type"] == "Marriage"
+        assert len(model["citations"]) == 3
+        assert len(model["sources"]) == 1
+        source = next(iter(model["sources"].values()))
+        assert len(source["repository_refs"]) == 1
+        assert len(model["repositories"]) == 1
+        assert len(model["media"]) == 1
+        media = next(iter(model["media"].values()))
+        assert media["path"] == "media/portrait.jpg"
+        assert "portrait" in media["description"].lower()
+        assert model["people"][0]["links"]["media"][0]["media_handle"] == media["handle"]
+        assert model["diagnostics"] == []
+        assert model["privacy"]["contains_private_data"] is False
+        print("PASS: installed add-on, rich Gramps snapshot, uncertain dates, sources and repositories")
 
         single = work / "single.json"
         log = report("F0002", single)

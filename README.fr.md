@@ -1,18 +1,20 @@
 # Gramps Fancy Genealogical Book
 
-[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
+[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
 
 Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille et exporte un modèle JSON commun. Les parcours généalogiques complets et les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
 
 ## Fonctionnement actuel
 
 - Sélecteur de famille Gramps et destination JSON explicite.
-- Extraction des parents et enfants, avec distinction entre handles internes et identifiants Gramps.
+- Instantané JSON v0.2 des personnes et familles directement liées, avec types de filiation, rôles d’événements, dates structurées, lieux, attributs, notes, citations, sources, dépôts et médias.
+- Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
+- Texte des notes exporté uniquement si elles portent l’étiquette Gramps `BOOK_PUBLICATION`; les notes de travail restent référencées sans leur contenu.
 - JSON Unicode, diagnostic des références indisponibles et publication atomique du fichier.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
 
-Les fonctions HTML et LaTeX actuelles sont des démonstrations de contrat. La synthèse de conception locale ne remplace pas la spécification complète ; voir le [suivi des exigences](docs/requirements.fr.md).
+Le parcours est limité à la famille choisie, aux membres directs et aux familles directement référencées par ces personnes. L’expansion généalogique complète reste l’étape suivante. Les fonctions HTML et LaTeX actuelles sont des démonstrations de contrat. Voir le [suivi de validation L3](docs/validation-l3.fr.md) et le [suivi des exigences](docs/requirements.fr.md).
 
 ## Construction et installation
 
@@ -52,6 +54,6 @@ python3 -m venv .venv
 
 Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration nécessite Python 3.12+ et Gramps 6.0 ; il vérifie les fichiers et diagnostics car Gramps peut renvoyer un code de sortie zéro malgré l’échec d’un rapport. La CI cible Python 3.10 à 3.13 pour le domaine et Gramps 6.0.8 pour l’intégration.
 
-Le [compte rendu de validation](docs/validation-l1.fr.md) distingue les contrôles effectués et les limites restantes.
+Le [compte rendu L1](docs/validation-l1.fr.md) et le [suivi L3](docs/validation-l3.fr.md) distinguent les contrôles effectués et les limites restantes.
 
 La famille de référence doit avoir deux partenaires connus (AC-02). Exigences intégrales : [spécification originale](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), avec sa [provenance](docs/reference/README.md).

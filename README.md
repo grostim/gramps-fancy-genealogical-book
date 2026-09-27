@@ -1,18 +1,20 @@
 # Gramps Fancy Genealogical Book
 
-[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md)
+[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md)
 
 An experimental Gramps 6 add-on for a family genealogical book. The current milestone selects a reference family and exports a shared JSON model. Full genealogy traversal and publication-quality LaTeX/PDF and HTML remain future milestones.
 
 ## What works now
 
 - Native Gramps family selector and explicit JSON destination.
-- Extraction of parents and children, preserving internal handles and Gramps IDs separately.
+- JSON v0.2 snapshot of people and directly linked families, including parent-child types, event roles, structured dates, places, attributes, notes, citations, sources, repositories and media.
+- Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
+- Note text is exported only when the Gramps note has the `BOOK_PUBLICATION` tag; working notes remain referenced without their content.
 - Unicode JSON, failure diagnostics for unavailable records and atomic file publication.
 - Existing files preserved unless **Replace an existing file** is enabled.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
 
-HTML and LaTeX functions are contract demonstrations, not finished book renderers. The imported design summary is not the full specification; see [reference tracking](docs/requirements.fr.md).
+Extraction currently covers the selected family, its direct members and families directly referenced by those people. Full genealogical traversal remains the next step. HTML and LaTeX functions are contract demonstrations, not finished book renderers. See the [L3 validation record](docs/validation-l3.md) and [requirement tracking](docs/requirements.fr.md).
 
 ## Build and install
 
@@ -50,6 +52,6 @@ python3 -m venv .venv
 
 Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.8 for integration.
 
-See the [validation record (French)](docs/validation-l1.md) for executed checks and remaining limitations.
+See the [L1 validation record](docs/validation-l1.md) and the [L3 validation record](docs/validation-l3.md) for executed checks and remaining limitations.
 
 The reference family must have two known partners (AC-02). Full source requirements: [original specification](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), with [provenance](docs/reference/README.md).

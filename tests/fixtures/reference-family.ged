@@ -7,6 +7,18 @@
 0 @I0001@ INDI
 1 NAME Émile /Exemple/
 1 SEX M
+1 BIRT
+2 DATE ABT 1900
+2 PLAC Lyon, France
+2 SOUR @S0001@
+3 PAGE Registre, folio 12
+1 EVEN
+2 TYPE Profession
+2 DATE 1920
+2 PLAC Lyon, France
+2 SOUR @S0001@
+3 PAGE Dossier, page 4
+1 OBJE @M0001@
 1 FAMS @F0001@
 0 @I0002@ INDI
 1 NAME Jeanne /Fictive/
@@ -24,6 +36,24 @@
 1 HUSB @I0001@
 1 WIFE @I0002@
 1 CHIL @I0003@
+1 MARR
+2 DATE 1924
+2 PLAC Villeurbanne, France
+2 SOUR @S0001@
+3 PAGE Acte, numéro 4
 0 @F0002@ FAM
 1 HUSB @I0004@
+0 @M0001@ OBJE
+1 FILE media/portrait.jpg
+2 FORM jpeg
+2 TITL Portrait fictif d'Émile
+0 @S0001@ SOUR
+1 TITL Registre fictif
+1 AUTH Archives fictives
+1 PUBL Collection synthétique
+1 REPO @R0001@
+2 CALN 3 E 12
+2 MEDI BOOK
+0 @R0001@ REPO
+1 NAME Dépôt municipal fictif
 0 TRLR
