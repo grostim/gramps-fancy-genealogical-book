@@ -4,6 +4,7 @@ from collections.abc import Iterator
 from dataclasses import fields, is_dataclass, replace
 
 from .domain import (
+    Citation,
     EditorialBook,
     EditorialCitationCall,
     EditorialCitationEntry,
@@ -22,6 +23,8 @@ from .domain import (
     Person,
     PersonOccurrence,
     Place,
+    RepositoryReference,
+    Source,
 )
 
 
@@ -34,6 +37,8 @@ def build_editorial_book(
     media_by_handle: dict[str, Media],
     events_by_handle: dict[str, Event],
     places_by_handle: dict[str, Place],
+    citations_by_handle: dict[str, Citation],
+    sources_by_handle: dict[str, Source],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -169,6 +174,8 @@ def build_editorial_book(
         media_by_handle,
         events_by_handle,
         places_by_handle,
+        citations_by_handle,
+        sources_by_handle,
     )
     profiles = [
         replace(
@@ -298,6 +305,8 @@ def _build_citation_entries(
     media_by_handle: dict[str, Media],
     events_by_handle: dict[str, Event],
     places_by_handle: dict[str, Place],
+    citations_by_handle: dict[str, Citation],
+    sources_by_handle: dict[str, Source],
 ) -> tuple[tuple[EditorialCitationEntry, ...], dict[str, tuple[str, ...]]]:
     calls_by_citation: dict[str, list[EditorialCitationCall]] = {}
     call_ids_by_context: dict[str, list[str]] = {}
@@ -403,6 +412,21 @@ def _build_citation_entries(
         EditorialCitationEntry(
             entry_id=f"citation:{citation_handle}",
             citation_handle=citation_handle,
+            source_handle=(
+                citation.source_handle
+                if (citation := citations_by_handle.get(citation_handle)) is not None
+                else None
+            ),
+            repository_refs=_citation_repository_refs(
+                citation_handle,
+                citations_by_handle,
+                sources_by_handle,
+            ),
+            media_refs=_citation_media_refs(
+                citation_handle,
+                citations_by_handle,
+                media_by_handle,
+            ),
             calls=tuple(calls),
         )
         for citation_handle, calls in calls_by_citation.items()
@@ -411,6 +435,34 @@ def _build_citation_entries(
         context_id: tuple(call_ids)
         for context_id, call_ids in call_ids_by_context.items()
     }
+
+
+def _citation_repository_refs(
+    citation_handle: str,
+    citations_by_handle: dict[str, Citation],
+    sources_by_handle: dict[str, Source],
+) -> tuple[RepositoryReference, ...]:
+    citation = citations_by_handle.get(citation_handle)
+    if citation is None or citation.source_handle is None:
+        return ()
+    source = sources_by_handle.get(citation.source_handle)
+    return source.repository_refs if source is not None else ()
+
+
+def _citation_media_refs(
+    citation_handle: str,
+    citations_by_handle: dict[str, Citation],
+    media_by_handle: dict[str, Media],
+) -> tuple[MediaReference, ...]:
+    citation = citations_by_handle.get(citation_handle)
+    if citation is None:
+        return ()
+    return tuple(
+        media_ref
+        for media_ref in citation.links.media
+        if (media := media_by_handle.get(media_ref.media_handle)) is not None
+        and not media.is_excluded
+    )
 
 
 def _citation_paths(value: object, path: str) -> Iterator[tuple[str, str]]:

@@ -383,6 +383,9 @@ class EditorialCitationCall:
 class EditorialCitationEntry:
     entry_id: str
     citation_handle: str
+    source_handle: str | None = None
+    repository_refs: tuple[RepositoryReference, ...] = ()
+    media_refs: tuple[MediaReference, ...] = ()
     calls: tuple[EditorialCitationCall, ...] = ()
 
 
