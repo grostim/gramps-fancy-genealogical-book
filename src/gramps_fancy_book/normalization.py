@@ -8,7 +8,6 @@ def build_book_model(family: Family) -> BookModel:
     people.extend(family.children)
     return BookModel(
         reference_family=family,
-        people=list(dict.fromkeys(people)),
+        people=list({person.handle: person for person in people}.values()),
         metadata={"BOOK_SCHEMA_VERSION": "0.1", "BOOK_REFERENCE_FAMILY": family.handle},
     )
-

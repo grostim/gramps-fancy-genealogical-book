@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 class Person:
     handle: str
     name: str
+    gramps_id: str = ""
 
 
 @dataclass(frozen=True)
@@ -15,6 +16,7 @@ class Family:
     father: Person | None = None
     mother: Person | None = None
     children: tuple[Person, ...] = ()
+    gramps_id: str = ""
 
 
 @dataclass
@@ -27,6 +29,7 @@ class BookModel:
         return {
             "reference_family": {
                 "handle": self.reference_family.handle,
+                "gramps_id": self.reference_family.gramps_id,
                 "father": _person_dict(self.reference_family.father),
                 "mother": _person_dict(self.reference_family.mother),
                 "children": [_person_dict(person) for person in self.reference_family.children],
@@ -37,5 +40,8 @@ class BookModel:
 
 
 def _person_dict(person: Person | None) -> dict[str, str] | None:
-    return None if person is None else {"handle": person.handle, "name": person.name}
-
+    return (
+        None
+        if person is None
+        else {"handle": person.handle, "gramps_id": person.gramps_id, "name": person.name}
+    )

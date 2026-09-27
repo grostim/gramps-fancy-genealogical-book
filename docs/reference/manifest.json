@@ -1,0 +1,38 @@
+{
+  "source": "ChatGPT: Spécification plugin Gramps",
+  "retrieved": "2026-09-27",
+  "archive": "Gramps_Fancy_Genealogical_Book_Specification_v1.1_et_maquettes.zip",
+  "archive_sha256": "6f81ebae5777e2e299f3caff10e1aa815a74aa0ae82c137356270c8691dd048f",
+  "files": [
+    {
+      "path": "Gramps_Fancy_Genealogical_Book_Specification_v1.1.md",
+      "sha256": "664be684c009d387ee15d615c8acce753cd2b73c9ea815fb27beea9796269cae",
+      "bytes": 54535,
+      "versioned": true
+    },
+    {
+      "path": "reference_maquette/maquette_structure_livret_familial.pdf",
+      "sha256": "8ba6ef634118600ec31ba97f63d6ea7942b202ac690afb4e73a30780ac6e18fa",
+      "bytes": 102452,
+      "versioned": false
+    },
+    {
+      "path": "reference_maquette/maquette_structure_livret_familial.html",
+      "sha256": "8b73168236bee292c218f1785709431eeff11622e63bacb76d30abfefeb35ab7",
+      "bytes": 36480,
+      "versioned": false
+    },
+    {
+      "path": "reference_maquette/maquette_livret_familial_evenements_sources.pdf",
+      "sha256": "d3c25b6604f968d9d0a9a13e2afd23cee1e9c645ae13341f008292ba9b0c0ff2",
+      "bytes": 128966,
+      "versioned": false
+    },
+    {
+      "path": "reference_maquette/maquette_livret_familial_evenements_sources.html",
+      "sha256": "400a1a62503ae97df0875197d1eaf9a5d07d2c650f5bdb9831416515c9db6eda",
+      "bytes": 34557,
+      "versioned": false
+    }
+  ]
+}

@@ -7,13 +7,15 @@ register(
     description=_("Select a reference family and export a testable book model."),
     version="0.1.0",
     gramps_target_version="6.0",
-    status=UNSTABLE,
+    # UNSTABLE add-ons are hidden by release builds of Gramps.
+    status=EXPERIMENTAL,
     fname="GrampsFancyBook.py",
     reportclass="GrampsFancyBookReport",
     optionclass="GrampsFancyBookOptions",
     authors=["Gramps Fancy Genealogical Book contributors"],
     authors_email=[],
-    category=CATEGORY_TEXT,
+    # Use the native custom-output lifecycle, without a PDF/ODT document backend.
+    category=CATEGORY_WEB,
     report_modes=[REPORT_MODE_GUI, REPORT_MODE_CLI],
     require_active=False,
 )

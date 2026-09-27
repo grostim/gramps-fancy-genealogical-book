@@ -9,3 +9,8 @@ build/
 *.egg-info/
 *.addon.tgz
 .DS_Store
+.work/
+.ruff_cache/
+
+# Private design references: real family data, never plugin fixtures.
+docs/reference/reference_maquette/
