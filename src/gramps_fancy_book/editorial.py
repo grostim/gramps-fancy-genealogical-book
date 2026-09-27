@@ -1,11 +1,19 @@
 """Editorial book skeleton assembled from the genealogy model."""
 
-from .domain import EditorialBook, EditorialPart, Genealogy
+from .domain import (
+    EditorialBook,
+    EditorialPart,
+    EditorialProfile,
+    Genealogy,
+    Person,
+    PersonOccurrence,
+)
 
 
 def build_editorial_book(
     genealogy: Genealogy,
     reference_family_handle: str,
+    people_by_handle: dict[str, Person],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -42,7 +50,53 @@ def build_editorial_book(
                     seen_primary_occurrences.add(primary_id)
                     person_occurrence_ids.append(primary_id)
 
-    body_parts = ("front-matter", "ancestry", "descent", "documentary-appendix", "person-index")
+    occurrences_by_person: dict[str, list[PersonOccurrence]] = {}
+    for part in (genealogy.ancestry, genealogy.descent):
+        for generation in part.generations:
+            for occurrence in generation.occurrences:
+                occurrences_by_person.setdefault(
+                    occurrence.person_handle, []
+                ).append(occurrence)
+
+    profiles = []
+    for person_handle in genealogy.profile_handles:
+        person = people_by_handle.get(person_handle)
+        person_occurrences = occurrences_by_person.get(person_handle, ())
+        primary = next(
+            (
+                occurrence
+                for occurrence in person_occurrences
+                if occurrence.is_primary_profile
+            ),
+            None,
+        )
+        family_section_ids = tuple(
+            dict.fromkeys(
+                section_id
+                for occurrence in person_occurrences
+                for section_id in occurrence.family_section_ids
+            )
+        )
+        profiles.append(
+            EditorialProfile(
+                profile_id=f"person:{person_handle}",
+                person_handle=person_handle,
+                primary_occurrence_id=(
+                    primary.occurrence_id if primary is not None else None
+                ),
+                family_section_ids=family_section_ids,
+                event_refs=person.links.events if person is not None else (),
+                media_refs=person.links.media if person is not None else (),
+            )
+        )
+
+    body_parts = (
+        "front-matter",
+        "ancestry",
+        "descent",
+        "documentary-appendix",
+        "person-index",
+    )
     return EditorialBook(
         parts=(
             EditorialPart("cover", "cover"),
@@ -64,5 +118,6 @@ def build_editorial_book(
                 "person_index",
                 person_occurrence_ids=tuple(person_occurrence_ids),
             ),
-        )
+        ),
+        profiles=tuple(profiles),
     )
