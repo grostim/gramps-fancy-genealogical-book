@@ -2,10 +2,16 @@
 
 from .conventions import BOOK_SCHEMA_VERSION
 from .domain import BookModel, Family, Snapshot
+from .traversal import build_genealogy
 
 
-def build_book_model(family: Family | Snapshot) -> BookModel:
+def build_book_model(
+    family: Family | Snapshot,
+    max_ancestor_depth: int | str | None = None,
+    max_descendant_depth: int | str | None = None,
+) -> BookModel:
     if isinstance(family, Snapshot):
+        genealogy = build_genealogy(family, max_ancestor_depth, max_descendant_depth)
         people = list(family.people.values())
         return BookModel(
             reference_family=family.reference_family,
@@ -23,7 +29,8 @@ def build_book_model(family: Family | Snapshot) -> BookModel:
             repositories=family.repositories,
             media=family.media,
             tags=family.tags,
-            diagnostics=family.diagnostics,
+            diagnostics=[*family.diagnostics, *genealogy.diagnostics],
+            genealogy=genealogy,
         )
 
     family_members = [person for person in (family.father, family.mother) if person is not None]

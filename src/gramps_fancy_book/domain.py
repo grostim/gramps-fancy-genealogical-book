@@ -1,5 +1,7 @@
 """Framework-independent records used by extraction and book generation."""
 
+from __future__ import annotations
+
 from dataclasses import asdict, dataclass, field, fields, is_dataclass
 from enum import Enum
 from typing import Any
@@ -243,6 +245,49 @@ class Media:
 
 
 @dataclass(frozen=True)
+class PersonOccurrence:
+    occurrence_id: str
+    person_handle: str
+    generation: int
+    family_handle: str | None = None
+    branch_handles: tuple[str, ...] = ()
+    roles: tuple[str, ...] = ()
+    lineage_paths: tuple[tuple[str, ...], ...] = ()
+    profile_anchor: str | None = None
+    is_primary_profile: bool = False
+
+
+@dataclass(frozen=True)
+class Generation:
+    number: int
+    occurrences: tuple[PersonOccurrence, ...] = ()
+
+
+@dataclass(frozen=True)
+class GenealogyPart:
+    name: str
+    generations: tuple[Generation, ...] = ()
+
+
+@dataclass(frozen=True)
+class FamilySection:
+    family_handle: str
+    part: str
+    generation: int
+    branch_handles: tuple[str, ...] = ()
+    roles: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class Genealogy:
+    ancestry: GenealogyPart
+    descent: GenealogyPart
+    family_sections: tuple[FamilySection, ...] = ()
+    profile_handles: tuple[str, ...] = ()
+    diagnostics: tuple[Diagnostic, ...] = ()
+
+
+@dataclass(frozen=True)
 class Diagnostic:
     code: str
     severity: str
@@ -283,9 +328,19 @@ class BookModel:
     media: dict[str, Media] = field(default_factory=dict)
     tags: dict[str, Tag] = field(default_factory=dict)
     diagnostics: list[Diagnostic] = field(default_factory=list)
+    genealogy: Genealogy | None = None
 
     def to_dict(self) -> dict[str, object]:
         """Return JSON-safe data while keeping each Gramps object keyed by handle."""
+        diagnostics = list(self.diagnostics)
+        if self.genealogy is not None:
+            diagnostics.extend(
+                item for item in self.genealogy.diagnostics if item not in diagnostics
+            )
+            genealogy = _plain(self.genealogy)
+            genealogy.pop("diagnostics", None)
+        else:
+            genealogy = None
         return _plain(
             {
                 "reference_family": self.reference_family,
@@ -299,7 +354,8 @@ class BookModel:
                 "repositories": self.repositories,
                 "media": self.media,
                 "tags": self.tags,
-                "diagnostics": self.diagnostics,
+                "diagnostics": diagnostics,
+                "genealogy": genealogy,
                 "privacy": {"contains_private_data": _contains_private_data(self)},
                 "metadata": self.metadata,
             }

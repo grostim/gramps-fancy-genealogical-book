@@ -1,6 +1,6 @@
 """Read-only boundary between Gramps and the framework-independent model."""
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from typing import Any, Protocol
 
 from .conventions import BOOK_EXCLUDE, BOOK_FEATURED, BOOK_PROFILE, BOOK_PUBLICATION
@@ -92,17 +92,22 @@ class GrampsDatabaseAdapter:
             raise LookupError(f"No family exists for Gramps ID {gramps_id!r}")
         return self.get_family(family.get_handle())
 
-    def read_snapshot(self, family_handle: str) -> Snapshot:
-        """Read a rich, one-hop family snapshot with a de-duplicated object cache.
-
-        The central family's members are required. Their directly linked unions and
-        parent families are also included; additional people remain graph references and
-        do not recursively pull the whole database into an export.
-        """
+    def read_snapshot(
+        self,
+        family_handle: str,
+        max_ancestor_depth: int | None = None,
+        max_descendant_depth: int | None = None,
+    ) -> Snapshot:
+        """Read the selected couple's directed genealogy and required family context."""
         self._reset_snapshot_state()
-        return self._read_snapshot(family_handle)
+        return self._read_snapshot(family_handle, max_ancestor_depth, max_descendant_depth)
 
-    def read_snapshot_by_gramps_id(self, gramps_id: str) -> Snapshot:
+    def read_snapshot_by_gramps_id(
+        self,
+        gramps_id: str,
+        max_ancestor_depth: int | None = None,
+        max_descendant_depth: int | None = None,
+    ) -> Snapshot:
         if not gramps_id:
             raise ValueError("Select a reference family.")
         self._reset_snapshot_state()
@@ -111,7 +116,7 @@ class GrampsDatabaseAdapter:
             raise LookupError(f"No family exists for Gramps ID {gramps_id!r}")
         handle = _string(_call(family, "get_handle", ""))
         self._cache["family"][handle] = family
-        return self._read_snapshot(handle)
+        return self._read_snapshot(handle, max_ancestor_depth, max_descendant_depth)
 
     def _reset_snapshot_state(self) -> None:
         self._cache = defaultdict(dict)
@@ -119,17 +124,20 @@ class GrampsDatabaseAdapter:
         self._diagnostic_keys = set()
         self._records = defaultdict(dict)
 
-    def _read_snapshot(self, family_handle: str) -> Snapshot:
+    def _read_snapshot(
+        self,
+        family_handle: str,
+        max_ancestor_depth: int | None,
+        max_descendant_depth: int | None,
+    ) -> Snapshot:
+        _validate_depth(max_ancestor_depth, "ancestry")
+        _validate_depth(max_descendant_depth, "descendant")
         reference_family = self._family_record(family_handle, required=True)
-        seed_people = list(self._records["person"].values())
-        related_family_handles = {
-            related
-            for person in seed_people
-            for related in (*person.family_handles, *person.parent_family_handles)
-            if related and related != family_handle
-        }
-        for related_handle in sorted(related_family_handles):
-            self._family_record(related_handle, required=False)
+        if reference_family.father is None or reference_family.mother is None:
+            raise ValueError("The reference family must have two known partners.")
+        roots = (reference_family.father.handle, reference_family.mother.handle)
+        self._expand_ancestors(roots, max_ancestor_depth)
+        self._expand_descendants(roots, max_descendant_depth, family_handle)
         associated_people = {
             relation.person_handle
             for person in self._records["person"].values()
@@ -153,6 +161,71 @@ class GrampsDatabaseAdapter:
             tags=dict(self._records["tag"]),
             diagnostics=list(self._diagnostics),
         )
+
+    def _expand_ancestors(self, roots: tuple[str, str], limit: int | None) -> None:
+        queue = deque((handle, 0) for handle in dict.fromkeys(roots))
+        visited: set[str] = set()
+        while queue:
+            person_handle, depth = queue.popleft()
+            if person_handle in visited:
+                continue
+            visited.add(person_handle)
+            person = self._records["person"].get(person_handle)
+            if person is None:
+                continue
+            for family_handle in person.family_handles:
+                self._family_record(family_handle, required=False)
+            if limit is not None and depth >= limit:
+                continue
+            for family_handle in person.parent_family_handles:
+                family = self._family_record(family_handle, required=False)
+                if family is None:
+                    continue
+                relationship = next(
+                    (
+                        item for item in family.child_relationships
+                        if item.person_handle == person_handle
+                    ),
+                    None,
+                )
+                for parent in (family.father, family.mother):
+                    if parent is None or _child_link_is_none(family, relationship, parent.handle):
+                        continue
+                    queue.append((parent.handle, depth + 1))
+
+    def _expand_descendants(
+        self,
+        roots: tuple[str, str],
+        limit: int | None,
+        central_family_handle: str,
+    ) -> None:
+        queue = deque((handle, 0) for handle in dict.fromkeys(roots))
+        visited: set[str] = set()
+        while queue:
+            person_handle, depth = queue.popleft()
+            if person_handle in visited:
+                continue
+            visited.add(person_handle)
+            person = self._records["person"].get(person_handle)
+            if person is None:
+                continue
+            family_handles = list(person.family_handles)
+            if depth == 0 and central_family_handle not in family_handles:
+                family_handles.append(central_family_handle)
+            for family_handle in family_handles:
+                family = self._family_record(family_handle, required=False)
+                if family is None or (limit is not None and depth >= limit):
+                    continue
+                for child in family.children:
+                    relationship = next(
+                        (
+                            item for item in family.child_relationships
+                            if item.person_handle == child.handle
+                        ),
+                        None,
+                    )
+                    if not _child_link_is_none(family, relationship, person_handle):
+                        queue.append((child.handle, depth + 1))
 
     def _get_primary(self, kind: str, handle: str | None) -> Any:
         if not handle:
@@ -764,3 +837,24 @@ def _record_tag_handles(record: Any) -> tuple[str, ...]:
     if isinstance(record, Media):
         handles.extend(record.tag_handles)
     return tuple(dict.fromkeys(handles))
+
+
+def _validate_depth(value: int | None, direction: str) -> None:
+    if value is not None and (
+        isinstance(value, bool) or not isinstance(value, int) or value < 0
+    ):
+        raise ValueError(f"The maximum {direction} depth must be a non-negative integer.")
+
+
+def _child_link_is_none(family: Family, relationship: ChildRelationship | None, parent_handle: str) -> bool:
+    if relationship is None:
+        return False
+    if family.father is not None and family.father.handle == parent_handle:
+        value = relationship.father_relation
+    elif family.mother is not None and family.mother.handle == parent_handle:
+        value = relationship.mother_relation
+    else:
+        return True
+    if value is False or (isinstance(value, int) and value == 0):
+        return True
+    return isinstance(value, str) and value.strip().casefold() == "none"

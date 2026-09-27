@@ -32,12 +32,22 @@ class GrampsFancyBookReport(Report):
     def write_report(self) -> None:
         try:
             gramps_id = self.options_class.get_reference_family_id()
+            max_ancestor_depth = self.options_class.get_max_ancestor_depth()
+            max_descendant_depth = self.options_class.get_max_descendant_depth()
             adapter = GrampsDatabaseAdapter(self.database)
-            snapshot = adapter.read_snapshot_by_gramps_id(gramps_id)
+            snapshot = adapter.read_snapshot_by_gramps_id(
+                gramps_id,
+                max_ancestor_depth=max_ancestor_depth,
+                max_descendant_depth=max_descendant_depth,
+            )
             family = snapshot.reference_family
             if family.father is None or family.mother is None:
                 raise ValueError(_("The reference family must have two known partners."))
-            model = build_book_model(snapshot)
+            model = build_book_model(
+                snapshot,
+                max_ancestor_depth=max_ancestor_depth,
+                max_descendant_depth=max_descendant_depth,
+            )
             write_model_json(
                 model,
                 self.options_class.get_destination(),

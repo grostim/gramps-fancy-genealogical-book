@@ -2,19 +2,21 @@
 
 [English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
 
-Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille et exporte un modèle JSON commun. Les parcours généalogiques complets et les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
+Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille, extrait son graphe d’ascendance et de descendance selon les profondeurs choisies, puis exporte un modèle JSON commun. Les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
 
 ## Fonctionnement actuel
 
 - Sélecteur de famille Gramps et destination JSON explicite.
-- Instantané JSON v0.2 des personnes et familles directement liées, avec types de filiation, rôles d’événements, dates structurées, lieux, attributs, notes, citations, sources, dépôts et médias.
+- Modèle JSON v0.3 avec occurrences par branche et génération, unions familiales, chemins de filiation et éligibilité des fiches.
+- Extraction des ascendants et descendants en profondeur illimitée par défaut, ou limitée séparément avec un entier ≥ 0.
+- Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute et filiations typées préservées.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
 - Texte des notes exporté uniquement si elles portent l’étiquette Gramps `BOOK_PUBLICATION`; les notes de travail restent référencées sans leur contenu.
 - JSON Unicode, diagnostic des références indisponibles et publication atomique du fichier.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
 
-Le parcours est limité à la famille choisie, aux membres directs et aux familles directement référencées par ces personnes. L’expansion généalogique complète reste l’étape suivante. Les fonctions HTML et LaTeX actuelles sont des démonstrations de contrat. Voir le [suivi de validation L3](docs/validation-l3.fr.md) et le [suivi des exigences](docs/requirements.fr.md).
+Le parcours suit les filiations parent–enfant explicitement enregistrées. Les unions, partenaires et fratries sont ajoutés comme contexte sans étendre automatiquement leur propre lignée. Le résultat reste un modèle de données : les fonctions HTML et LaTeX sont encore des démonstrations de contrat. Voir le [suivi L3](docs/validation-l3.fr.md), le [démarrage L4](docs/validation-l4.fr.md) et le [suivi des exigences](docs/requirements.fr.md).
 
 ## Construction et installation
 
@@ -36,7 +38,7 @@ L’interface utilise des chaînes traduisibles ; les traductions françaises pr
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,destination=/chemin/absolu/famille.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,destination=/chemin/absolu/famille.json"
 ```
 
 Ajouter `overwrite=True` aux options pour autoriser le remplacement. Le GEDCOM fourni ne contient que des personnes fictives. Le script ci-dessous automatise le test dans un profil Gramps temporaire et installe uniquement l’archive construite. Sur macOS, l’exécutable est `/Applications/Gramps.app/Contents/MacOS/Gramps`.
