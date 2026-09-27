@@ -1,6 +1,6 @@
 # L4 progress — genealogy traversal
 
-Fourth increment prepared on 27 September 2026. L4 is still in progress; this note describes the implemented contract and does not claim that all acceptance scenarios have been qualified.
+Fifth increment prepared on 27 September 2026. L4 is still in progress; this note describes the implemented contract and does not claim that all acceptance scenarios have been qualified.
 
 ## Available traversal
 
@@ -11,7 +11,8 @@ Fourth increment prepared on 27 September 2026. L4 is still in progress; this no
 - F0 appears as one section at the start of ancestry; the descendant part keeps the central occurrences as references. Children of ancestors' other unions appear as context without expanding their descendants.
 - Explicit child-parent relationships recorded as `None` are not traversed. Single-parent families encountered in the graph remain valid.
 - A path that revisits a person is kept as a visible occurrence, reported as a diagnostic, and stopped before the loop is expanded again.
-- Profile eligibility follows `BOOK_PROFILE = YES` or a substantive individual/family event other than birth or death. Only the first occurrence gets the primary profile anchor; later occurrences retain its link.
+- Profile eligibility follows `BOOK_PROFILE = YES` or a substantive individual/family event other than birth or death.
+- Each occurrence carries `primary_occurrence_id` pointing to the person’s first appearance, even when no full profile exists. For an eligible person, `profile_anchor` and `is_primary_profile` still identify the single profile and its primary occurrence.
 - Generation order is deterministic. Complete exact birth dates sort chronologically; absent or uncertain dates use a stable identifier as their tie-breaker.
 - Family sections follow generation and branch-occurrence order, then the source order of unions in the relevant Gramps partner or child family list. The family identifier is only a deterministic tie-breaker.
 - Each family section has a stable ID, references its in-scope partner and child occurrences, and exposes parent-child links with the Gramps-normalized relationship type for each parent when available. Each occurrence links back to its sections; generation, branch, path, and profile anchor provide the genealogy-marker data.

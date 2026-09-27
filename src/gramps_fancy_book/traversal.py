@@ -189,11 +189,20 @@ def build_genealogy(
     eligible_profiles = _eligible_profiles(
         people, families, snapshot.events, occurrences, family_sections.values()
     )
+    parts_occurrences = {
+        part: _ordered_occurrences(part, occurrences, people, root_order, snapshot.events)
+        for part in ("ancestry", "descent")
+    }
+    primary_occurrence_ids: dict[str, str] = {}
+    for part in ("ancestry", "descent"):
+        for item in parts_occurrences[part]:
+            primary_occurrence_ids.setdefault(item.person_handle, item.occurrence_id)
+
     ordered_parts: dict[str, tuple[Generation, ...]] = {}
     primary_profiles: set[str] = set()
     profile_handles: list[str] = []
     for part in ("ancestry", "descent"):
-        ordered = _ordered_occurrences(part, occurrences, people, root_order, snapshot.events)
+        ordered = parts_occurrences[part]
         grouped: dict[int, list[PersonOccurrence]] = defaultdict(list)
         for item in ordered:
             profile_anchor = None
@@ -215,6 +224,7 @@ def build_genealogy(
                     lineage_paths=item.lineage_paths,
                     profile_anchor=profile_anchor,
                     is_primary_profile=is_primary,
+                    primary_occurrence_id=primary_occurrence_ids[item.person_handle],
                 )
             )
         generation_numbers = sorted(

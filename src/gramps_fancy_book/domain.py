@@ -256,6 +256,7 @@ class PersonOccurrence:
     profile_anchor: str | None = None
     is_primary_profile: bool = False
     family_section_ids: tuple[str, ...] = ()
+    primary_occurrence_id: str | None = None
 
 
 @dataclass(frozen=True)
