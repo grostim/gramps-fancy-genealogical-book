@@ -6,6 +6,15 @@ from .editorial import build_editorial_book
 from .traversal import build_genealogy
 
 
+def _snapshot_people(snapshot: Snapshot):
+    people = dict(snapshot.people)
+    for family in (snapshot.reference_family, *snapshot.families.values()):
+        for person in (family.father, family.mother, *family.children):
+            if person is not None:
+                people.setdefault(person.handle, person)
+    return people
+
+
 def build_book_model(
     family: Family | Snapshot,
     max_ancestor_depth: int | str | None = None,
@@ -32,7 +41,11 @@ def build_book_model(
             tags=family.tags,
             diagnostics=[*family.diagnostics, *genealogy.diagnostics],
             genealogy=genealogy,
-            editorial_book=build_editorial_book(genealogy, family.reference_family.handle),
+            editorial_book=build_editorial_book(
+                genealogy,
+                family.reference_family.handle,
+                _snapshot_people(family),
+            ),
         )
 
     family_members = [person for person in (family.father, family.mother) if person is not None]
