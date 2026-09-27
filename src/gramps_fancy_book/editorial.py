@@ -6,6 +6,8 @@ from .domain import (
     EditorialPart,
     EditorialPortrait,
     EditorialProfile,
+    Event,
+    EventReference,
     Family,
     FamilySection,
     Genealogy,
@@ -23,6 +25,7 @@ def build_editorial_book(
     families_by_handle: dict[str, Family],
     notes_by_handle: dict[str, Note],
     media_by_handle: dict[str, Media],
+    events_by_handle: dict[str, Event],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -67,7 +70,7 @@ def build_editorial_book(
                 primary_section_id=family_sections[0].section_id,
                 family_section_ids=tuple(section.section_id for section in family_sections),
                 note_handles=_published_note_handles(family.links.notes, notes_by_handle),
-                event_refs=family.links.events,
+                event_refs=_chronological_event_refs(family.links.events, events_by_handle),
                 media_refs=family.links.media,
             )
         )
@@ -127,7 +130,11 @@ def build_editorial_book(
                     if person is not None
                     else None
                 ),
-                event_refs=person.links.events if person is not None else (),
+                event_refs=(
+                    _chronological_event_refs(person.links.events, events_by_handle)
+                    if person is not None
+                    else ()
+                ),
                 media_refs=person.links.media if person is not None else (),
             )
         )
@@ -216,3 +223,29 @@ def _primary_portrait(
                 caption=media.description,
             )
     return None
+
+
+def _chronological_event_refs(
+    event_refs: tuple[EventReference, ...], events_by_handle: dict[str, Event]
+) -> tuple[EventReference, ...]:
+    def event_key(
+        item: tuple[int, EventReference]
+    ) -> tuple[bool, int, int, int, str]:
+        original_index, reference = item
+        event = events_by_handle.get(reference.event_handle)
+        sort_value = (
+            event.date.sort_value
+            if event is not None and event.date is not None
+            else None
+        )
+        return (
+            sort_value is None,
+            sort_value if sort_value is not None else 0,
+            reference.order,
+            original_index,
+            reference.event_handle,
+        )
+
+    return tuple(
+        reference for _, reference in sorted(enumerate(event_refs), key=event_key)
+    )
