@@ -1,6 +1,6 @@
 # L4 progress — genealogy traversal
 
-First increment prepared on 27 September 2026. L4 is still in progress; this note describes the implemented contract and does not claim that all acceptance scenarios have been qualified.
+Second increment prepared on 27 September 2026. L4 is still in progress; this note describes the implemented contract and does not claim that all acceptance scenarios have been qualified.
 
 ## Available traversal
 
@@ -13,6 +13,7 @@ First increment prepared on 27 September 2026. L4 is still in progress; this not
 - A path that revisits a person is kept as a visible occurrence, reported as a diagnostic, and stopped before the loop is expanded again.
 - Profile eligibility follows `BOOK_PROFILE = YES` or a substantive individual/family event other than birth or death. Only the first occurrence gets the primary profile anchor; later occurrences retain its link.
 - Generation order is deterministic. Complete exact birth dates sort chronologically; absent or uncertain dates use a stable identifier as their tie-breaker.
+- Family sections follow generation and branch-occurrence order, then the source order of unions in the relevant Gramps partner or child family list. The family identifier is only a deterministic tie-breaker.
 
 ## Remaining before L4 exit
 

@@ -223,12 +223,32 @@ def build_genealogy(
             Generation(number, tuple(grouped[number])) for number in generation_numbers
         )
 
+    ordered_occurrences = {
+        part: tuple(
+            occurrence
+            for generation in ordered_parts[part]
+            for occurrence in generation.occurrences
+        )
+        for part in ("ancestry", "descent")
+    }
+    occurrence_positions = {
+        (
+            part,
+            occurrence.person_handle,
+            occurrence.generation,
+            occurrence.family_handle,
+        ): position
+        for part, items in ordered_occurrences.items()
+        for position, occurrence in enumerate(items)
+    }
     ordered_sections = sorted(
         family_sections.values(),
-        key=lambda section: (
-            0 if section.part == "ancestry" else 1,
-            -section.generation if section.part == "ancestry" else section.generation,
-            section.family_handle,
+        key=lambda section: _family_section_order_key(
+            section,
+            families,
+            people,
+            ordered_occurrences,
+            occurrence_positions,
         ),
     )
     family_section_records = tuple(
@@ -249,6 +269,72 @@ def build_genealogy(
         family_sections=family_section_records,
         profile_handles=tuple(profile_handles),
         diagnostics=tuple(diagnostics.values()),
+    )
+
+
+def _family_section_order_key(
+    section: _FamilySection,
+    families: dict[str, Family],
+    people: dict[str, Person],
+    ordered_occurrences: dict[str, tuple[PersonOccurrence, ...]],
+    occurrence_positions: dict[tuple[str, str, int, str | None], int],
+) -> tuple[int, int, int, int, str]:
+    """Order family sections along their branch and source-union order."""
+    family = families[section.family_handle]
+    ancestry = section.part == "ancestry"
+    source_candidates: list[tuple[int, int]] = []
+
+    if ancestry and "parent_family" in section.roles:
+        # A parent union belongs below the child occurrence that led to it.
+        owner_generation = section.generation + 1
+        owner_is_child = True
+    else:
+        # An ancestor's other union and a descendant union belong to their
+        # partner occurrence at the same generation as the section.
+        owner_generation = section.generation
+        owner_is_child = False
+
+    member_handles = (
+        {child.handle for child in family.children}
+        if owner_is_child
+        else {partner.handle for partner in _partners(family)}
+    )
+    source_position_name = "parent_family_handles" if owner_is_child else "family_handles"
+    for position, occurrence in enumerate(ordered_occurrences[section.part]):
+        if occurrence.generation != owner_generation:
+            continue
+        if occurrence.person_handle not in member_handles:
+            continue
+        if not any(branch in occurrence.branch_handles for branch in section.branch_handles):
+            continue
+        if "lineage" not in occurrence.roles and "central" not in occurrence.roles:
+            continue
+        owner = people[occurrence.person_handle]
+        source_unions = getattr(owner, source_position_name)
+        try:
+            union_position = source_unions.index(section.family_handle)
+        except ValueError:
+            union_position = len(source_unions)
+        occurrence_position = occurrence_positions.get(
+            (
+                section.part,
+                occurrence.person_handle,
+                occurrence.generation,
+                occurrence.family_handle,
+            ),
+            position,
+        )
+        source_candidates.append((occurrence_position, union_position))
+
+    source_position, union_position = min(
+        source_candidates, default=(1_000_000, 1_000_000)
+    )
+    return (
+        0 if ancestry else 1,
+        -section.generation if ancestry else section.generation,
+        source_position,
+        union_position,
+        section.family_handle,
     )
 
 
