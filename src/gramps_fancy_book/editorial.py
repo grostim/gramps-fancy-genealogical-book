@@ -9,6 +9,8 @@ from .domain import (
     EditorialCitationCall,
     EditorialCitationEntry,
     EditorialFamilyNotice,
+    EditorialMediaPlacement,
+    EditorialMediaUse,
     EditorialPart,
     EditorialPortrait,
     EditorialProfile,
@@ -177,6 +179,13 @@ def build_editorial_book(
         citations_by_handle,
         sources_by_handle,
     )
+    media_placements = _build_media_placements(
+        profiles,
+        family_notices,
+        citation_entries,
+        cover_portraits,
+        media_by_handle,
+    )
     profiles = [
         replace(
             profile,
@@ -239,6 +248,7 @@ def build_editorial_book(
         family_notices=tuple(family_notices),
         cover_portraits=tuple(cover_portraits),
         citation_entries=citation_entries,
+        media_placements=media_placements,
     )
 
 
@@ -462,6 +472,65 @@ def _citation_media_refs(
         for media_ref in citation.links.media
         if (media := media_by_handle.get(media_ref.media_handle)) is not None
         and not media.is_excluded
+    )
+
+
+def _build_media_placements(
+    profiles: list[EditorialProfile],
+    family_notices: list[EditorialFamilyNotice],
+    citation_entries: tuple[EditorialCitationEntry, ...],
+    cover_portraits: list[EditorialPortrait],
+    media_by_handle: dict[str, Media],
+) -> tuple[EditorialMediaPlacement, ...]:
+    uses_by_media: dict[str, list[EditorialMediaUse]] = {}
+
+    def add_use(
+        context_type: str,
+        context_id: str,
+        media_ref: MediaReference,
+        citation_handles: tuple[str, ...] = (),
+    ) -> None:
+        media = media_by_handle.get(media_ref.media_handle)
+        if media is None or media.is_excluded:
+            return
+        uses_by_media.setdefault(media.handle, []).append(
+            EditorialMediaUse(
+                context_type=context_type,
+                context_id=context_id,
+                media_ref=media_ref,
+                citation_handles=tuple(dict.fromkeys(citation_handles)),
+            )
+        )
+
+    for profile in profiles:
+        for media_ref in profile.media_refs:
+            add_use("profile", profile.profile_id, media_ref, media_ref.citations)
+
+    for notice in family_notices:
+        for media_ref in notice.media_refs:
+            add_use("family_notice", notice.notice_id, media_ref, media_ref.citations)
+
+    for entry in citation_entries:
+        for media_ref in entry.media_refs:
+            add_use(
+                "citation",
+                entry.entry_id,
+                media_ref,
+                (entry.citation_handle, *media_ref.citations),
+            )
+
+    for portrait in cover_portraits:
+        add_use("cover", "cover", portrait.media_ref)
+
+    return tuple(
+        EditorialMediaPlacement(
+            placement_id=f"media:{media_handle}",
+            media_handle=media_handle,
+            caption=media_by_handle[media_handle].description,
+            is_featured=media_by_handle[media_handle].is_featured,
+            uses=tuple(uses),
+        )
+        for media_handle, uses in uses_by_media.items()
     )
 
 

@@ -390,12 +390,30 @@ class EditorialCitationEntry:
 
 
 @dataclass(frozen=True)
+class EditorialMediaUse:
+    context_type: str
+    context_id: str
+    media_ref: MediaReference
+    citation_handles: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class EditorialMediaPlacement:
+    placement_id: str
+    media_handle: str
+    caption: str = ""
+    is_featured: bool = False
+    uses: tuple[EditorialMediaUse, ...] = ()
+
+
+@dataclass(frozen=True)
 class EditorialBook:
     parts: tuple[EditorialPart, ...] = ()
     profiles: tuple[EditorialProfile, ...] = ()
     family_notices: tuple[EditorialFamilyNotice, ...] = ()
     cover_portraits: tuple[EditorialPortrait, ...] = ()
     citation_entries: tuple[EditorialCitationEntry, ...] = ()
+    media_placements: tuple[EditorialMediaPlacement, ...] = ()
 
 
 @dataclass
