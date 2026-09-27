@@ -870,6 +870,6 @@ def _child_link_is_none(family: Family, relationship: ChildRelationship | None, 
         value = relationship.mother_relation
     else:
         return True
-    if value is False or (isinstance(value, int) and value == 0):
+    if value is False:
         return True
     return isinstance(value, str) and value.strip().casefold() == "none"

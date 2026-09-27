@@ -488,9 +488,8 @@ def _ordered_occurrences(
             grouped[generation],
             key=lambda item: (
                 0 if "central" in item.roles else 1,
+                _branch_hierarchy_key(item, part, people, root_order),
                 item.family_handle or "",
-                min((root_order.get(handle, 99) for handle in item.branch_handles), default=99)
-                if "central" in item.roles else 99,
                 _birth_sort_key(people[item.person_handle], events),
                 _identity_sort_key(people[item.person_handle]),
             ),
@@ -514,6 +513,45 @@ def _ordered_occurrences(
                 )
             )
     return tuple(result)
+
+
+def _branch_hierarchy_key(
+    occurrence: _Occurrence,
+    part: str,
+    people: dict[str, Person],
+    root_order: dict[str, int],
+) -> tuple[int, tuple[str, ...], int]:
+    """Order lineage occurrences by root, parent branch, then source union order."""
+    keys = []
+    for path in occurrence.lineage_paths:
+        if not path:
+            continue
+        root_position = root_order.get(path[0], 99)
+        if len(path) == 1:
+            keys.append((root_position, (), -1))
+            continue
+
+        parent_path = path[:-1]
+        parent = people.get(path[-2])
+        if parent is None:
+            union_handles = ()
+        elif part == "descent":
+            union_handles = parent.family_handles
+        else:
+            union_handles = parent.parent_family_handles
+        try:
+            union_position = union_handles.index(occurrence.family_handle)
+        except ValueError:
+            union_position = len(union_handles)
+        keys.append((root_position, parent_path, union_position))
+
+    if keys:
+        return min(keys)
+    branch_position = min(
+        (root_order.get(handle, 99) for handle in occurrence.branch_handles),
+        default=99,
+    )
+    return branch_position, (), 99
 
 
 def _birth_sort_key(person: Person, events: dict) -> tuple[int, int, int, int]:
@@ -570,6 +608,6 @@ def _parent_linked(family: Family, child_relationship, parent_handle: str) -> bo
         relation = child_relationship.mother_relation if child_relationship is not None else None
     else:
         return False
-    if relation is False or relation == 0:
+    if relation is False:
         return False
     return not (isinstance(relation, str) and relation.strip().casefold() == "none")
