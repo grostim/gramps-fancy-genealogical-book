@@ -10,7 +10,6 @@ from .domain import (
     FamilySection,
     Genealogy,
     Media,
-    MediaReference,
     Note,
     Person,
     PersonOccurrence,
