@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Quatrième incrément préparé le 27 septembre 2026. L4 reste en cours ; cette note décrit le contrat implémenté, sans déclarer les scénarios d’acceptation entièrement qualifiés.
+Cinquième incrément préparé le 27 septembre 2026. L4 reste en cours ; cette note décrit le contrat implémenté, sans déclarer les scénarios d’acceptation entièrement qualifiés.
 
 ## Parcours disponibles
 
@@ -11,7 +11,8 @@ Quatrième incrément préparé le 27 septembre 2026. L4 reste en cours ; cette 
 - F0 est une section unique au début de l’ascendance ; la descendance conserve les occurrences centrales comme renvois. Les enfants des autres unions des ancêtres figurent comme contexte, sans développement de leur descendance.
 - Les relations enfant-parent explicitement « None » ne sont pas parcourues. Les familles monoparentales restent admises dans le graphe.
 - Un chemin qui revisite une personne est conservé comme occurrence visible, signalé par un diagnostic et arrêté avant de développer la boucle.
-- L’éligibilité de fiche applique `BOOK_PROFILE = YES` ou un événement individuel/familial substantiel autre que naissance et décès. Une seule occurrence reçoit l’ancre principale de fiche ; les autres conservent leur renvoi.
+- L’éligibilité de fiche applique `BOOK_PROFILE = YES` ou un événement individuel/familial substantiel autre que naissance et décès.
+- Chaque occurrence renseigne `primary_occurrence_id` pour renvoyer à la première apparition de la personne, même sans fiche complète. Pour une personne éligible, `profile_anchor` et `is_primary_profile` désignent toujours sa fiche unique et son occurrence principale.
 - L’ordre des générations est déterministe ; les dates de naissance complètes et exactes sont ordonnées chronologiquement, puis les dates absentes ou incertaines par identifiant stable.
 - Les sections familiales suivent d’abord l’ordre des générations et des occurrences de branche, puis l’ordre source des unions dans les listes Gramps du partenaire ou de l’enfant concerné. L’identifiant familial ne sert que de départage déterministe.
 - Chaque section familiale a un identifiant stable, référence les occurrences de ses partenaires et enfants dans le périmètre, et expose les liens parent-enfant avec la valeur du type de filiation normalisée depuis Gramps pour chaque parent, lorsqu’elle est disponible. Chaque occurrence conserve les identifiants de ses sections ; génération, branche, chemin et ancre de fiche fournissent les données du repère.
