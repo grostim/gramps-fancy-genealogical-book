@@ -164,7 +164,6 @@ def build_genealogy(
         )
     for root_handle in set(roots):
         add_family_section("ancestry", central_family.handle, 0, root_handle, "central")
-        add_family_section("descent", central_family.handle, 0, root_handle, "central")
 
     _build_ancestry(
         roots,
@@ -293,6 +292,16 @@ def _build_ancestry(
                         add_occurrence(
                             "ancestry", partner.handle, -depth, family_handle, branch, "partner"
                         )
+                for child in family.children:
+                    relationship = _child_relationship(family, child.handle)
+                    if (
+                        child.handle == path[-2]
+                        or not _parent_linked(family, relationship, handle)
+                    ):
+                        continue
+                    add_occurrence(
+                        "ancestry", child.handle, 1 - depth, family_handle, branch, "sibling"
+                    )
 
         if limit is not None and depth >= limit:
             continue
@@ -369,7 +378,8 @@ def _build_descent(
                     "A genealogy link points to a family missing from the snapshot.",
                 )
                 continue
-            add_family_section("descent", family_handle, depth, branch, "descendant_union")
+            if family_handle != central_family_handle:
+                add_family_section("descent", family_handle, depth, branch, "descendant_union")
             for partner in _partners(family):
                 if partner.handle != handle:
                     add_occurrence(

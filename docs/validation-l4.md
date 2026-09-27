@@ -8,6 +8,7 @@ First increment prepared on 27 September 2026. L4 is still in progress; this not
 - Ancestry and descendant limits are independent. `unlimited` is the default; zero or a non-negative integer can also be selected.
 - The Gramps adapter recursively loads the families and people linked in those directions, then keeps unions and siblings as context. It does not expand the ancestry of a spouse introduced only through a descendant's union.
 - The Gramps-independent engine produces negative and positive generations, family sections, occurrence roles, branch roots, and parentage paths.
+- F0 appears as one section at the start of ancestry; the descendant part keeps the central occurrences as references. Children of ancestors' other unions appear as context without expanding their descendants.
 - Explicit child-parent relationships recorded as `None` are not traversed. Single-parent families encountered in the graph remain valid.
 - A path that revisits a person is kept as a visible occurrence, reported as a diagnostic, and stopped before the loop is expanded again.
 - Profile eligibility follows `BOOK_PROFILE = YES` or a substantive individual/family event other than birth or death. Only the first occurrence gets the primary profile anchor; later occurrences retain its link.

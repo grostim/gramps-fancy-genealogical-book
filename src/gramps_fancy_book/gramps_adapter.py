@@ -184,6 +184,17 @@ class GrampsDatabaseAdapter:
                         partner.handle for partner in (family.father, family.mother)
                         if partner is not None and partner.handle != person_handle
                     )
+                    if depth > 0:
+                        for child in family.children:
+                            relationship = next(
+                                (
+                                    item for item in family.child_relationships
+                                    if item.person_handle == child.handle
+                                ),
+                                None,
+                            )
+                            if not _child_link_is_none(family, relationship, person_handle):
+                                contextual_people.add(child.handle)
             if limit is not None and depth >= limit:
                 continue
             for family_handle in person.parent_family_handles:
