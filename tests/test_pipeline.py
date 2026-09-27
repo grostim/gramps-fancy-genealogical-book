@@ -34,14 +34,15 @@ def test_model_is_json_serializable_shape():
     family = Family(handle="F0002")
     model = create_intermediate_model(InMemoryFamilySource(family), "F0002")
 
-    assert model.to_dict() == {
-        "reference_family": {
-            "handle": "F0002",
-            "gramps_id": "",
-            "father": None,
-            "mother": None,
-            "children": [],
-        },
-        "people": [],
-        "metadata": {"BOOK_SCHEMA_VERSION": "0.1", "BOOK_REFERENCE_FAMILY": "F0002"},
+    payload = model.to_dict()
+    assert payload["reference_family"]["handle"] == "F0002"
+    assert payload["reference_family"]["father"] is None
+    assert payload["reference_family"]["children"] == []
+    assert payload["people"] == []
+    assert payload["families"]["F0002"]["handle"] == "F0002"
+    assert payload["events"] == payload["citations"] == payload["media"] == {}
+    assert payload["privacy"] == {"contains_private_data": False}
+    assert payload["metadata"] == {
+        "BOOK_SCHEMA_VERSION": "0.2",
+        "BOOK_REFERENCE_FAMILY": "F0002",
     }

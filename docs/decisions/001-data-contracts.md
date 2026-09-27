@@ -1,6 +1,6 @@
 # ADR 001 — Data contracts / Contrats de données
 
-Status: proposed for L2; 2026-09-27. This document does not redefine the v1.1 requirements.
+Status: accepted for extraction v0.2; 2026-09-27. This document does not redefine the v1.1 requirements.
 
 ## English
 
@@ -25,7 +25,7 @@ Status: proposed for L2; 2026-09-27. This document does not redefine the v1.1 re
 | Media placement | One documentary reproduction per media identity; derivative cache identity does not override this requirement |
 | Ordering | Branch/parent/union grouping, comparable dates, original position where required, then stable technical key |
 
-The current JSON 0.1 is an extraction demonstration. It is not the final editorial schema. Do not silently repurpose it; introduce an explicit new schema version when the richer snapshot and book contracts are implemented.
+JSON v0.2 is the first handle-keyed extraction snapshot, not the final editorial schema. It includes a `privacy.contains_private_data` summary and structured diagnostics. Future incompatible extraction or book-model changes must increment the schema version instead of silently repurposing this one.
 
 ### Outputs and diagnostics
 
@@ -56,7 +56,7 @@ Resolve before implementation: overlapping date bounds, six editorial note roles
 | Placement média | Une reproduction documentaire par objet ; le cache des dérivés ne change pas cette règle |
 | Tri | Branche/parent/union, dates comparables, position d’origine si requise, puis clé technique stable |
 
-Le JSON 0.1 actuel démontre l’extraction ; ce n’est pas le schéma éditorial final. L’introduction des contrats enrichis devra annoncer une nouvelle version de schéma.
+Le JSON v0.2 est le premier instantané d’extraction indexé par handle, pas le schéma éditorial final. Il inclut le résumé `privacy.contains_private_data` et des diagnostics structurés. Toute évolution incompatible de l’extraction ou du modèle du livre devra augmenter la version plutôt que réaffecter silencieusement les champs.
 
 ### Sorties et diagnostics
 

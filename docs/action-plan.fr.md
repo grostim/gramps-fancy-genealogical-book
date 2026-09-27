@@ -224,14 +224,14 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 
 - Dépôt privé créé : [grostim/gramps-fancy-genealogical-book](https://github.com/grostim/gramps-fancy-genealogical-book). Branches `main` et `codex/initial-project` publiées. L’accès GitHub fonctionne via le trousseau macOS ; le précédent échec était lié au sandbox.
 - L0 en cours : [matrice des 27 scénarios](requirements.fr.md) établie et texte intégral récupéré ; originaux récupérés et maquettes consultées ; licence de distribution restant à confirmer.
-- L1 prêt à fusionner après revue : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel. Tests locaux et CI Linux réussis ; voir le [compte rendu de validation](validation-l1.fr.md).
-- L2 en cours : [contrats de données](decisions/001-data-contracts.md), [revue de fondation](decisions/002-foundation-review.md), prototype LaTeX non compilé faute de ressources du moteur, recadrage média synthétique démontré et [obstacles Gramps Web](../prototypes/web-spike.md) documentés.
+- L1 fusionné et validé : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel ; CI réussie. Voir le [compte rendu de validation](validation-l1.fr.md).
+- L2 fusionné pour les contrats et les prototypes médias/Web. La compilation LuaLaTeX et une recette sur Gramps Web restent à prouver ; voir [contrats de données](decisions/001-data-contracts.md), [revue de fondation](decisions/002-foundation-review.md) et [obstacles Gramps Web](../prototypes/web-spike.md).
+- L3 en cours : schéma JSON v0.2 et extraction des liens/documentaires. Douze tests, Ruff, la construction de l’archive et l’intégration isolée avec Gramps 6.0.8 passent sur une fixture GEDCOM enrichie. Les tags éditoriaux et rectangles de recadrage restent à éprouver avec de vrais objets Gramps.
 - Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
-1. Revoir la fondation sur la branche dédiée avant fusion.
-2. Fournir un environnement LuaLaTeX reproductible et compiler le prototype jusqu’à stabilisation des renvois.
-3. Résoudre le contrat de sortie Gramps Web, notamment la destination serveur et le ZIP HTML, puis l’éprouver sur une instance jetable.
-4. Étendre le prototype médias aux PDF monopage et à l’orientation EXIF.
-5. Compléter les traductions FR/EN, puis construire le moteur généalogique selon les contrats validés.
+1. Compléter la fixture native Gramps pour éprouver `BOOK_PUBLICATION`, `BOOK_PROFILE` et les rectangles médias avec de vrais objets Gramps ; confirmer ces changements par la CI après publication de la branche.
+2. Clore L3 sur ces essais, puis implémenter L4 : parcours des filiations, unions, générations, implexes, collatéraux et frontières de profondeur selon la v1.1.
+3. En parallèle, fournir un environnement LuaLaTeX reproductible et compiler le prototype jusqu’à stabilisation des renvois.
+4. Résoudre le contrat de sortie Gramps Web et étendre le prototype médias aux PDF monopage et à l’orientation EXIF avant d’annoncer ces compatibilités.

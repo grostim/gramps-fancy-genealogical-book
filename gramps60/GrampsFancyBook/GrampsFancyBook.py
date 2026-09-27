@@ -33,10 +33,11 @@ class GrampsFancyBookReport(Report):
         try:
             gramps_id = self.options_class.get_reference_family_id()
             adapter = GrampsDatabaseAdapter(self.database)
-            family = adapter.get_family_by_gramps_id(gramps_id)
+            snapshot = adapter.read_snapshot_by_gramps_id(gramps_id)
+            family = snapshot.reference_family
             if family.father is None or family.mother is None:
                 raise ValueError(_("The reference family must have two known partners."))
-            model = build_book_model(family)
+            model = build_book_model(snapshot)
             write_model_json(
                 model,
                 self.options_class.get_destination(),
