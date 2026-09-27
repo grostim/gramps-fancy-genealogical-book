@@ -287,6 +287,7 @@ class FamilySection:
 class ParentChildLink:
     parent_occurrence_id: str
     child_occurrence_id: str
+    relationship_type: Any = None
 
 
 @dataclass(frozen=True)
