@@ -7,7 +7,7 @@ An experimental Gramps 6 add-on for a family genealogical book. The current mile
 ## What works now
 
 - Native Gramps family selector and explicit JSON destination.
-- JSON v0.7 model with genealogy occurrences, typed relationship links and an ordered editorial structure for the book’s main parts.
+- JSON v0.7 model with genealogy occurrences, typed relationship links and an ordered editorial structure with eligible person profiles linked to their events, media and family sections.
 - Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
