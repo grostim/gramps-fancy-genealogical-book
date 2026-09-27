@@ -326,6 +326,20 @@ class Snapshot:
     diagnostics: list[Diagnostic] = field(default_factory=list)
 
 
+@dataclass(frozen=True)
+class EditorialPart:
+    part_id: str
+    kind: str
+    family_section_ids: tuple[str, ...] = ()
+    person_occurrence_ids: tuple[str, ...] = ()
+    part_ids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class EditorialBook:
+    parts: tuple[EditorialPart, ...] = ()
+
+
 @dataclass
 class BookModel:
     reference_family: Family
@@ -342,6 +356,7 @@ class BookModel:
     tags: dict[str, Tag] = field(default_factory=dict)
     diagnostics: list[Diagnostic] = field(default_factory=list)
     genealogy: Genealogy | None = None
+    editorial_book: EditorialBook | None = None
 
     def to_dict(self) -> dict[str, object]:
         """Return JSON-safe data while keeping each Gramps object keyed by handle."""
@@ -369,6 +384,7 @@ class BookModel:
                 "tags": self.tags,
                 "diagnostics": diagnostics,
                 "genealogy": genealogy,
+                "editorial_book": self.editorial_book,
                 "privacy": {"contains_private_data": _contains_private_data(self)},
                 "metadata": self.metadata,
             }

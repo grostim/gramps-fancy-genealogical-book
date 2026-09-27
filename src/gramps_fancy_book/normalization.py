@@ -2,6 +2,7 @@
 
 from .conventions import BOOK_SCHEMA_VERSION
 from .domain import BookModel, Family, Snapshot
+from .editorial import build_editorial_book
 from .traversal import build_genealogy
 
 
@@ -31,6 +32,7 @@ def build_book_model(
             tags=family.tags,
             diagnostics=[*family.diagnostics, *genealogy.diagnostics],
             genealogy=genealogy,
+            editorial_book=build_editorial_book(genealogy, family.reference_family.handle),
         )
 
     family_members = [person for person in (family.father, family.mother) if person is not None]

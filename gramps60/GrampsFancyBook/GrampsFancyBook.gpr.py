@@ -5,7 +5,7 @@ register(
     id="gramps_fancy_genealogical_book",
     name=_("Gramps Fancy Genealogical Book"),
     description=_("Select a reference family and export a normalized book-data snapshot."),
-    version="0.6.0",
+    version="0.7.0",
     gramps_target_version="6.0",
     # UNSTABLE add-ons are hidden by release builds of Gramps.
     status=EXPERIMENTAL,
