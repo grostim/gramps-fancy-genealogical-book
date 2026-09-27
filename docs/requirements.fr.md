@@ -8,7 +8,7 @@
 - S2 : discussion « Concevoir un livre généalogique », conversation `6ab57872-e2e4-83eb-b0b9-1c0081b338b0`.
 - S3 : [synthèse locale](specification-v1.1.md), établie à partir de S1.
 
-- S4 : [transcription intégrale de la v1.1](reference/specification-v1.1.visible.txt), extraite de l’aperçu ChatGPT le 27 septembre 2026 ; voir la [provenance](reference/README.md). Elle contient AC-01 à AC-27. Le téléchargement du Markdown original et du ZIP n’a pas abouti ; les maquettes restent à importer.
+- S4 : [transcription intégrale de la v1.1](reference/specification-v1.1.visible.txt), extraite de l’aperçu ChatGPT le 27 septembre 2026 ; voir la [provenance](reference/README.md). Elle contient AC-01 à AC-27. Le [Markdown original](reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md) et les quatre maquettes ont ensuite été retrouvés dans le ZIP téléchargé. L’original prime ; les maquettes sont conservées localement hors Git.
 
 ## Matrice provisoire
 
@@ -35,7 +35,7 @@ Le statut d’enregistrement est `EXPERIMENTAL` : le statut `UNSTABLE` utilisé 
 
 ## Points ouverts
 
-- Importer les maquettes et conserver les originaux ; les 27 scénarios sont associés aux tâches ci-dessous.
+- Références récupérées ; conserver leur transmission privée aux futurs intervenants. Les 27 scénarios sont associés aux tâches ci-dessous.
 - Conserver la revue du premier jalon avant d’engager le moteur complet.
 - Confirmer la licence de distribution déclarée GPL dans les métadonnées avant publication d’une version distribuée.
 - Le dépôt GitHub a été créé privé ; les distributions publiques demandent une décision de visibilité.
@@ -59,7 +59,7 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | Scénario | Sujet | Tâches | État |
 | --- | --- | --- | --- |
 | AC-01 | Couple central et génération zéro | L1.3, L4.1, L5.1 | À réaliser / recette complète restante |
-| AC-02 | Refus du couple incomplet | L1.3–L1.7 | Implémenté ; intégration CI à actualiser |
+| AC-02 | Refus du couple incomplet | L1.3–L1.7 | Validé en CLI Gramps 6.0.8 ; CI 36288791405 |
 | AC-03 | Descendants des autres unions | L4.3–L4.4 | À réaliser / recette complète restante |
 | AC-04 | Filiations explicites multiples | L3.1, L4.4 | À réaliser / recette complète restante |
 | AC-05 | Implexes, fiche unique et cycles | L4.4–L4.5 | À réaliser / recette complète restante |
@@ -84,4 +84,4 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-24 | Stabilité du contenu et des ancres | L4.6, L5.6, L8.1 | À réaliser / recette complète restante |
 | AC-25 | Métadonnées indépendantes de la langue | L3.3, L8.4 | À réaliser / recette complète restante |
 | AC-26 | Documentation FR/EN et contrôle CI | L1.8, L8.4 | À réaliser / recette complète restante |
-| AC-27 | Transmission des maquettes | L0.1, L6.1 | À réaliser / recette complète restante |
+| AC-27 | Transmission des maquettes | L0.1, L6.1 | Originaux locaux récupérés et PDFs consultés ; transmission privée requise pour un nouveau clone |

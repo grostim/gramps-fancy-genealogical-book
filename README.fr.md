@@ -54,4 +54,4 @@ Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration néce
 
 Le [compte rendu de validation](docs/validation-l1.fr.md) distingue les contrôles effectués et les limites restantes.
 
-La famille de référence doit avoir deux partenaires connus (AC-02). Exigences intégrales : [transcription visible de la spécification](docs/reference/specification-v1.1.visible.txt), avec sa [provenance](docs/reference/README.md).
+La famille de référence doit avoir deux partenaires connus (AC-02). Exigences intégrales : [spécification originale](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), avec sa [provenance](docs/reference/README.md).

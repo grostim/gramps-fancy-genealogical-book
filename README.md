@@ -50,6 +50,6 @@ python3 -m venv .venv
 
 Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.8 for integration.
 
-See the [validation record (French)](docs/validation-l1.fr.md) for executed checks and remaining limitations.
+See the [validation record (French)](docs/validation-l1.md) for executed checks and remaining limitations.
 
-The reference family must have two known partners (AC-02). Full source requirements: [visible specification transcription](docs/reference/specification-v1.1.visible.txt), with [provenance](docs/reference/README.md).
+The reference family must have two known partners (AC-02). Full source requirements: [original specification](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), with [provenance](docs/reference/README.md).

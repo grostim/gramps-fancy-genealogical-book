@@ -6,7 +6,7 @@ Version de travail du 26 septembre 2026, suivi actualisé le 27 septembre 2026. 
 
 Le plan repose sur les discussions « Spécification plugin Gramps » et « Concevoir un livre généalogique », ainsi que sur l’inspection du dépôt au commit `ab42de1`.
 
-Le fichier local [specification-v1.1.md](specification-v1.1.md) est une synthèse historique de démarrage. Le [texte intégral visible de la v1.1](reference/specification-v1.1.visible.txt) a depuis été récupéré via l’aperçu ChatGPT, avec sa [provenance](reference/README.md). Il comporte 18 sections et **27 scénarios AC-01 à AC-27**, malgré les 24 annoncés dans la discussion. La [matrice d’exigences](requirements.fr.md) les associe aux tâches ci-dessous. Les fichiers originaux des deux maquettes PDF/HTML restent à importer avant de figer les gabarits.
+Le fichier local [specification-v1.1.md](specification-v1.1.md) est une synthèse historique de démarrage. Le [texte intégral visible de la v1.1](reference/specification-v1.1.visible.txt) a depuis été récupéré via l’aperçu ChatGPT, avec sa [provenance](reference/README.md). Il comporte 18 sections et **27 scénarios AC-01 à AC-27**, malgré les 24 annoncés dans la discussion. La [matrice d’exigences](requirements.fr.md) les associe aux tâches ci-dessous. Le [Markdown original](reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md) et les quatre maquettes ont été récupérés ensuite ; les maquettes restent locales, hors Git, car elles contiennent des données familiales réelles. Voir la [revue visuelle](reference/mockup-review.md).
 
 Les éléments suivants sont confirmés par les échanges accessibles :
 
@@ -223,13 +223,13 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 ## 8. Suivi d’exécution — 27 septembre 2026
 
 - Dépôt privé créé : [grostim/gramps-fancy-genealogical-book](https://github.com/grostim/gramps-fancy-genealogical-book). Branches `main` et `codex/initial-project` publiées. L’accès GitHub fonctionne via le trousseau macOS ; le précédent échec était lié au sandbox.
-- L0 en cours : [matrice des 27 scénarios](requirements.fr.md) établie et texte intégral récupéré ; originaux des maquettes encore à importer.
+- L0 en cours : [matrice des 27 scénarios](requirements.fr.md) établie et texte intégral récupéré ; originaux récupérés et maquettes consultées ; licence de distribution restant à confirmer.
 - L1 à revoir : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel. Tests locaux et CI Linux réussis ; voir le [compte rendu de validation](validation-l1.fr.md).
-- Contrôle graphique restant : Mac verrouillé lors de l’essai. Le succès CLI ne valide pas encore le parcours graphique.
+- Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
-1. Récupérer les maquettes originales avant de figer les gabarits et conserver le Markdown original si disponible.
-2. Terminer le contrôle graphique de L1 après déverrouillage du Mac.
-3. Revoir la fondation sur la branche dédiée avant fusion.
-4. Engager les prototypes LaTeX, médias et Gramps Web, puis le moteur généalogique selon les contrats validés.
+1. Revoir la fondation sur la branche dédiée avant fusion.
+2. Engager les prototypes LaTeX, médias et Gramps Web, en utilisant les maquettes comme inspiration et la v1.1 comme règle fonctionnelle.
+3. Améliorer les diagnostics utilisateur et compléter les traductions FR/EN.
+4. Construire ensuite le moteur généalogique selon les contrats validés.

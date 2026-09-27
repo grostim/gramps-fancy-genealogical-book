@@ -1,11 +1,15 @@
 # Design source provenance
 
-`specification-v1.1.visible.txt` is the complete visible text extracted from the ChatGPT document preview on 2026-09-27. It is a transcription, not a byte-identical download of the original Markdown. Tables use tab-separated cells and UI labels may remain.
+The original [specification v1.1](Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), dated 2026-09-25, was recovered on 2026-09-27 from `Gramps_Fancy_Genealogical_Book_Specification_v1.1_et_maquettes.zip` in Downloads. Its bytes and the four mockups match the archive. [manifest.json](manifest.json) records sizes and SHA-256 checksums.
 
-Source: [Spécification plugin Gramps](https://chatgpt.com/c/6ab6271b-2764-83eb-bee1-104a02c02d59), attachment `Gramps_Fancy_Genealogical_Book_Specification_v1.1.md`, dated 2026-09-25. The source contains 18 sections and **27** acceptance scenarios (AC-01–AC-27), despite the conversation summary mentioning 24.
+Source: [Spécification plugin Gramps](https://chatgpt.com/c/6ab6271b-2764-83eb-bee1-104a02c02d59). The original has 18 sections and **27** acceptance scenarios, AC-01–AC-27. It supersedes the earlier visible-text transcription, retained for traceability.
 
-The original Markdown/ZIP download did not complete through the browser. The four original PDF/HTML mockup files remain to be imported before finalizing templates. This transcription contains requirements, not personal family fixtures.
+The four mockups are available locally under `reference_maquette/`, deliberately ignored by Git because they contain real family data (§ 13). Transfer them privately to future implementers; a fresh clone does not contain them. The plugin archive and test fixtures exclude these references. Consult [mockup-review.md](mockup-review.md) before implementing templates.
 
 # Provenance française
 
-Le fichier texte conserve le texte intégral visible dans l’aperçu ChatGPT le 27 septembre 2026. Ce n’est pas une copie binaire du Markdown original : les tableaux sont séparés par des tabulations et des libellés de l’interface peuvent subsister. La v1.1 du 25 septembre contient 18 sections et **27 scénarios**, AC-01 à AC-27, malgré les 24 annoncés dans le résumé de discussion. Les téléchargements Markdown/ZIP n’ont pas abouti. Les quatre maquettes PDF/HTML restent à importer avant de figer les gabarits.
+La [spécification originale v1.1](Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), datée du 25 septembre 2026, a été récupérée le 27 septembre depuis l’archive ZIP présente dans Téléchargements. Le Markdown et les quatre maquettes sont identiques aux fichiers de l’archive ; leurs tailles et empreintes SHA-256 figurent dans [manifest.json](manifest.json).
+
+L’original comporte 18 sections et **27 scénarios AC-01 à AC-27**. Il remplace comme référence la transcription visible antérieure, conservée pour traçabilité.
+
+Les quatre maquettes sont disponibles localement dans `reference_maquette/`. Elles contiennent des données familiales réelles et sont exclues de Git conformément au § 13. Un clone neuf ne les contient pas : leur transmission privée reste nécessaire pour les futurs intervenants. Elles sont aussi exclues de l’archive du plugin et des fixtures. Consulter la [revue des maquettes](mockup-review.md) avant l’implémentation graphique.
