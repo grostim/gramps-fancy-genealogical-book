@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import defaultdict, deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Iterable
 
 from .domain import (
@@ -13,6 +13,7 @@ from .domain import (
     Genealogy,
     GenealogyPart,
     Generation,
+    ParentChildLink,
     Person,
     PersonOccurrence,
     Snapshot,
@@ -272,18 +273,31 @@ def build_genealogy(
             root_order,
         ),
     )
-    family_section_records = tuple(
-        FamilySection(
-            family_handle=section.family_handle,
-            part=section.part,
-            generation=section.generation,
-            branch_handles=tuple(
-                sorted(section.branch_handles, key=lambda handle: (root_order.get(handle, 99), handle))
-            ),
-            roles=tuple(sorted(section.roles)),
-        )
-        for section in ordered_sections
+    family_section_records, occurrence_section_ids = _link_family_sections(
+        ordered_sections,
+        families,
+        ordered_parts,
+        central_family.handle,
+        root_order,
     )
+    ordered_parts = {
+        part: tuple(
+            Generation(
+                generation.number,
+                tuple(
+                    replace(
+                        occurrence,
+                        family_section_ids=tuple(
+                            occurrence_section_ids.get(occurrence.occurrence_id, ())
+                        ),
+                    )
+                    for occurrence in generation.occurrences
+                ),
+            )
+            for generation in generations
+        )
+        for part, generations in ordered_parts.items()
+    }
     return Genealogy(
         ancestry=GenealogyPart("ancestry", ordered_parts["ancestry"]),
         descent=GenealogyPart("descent", ordered_parts["descent"]),
@@ -336,6 +350,125 @@ def _lineage_path_order_key(
             for length in range(2, len(path) + 1)
         ),
     )
+
+
+def _link_family_sections(
+    ordered_sections: list[_FamilySection],
+    families: dict[str, Family],
+    ordered_parts: dict[str, tuple[Generation, ...]],
+    central_family_handle: str,
+    root_order: dict[str, int],
+) -> tuple[tuple[FamilySection, ...], dict[str, tuple[str, ...]]]:
+    """Connect family sections to the in-scope partner and child occurrences."""
+    occurrences_by_context: dict[tuple[str, int, str], list[PersonOccurrence]] = defaultdict(list)
+    for part, generations in ordered_parts.items():
+        for generation in generations:
+            for occurrence in generation.occurrences:
+                occurrences_by_context[(part, generation.number, occurrence.person_handle)].append(
+                    occurrence
+                )
+
+    section_records: list[FamilySection] = []
+    section_ids_by_occurrence: dict[str, list[str]] = defaultdict(list)
+    for section in ordered_sections:
+        family = families[section.family_handle]
+        section_id = f"family:{section.part}:{section.generation}:{section.family_handle}"
+        partners_by_handle: dict[str, list[PersonOccurrence]] = defaultdict(list)
+        section_branches = section.branch_handles
+        for partner in _partners(family):
+            for occurrence in occurrences_by_context.get(
+                (section.part, section.generation, partner.handle), ()
+            ):
+                is_context_member = occurrence.family_handle == family.handle or bool(
+                    {"lineage", "central"}.intersection(occurrence.roles)
+                )
+                if is_context_member and section_branches.intersection(occurrence.branch_handles):
+                    partners_by_handle[partner.handle].append(occurrence)
+
+        partner_occurrences = [
+            occurrence
+            for partner in _partners(family)
+            for occurrence in partners_by_handle.get(partner.handle, ())
+        ]
+        child_part = (
+            "descent"
+            if section.part == "ancestry"
+            and section.family_handle == central_family_handle
+            and section.generation == 0
+            and "central" in section.roles
+            else section.part
+        )
+        child_generation = section.generation + 1
+        child_occurrences: list[PersonOccurrence] = []
+        parent_child_links: list[ParentChildLink] = []
+        seen_child_ids: set[str] = set()
+        seen_links: set[tuple[str, str]] = set()
+        for child in family.children:
+            child_relation = _child_relationship(family, child.handle)
+            linked_parents = tuple(
+                partner.handle
+                for partner in _partners(family)
+                if _parent_linked(family, child_relation, partner.handle)
+            )
+            if not linked_parents:
+                continue
+            candidates = [
+                occurrence
+                for occurrence in occurrences_by_context.get(
+                    (child_part, child_generation, child.handle), ()
+                )
+                if section_branches.intersection(occurrence.branch_handles)
+                and (
+                    occurrence.family_handle == family.handle
+                    or "lineage" in occurrence.roles
+                    or "central" in occurrence.roles
+                    or "sibling" in occurrence.roles
+                )
+            ]
+            for occurrence in candidates:
+                if occurrence.occurrence_id not in seen_child_ids:
+                    seen_child_ids.add(occurrence.occurrence_id)
+                    child_occurrences.append(occurrence)
+            for parent_handle in linked_parents:
+                for parent in partners_by_handle.get(parent_handle, ()):
+                    for occurrence in candidates:
+                        link_key = parent.occurrence_id, occurrence.occurrence_id
+                        if link_key not in seen_links:
+                            seen_links.add(link_key)
+                            parent_child_links.append(
+                                ParentChildLink(
+                                    parent_occurrence_id=parent.occurrence_id,
+                                    child_occurrence_id=occurrence.occurrence_id,
+                                )
+                            )
+
+        partner_ids = tuple(dict.fromkeys(item.occurrence_id for item in partner_occurrences))
+        child_ids = tuple(item.occurrence_id for item in child_occurrences)
+        for occurrence_id in (*partner_ids, *child_ids):
+            section_ids_by_occurrence[occurrence_id].append(section_id)
+        section_records.append(
+            FamilySection(
+                family_handle=section.family_handle,
+                part=section.part,
+                generation=section.generation,
+                branch_handles=tuple(
+                    sorted(
+                        section_branches,
+                        key=lambda handle: (root_order.get(handle, 99), handle),
+                    )
+                ),
+                roles=tuple(sorted(section.roles)),
+                section_id=section_id,
+                partner_occurrence_ids=partner_ids,
+                child_occurrence_ids=child_ids,
+                parent_child_links=tuple(parent_child_links),
+            )
+        )
+
+    return tuple(section_records), {
+        occurrence_id: tuple(dict.fromkeys(section_ids))
+        for occurrence_id, section_ids in section_ids_by_occurrence.items()
+    }
 
 
 def _build_ancestry(
