@@ -53,3 +53,5 @@ python3 -m venv .venv
 Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration nécessite Python 3.12+ et Gramps 6.0 ; il vérifie les fichiers et diagnostics car Gramps peut renvoyer un code de sortie zéro malgré l’échec d’un rapport. La CI cible Python 3.10 à 3.13 pour le domaine et Gramps 6.0.8 pour l’intégration.
 
 Le [compte rendu de validation](docs/validation-l1.fr.md) distingue les contrôles effectués et les limites restantes.
+
+La famille de référence doit avoir deux partenaires connus (AC-02). Exigences intégrales : [transcription visible de la spécification](docs/reference/specification-v1.1.visible.txt), avec sa [provenance](docs/reference/README.md).

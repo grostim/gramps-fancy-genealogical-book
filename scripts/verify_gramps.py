@@ -70,16 +70,12 @@ def verify(executable: str) -> None:
 
         single = work / "single.json"
         log = report("F0002", single)
-        if not single.exists():
-            raise AssertionError(log)
-        model = json.loads(single.read_text(encoding="utf-8"))
-        assert model["reference_family"]["mother"] is None
-        assert model["reference_family"]["children"] == []
-        assert [person["gramps_id"] for person in model["people"]] == ["I0004"]
-        print("PASS: single-parent family without children")
+        assert "two known partners" in log, log
+        assert not single.exists()
+        print("PASS: incomplete reference couple rejected without output (AC-02)")
 
         original = output.read_bytes()
-        for family in ("F9999", ""):
+        for family in ("F9999", "", "F0002"):
             log = report(family, output, overwrite=True)
             assert "Book model export failed" in log, log
             assert output.read_bytes() == original
@@ -88,8 +84,9 @@ def verify(executable: str) -> None:
         assert output.read_bytes() == original
         print("PASS: invalid/empty selection and existing-output protection")
 
-        log = report("F0002", output, overwrite=True)
-        assert json.loads(output.read_text())["reference_family"]["gramps_id"] == "F0002", log
+        output.write_text("previous export", encoding="utf-8")
+        log = report("F0001", output, overwrite=True)
+        assert json.loads(output.read_text())["reference_family"]["gramps_id"] == "F0001", log
         print("PASS: explicit replacement")
 
         for destination in (None, work / "missing" / "file.json", work / "not-json.pdf"):

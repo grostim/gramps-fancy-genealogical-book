@@ -1,18 +1,18 @@
 # Plan d’action — Gramps Fancy Genealogical Book
 
-Version de travail du 26 septembre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
+Version de travail du 26 septembre 2026, suivi actualisé le 27 septembre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
 
 ## 1. Références et niveau de certitude
 
 Le plan repose sur les discussions « Spécification plugin Gramps » et « Concevoir un livre généalogique », ainsi que sur l’inspection du dépôt au commit `ab42de1`.
 
-Le fichier local [specification-v1.1.md](specification-v1.1.md) est une synthèse de démarrage. Le document intégral annoncé dans la discussion — 18 sections et 24 scénarios d’acceptation — et les deux maquettes PDF/HTML ne sont pas présents dans ce dépôt. Le contenu de ces 24 scénarios ne peut donc pas encore être repris fidèlement. Leur importation et leur rapprochement avec ce plan constituent la première tâche.
+Le fichier local [specification-v1.1.md](specification-v1.1.md) est une synthèse historique de démarrage. Le [texte intégral visible de la v1.1](reference/specification-v1.1.visible.txt) a depuis été récupéré via l’aperçu ChatGPT, avec sa [provenance](reference/README.md). Il comporte 18 sections et **27 scénarios AC-01 à AC-27**, malgré les 24 annoncés dans la discussion. La [matrice d’exigences](requirements.fr.md) les associe aux tâches ci-dessous. Les fichiers originaux des deux maquettes PDF/HTML restent à importer avant de figer les gabarits.
 
 Les éléments suivants sont confirmés par les échanges accessibles :
 
 - Plugin pour Gramps 6, organisé autour d’une famille de référence.
 - Architecture séparant intégration Gramps, extraction/normalisation, moteur généalogique, modèle éditorial et rendus LaTeX/PDF et HTML.
-- Présentation familiale, ascendance par générations et descendance par branches comme base de conception retenue dans les échanges sur la maquette ; détails de parcours à rapprocher de la spécification intégrale.
+- Présentation familiale, ascendance par générations et descendance par branches comme base de conception retenue dans les échanges sur la maquette ; règles détaillées au § 4 de la v1.1.
 - Repères permettant de situer la famille dans la généalogie, avec navigation utilisable sur papier et à l’écran.
 - Événements de vie détaillés pour les individus concernés : professions, distinctions, service militaire et autres événements présents dans Gramps.
 - Portraits et photographies des personnes et familles, avec annexes pour les illustrations complémentaires.
@@ -22,9 +22,9 @@ Les éléments suivants sont confirmés par les échanges accessibles :
 - Publication des objets privés lorsque leur lecture est autorisée par Gramps, sans contournement des droits disponibles.
 - Premier jalon limité à un plugin installable, une sélection de famille et un modèle intermédiaire testable, suivi d’une revue de la fondation.
 
-Les règles précises de filiation, de profondeur, de sélection des fiches, de priorité entre métadonnées et de pagination doivent être extraites du texte intégral avant leur implémentation. Les options techniques proposées ci-dessous restent révisables sur preuve issue des prototypes.
+Les règles précises de filiation, de profondeur, de sélection des fiches, de priorité entre métadonnées et de pagination sont relevées dans la matrice d’exigences. Les options techniques proposées ci-dessous restent révisables sur preuve issue des prototypes.
 
-## 2. Point de départ
+## 2. Point de départ (constat initial du 26 septembre)
 
 | Élément | État constaté | Travail restant |
 | --- | --- | --- |
@@ -64,7 +64,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 
 1. L0.1 — Importer `Gramps_Fancy_Genealogical_Book_Specification_v1.1.md` et les deux maquettes dans un répertoire de références, en conservant leur version et leur provenance.
 2. L0.2 — Distinguer clairement la synthèse locale du document intégral ; relever les écarts entre code, synthèse et spécification.
-3. L0.3 — Construire une matrice « exigence → section source → tâche → scénario → résultat ». Reprendre les 24 scénarios avec leurs identifiants d’origine lorsqu’ils sont disponibles.
+3. L0.3 — Construire une matrice « exigence → section source → tâche → scénario → résultat ». Maintenir AC-01 à AC-27 avec leurs identifiants d’origine.
 4. L0.4 — Consigner les décisions déjà prises et les seules ambiguïtés restantes. Toute nouvelle proposition indique sa justification et les fonctions affectées.
 5. L0.5 — Rétablir l’authentification GitHub, créer le dépôt avec la visibilité retenue, publier une branche de base et conserver le travail de fondation sur une branche de revue.
 6. L0.6 — Clarifier la licence de distribution, déjà déclarée GPL dans les métadonnées mais dépourvue de fichier de licence dans le squelette ; compléter les fichiers correspondants une fois le choix confirmé.
@@ -96,7 +96,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 
 1. L2.1 — Formaliser les contrats entre extraction, parcours, livre et rendus : identifiants, ordre déterministe, champs optionnels, diagnostics et version du JSON.
 2. L2.2 — Définir les références stables du livre. Distinguer identifiant interne, identifiant Gramps, identifiant de publication et numéro de page ; un changement de pagination ne doit pas casser un lien.
-3. L2.3 — Réaliser un prototype LaTeX réduit : accents, noms longs, notes de bas de page selon les règles du texte intégral, références de pages et URL longues. Choisir le moteur et les dépendances après ce prototype.
+3. L2.3 — Réaliser un prototype de 15–30 pages sous LuaLaTeX, hypothèse initiale : accents, noms longs, notes de bas de page selon les règles du texte intégral, références de pages et URL longues. Choisir le moteur et les dépendances après ce prototype.
 4. L2.4 — Réaliser un prototype de média : chargement de l’original, lecture du rectangle Gramps, recadrage et génération d’un dérivé. Définir le traitement des coordonnées invalides et des fichiers absents.
 5. L2.5 — Vérifier sur une instance de développement Gramps Web le chargement du rapport, les options disponibles, les accès aux médias, l’exécution sans interface graphique et la récupération du résultat.
 6. L2.6 — Définir la gestion de compilation : répertoire temporaire, arguments explicites, délai maximal, journal exploitable et restitution des erreurs. Les textes généalogiques doivent être traités comme des données dans les rendus.
@@ -137,12 +137,14 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 
 **Actions**
 
-1. L5.1 — Assembler les parties du livre : couple central, ascendances, descendances, annexes photographiques et documentaires ; confirmer sommaire et index dans le texte intégral.
+1. L5.1 — Assembler les parties du livre : couverture, préliminaires, sommaire, ascendance commençant par F0, descendance, annexe documentaire unique et index des personnes.
 2. L5.2 — Définir les fiches familiales et notices, les événements de vie, les portraits, les légendes et les renvois. Prévoir qu’une fiche occupe plusieurs pages.
 3. L5.3 — Attribuer une cible unique à chaque citation publiée et permettre plusieurs appels depuis les faits et personnes qui l’utilisent.
 4. L5.4 — Composer une notice documentaire compacte : dépôt réellement lié à la source, source, détail de citation, URL complète et médias utiles. Ne pas y répéter la liste des faits justifiés.
 5. L5.5 — Préparer les images dérivées à partir des originaux, appliquer les régions de référence et conserver l’association entre extrait et citation. Le cache doit tenir compte du fichier et du rectangle.
 6. L5.6 — Modéliser les cibles de navigation et les index avant pagination ; vérifier que toute référence pointe vers une section existante ou porte une indication explicite de hors périmètre.
+
+7. L5.7 — Produire séparément le rapport de contradictions de dates/lieux pour un même fait, sans avertissement dans le livre ni audit généalogique général (AC-19).
 
 **Critères de sortie :** le même modèle alimente les deux rendus ; aucune décision de sélection généalogique n’est recalculée dans un moteur de rendu. Une citation commune à plusieurs faits n’apparaît qu’une fois dans l’annexe, avec tous ses appels résolus. Les originaux restent intacts.
 
@@ -175,7 +177,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 
 **Actions**
 
-1. L8.1 — Exécuter les 24 scénarios originaux, complétés par les cas techniques nécessaires ; lier chaque résultat à une version du plugin et de l’environnement.
+1. L8.1 — Exécuter les 27 scénarios originaux, complétés par les cas techniques nécessaires ; lier chaque résultat à une version du plugin et de l’environnement.
 2. L8.2 — Qualifier les versions Gramps, Python et moteurs documentaires retenues sur la base des essais, puis aligner la CI et la documentation sur cette matrice.
 3. L8.3 — Mesurer temps de génération, mémoire et taille des sorties sur de petits, moyens et grands jeux fictifs. Fixer les seuils acceptables après une première mesure représentative.
 4. L8.4 — Compléter les guides FR/EN : installation, dépendances LaTeX, configuration, `BOOK_*`, formats de sortie, dépannage, architecture et contribution. Compléter les traductions de l’interface.
@@ -186,7 +188,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 
 ## 5. Couverture fonctionnelle et contrôles proposés
 
-Cette matrice est provisoire : elle ne constitue pas une reconstitution des 24 scénarios originaux.
+Cette vue thématique est complétée par la correspondance AC-01 à AC-27 dans [requirements.fr.md](requirements.fr.md).
 
 | Besoin | Lots | Contrôle principal |
 | --- | --- | --- |
@@ -204,20 +206,11 @@ Cette matrice est provisoire : elle ne constitue pas une reconstitution des 24 s
 
 Les données de test seront fictives et versionnées. Les comparaisons de JSON porteront sur l’identité, les relations et l’ordre attendu ; les comparaisons PDF porteront aussi sur le rendu visuel et les liens. Les tests unitaires ne remplaceront pas l’installation réelle du paquet.
 
-## 6. Arbitrages à extraire ou à confirmer
+## 6. Décisions et prototypes restant à mener
 
-| Sujet | Source ou décision attendue | Lot concerné |
-| --- | --- | --- |
-| Filiations retenues, unions périphériques, profondeur | Reprendre les décisions exactes de la v1.1 | L0, L4 |
-| Signification, support et priorité des `BOOK_*` | Distinguer étiquettes, attributs, valeurs et conflits | L0, L3–L5 |
-| Répartition entre mention et fiche détaillée | Reprendre la règle de sélection et de déduplication | L0, L4–L5 |
-| Notes de bas de page, appels et index | Reprendre les prescriptions de la v1.1 | L0, L2, L5–L6 |
-| Sortie LaTeX fournie à l’utilisateur, en plus du PDF | Vérifier le contrat des livrables | L0, L6 |
-| Compatibilité Gramps Web attendue pour la première version | Rapprocher l’exigence du résultat du prototype | L2, L8 |
-| Moteur LaTeX et dépendances | Décider sur le prototype et les environnements cibles | L2 |
-| Licence et visibilité GitHub | Confirmer les choix de distribution | L0, L8 |
+Les règles fonctionnelles sont établies par la v1.1 et résumées dans la matrice. Les points T-01 à T-10 du § 17 restent à résoudre par essais : sorties personnalisées Desktop/Web ; six notes éditoriales F0 ; dates et tri stable ; rôles et filiations « aucun » ; médias et PDF ; Markdown et notes riches ; lisibilité A4 ; convergence pagination/index ; matrice des environnements ; export LaTeX futur facultatif.
 
-Ces questions doivent d’abord être résolues par la lecture du document intégral. Seules les ambiguïtés persistantes nécessitent un arbitrage supplémentaire.
+Gramps Web est requis pour la version cible, avec preuve d’intégration avant annonce. LuaLaTeX est l’hypothèse technique de départ. La licence et le passage éventuel du dépôt privé au public doivent être fixés avant distribution. Le traitement des régions de médias mentionné dans la discussion reste à rapprocher de la déduplication prescrite par la v1.1.
 
 ## 7. Découpage de travail et suivi
 
@@ -225,13 +218,18 @@ Chaque tâche `Lx.y` peut devenir une issue GitHub contenant son besoin, ses dé
 
 Les statuts de suivi seront : à préparer, prêt, en cours, à revoir, validé ou bloqué avec cause. Le statut « validé » nécessite la preuve prévue dans le lot. Une archive construite ou une CI écrite ne suffisent pas à déclarer une intégration validée.
 
-Les estimations calendaires seront établies après L0 et L1 : le détail des 24 scénarios et les contraintes constatées dans Gramps peuvent modifier sensiblement la charge. Le périmètre des futurs rendus ne doit pas être chiffré à partir des seuls exemples actuels.
+Les estimations calendaires seront établies après L0 et L1 : le détail des 27 scénarios et les contraintes constatées dans Gramps peuvent modifier sensiblement la charge. Le périmètre des futurs rendus ne doit pas être chiffré à partir des seuls exemples actuels.
 
-## 8. Prochaines actions concrètes
+## 8. Suivi d’exécution — 27 septembre 2026
 
-1. Importer le dossier complet de conception et établir la matrice d’exigences.
-2. Rétablir l’accès GitHub, créer le dépôt et préparer la revue de la fondation locale.
-3. Mettre en place Gramps 6 avec une base fictive et installer l’archive générée.
-4. Valider et corriger le rapport JSON, puis exécuter les contrôles du premier jalon.
-5. Présenter la fondation avec sa démonstration et son état de conformité.
-6. Engager les prototypes LaTeX, médias et Gramps Web, puis le moteur généalogique selon les contrats validés.
+- Dépôt privé créé : [grostim/gramps-fancy-genealogical-book](https://github.com/grostim/gramps-fancy-genealogical-book). Branches `main` et `codex/initial-project` publiées. L’accès GitHub fonctionne via le trousseau macOS ; le précédent échec était lié au sandbox.
+- L0 en cours : [matrice des 27 scénarios](requirements.fr.md) établie et texte intégral récupéré ; originaux des maquettes encore à importer.
+- L1 à revoir : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel. Tests locaux et CI Linux réussis ; voir le [compte rendu de validation](validation-l1.fr.md).
+- Contrôle graphique restant : Mac verrouillé lors de l’essai. Le succès CLI ne valide pas encore le parcours graphique.
+
+### Prochaines actions
+
+1. Récupérer les maquettes originales avant de figer les gabarits et conserver le Markdown original si disponible.
+2. Terminer le contrôle graphique de L1 après déverrouillage du Mac.
+3. Revoir la fondation sur la branche dédiée avant fusion.
+4. Engager les prototypes LaTeX, médias et Gramps Web, puis le moteur généalogique selon les contrats validés.
