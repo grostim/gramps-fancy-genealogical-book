@@ -223,12 +223,53 @@ def build_genealogy(
             Generation(number, tuple(grouped[number])) for number in generation_numbers
         )
 
+    lineage_path_positions: dict[tuple[str, tuple[str, ...]], int] = {}
+    for part, generations in ordered_parts.items():
+        for generation in generations:
+            for position, occurrence in enumerate(generation.occurrences):
+                for path in occurrence.lineage_paths:
+                    key = part, path
+                    lineage_path_positions[key] = min(
+                        position, lineage_path_positions.get(key, position)
+                    )
+
+    section_source_order: dict[
+        tuple[str, str, int], list[tuple[tuple[int, ...], int]]
+    ] = defaultdict(list)
+    for part, generations in ordered_parts.items():
+        for generation in generations:
+            for occurrence in generation.occurrences:
+                if "lineage" not in occurrence.roles and "central" not in occurrence.roles:
+                    continue
+                person = people.get(occurrence.person_handle)
+                if person is None:
+                    continue
+                path_keys = [
+                    _lineage_path_order_key(path, part, root_order, lineage_path_positions)
+                    for path in occurrence.lineage_paths
+                ]
+                if not path_keys:
+                    path_keys = [
+                        (root_order.get(branch, 99),)
+                        for branch in occurrence.branch_handles
+                    ]
+                path_key = min(path_keys, default=(99,))
+                for union_position, family_handle in enumerate(person.family_handles):
+                    section_source_order[(part, family_handle, occurrence.generation)].append(
+                        (path_key, union_position)
+                    )
+                if part == "ancestry":
+                    for union_position, family_handle in enumerate(person.parent_family_handles):
+                        section_source_order[
+                            (part, family_handle, occurrence.generation - 1)
+                        ].append((path_key, union_position))
+
     ordered_sections = sorted(
         family_sections.values(),
-        key=lambda section: (
-            0 if section.part == "ancestry" else 1,
-            -section.generation if section.part == "ancestry" else section.generation,
-            section.family_handle,
+        key=lambda section: _family_section_order_key(
+            section,
+            section_source_order,
+            root_order,
         ),
     )
     family_section_records = tuple(
@@ -249,6 +290,51 @@ def build_genealogy(
         family_sections=family_section_records,
         profile_handles=tuple(profile_handles),
         diagnostics=tuple(diagnostics.values()),
+    )
+
+
+def _family_section_order_key(
+    section: _FamilySection,
+    section_source_order: dict[
+        tuple[str, str, int], list[tuple[tuple[int, ...], int]]
+    ],
+    root_order: dict[str, int],
+) -> tuple[int, int, tuple[int, ...], int, str]:
+    """Order family sections by comparable lineage paths and source unions."""
+    ancestry = section.part == "ancestry"
+    fallback_path = min(
+        (root_order.get(branch, 99),) for branch in section.branch_handles
+    ) if section.branch_handles else (99,)
+    path_position, union_position = min(
+        section_source_order.get(
+            (section.part, section.family_handle, section.generation),
+            [(fallback_path, 1_000_000)],
+        )
+    )
+    return (
+        0 if ancestry else 1,
+        -section.generation if ancestry else section.generation,
+        path_position,
+        union_position,
+        section.family_handle,
+    )
+
+
+def _lineage_path_order_key(
+    path: tuple[str, ...],
+    part: str,
+    root_order: dict[str, int],
+    path_positions: dict[tuple[str, tuple[str, ...]], int],
+) -> tuple[int, ...]:
+    """Return a branch-comparable key using each occurrence's local generation order."""
+    if not path:
+        return (99,)
+    return (
+        root_order.get(path[0], 99),
+        *(
+            path_positions.get((part, path[:length]), 1_000_000)
+            for length in range(2, len(path) + 1)
+        ),
     )
 
 
