@@ -80,7 +80,7 @@ def verify(executable: str) -> None:
             assert "Book model export failed" in log, log
             assert output.read_bytes() == original
         log = report("F0001", output)
-        assert "Book model export failed" in log, log
+        assert "Output file already exists" in log, log
         assert output.read_bytes() == original
         print("PASS: invalid/empty selection and existing-output protection")
 

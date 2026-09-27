@@ -1,6 +1,6 @@
 # Gramps Fancy Genealogical Book
 
-[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture](docs/architecture.md)
+[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md)
 
 An experimental Gramps 6 add-on for a family genealogical book. The current milestone selects a reference family and exports a shared JSON model. Full genealogy traversal and publication-quality LaTeX/PDF and HTML remain future milestones.
 
