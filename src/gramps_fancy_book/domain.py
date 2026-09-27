@@ -342,6 +342,7 @@ class EditorialProfile:
     person_handle: str
     primary_occurrence_id: str | None = None
     family_section_ids: tuple[str, ...] = ()
+    note_handles: tuple[str, ...] = ()
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
 
@@ -352,6 +353,7 @@ class EditorialFamilyNotice:
     family_handle: str
     primary_section_id: str
     family_section_ids: tuple[str, ...] = ()
+    note_handles: tuple[str, ...] = ()
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
 

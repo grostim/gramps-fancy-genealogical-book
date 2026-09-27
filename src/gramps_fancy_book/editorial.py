@@ -8,6 +8,7 @@ from .domain import (
     Family,
     FamilySection,
     Genealogy,
+    Note,
     Person,
     PersonOccurrence,
 )
@@ -18,6 +19,7 @@ def build_editorial_book(
     reference_family_handle: str,
     people_by_handle: dict[str, Person],
     families_by_handle: dict[str, Family],
+    notes_by_handle: dict[str, Note],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -61,6 +63,7 @@ def build_editorial_book(
                 family_handle=family_handle,
                 primary_section_id=family_sections[0].section_id,
                 family_section_ids=tuple(section.section_id for section in family_sections),
+                note_handles=_published_note_handles(family.links.notes, notes_by_handle),
                 event_refs=family.links.events,
                 media_refs=family.links.media,
             )
@@ -111,6 +114,11 @@ def build_editorial_book(
                     primary.occurrence_id if primary is not None else None
                 ),
                 family_section_ids=family_section_ids,
+                note_handles=(
+                    _published_note_handles(person.links.notes, notes_by_handle)
+                    if person is not None
+                    else ()
+                ),
                 event_refs=person.links.events if person is not None else (),
                 media_refs=person.links.media if person is not None else (),
             )
@@ -157,4 +165,14 @@ def build_editorial_book(
         ),
         profiles=tuple(profiles),
         family_notices=tuple(family_notices),
+    )
+
+
+def _published_note_handles(
+    note_handles: tuple[str, ...], notes_by_handle: dict[str, Note]
+) -> tuple[str, ...]:
+    return tuple(
+        handle
+        for handle in note_handles
+        if (note := notes_by_handle.get(handle)) is not None and note.is_publishable
     )

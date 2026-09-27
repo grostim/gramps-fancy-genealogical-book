@@ -52,6 +52,7 @@ def build_book_model(
                 family.reference_family.handle,
                 _snapshot_people(family),
                 _snapshot_families(family),
+                family.notes,
             ),
         )
 
