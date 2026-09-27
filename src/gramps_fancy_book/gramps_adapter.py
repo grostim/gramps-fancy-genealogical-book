@@ -362,6 +362,9 @@ class GrampsDatabaseAdapter:
         return Attribute(
             type=_type_text(_call(obj, "get_type")),
             value=_string(_call(obj, "get_value", "")),
+            citations=tuple(_sequence(obj, "get_citation_list")),
+            notes=tuple(_sequence(obj, "get_note_list")),
+            private=_optional_bool(obj, "get_privacy"),
         )
 
     def _date(self, obj: Any) -> DateValue | None:
@@ -373,8 +376,15 @@ class GrampsDatabaseAdapter:
         ymd = _call(raw_date, "get_ymd")
         stop_ymd = _call(raw_date, "get_stop_ymd")
         sort_value = _call(raw_date, "get_sort_value")
+        text = _string(_call(raw_date, "get_text", ""))
+        try:
+            from gramps.gen.datehandler import displayer
+        except ImportError:
+            display = text
+        else:
+            display = _string(displayer.display(raw_date)) or text
         return DateValue(
-            display=_string(_call(raw_date, "get_text", "")),
+            display=display,
             sort_value=int(sort_value) if sort_value not in (None, 0) else None,
             modifier=_integer_or_none(_call(raw_date, "get_modifier")),
             quality=_integer_or_none(_call(raw_date, "get_quality")),
@@ -495,6 +505,8 @@ class GrampsDatabaseAdapter:
                     call_number=_string(_call(ref, "get_call_number", "")),
                     media_type=_type_text(_call(ref, "get_media_type")),
                     order=index,
+                    notes=tuple(_sequence(ref, "get_note_list")),
+                    private=_optional_bool(ref, "get_privacy"),
                 )
             )
         return self._store(
@@ -626,18 +638,24 @@ class GrampsDatabaseAdapter:
                         self._citation_record(citation_handle)
                     for note_handle in links.notes:
                         self._note_record(note_handle)
+                    for attribute in links.attributes:
+                        self._hydrate_attribute_references(attribute)
                     for media_ref in links.media:
                         self._media_record(media_ref.media_handle)
                         for citation_handle in media_ref.citations:
                             self._citation_record(citation_handle)
                         for note_handle in media_ref.notes:
                             self._note_record(note_handle)
+                        for attribute in media_ref.attributes:
+                            self._hydrate_attribute_references(attribute)
                     for event_ref in links.events:
                         self._event_record(event_ref.event_handle)
                         for citation_handle in event_ref.citations:
                             self._citation_record(citation_handle)
                         for note_handle in event_ref.notes:
                             self._note_record(note_handle)
+                        for attribute in event_ref.attributes:
+                            self._hydrate_attribute_references(attribute)
                     for child_ref in getattr(record, "child_relationships", ()):
                         for citation_handle in child_ref.citations:
                             self._citation_record(citation_handle)
@@ -666,6 +684,12 @@ class GrampsDatabaseAdapter:
             if sizes == previous_sizes:
                 break
             previous_sizes = sizes
+
+    def _hydrate_attribute_references(self, attribute: Attribute) -> None:
+        for citation_handle in attribute.citations:
+            self._citation_record(citation_handle)
+        for note_handle in attribute.notes:
+            self._note_record(note_handle)
 
 
 def _sequence(obj: Any, method: str) -> tuple[Any, ...]:

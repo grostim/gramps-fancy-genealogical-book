@@ -11,6 +11,9 @@ from .conventions import BOOK_PROFILE
 class Attribute:
     type: str
     value: str
+    citations: tuple[str, ...] = ()
+    notes: tuple[str, ...] = ()
+    private: bool | None = None
 
 
 @dataclass(frozen=True)
