@@ -15,6 +15,8 @@ Les couches d’extraction et de parcours produisent un modèle JSON v0.7 indép
 
 Les références d’événements des fiches et notices familiales sont classées selon la valeur de tri Gramps ; les événements sans date viennent à la fin, et l’ordre d’association d’origine départage les valeurs identiques. Les plages approximatives ou chevauchantes restent à qualifier dans T‑03 avant de considérer la chronologie comme validée.
 
+Le modèle éditorial regroupe maintenant les appels sous une cible unique par handle de citation. Chaque appel conserve son contexte, l’objet qui le porte et son chemin de champ ; plusieurs personnes, notices familiales, événements, lieux, médias ou notes publiables peuvent ainsi renvoyer à la même cible sans perdre leur identité propre. Cette structure couvre une première partie de L5.3 ; les numéros compacts devront être attribués depuis l’ordre définitif du livre. Les notices bibliographiques, notes de bas de page, pages définitives et appels provenant de contextes éditoriaux encore absents restent à composer.
+
 Le modèle de parcours attribue à chaque occurrence sa partie, sa génération, sa famille et ses branches de départ ; les chemins alternatifs restent distincts. Les unions et partenaires donnent le contexte sans devenir de nouvelles racines. Les rendus HTML et LaTeX ne consomment pas encore ce modèle de parcours et restent des démonstrations.
 
 Le texte des notes n’est exposé que si elles portent l’étiquette Gramps `BOOK_PUBLICATION`. Les drapeaux privés sont préservés sans exclure les données accessibles à la base fournie. Le JSON indique si l’instantané contient des objets ou associations privés ; l’avertissement requis avant la publication d’un livre complet reste à mettre en place.

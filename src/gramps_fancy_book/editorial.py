@@ -1,7 +1,12 @@
 """Editorial book skeleton assembled from the genealogy model."""
 
+from collections.abc import Iterator
+from dataclasses import fields, is_dataclass, replace
+
 from .domain import (
     EditorialBook,
+    EditorialCitationCall,
+    EditorialCitationEntry,
     EditorialFamilyNotice,
     EditorialPart,
     EditorialPortrait,
@@ -12,9 +17,11 @@ from .domain import (
     FamilySection,
     Genealogy,
     Media,
+    MediaReference,
     Note,
     Person,
     PersonOccurrence,
+    Place,
 )
 
 
@@ -26,6 +33,7 @@ def build_editorial_book(
     notes_by_handle: dict[str, Note],
     media_by_handle: dict[str, Media],
     events_by_handle: dict[str, Event],
+    places_by_handle: dict[str, Place],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -152,6 +160,31 @@ def build_editorial_book(
         if portrait is not None:
             cover_portraits.append(portrait)
 
+    citation_entries, citation_call_ids = _build_citation_entries(
+        profiles,
+        family_notices,
+        people_by_handle,
+        families_by_handle,
+        notes_by_handle,
+        media_by_handle,
+        events_by_handle,
+        places_by_handle,
+    )
+    profiles = [
+        replace(
+            profile,
+            citation_call_ids=citation_call_ids.get(profile.profile_id, ()),
+        )
+        for profile in profiles
+    ]
+    family_notices = [
+        replace(
+            notice,
+            citation_call_ids=citation_call_ids.get(notice.notice_id, ()),
+        )
+        for notice in family_notices
+    ]
+
     body_parts = (
         "front-matter",
         "ancestry",
@@ -184,7 +217,11 @@ def build_editorial_book(
                     if notice.primary_section_id in descent_section_ids
                 ),
             ),
-            EditorialPart("documentary-appendix", "documentary_appendix"),
+            EditorialPart(
+                "documentary-appendix",
+                "documentary_appendix",
+                citation_entry_ids=tuple(entry.entry_id for entry in citation_entries),
+            ),
             EditorialPart(
                 "person-index",
                 "person_index",
@@ -194,6 +231,7 @@ def build_editorial_book(
         profiles=tuple(profiles),
         family_notices=tuple(family_notices),
         cover_portraits=tuple(cover_portraits),
+        citation_entries=citation_entries,
     )
 
 
@@ -249,3 +287,153 @@ def _chronological_event_refs(
     return tuple(
         reference for _, reference in sorted(enumerate(event_refs), key=event_key)
     )
+
+
+def _build_citation_entries(
+    profiles: list[EditorialProfile],
+    family_notices: list[EditorialFamilyNotice],
+    people_by_handle: dict[str, Person],
+    families_by_handle: dict[str, Family],
+    notes_by_handle: dict[str, Note],
+    media_by_handle: dict[str, Media],
+    events_by_handle: dict[str, Event],
+    places_by_handle: dict[str, Place],
+) -> tuple[tuple[EditorialCitationEntry, ...], dict[str, tuple[str, ...]]]:
+    calls_by_citation: dict[str, list[EditorialCitationCall]] = {}
+    call_ids_by_context: dict[str, list[str]] = {}
+
+    def add_record(
+        context_id: str,
+        owner_type: str,
+        owner_handle: str,
+        path: str,
+        record: object,
+    ) -> None:
+        for field_path, citation_handle in _citation_paths(record, path):
+            call_id = f"citation-call:{context_id}:{field_path}"
+            call = EditorialCitationCall(
+                call_id=call_id,
+                citation_handle=citation_handle,
+                context_id=context_id,
+                owner_type=owner_type,
+                owner_handle=owner_handle,
+                field_path=field_path,
+            )
+            calls_by_citation.setdefault(citation_handle, []).append(call)
+            call_ids_by_context.setdefault(context_id, []).append(call_id)
+
+    def add_event_context(
+        context_id: str, reference_index: int, event_reference: EventReference
+    ) -> None:
+        event = events_by_handle.get(event_reference.event_handle)
+        if event is None:
+            return
+        add_record(
+            context_id,
+            "event",
+            event.handle,
+            f"event[{reference_index}]:{event_reference.order}:{event.handle}",
+            event,
+        )
+        if event.place_handle is not None:
+            place = places_by_handle.get(event.place_handle)
+            if place is not None:
+                add_record(
+                    context_id,
+                    "place",
+                    place.handle,
+                    f"event[{reference_index}]:place:{place.handle}",
+                    place,
+                )
+
+    def add_media_context(
+        context_id: str, reference_index: int, media_ref: MediaReference
+    ) -> None:
+        media = media_by_handle.get(media_ref.media_handle)
+        if media is not None:
+            add_record(
+                context_id,
+                "media",
+                media.handle,
+                f"media[{reference_index}]:{media_ref.order}:{media.handle}",
+                media,
+            )
+
+    for profile in profiles:
+        person = people_by_handle.get(profile.person_handle)
+        if person is None:
+            continue
+        add_record(profile.profile_id, "person", person.handle, "person", person)
+        for index, event_reference in enumerate(profile.event_refs):
+            add_event_context(profile.profile_id, index, event_reference)
+        for index, media_reference in enumerate(profile.media_refs):
+            add_media_context(profile.profile_id, index, media_reference)
+        for index, note_handle in enumerate(profile.note_handles):
+            note = notes_by_handle.get(note_handle)
+            if note is not None:
+                add_record(
+                    profile.profile_id,
+                    "note",
+                    note.handle,
+                    f"note:{index}:{note.handle}",
+                    note,
+                )
+
+    for notice in family_notices:
+        family = families_by_handle.get(notice.family_handle)
+        if family is None:
+            continue
+        add_record(notice.notice_id, "family", family.handle, "family", family)
+        for index, event_reference in enumerate(notice.event_refs):
+            add_event_context(notice.notice_id, index, event_reference)
+        for index, media_reference in enumerate(notice.media_refs):
+            add_media_context(notice.notice_id, index, media_reference)
+        for index, note_handle in enumerate(notice.note_handles):
+            note = notes_by_handle.get(note_handle)
+            if note is not None:
+                add_record(
+                    notice.notice_id,
+                    "note",
+                    note.handle,
+                    f"note:{index}:{note.handle}",
+                    note,
+                )
+
+    entries = tuple(
+        EditorialCitationEntry(
+            entry_id=f"citation:{citation_handle}",
+            citation_handle=citation_handle,
+            calls=tuple(calls),
+        )
+        for citation_handle, calls in calls_by_citation.items()
+    )
+    return entries, {
+        context_id: tuple(call_ids)
+        for context_id, call_ids in call_ids_by_context.items()
+    }
+
+
+def _citation_paths(value: object, path: str) -> Iterator[tuple[str, str]]:
+    if is_dataclass(value) and not isinstance(value, type):
+        for item in fields(value):
+            if isinstance(value, Family) and item.name in {"father", "mother", "children"}:
+                continue
+            child = getattr(value, item.name)
+            child_path = f"{path}.{item.name}"
+            if item.name == "citations":
+                for index, citation_handle in enumerate(child):
+                    yield f"{child_path}[{index}]", citation_handle
+            elif isinstance(child, dict):
+                for key in sorted(child, key=str):
+                    yield from _citation_paths(child[key], f"{child_path}[{key}]")
+            elif isinstance(child, (tuple, list)):
+                for index, item_value in enumerate(child):
+                    yield from _citation_paths(item_value, f"{child_path}[{index}]")
+            else:
+                yield from _citation_paths(child, child_path)
+    elif isinstance(value, dict):
+        for key in sorted(value, key=str):
+            yield from _citation_paths(value[key], f"{path}[{key}]")
+    elif isinstance(value, (tuple, list)):
+        for index, item_value in enumerate(value):
+            yield from _citation_paths(item_value, f"{path}[{index}]")

@@ -332,6 +332,7 @@ class EditorialPart:
     kind: str
     family_section_ids: tuple[str, ...] = ()
     family_notice_ids: tuple[str, ...] = ()
+    citation_entry_ids: tuple[str, ...] = ()
     person_occurrence_ids: tuple[str, ...] = ()
     part_ids: tuple[str, ...] = ()
 
@@ -346,6 +347,7 @@ class EditorialProfile:
     portrait: EditorialPortrait | None = None
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
+    citation_call_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -364,6 +366,24 @@ class EditorialFamilyNotice:
     note_handles: tuple[str, ...] = ()
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
+    citation_call_ids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class EditorialCitationCall:
+    call_id: str
+    citation_handle: str
+    context_id: str
+    owner_type: str
+    owner_handle: str
+    field_path: str
+
+
+@dataclass(frozen=True)
+class EditorialCitationEntry:
+    entry_id: str
+    citation_handle: str
+    calls: tuple[EditorialCitationCall, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -372,6 +392,7 @@ class EditorialBook:
     profiles: tuple[EditorialProfile, ...] = ()
     family_notices: tuple[EditorialFamilyNotice, ...] = ()
     cover_portraits: tuple[EditorialPortrait, ...] = ()
+    citation_entries: tuple[EditorialCitationEntry, ...] = ()
 
 
 @dataclass
