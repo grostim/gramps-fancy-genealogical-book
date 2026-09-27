@@ -19,6 +19,8 @@ Le modèle éditorial regroupe maintenant les appels sous une cible unique par h
 
 Les emplacements éditoriaux sont dédupliqués par handle de média Gramps. Chaque emplacement conserve toutes ses références admissibles, dont chaque rectangle et citation associée, ainsi que la description et le drapeau `BOOK_FEATURED`. Une reproduction documentaire unique est ainsi distincte des dérivés recadrés qui peuvent être nécessaires selon les références. La lecture des originaux, l’application des recadrages et les clés de cache fondées sur le contenu du fichier, le rectangle et la politique de conversion restent à implémenter.
 
+L’utilitaire média convertit maintenant les régions Gramps en pourcentages vers des bornes pixel couvrantes et calcule les clés de dérivés à partir des octets source, de la région normalisée et d’une version explicite de la politique de conversion. Les régions invalides lèvent une `ValueError` que l’appelant devra signaler ; la résolution des fichiers, le décodage/recadrage, l’orientation EXIF et les PDF ne sont pas encore intégrés.
+
 Le modèle de parcours attribue à chaque occurrence sa partie, sa génération, sa famille et ses branches de départ ; les chemins alternatifs restent distincts. Les unions et partenaires donnent le contexte sans devenir de nouvelles racines. Les rendus HTML et LaTeX ne consomment pas encore ce modèle de parcours et restent des démonstrations.
 
 Le texte des notes n’est exposé que si elles portent l’étiquette Gramps `BOOK_PUBLICATION`. Les drapeaux privés sont préservés sans exclure les données accessibles à la base fournie. Le JSON indique si l’instantané contient des objets ou associations privés ; l’avertissement requis avant la publication d’un livre complet reste à mettre en place.
