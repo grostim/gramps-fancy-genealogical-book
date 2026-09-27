@@ -15,6 +15,12 @@ def _snapshot_people(snapshot: Snapshot):
     return people
 
 
+def _snapshot_families(snapshot: Snapshot):
+    families = dict(snapshot.families)
+    families.setdefault(snapshot.reference_family.handle, snapshot.reference_family)
+    return families
+
+
 def build_book_model(
     family: Family | Snapshot,
     max_ancestor_depth: int | str | None = None,
@@ -45,6 +51,10 @@ def build_book_model(
                 genealogy,
                 family.reference_family.handle,
                 _snapshot_people(family),
+                _snapshot_families(family),
+                family.notes,
+                family.media,
+                family.events,
             ),
         )
 

@@ -2,9 +2,17 @@
 
 from .domain import (
     EditorialBook,
+    EditorialFamilyNotice,
     EditorialPart,
+    EditorialPortrait,
     EditorialProfile,
+    Event,
+    EventReference,
+    Family,
+    FamilySection,
     Genealogy,
+    Media,
+    Note,
     Person,
     PersonOccurrence,
 )
@@ -14,6 +22,10 @@ def build_editorial_book(
     genealogy: Genealogy,
     reference_family_handle: str,
     people_by_handle: dict[str, Person],
+    families_by_handle: dict[str, Family],
+    notes_by_handle: dict[str, Note],
+    media_by_handle: dict[str, Media],
+    events_by_handle: dict[str, Event],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -39,6 +51,29 @@ def build_editorial_book(
         for section in genealogy.family_sections
         if section.part == "descent"
     )
+    ordered_sections = (*ancestry_sections, *descent_sections)
+    sections_by_family: dict[str, list[FamilySection]] = {}
+    for section in ordered_sections:
+        sections_by_family.setdefault(section.family_handle, []).append(section)
+
+    family_notices: list[EditorialFamilyNotice] = []
+    ancestry_section_ids = {section.section_id for section in ancestry_sections}
+    descent_section_ids = {section.section_id for section in descent_sections}
+    for family_handle, family_sections in sections_by_family.items():
+        family = families_by_handle.get(family_handle)
+        if family is None:
+            continue
+        family_notices.append(
+            EditorialFamilyNotice(
+                notice_id=f"family-notice:{family_handle}",
+                family_handle=family_handle,
+                primary_section_id=family_sections[0].section_id,
+                family_section_ids=tuple(section.section_id for section in family_sections),
+                note_handles=_published_note_handles(family.links.notes, notes_by_handle),
+                event_refs=_chronological_event_refs(family.links.events, events_by_handle),
+                media_refs=family.links.media,
+            )
+        )
 
     person_occurrence_ids: list[str] = []
     seen_primary_occurrences: set[str] = set()
@@ -85,10 +120,37 @@ def build_editorial_book(
                     primary.occurrence_id if primary is not None else None
                 ),
                 family_section_ids=family_section_ids,
-                event_refs=person.links.events if person is not None else (),
+                note_handles=(
+                    _published_note_handles(person.links.notes, notes_by_handle)
+                    if person is not None
+                    else ()
+                ),
+                portrait=(
+                    _primary_portrait(person, media_by_handle)
+                    if person is not None
+                    else None
+                ),
+                event_refs=(
+                    _chronological_event_refs(person.links.events, events_by_handle)
+                    if person is not None
+                    else ()
+                ),
                 media_refs=person.links.media if person is not None else (),
             )
         )
+
+    reference_family = families_by_handle.get(reference_family_handle)
+    cover_portraits = []
+    for person in (
+        (reference_family.father, reference_family.mother)
+        if reference_family is not None
+        else ()
+    ):
+        if person is None:
+            continue
+        portrait = _primary_portrait(person, media_by_handle)
+        if portrait is not None:
+            cover_portraits.append(portrait)
 
     body_parts = (
         "front-matter",
@@ -106,11 +168,21 @@ def build_editorial_book(
                 "ancestry",
                 "ancestry",
                 family_section_ids=tuple(section.section_id for section in ancestry_sections),
+                family_notice_ids=tuple(
+                    notice.notice_id
+                    for notice in family_notices
+                    if notice.primary_section_id in ancestry_section_ids
+                ),
             ),
             EditorialPart(
                 "descent",
                 "descent",
                 family_section_ids=tuple(section.section_id for section in descent_sections),
+                family_notice_ids=tuple(
+                    notice.notice_id
+                    for notice in family_notices
+                    if notice.primary_section_id in descent_section_ids
+                ),
             ),
             EditorialPart("documentary-appendix", "documentary_appendix"),
             EditorialPart(
@@ -120,4 +192,60 @@ def build_editorial_book(
             ),
         ),
         profiles=tuple(profiles),
+        family_notices=tuple(family_notices),
+        cover_portraits=tuple(cover_portraits),
+    )
+
+
+def _published_note_handles(
+    note_handles: tuple[str, ...], notes_by_handle: dict[str, Note]
+) -> tuple[str, ...]:
+    return tuple(
+        handle
+        for handle in note_handles
+        if (note := notes_by_handle.get(handle)) is not None and note.is_publishable
+    )
+
+
+def _primary_portrait(
+    person: Person, media_by_handle: dict[str, Media]
+) -> EditorialPortrait | None:
+    for media_ref in person.links.media:
+        media = media_by_handle.get(media_ref.media_handle)
+        if (
+            media is not None
+            and media.mime_type.casefold().startswith("image/")
+            and not media.is_excluded
+        ):
+            return EditorialPortrait(
+                person_handle=person.handle,
+                media_ref=media_ref,
+                caption=media.description,
+            )
+    return None
+
+
+def _chronological_event_refs(
+    event_refs: tuple[EventReference, ...], events_by_handle: dict[str, Event]
+) -> tuple[EventReference, ...]:
+    def event_key(
+        item: tuple[int, EventReference]
+    ) -> tuple[bool, int, int, int, str]:
+        original_index, reference = item
+        event = events_by_handle.get(reference.event_handle)
+        sort_value = (
+            event.date.sort_value
+            if event is not None and event.date is not None
+            else None
+        )
+        return (
+            sort_value is None,
+            sort_value if sort_value is not None else 0,
+            reference.order,
+            original_index,
+            reference.event_handle,
+        )
+
+    return tuple(
+        reference for _, reference in sorted(enumerate(event_refs), key=event_key)
     )
