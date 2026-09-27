@@ -5,9 +5,12 @@ from .domain import (
     EditorialFamilyNotice,
     EditorialPart,
     EditorialProfile,
+    EditorialPortrait,
     Family,
     FamilySection,
     Genealogy,
+    Media,
+    MediaReference,
     Note,
     Person,
     PersonOccurrence,
@@ -20,6 +23,7 @@ def build_editorial_book(
     people_by_handle: dict[str, Person],
     families_by_handle: dict[str, Family],
     notes_by_handle: dict[str, Note],
+    media_by_handle: dict[str, Media],
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -119,10 +123,27 @@ def build_editorial_book(
                     if person is not None
                     else ()
                 ),
+                portrait_ref=(
+                    _primary_portrait_ref(person, media_by_handle)
+                    if person is not None
+                    else None
+                ),
                 event_refs=person.links.events if person is not None else (),
                 media_refs=person.links.media if person is not None else (),
             )
         )
+
+    reference_family = families_by_handle.get(reference_family_handle)
+    cover_portraits = tuple(
+        EditorialPortrait(person_handle=person.handle, media_ref=portrait_ref)
+        for person in (
+            (reference_family.father, reference_family.mother)
+            if reference_family is not None
+            else ()
+        )
+        if person is not None
+        and (portrait_ref := _primary_portrait_ref(person, media_by_handle)) is not None
+    )
 
     body_parts = (
         "front-matter",
@@ -165,6 +186,7 @@ def build_editorial_book(
         ),
         profiles=tuple(profiles),
         family_notices=tuple(family_notices),
+        cover_portraits=cover_portraits,
     )
 
 
@@ -176,3 +198,17 @@ def _published_note_handles(
         for handle in note_handles
         if (note := notes_by_handle.get(handle)) is not None and note.is_publishable
     )
+
+
+def _primary_portrait_ref(
+    person: Person, media_by_handle: dict[str, Media]
+) -> MediaReference | None:
+    for media_ref in person.links.media:
+        media = media_by_handle.get(media_ref.media_handle)
+        if (
+            media is not None
+            and media.mime_type.casefold().startswith("image/")
+            and not media.is_excluded
+        ):
+            return media_ref
+    return None

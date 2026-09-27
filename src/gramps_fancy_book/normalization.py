@@ -53,6 +53,7 @@ def build_book_model(
                 _snapshot_people(family),
                 _snapshot_families(family),
                 family.notes,
+                family.media,
             ),
         )
 

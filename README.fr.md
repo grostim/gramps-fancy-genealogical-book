@@ -7,7 +7,7 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 ## Fonctionnement actuel
 
 - Sélecteur de famille Gramps et destination JSON explicite.
-- Modèle JSON v0.7 avec occurrences généalogiques, liens typés et cibles de renvoi, accompagné d’une structure éditoriale ordonnée. Les fiches de personnes éligibles et une notice par famille du périmètre référencent les notes publiables, événements, médias et sections familiales.
+- Modèle JSON v0.7 avec occurrences généalogiques, liens typés et cibles de renvoi, accompagné d’une structure éditoriale ordonnée. Les fiches de personnes éligibles et une notice par famille du périmètre référencent les notes publiables, portraits, événements, médias et sections familiales.
 - Extraction des ascendants et descendants en profondeur illimitée par défaut, ou limitée séparément avec un entier ≥ 0.
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.

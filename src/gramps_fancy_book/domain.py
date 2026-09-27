@@ -343,8 +343,15 @@ class EditorialProfile:
     primary_occurrence_id: str | None = None
     family_section_ids: tuple[str, ...] = ()
     note_handles: tuple[str, ...] = ()
+    portrait_ref: MediaReference | None = None
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
+
+
+@dataclass(frozen=True)
+class EditorialPortrait:
+    person_handle: str
+    media_ref: MediaReference
 
 
 @dataclass(frozen=True)
@@ -363,6 +370,7 @@ class EditorialBook:
     parts: tuple[EditorialPart, ...] = ()
     profiles: tuple[EditorialProfile, ...] = ()
     family_notices: tuple[EditorialFamilyNotice, ...] = ()
+    cover_portraits: tuple[EditorialPortrait, ...] = ()
 
 
 @dataclass
