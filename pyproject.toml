@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gramps-fancy-genealogical-book"
-version = "0.7.0"
+version = "0.8.0"
 description = "A modular Gramps 6 plugin for producing genealogical books."
 readme = "README.md"
 requires-python = ">=3.10"

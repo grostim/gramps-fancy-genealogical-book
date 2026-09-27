@@ -331,6 +331,7 @@ class EditorialPart:
     part_id: str
     kind: str
     family_section_ids: tuple[str, ...] = ()
+    family_notice_ids: tuple[str, ...] = ()
     person_occurrence_ids: tuple[str, ...] = ()
     part_ids: tuple[str, ...] = ()
 
@@ -346,9 +347,20 @@ class EditorialProfile:
 
 
 @dataclass(frozen=True)
+class EditorialFamilyNotice:
+    notice_id: str
+    family_handle: str
+    primary_section_id: str
+    family_section_ids: tuple[str, ...] = ()
+    event_refs: tuple[EventReference, ...] = ()
+    media_refs: tuple[MediaReference, ...] = ()
+
+
+@dataclass(frozen=True)
 class EditorialBook:
     parts: tuple[EditorialPart, ...] = ()
     profiles: tuple[EditorialProfile, ...] = ()
+    family_notices: tuple[EditorialFamilyNotice, ...] = ()
 
 
 @dataclass
