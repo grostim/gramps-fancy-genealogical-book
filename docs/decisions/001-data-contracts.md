@@ -31,7 +31,9 @@ JSON v0.2 is the first handle-keyed extraction snapshot, not the final editorial
 
 A run has a staging directory and produces exactly the selected PDF or HTML ZIP. Validate the staged result before replacing a previous deliverable. Separate user cancellation, fatal generation errors, recoverable technical diagnostics and the narrowly scoped genealogy conflict report (§ 12). Logs and real-family exports are local run artifacts, never repository fixtures.
 
-Resolve before implementation: overlapping date bounds, six editorial note roles on F0, “none” parent-child links, media-reference regions versus unique documentary placement, native rich notes plus Markdown, authorized private-object visibility.
+The editorial model implements the media contract by keeping one placement per Gramps media identity and retaining all referencing contexts and rectangles under it. Derivatives remain distinct per source-content digest, rectangle, and conversion-policy version.
+
+Resolve before implementation: overlapping date bounds, six editorial note roles on F0, “none” parent-child links, invalid-region fallback and source-path resolution, native rich notes plus Markdown, authorized private-object visibility.
 
 ## Français
 
@@ -62,4 +64,6 @@ Le JSON v0.2 est le premier instantané d’extraction indexé par handle, pas l
 
 Chaque exécution possède son répertoire temporaire et produit exclusivement le PDF ou ZIP HTML choisi. Le résultat est contrôlé avant remplacement d’un livrable précédent. Distinguer annulation, erreur bloquante, diagnostic technique récupérable et rapport généalogique limité au § 12. Les journaux et exports réels restent locaux, hors fixtures versionnées.
 
-Restent à éprouver : dates aux bornes superposées, six rôles de notes sur F0, filiation « aucun », régions de médias et reproduction unique, Markdown avec notes riches, visibilité autorisée des objets privés.
+Le modèle éditorial applique le contrat média en gardant un seul emplacement par identité Gramps et toutes ses références contextuelles et régions dessous. Les dérivés restent distincts selon l’empreinte du contenu, le rectangle et la version de la politique de conversion.
+
+Restent à éprouver : dates aux bornes superposées, six rôles de notes sur F0, filiation « aucun », repli en cas de région invalide et résolution des chemins source, Markdown avec notes riches, visibilité autorisée des objets privés.
