@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Troisième incrément préparé le 27 septembre 2026. L4 reste en cours ; cette note décrit le contrat implémenté, sans déclarer les scénarios d’acceptation entièrement qualifiés.
+Quatrième incrément préparé le 27 septembre 2026. L4 reste en cours ; cette note décrit le contrat implémenté, sans déclarer les scénarios d’acceptation entièrement qualifiés.
 
 ## Parcours disponibles
 
@@ -14,7 +14,7 @@ Troisième incrément préparé le 27 septembre 2026. L4 reste en cours ; cette 
 - L’éligibilité de fiche applique `BOOK_PROFILE = YES` ou un événement individuel/familial substantiel autre que naissance et décès. Une seule occurrence reçoit l’ancre principale de fiche ; les autres conservent leur renvoi.
 - L’ordre des générations est déterministe ; les dates de naissance complètes et exactes sont ordonnées chronologiquement, puis les dates absentes ou incertaines par identifiant stable.
 - Les sections familiales suivent d’abord l’ordre des générations et des occurrences de branche, puis l’ordre source des unions dans les listes Gramps du partenaire ou de l’enfant concerné. L’identifiant familial ne sert que de départage déterministe.
-- Chaque section familiale a un identifiant stable, référence les occurrences de ses partenaires et enfants dans le périmètre, et expose les liens parent-enfant entre ces occurrences. Chaque occurrence conserve les identifiants de ses sections ; génération, branche, chemin et ancre de fiche fournissent les données du repère.
+- Chaque section familiale a un identifiant stable, référence les occurrences de ses partenaires et enfants dans le périmètre, et expose les liens parent-enfant avec la valeur du type de filiation normalisée depuis Gramps pour chaque parent, lorsqu’elle est disponible. Chaque occurrence conserve les identifiants de ses sections ; génération, branche, chemin et ancre de fiche fournissent les données du repère.
 
 ## Limites avant la sortie de L4
 

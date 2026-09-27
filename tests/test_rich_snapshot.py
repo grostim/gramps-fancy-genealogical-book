@@ -272,7 +272,7 @@ def test_snapshot_preserves_relationships_events_sources_media_and_privacy():
     payload = model.to_dict()
     people = {person.handle: person for person in model.people}
 
-    assert model.metadata["BOOK_SCHEMA_VERSION"] == "0.4"
+    assert model.metadata["BOOK_SCHEMA_VERSION"] == "0.5"
     assert payload["privacy"]["contains_private_data"] is True
     assert payload["reference_family"]["child_relationships"] == [
         {

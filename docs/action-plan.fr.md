@@ -56,7 +56,7 @@ La compilation Python et la construction de l’archive ont été réalisées pr
 
 Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 peuvent avancer conjointement. Les deux rendus peuvent être développés indépendamment une fois le modèle éditorial stabilisé. La documentation et les contrôles accompagnent chaque lot.
 
-**Suivi au 27 septembre 2026 :** les premiers incréments d’extraction L3 et les corrections de revue sont fusionnés. L’implémentation L4 commence avec le parcours borné des filiations, les sections familiales contextuelles et les occurrences par génération. La sortie de L4 reste conditionnée à la qualification des scénarios AC-01, AC-03 à AC-09 et à l’intégration du modèle dans les rendus.
+**Suivi au 27 septembre 2026 :** les premiers incréments d’extraction L3 et les corrections de revue sont fusionnés. L4 se poursuit avec le parcours borné des filiations, les sections familiales contextuelles, les occurrences par génération et les liens parent-enfant qui conservent leurs types. La sortie de L4 reste conditionnée à la qualification des scénarios AC-01, AC-03 à AC-09 et à l’intégration du modèle dans les rendus.
 
 ## 4. Lots détaillés
 
@@ -229,12 +229,12 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - L1 fusionné et validé : archive installée dans un profil isolé, famille fictive exportée et cas d’erreur contrôlés dans Gramps 6.0.8 réel ; CI réussie. Voir le [compte rendu de validation](validation-l1.fr.md).
 - L2 fusionné pour les contrats et les prototypes médias/Web. La compilation LuaLaTeX et une recette sur Gramps Web restent à prouver ; voir [contrats de données](decisions/001-data-contracts.md), [revue de fondation](decisions/002-foundation-review.md) et [obstacles Gramps Web](../prototypes/web-spike.md).
 - L3 : premier incrément du schéma v0.2 fusionné ; les commentaires de revue sur dates, attributs et références de dépôts ont été traités dans une PR de suivi fusionnée. Les tags éditoriaux et rectangles de recadrage restent à éprouver avec de vrais objets Gramps.
-- L4 en cours : modèle JSON v0.4, extraction bornée de l’ascendance et de la descendance, occurrences par génération, ordre déterministe des sections familiales, identifiants de section et liens entre occurrences partenaires/enfants. La qualification des cas d’acceptation et la consommation du modèle par les rendus restent à réaliser.
+- L4 en cours : modèle JSON v0.5, extraction bornée de l’ascendance et de la descendance, occurrences par génération, ordre déterministe des sections familiales, identifiants de section, liens entre occurrences partenaires/enfants et types de filiation par lien. La qualification des cas d’acceptation et la consommation du modèle par les rendus restent à réaliser.
 - Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
 1. Compléter la fixture native Gramps pour éprouver `BOOK_PUBLICATION`, `BOOK_PROFILE` et les rectangles médias avec de vrais objets Gramps ; confirmer ces changements par la CI après publication de la branche.
-2. Clore L3 sur ces essais, puis implémenter L4 : parcours des filiations, unions, générations, implexes, collatéraux et frontières de profondeur selon la v1.1.
+2. Poursuivre L4 en qualifiant AC-03 à AC-09 : autres unions, filiations multiples, implexes, collatéraux, familles monoparentales et frontières de profondeur selon la v1.1.
 3. En parallèle, fournir un environnement LuaLaTeX reproductible et compiler le prototype jusqu’à stabilisation des renvois.
 4. Résoudre le contrat de sortie Gramps Web et étendre le prototype médias aux PDF monopage et à l’orientation EXIF avant d’annoncer ces compatibilités.

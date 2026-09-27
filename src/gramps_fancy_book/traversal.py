@@ -406,7 +406,10 @@ def _link_family_sections(
         for child in family.children:
             child_relation = _child_relationship(family, child.handle)
             linked_parents = tuple(
-                partner.handle
+                (
+                    partner.handle,
+                    _parent_relationship(family, child_relation, partner.handle),
+                )
                 for partner in _partners(family)
                 if _parent_linked(family, child_relation, partner.handle)
             )
@@ -429,7 +432,7 @@ def _link_family_sections(
                 if occurrence.occurrence_id not in seen_child_ids:
                     seen_child_ids.add(occurrence.occurrence_id)
                     child_occurrences.append(occurrence)
-            for parent_handle in linked_parents:
+            for parent_handle, relationship_type in linked_parents:
                 for parent in partners_by_handle.get(parent_handle, ()):
                     for occurrence in candidates:
                         link_key = parent.occurrence_id, occurrence.occurrence_id
@@ -439,6 +442,7 @@ def _link_family_sections(
                                 ParentChildLink(
                                     parent_occurrence_id=parent.occurrence_id,
                                     child_occurrence_id=occurrence.occurrence_id,
+                                    relationship_type=relationship_type,
                                 )
                             )
 
@@ -836,13 +840,18 @@ def _child_relationship(family: Family, person_handle: str):
     )
 
 
-def _parent_linked(family: Family, child_relationship, parent_handle: str) -> bool:
+def _parent_relationship(family: Family, child_relationship, parent_handle: str):
     if family.father is not None and family.father.handle == parent_handle:
-        relation = child_relationship.father_relation if child_relationship is not None else None
-    elif family.mother is not None and family.mother.handle == parent_handle:
-        relation = child_relationship.mother_relation if child_relationship is not None else None
-    else:
+        return child_relationship.father_relation if child_relationship is not None else None
+    if family.mother is not None and family.mother.handle == parent_handle:
+        return child_relationship.mother_relation if child_relationship is not None else None
+    return None
+
+
+def _parent_linked(family: Family, child_relationship, parent_handle: str) -> bool:
+    if parent_handle not in {partner.handle for partner in _partners(family)}:
         return False
+    relation = _parent_relationship(family, child_relationship, parent_handle)
     if relation is False:
         return False
     return not (isinstance(relation, str) and relation.strip().casefold() == "none")
