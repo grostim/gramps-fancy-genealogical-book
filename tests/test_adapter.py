@@ -44,6 +44,14 @@ def test_dangling_reference_is_reported_instead_of_silently_omitted():
         GrampsDatabaseAdapter(db).get_family_by_gramps_id("F0042")
 
 
+def test_child_reference_without_handle_is_reported():
+    db = make_database()
+    family = db.get_family_from_gramps_id.return_value
+    family.get_child_ref_list.return_value = [SimpleNamespace(ref=None)]
+    with pytest.raises(LookupError, match="without a handle"):
+        GrampsDatabaseAdapter(db).get_family_by_gramps_id("F0042")
+
+
 def test_nonexistent_family_and_empty_selection():
     db = make_database()
     db.get_family_from_gramps_id.return_value = None

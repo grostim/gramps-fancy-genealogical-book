@@ -20,16 +20,20 @@ class GrampsDatabaseAdapter:
         if family is None:
             raise LookupError(f"No family exists for handle {handle!r}")
 
+        father = self._person(family.get_father_handle())
+        mother = self._person(family.get_mother_handle())
+        children = []
+        for child_ref in family.get_child_ref_list():
+            if not child_ref.ref:
+                raise LookupError("Family contains a child reference without a handle.")
+            children.append(self._person(child_ref.ref))
+
         return Family(
             handle=family.get_handle(),
             gramps_id=family.get_gramps_id(),
-            father=self._person(family.get_father_handle()),
-            mother=self._person(family.get_mother_handle()),
-            children=tuple(
-                person
-                for child_ref in family.get_child_ref_list()
-                if (person := self._person(child_ref.ref)) is not None
-            ),
+            father=father,
+            mother=mother,
+            children=tuple(children),
         )
 
     def get_family_by_gramps_id(self, gramps_id: str) -> Family:

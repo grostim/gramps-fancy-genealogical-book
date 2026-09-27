@@ -42,5 +42,10 @@ class GrampsFancyBookReport(Report):
                 self.options_class.get_destination(),
                 overwrite=self.options_class.get_overwrite(),
             )
+        except FileExistsError as exc:
+            raise ReportError(
+                _("Output file already exists"),
+                _("Choose another JSON output file or enable 'Replace an existing file'."),
+            ) from exc
         except (LookupError, ValueError, OSError) as exc:
             raise ReportError(_("Book model export failed"), str(exc)) from exc
