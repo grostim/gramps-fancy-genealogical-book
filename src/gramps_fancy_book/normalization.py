@@ -56,6 +56,8 @@ def build_book_model(
                 family.media,
                 family.events,
                 family.places,
+                family.citations,
+                family.sources,
             ),
         )
 
