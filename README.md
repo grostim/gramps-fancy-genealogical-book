@@ -2,19 +2,21 @@
 
 [Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md)
 
-An experimental Gramps 6 add-on for a family genealogical book. The current milestone selects a reference family and exports a shared JSON model. Full genealogy traversal and publication-quality LaTeX/PDF and HTML remain future milestones.
+An experimental Gramps 6 add-on for a family genealogical book. The current milestone selects a reference family, extracts its ancestry and descendant graph to the chosen depths, and exports a shared JSON model. Publication-quality LaTeX/PDF and HTML remain future milestones.
 
 ## What works now
 
 - Native Gramps family selector and explicit JSON destination.
-- JSON v0.2 snapshot of people and directly linked families, including parent-child types, event roles, structured dates, places, attributes, notes, citations, sources, repositories and media.
+- JSON v0.3 model with branch and generation occurrences, family unions, parentage paths and profile eligibility.
+- Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
+- Structured dates use Gramps' date displayer while preserving the raw serialized date and typed parentage.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
 - Note text is exported only when the Gramps note has the `BOOK_PUBLICATION` tag; working notes remain referenced without their content.
 - Unicode JSON, failure diagnostics for unavailable records and atomic file publication.
 - Existing files preserved unless **Replace an existing file** is enabled.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
 
-Extraction currently covers the selected family, its direct members and families directly referenced by those people. Full genealogical traversal remains the next step. HTML and LaTeX functions are contract demonstrations, not finished book renderers. See the [L3 validation record](docs/validation-l3.md) and [requirement tracking](docs/requirements.fr.md).
+Traversal follows recorded parent-child links. Unions, partners and siblings are included as context without automatically expanding their own lineages. The output is still a data model: HTML and LaTeX functions remain contract demonstrations. See the [L3 validation record](docs/validation-l3.md), the [L4 progress note](docs/validation-l4.md), and [requirement tracking](docs/requirements.fr.md).
 
 ## Build and install
 
@@ -34,7 +36,7 @@ In Gramps, the report is registered under **Reports → Web Pages**. This catego
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,destination=/absolute/path/family.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,destination=/absolute/path/family.json"
 ```
 
 Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.

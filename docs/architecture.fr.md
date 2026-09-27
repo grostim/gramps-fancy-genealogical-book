@@ -11,9 +11,9 @@ Le projet sépare six responsabilités :
 
 ## Instantané d’extraction
 
-L’adaptateur produit un instantané JSON v0.2 indépendant de Gramps. Il comprend la famille choisie, ses membres, leurs unions et familles parentales directement référencées, les rôles des événements, les champs de dates, lieux, adresses et associations de personnes, notes, citations, sources, références de dépôts, médias, étiquettes et attributs. Les caches indexés par handle évitent de relire un objet dans la même extraction ; les références facultatives manquantes donnent des diagnostics structurés.
+L’adaptateur produit un instantané JSON v0.3 indépendant de Gramps. Il comprend les familles, personnes, événements, médias, citations, sources et liens requis par les parcours. Des limites d’ascendance et de descendance indépendantes restreignent la lecture ; leur valeur par défaut est illimitée. Les caches indexés par handle évitent de relire un objet dans la même extraction ; les références facultatives manquantes donnent des diagnostics structurés.
 
-Cet instantané ne constitue pas encore un graphe généalogique parcouru ni un livre éditorial. L’extraction ne suit qu’un niveau de familles depuis les membres de la famille centrale ; le lot L4 ajoutera les parcours d’ascendance et de descendance. Les rendus HTML et LaTeX restent des démonstrations.
+Le modèle de parcours attribue à chaque occurrence sa partie, sa génération, sa famille et ses branches de départ ; les chemins alternatifs restent distincts. Les unions et partenaires donnent le contexte sans devenir de nouvelles racines. Les rendus HTML et LaTeX ne consomment pas encore ce modèle de parcours et restent des démonstrations.
 
 Le texte des notes n’est exposé que si elles portent l’étiquette Gramps `BOOK_PUBLICATION`. Les drapeaux privés sont préservés sans exclure les données accessibles à la base fournie. Le JSON indique si l’instantané contient des objets ou associations privés ; l’avertissement requis avant la publication d’un livre complet reste à mettre en place.
 
