@@ -223,32 +223,53 @@ def build_genealogy(
             Generation(number, tuple(grouped[number])) for number in generation_numbers
         )
 
-    ordered_occurrences = {
-        part: tuple(
-            occurrence
-            for generation in ordered_parts[part]
-            for occurrence in generation.occurrences
-        )
-        for part in ("ancestry", "descent")
-    }
-    occurrence_positions = {
-        (
-            part,
-            occurrence.person_handle,
-            occurrence.generation,
-            occurrence.family_handle,
-        ): position
-        for part, items in ordered_occurrences.items()
-        for position, occurrence in enumerate(items)
-    }
+    lineage_path_positions: dict[tuple[str, tuple[str, ...]], int] = {}
+    for part, generations in ordered_parts.items():
+        for generation in generations:
+            for position, occurrence in enumerate(generation.occurrences):
+                for path in occurrence.lineage_paths:
+                    key = part, path
+                    lineage_path_positions[key] = min(
+                        position, lineage_path_positions.get(key, position)
+                    )
+
+    section_source_order: dict[
+        tuple[str, str, int], list[tuple[tuple[int, ...], int]]
+    ] = defaultdict(list)
+    for part, generations in ordered_parts.items():
+        for generation in generations:
+            for occurrence in generation.occurrences:
+                if "lineage" not in occurrence.roles and "central" not in occurrence.roles:
+                    continue
+                person = people.get(occurrence.person_handle)
+                if person is None:
+                    continue
+                path_keys = [
+                    _lineage_path_order_key(path, part, root_order, lineage_path_positions)
+                    for path in occurrence.lineage_paths
+                ]
+                if not path_keys:
+                    path_keys = [
+                        (root_order.get(branch, 99),)
+                        for branch in occurrence.branch_handles
+                    ]
+                path_key = min(path_keys, default=(99,))
+                for union_position, family_handle in enumerate(person.family_handles):
+                    section_source_order[(part, family_handle, occurrence.generation)].append(
+                        (path_key, union_position)
+                    )
+                if part == "ancestry":
+                    for union_position, family_handle in enumerate(person.parent_family_handles):
+                        section_source_order[
+                            (part, family_handle, occurrence.generation - 1)
+                        ].append((path_key, union_position))
+
     ordered_sections = sorted(
         family_sections.values(),
         key=lambda section: _family_section_order_key(
             section,
-            families,
-            people,
-            ordered_occurrences,
-            occurrence_positions,
+            section_source_order,
+            root_order,
         ),
     )
     family_section_records = tuple(
@@ -274,67 +295,46 @@ def build_genealogy(
 
 def _family_section_order_key(
     section: _FamilySection,
-    families: dict[str, Family],
-    people: dict[str, Person],
-    ordered_occurrences: dict[str, tuple[PersonOccurrence, ...]],
-    occurrence_positions: dict[tuple[str, str, int, str | None], int],
-) -> tuple[int, int, int, int, str]:
-    """Order family sections along their branch and source-union order."""
-    family = families[section.family_handle]
+    section_source_order: dict[
+        tuple[str, str, int], list[tuple[tuple[int, ...], int]]
+    ],
+    root_order: dict[str, int],
+) -> tuple[int, int, tuple[int, ...], int, str]:
+    """Order family sections by comparable lineage paths and source unions."""
     ancestry = section.part == "ancestry"
-    source_candidates: list[tuple[int, int]] = []
-
-    if ancestry and "parent_family" in section.roles:
-        # A parent union belongs below the child occurrence that led to it.
-        owner_generation = section.generation + 1
-        owner_is_child = True
-    else:
-        # An ancestor's other union and a descendant union belong to their
-        # partner occurrence at the same generation as the section.
-        owner_generation = section.generation
-        owner_is_child = False
-
-    member_handles = (
-        {child.handle for child in family.children}
-        if owner_is_child
-        else {partner.handle for partner in _partners(family)}
-    )
-    source_position_name = "parent_family_handles" if owner_is_child else "family_handles"
-    for position, occurrence in enumerate(ordered_occurrences[section.part]):
-        if occurrence.generation != owner_generation:
-            continue
-        if occurrence.person_handle not in member_handles:
-            continue
-        if not any(branch in occurrence.branch_handles for branch in section.branch_handles):
-            continue
-        if "lineage" not in occurrence.roles and "central" not in occurrence.roles:
-            continue
-        owner = people[occurrence.person_handle]
-        source_unions = getattr(owner, source_position_name)
-        try:
-            union_position = source_unions.index(section.family_handle)
-        except ValueError:
-            union_position = len(source_unions)
-        occurrence_position = occurrence_positions.get(
-            (
-                section.part,
-                occurrence.person_handle,
-                occurrence.generation,
-                occurrence.family_handle,
-            ),
-            position,
+    fallback_path = min(
+        (root_order.get(branch, 99),) for branch in section.branch_handles
+    ) if section.branch_handles else (99,)
+    path_position, union_position = min(
+        section_source_order.get(
+            (section.part, section.family_handle, section.generation),
+            [(fallback_path, 1_000_000)],
         )
-        source_candidates.append((occurrence_position, union_position))
-
-    source_position, union_position = min(
-        source_candidates, default=(1_000_000, 1_000_000)
     )
     return (
         0 if ancestry else 1,
         -section.generation if ancestry else section.generation,
-        source_position,
+        path_position,
         union_position,
         section.family_handle,
+    )
+
+
+def _lineage_path_order_key(
+    path: tuple[str, ...],
+    part: str,
+    root_order: dict[str, int],
+    path_positions: dict[tuple[str, tuple[str, ...]], int],
+) -> tuple[int, ...]:
+    """Return a branch-comparable key using each occurrence's local generation order."""
+    if not path:
+        return (99,)
+    return (
+        root_order.get(path[0], 99),
+        *(
+            path_positions.get((part, path[:length]), 1_000_000)
+            for length in range(2, len(path) + 1)
+        ),
     )
 
 
