@@ -123,8 +123,8 @@ def build_editorial_book(
                     if person is not None
                     else ()
                 ),
-                portrait_ref=(
-                    _primary_portrait_ref(person, media_by_handle)
+                portrait=(
+                    _primary_portrait(person, media_by_handle)
                     if person is not None
                     else None
                 ),
@@ -134,16 +134,17 @@ def build_editorial_book(
         )
 
     reference_family = families_by_handle.get(reference_family_handle)
-    cover_portraits = tuple(
-        EditorialPortrait(person_handle=person.handle, media_ref=portrait_ref)
-        for person in (
-            (reference_family.father, reference_family.mother)
-            if reference_family is not None
-            else ()
-        )
-        if person is not None
-        and (portrait_ref := _primary_portrait_ref(person, media_by_handle)) is not None
-    )
+    cover_portraits = []
+    for person in (
+        (reference_family.father, reference_family.mother)
+        if reference_family is not None
+        else ()
+    ):
+        if person is None:
+            continue
+        portrait = _primary_portrait(person, media_by_handle)
+        if portrait is not None:
+            cover_portraits.append(portrait)
 
     body_parts = (
         "front-matter",
@@ -186,7 +187,7 @@ def build_editorial_book(
         ),
         profiles=tuple(profiles),
         family_notices=tuple(family_notices),
-        cover_portraits=cover_portraits,
+        cover_portraits=tuple(cover_portraits),
     )
 
 
@@ -200,9 +201,9 @@ def _published_note_handles(
     )
 
 
-def _primary_portrait_ref(
+def _primary_portrait(
     person: Person, media_by_handle: dict[str, Media]
-) -> MediaReference | None:
+) -> EditorialPortrait | None:
     for media_ref in person.links.media:
         media = media_by_handle.get(media_ref.media_handle)
         if (
@@ -210,5 +211,9 @@ def _primary_portrait_ref(
             and media.mime_type.casefold().startswith("image/")
             and not media.is_excluded
         ):
-            return media_ref
+            return EditorialPortrait(
+                person_handle=person.handle,
+                media_ref=media_ref,
+                caption=media.description,
+            )
     return None
