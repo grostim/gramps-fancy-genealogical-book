@@ -1,6 +1,6 @@
 # Avancement L7 — livre HTML
 
-Compte rendu du 28 septembre 2026. Les PR #51–#54 ont livré le rendu HTML, sa navigation, les notes sécurisées et le générateur ZIP. Cette tranche relie maintenant l’archive au rapport Gramps et prépare ses médias dans un répertoire temporaire.
+Compte rendu du 28 septembre 2026. Les PR #51–#55 ont livré le rendu HTML, sa navigation, les notes sécurisées, le générateur ZIP et son intégration au rapport Gramps. L’export prépare les médias dans un répertoire temporaire.
 
 ## Contenu rendu
 
@@ -17,8 +17,8 @@ Compte rendu du 28 septembre 2026. Les PR #51–#54 ont livré le rendu HTML, sa
 ## Vérifications et limites
 
 - `tests/test_html_renderer.py` vérifie les parties, les liens internes, l’unicité des identifiants et l’échappement d’un nom hostile.
-- La CI de la PR #53 passe sous Python 3.10–3.13, Ruff, build, Gramps et LuaLaTeX ; la CI de l’archive L7.4 reste à confirmer.
-- Le rapport Gramps propose « HTML book (ZIP archive) » par défaut. Il prépare les dérivés dans un répertoire temporaire, puis n’écrit que l’archive choisie ; le JSON reste disponible comme sortie de diagnostic du développement.
+- La PR #55 a été fusionnée après correction d’un retour P2 sur la gestion des extensions. Les jobs Actions n’ont pas pu démarrer sur sa tête corrigée : GitHub signale un problème de facturation ou de plafond de dépenses ; la validation CI de L7.4 reste donc à reprendre après rétablissement du compte.
+- Le rapport Gramps crée une archive HTML ZIP par défaut pour une destination `.zip`. Le mode automatique accepte aussi les anciennes commandes CLI qui indiquent seulement une destination `.json` ; le format JSON reste disponible explicitement pour le diagnostic.
 - Depuis Gramps Desktop, ouvrir Rapports > Web > Gramps Fancy Genealogical Book, choisir la famille et la destination .zip, puis extraire l’archive et ouvrir index.html.
 - Le script CI d’intégration Gramps conserve la sortie JSON de diagnostic pour ses contrôles existants. La génération HTML ZIP via l’interface réelle et la recette hors ligne AC-10/AC-23 restent à confirmer ; les contrôles clavier, tailles d’écran et revue visuelle PDF restent à réaliser.
 - La revue visuelle des PDF générés en L6 reste séparée et ouverte.

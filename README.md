@@ -2,11 +2,11 @@
 
 [Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md) · [Media validation](docs/validation-media.md)
 
-An experimental Gramps 6 add-on for a family genealogical book. The current milestone exports a shared JSON model and a preliminary LaTeX book with genealogy sections, profiles, family notices, citations, page references and a person index. The final PDF layout and multipass output still need visual validation; HTML remains in a later milestone.
+An experimental Gramps 6 add-on for a family genealogical book. The Gramps report now creates a self-contained HTML book ZIP by default, while retaining a JSON snapshot mode for diagnostics and a preliminary LaTeX book. HTML accessibility checks and final PDF layout validation remain in progress.
 
 ## What works now
 
-- Native Gramps family selector and explicit JSON destination.
+- Native Gramps family selector, HTML ZIP output by default, and JSON snapshot output for diagnostics.
 - JSON v0.8 model with genealogy occurrences, typed relationship links and an ordered editorial structure. Stable navigation targets and an alphabetical person index point to each profile or its primary occurrence. Eligible person profiles and one family notice per in-scope family link to published notes, portraits and their captions, events, media and family sections.
 - Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
@@ -35,7 +35,7 @@ Extract `gramps60/download/GrampsFancyBook.addon.tgz` into the Gramps 6 user plu
 - Linux: `${XDG_DATA_HOME:-$HOME/.local/share}/gramps/gramps60/plugins/`
 - Isolated profile: `$GRAMPSHOME/gramps/gramps60/plugins/`
 
-In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. This milestone writes a `.json` model, a separate `<name>_consistency.json` control report and, when images can be converted, a neighboring `<name>_media/` folder. The control report compares only events with the same native Gramps event attribute `BOOK_FACT_ID`; it records disjoint date ranges as conflicts and differing place references for manual review. Select a reference family and a `.json` destination; **Replace an existing file** also replaces the report and neighboring media directory. The destination directory must already exist.
+In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. The default report output is a self-contained `.zip` HTML book that can be extracted and viewed locally. The JSON snapshot remains available for diagnostics and writes a `.json` model, a separate `<name>_consistency.json` control report and, when images can be converted, a neighboring `<name>_media/` folder. The control report compares only events with the same native Gramps event attribute `BOOK_FACT_ID`; it records disjoint date ranges as conflicts and differing place references for manual review. For a diagnostic snapshot, select JSON snapshot and a `.json` destination; **Replace an existing file** also replaces the report and neighboring media directory. The destination directory must already exist.
 
 The LaTeX note renderer requires Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
 
@@ -45,7 +45,7 @@ Image and PDF converters remain optional so JSON export works without them. For 
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,destination=/absolute/path/family.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,output_format=json_snapshot,destination=/absolute/path/family.json"
 ```
 
 Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
