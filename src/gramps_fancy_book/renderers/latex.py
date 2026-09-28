@@ -793,6 +793,7 @@ def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
 def _section_heading(title: str) -> str:
     escaped = escape_latex_text(title)
     return (
+        "\\clearpage\n"
         f"\\section*{{{escaped}}}\n"
         f"\\addcontentsline{{toc}}{{section}}{{{escaped}}}\n"
     )
