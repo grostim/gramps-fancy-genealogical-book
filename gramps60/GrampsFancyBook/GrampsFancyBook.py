@@ -35,6 +35,12 @@ from gramps_fancy_book.renderers.html_archive import (  # noqa: E402
     validate_html_archive_destination,
     write_html_archive,
 )
+from gramps_fancy_book.renderers.latex_pdf import (  # noqa: E402
+    LatexCompilationError,
+    LatexCompilerUnavailable,
+    validate_latex_pdf_destination,
+    write_latex_pdf,
+)
 
 
 class GrampsFancyBookReport(Report):
@@ -84,6 +90,26 @@ class GrampsFancyBookReport(Report):
                         media_asset_directory=asset_staging,
                         overwrite=overwrite,
                     )
+            elif output_format == "pdf":
+                pdf_destination = validate_latex_pdf_destination(
+                    destination, overwrite=overwrite
+                )
+                with tempfile.TemporaryDirectory(
+                    prefix=".book-pdf-media-stage-",
+                    dir=pdf_destination.parent,
+                ) as asset_staging:
+                    prepare_editorial_media(
+                        self.database,
+                        model,
+                        "media",
+                        asset_staging,
+                    )
+                    write_latex_pdf(
+                        model,
+                        pdf_destination,
+                        media_asset_directory=asset_staging,
+                        overwrite=overwrite,
+                    )
             elif output_format == "json_snapshot":
                 consistency_report = build_consistency_report(model)
                 with media_asset_staging_directory(
@@ -111,5 +137,21 @@ class GrampsFancyBookReport(Report):
                 _("Output already exists"),
                 _("Choose another destination or enable 'Replace an existing file'."),
             ) from exc
+        except LatexCompilerUnavailable as exc:
+            raise ReportError(
+                _("PDF output unavailable"),
+                _("LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."),
+            ) from exc
+        except LatexCompilationError as exc:
+            message_id = {
+                "compile": "LuaLaTeX could not compile the selected book.",
+                "timeout": "LuaLaTeX compilation timed out.",
+                "references_unstable": "PDF references did not stabilize after five compilation passes.",
+                "layout_warnings": "PDF compilation reported unresolved references or overfull boxes.",
+                "missing_pdf": "LuaLaTeX completed without producing a PDF file.",
+                "missing_auxiliary_files": "PDF compilation did not produce auxiliary files required to resolve references.",
+                "missing_log": "LuaLaTeX did not produce a compilation log.",
+            }.get(exc.reason, "LuaLaTeX could not produce a valid PDF.")
+            raise ReportError(_("PDF generation failed"), _(message_id)) from exc
         except (LookupError, ValueError, OSError) as exc:
             raise ReportError(_("Book generation failed"), str(exc)) from exc
