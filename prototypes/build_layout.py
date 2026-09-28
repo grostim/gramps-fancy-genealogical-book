@@ -12,6 +12,7 @@ HEADER = r"""\documentclass[11pt,a4paper]{article}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[margin=20mm,headheight=15pt]{geometry}
 \usepackage{longtable,array,fancyhdr}
+\usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \pagestyle{fancy}\fancyhf{}
 \fancyhead[L]{Famille Exemple -- prototype fictif}

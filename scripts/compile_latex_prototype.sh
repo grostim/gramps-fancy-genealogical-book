@@ -36,8 +36,8 @@ if [[ "$stable" != "1" ]]; then
   exit 1
 fi
 
-if grep -Eq 'Reference .*undefined|There were undefined references|Label\(s\) may have changed' layout-spike.log; then
-  echo "LuaLaTeX reported unresolved or unstable references." >&2
+if grep -Eq 'Reference .*undefined|There were undefined references|Label\(s\) may have changed|Overfull \\[hv]box' layout-spike.log; then
+  echo "LuaLaTeX reported unresolved references, unstable references, or overfull boxes." >&2
   exit 1
 fi
 

@@ -44,7 +44,7 @@ Voir [web-spike.md](web-spike.md). Aucune instance de développement fournie et 
 
 ## Reproducible LuaLaTeX build
 
-The layout spike now uses LuaLaTeX and can be compiled with the TeX Live container image pinned by digest in the CI workflow. The build script disables shell escape, performs up to five passes until the auxiliary reference files stop changing, rejects unresolved references, and writes the source, log, and PDF under `.work/latex-spike/`.
+The layout spike now uses LuaLaTeX and can be compiled with the TeX Live container image pinned by digest in the CI workflow. The build script disables shell escape, performs up to five passes until the auxiliary reference files stop changing, rejects unresolved references and overfull text boxes, and writes the source, log, and PDF under `.work/latex-spike/`.
 
 To reproduce it locally on macOS or Linux with Docker installed:
 
@@ -62,7 +62,7 @@ The `latex-prototype` CI job runs the same command and keeps the PDF, source, an
 
 ## Compilation LuaLaTeX reproductible
 
-Le prototype de composition utilise maintenant LuaLaTeX et se compile dans l’image TeX Live dont le digest est épinglé dans le workflow CI. Le script désactive le shell escape, relance la compilation jusqu’à stabilisation des fichiers de références (cinq passes maximum), échoue si des renvois restent non résolus et place le source, le journal et le PDF dans `.work/latex-spike/`.
+Le prototype de composition utilise maintenant LuaLaTeX et se compile dans l’image TeX Live dont le digest est épinglé dans le workflow CI. Le script désactive le shell escape, relance la compilation jusqu’à stabilisation des fichiers de références (cinq passes maximum), échoue si des renvois restent non résolus ou si le texte déborde; il place le source, le journal et le PDF dans `.work/latex-spike/`.
 
 Pour le reproduire localement sous macOS ou Linux avec Docker :
 
