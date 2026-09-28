@@ -94,7 +94,6 @@ def _occurrences_in(genealogy, part):
     )
 
 
-
 def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
     p0 = _person("p0", family_handles=("f0",))
     p1 = _person("p1", family_handles=("f0",))
@@ -167,6 +166,7 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
             and r"\hyperlink{" in line
             for line in connection_text.splitlines()
         )
+
 
 def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry():
     p0 = _person("p0", family_handles=("f0", "f1"))
