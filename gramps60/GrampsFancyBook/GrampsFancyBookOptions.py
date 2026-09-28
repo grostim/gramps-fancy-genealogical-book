@@ -92,7 +92,7 @@ class GrampsFancyBookOptions(MenuReportOptions):
         if not str(value or "").strip():
             return ""
         output = Path(value).expanduser()
-        if output.suffix.casefold() in {".zip", ".json"} or not output.suffix:
+        if not output.suffix:
             output = output.with_suffix(extension)
         return str(output)
 
