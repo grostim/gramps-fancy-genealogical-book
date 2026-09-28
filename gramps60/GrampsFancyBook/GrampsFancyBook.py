@@ -77,7 +77,7 @@ class GrampsFancyBookReport(Report):
                 )
         except FileExistsError as exc:
             raise ReportError(
-                _("Output file, report or media folder already exists"),
+                _("Output file or media folder already exists"),
                 _(
                     "Choose another JSON destination or enable 'Replace an existing file' "
                     "to replace the model, consistency report and media folder."

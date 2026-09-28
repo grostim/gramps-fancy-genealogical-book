@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from collections import defaultdict
 from itertools import combinations
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from .conventions import BOOK_FACT_ID
-from .domain import BookModel, DateValue, Event
+
+if TYPE_CHECKING:
+    from .domain import BookModel, DateValue, Event
 
 
 _REPORT_SCHEMA_VERSION = "1.0"
