@@ -2,7 +2,17 @@
 
 from urllib.parse import quote, urlsplit
 
-from ..domain import BookModel, EditorialProfile, GenealogyPart, Note, Person
+from ..domain import (
+    BookModel,
+    EditorialCitationCall,
+    EditorialCitationEntry,
+    EditorialProfile,
+    GenealogyPart,
+    Note,
+    Person,
+    RepositoryReference,
+    Url,
+)
 
 
 def render_latex(model: BookModel) -> str:
@@ -24,10 +34,28 @@ def render_latex(model: BookModel) -> str:
 
     if model.editorial_book is not None and model.editorial_book.profiles:
         document.append("\\section*{Person profiles}\n")
+        citation_by_call = {
+            call.call_id: entry
+            for entry in model.editorial_book.citation_entries
+            for call in entry.calls
+        }
         for profile in model.editorial_book.profiles:
             document.append(
-                _render_profile(profile, model, people_by_handle, emitted_targets)
+                _render_profile(
+                    profile,
+                    model,
+                    people_by_handle,
+                    emitted_targets,
+                    citation_by_call,
+                )
             )
+
+    if model.editorial_book is not None and model.editorial_book.citation_entries:
+        document.append(
+            _render_citation_appendix(
+                model.editorial_book.citation_entries, model, emitted_targets
+            )
+        )
 
     if model.editorial_book is not None and model.editorial_book.person_index:
         targets = {
@@ -91,6 +119,7 @@ def _render_profile(
     model: BookModel,
     people_by_handle: dict[str, Person],
     emitted_targets: set[str],
+    citation_by_call: dict[str, EditorialCitationEntry],
 ) -> str:
     person = people_by_handle.get(profile.person_handle)
     name = person.name if person is not None else ""
@@ -167,7 +196,198 @@ def _render_profile(
                 f"{note_text}\n"
                 "\\end{quote}\n"
             )
+
+    citation_entries = {
+        citation_by_call[call_id].entry_id: citation_by_call[call_id]
+        for call_id in profile.citation_call_ids
+        if call_id in citation_by_call
+    }
+    if citation_entries:
+        output.append("\\paragraph{Sources}\n\\begin{itemize}\n")
+        for entry in citation_entries.values():
+            label = _citation_title(entry, model)
+            output.append(
+                f"\\item \\hyperlink{{{_latex_target(entry.entry_id)}}}"
+                f"{{{escape_latex_text(label)}}}\n"
+            )
+        output.append("\\end{itemize}\n")
     return "".join(output)
+
+
+def _render_citation_appendix(
+    entries: tuple[EditorialCitationEntry, ...],
+    model: BookModel,
+    emitted_targets: set[str],
+) -> str:
+    output = ["\\section*{Documentary appendix}\n\\begin{itemize}\n"]
+    profiles = {
+        profile.profile_id: profile
+        for profile in (model.editorial_book.profiles if model.editorial_book else ())
+    }
+    people_by_handle = {person.handle: person for person in model.people}
+    for entry in entries:
+        citation = model.citations.get(entry.citation_handle)
+        source_handle = entry.source_handle or (
+            citation.source_handle if citation is not None else None
+        )
+        source = model.sources.get(source_handle) if source_handle else None
+        output.append(
+            f"\\item {_latex_anchor(entry.entry_id, emitted_targets)}"
+            f"\\textbf{{{escape_latex_text(_citation_title(entry, model))}}}\n"
+        )
+        details = []
+        if source is not None and source.author:
+            details.append(escape_latex_text(source.author))
+        if source is not None and source.publication_info:
+            details.append(escape_latex_text(source.publication_info))
+        if citation is not None and citation.page:
+            details.append(f"p. {escape_latex_text(citation.page)}")
+        if citation is not None and citation.date is not None and citation.date.display:
+            details.append(escape_latex_text(citation.date.display))
+        if details:
+            output.append(f"\\par {'; '.join(details)}\n")
+
+        urls: list[Url] = []
+        if citation is not None:
+            urls.extend(citation.urls)
+        if source is not None:
+            urls.extend(source.urls)
+        repositories = []
+        for reference in entry.repository_refs:
+            repository = model.repositories.get(reference.repository_handle)
+            repository_name = (
+                (repository.name or repository.gramps_id)
+                if repository is not None
+                else ""
+            ) or reference.repository_handle
+            repositories.append((repository_name, reference))
+            if repository is not None:
+                urls.extend(repository.urls)
+        if repositories:
+            output.append("\\par Repositories: ")
+            output.append(
+                "; ".join(
+                    _format_repository(repository_name, reference)
+                    for repository_name, reference in repositories
+                )
+            )
+            output.append("\n")
+
+        if urls:
+            output.append("\\par URLs: ")
+            output.append("; ".join(_format_url(item) for item in _unique_urls(urls)))
+            output.append("\n")
+
+        media_labels = []
+        for reference in entry.media_refs:
+            media = model.media.get(reference.media_handle)
+            media_labels.append(
+                (media.description or media.gramps_id if media else "")
+                or reference.media_handle
+            )
+        if media_labels:
+            output.append(
+                "\\par Media: "
+                + "; ".join(escape_latex_text(label) for label in media_labels)
+                + "\n"
+            )
+
+        call_labels = [
+            (call, _citation_call_label(call, profiles, people_by_handle, model))
+            for call in entry.calls
+        ]
+        if call_labels:
+            output.append("\\begin{itemize}\n")
+            for call, label in call_labels:
+                context = profiles.get(call.context_id)
+                linked_label = escape_latex_text(label)
+                if context is not None and context.profile_id in emitted_targets:
+                    linked_label = (
+                        f"\\hyperlink{{{_latex_target(context.profile_id)}}}"
+                        f"{{{linked_label}}}"
+                    )
+                output.append(
+                    f"\\item {_latex_anchor(call.call_id, emitted_targets)}"
+                    f"{linked_label}\n"
+                )
+            output.append("\\end{itemize}\n")
+    output.append("\\end{itemize}\n")
+    return "".join(output)
+
+
+def _citation_title(entry: EditorialCitationEntry, model: BookModel) -> str:
+    citation = model.citations.get(entry.citation_handle)
+    source_handle = entry.source_handle or (
+        citation.source_handle if citation is not None else None
+    )
+    source = model.sources.get(source_handle) if source_handle else None
+    if source is not None:
+        title = source.title or source.abbreviation
+        if title:
+            return title
+    if citation is not None and citation.gramps_id:
+        return citation.gramps_id
+    return entry.citation_handle
+
+
+def _format_repository(
+    repository_name: str, reference: RepositoryReference
+) -> str:
+    details = [escape_latex_text(repository_name)]
+    if reference.call_number:
+        details.append(escape_latex_text(reference.call_number))
+    if reference.media_type:
+        details.append(escape_latex_text(reference.media_type))
+    return ", ".join(details)
+
+
+def _format_url(url: Url) -> str:
+    rendered = format_latex_url(url.path)
+    if url.description:
+        return f"{rendered} ({escape_latex_text(url.description)})"
+    return rendered
+
+
+def _citation_call_label(
+    call: EditorialCitationCall,
+    profiles: dict[str, EditorialProfile],
+    people_by_handle: dict[str, Person],
+    model: BookModel,
+) -> str:
+    profile = profiles.get(call.context_id)
+    person = people_by_handle.get(profile.person_handle) if profile is not None else None
+    context_name = person.name if person is not None else ""
+    if call.owner_type == "event":
+        event = model.events.get(call.owner_handle)
+        owner_name = (
+            (event.description or event.type or event.gramps_id)
+            if event is not None
+            else ""
+        )
+    elif call.owner_type == "media":
+        media = model.media.get(call.owner_handle)
+        owner_name = (
+            (media.description or media.gramps_id) if media is not None else ""
+        )
+    elif call.owner_type == "note":
+        note = model.notes.get(call.owner_handle)
+        owner_name = (note.gramps_id or "Note") if note is not None else ""
+    else:
+        owner_name = person.name if call.owner_type == "person" and person else ""
+    owner_name = owner_name or call.owner_handle
+    if context_name:
+        return f"{context_name} — {call.owner_type}: {owner_name}"
+    return f"{call.owner_type}: {owner_name}"
+
+
+def _unique_urls(urls: list[Url]) -> tuple[Url, ...]:
+    seen = set()
+    unique = []
+    for url in urls:
+        if url.path not in seen:
+            unique.append(url)
+            seen.add(url.path)
+    return tuple(unique)
 
 
 def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
