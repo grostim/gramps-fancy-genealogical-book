@@ -19,7 +19,6 @@ from ..domain import (
     RepositoryReference,
     Url,
 )
-
 from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
 
@@ -417,11 +416,7 @@ def _render_family_notice(
                 if index < len(notice.note_target_ids)
                 else ""
             )
-            note_text = (
-                escape_latex_text(note.text)
-                if note.text
-                else r"\emph{No text supplied.}"
-            )
+            note_text = render_latex_note(note)
             output.append(
                 f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
                 f"{note_text}\n"
