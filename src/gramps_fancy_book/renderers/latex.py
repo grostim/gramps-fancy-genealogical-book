@@ -23,8 +23,6 @@ from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
 
 
-
-
 def _render_cover(model: BookModel) -> str:
     """Render the generated cover and any available partner portrait medallions."""
     family = model.reference_family
@@ -35,8 +33,12 @@ def _render_cover(model: BookModel) -> str:
     ]
     partner_names = [person.name or person.handle for person in partners]
     subtitle = " and ".join(partner_names) or family.gramps_id or family.handle
+    safe_handle = "".join(
+        character for character in family.handle if character.isalnum() or character in "_-"
+    )
 
     output = [
+        f"% Gramps family handle: {safe_handle}\n",
         "\\begin{titlepage}\n"
         "\\thispagestyle{empty}\n"
         "\\centering\n"
