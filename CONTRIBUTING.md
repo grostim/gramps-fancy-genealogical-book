@@ -19,13 +19,13 @@ The package supports Python 3.10 and later. From the repository root:
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/python -m pip install -e '.[dev,media]'
 .venv/bin/ruff check .
 .venv/bin/pytest -q
 .venv/bin/python build_addon.py
 ```
 
-The add-on build also needs GNU gettext's `msgfmt` on `PATH` when compiling the French report catalog. Install the system `gettext` package if the command is unavailable. The `media` extra installs optional Pillow and pypdfium2 dependencies for media conversion.
+The add-on build also needs GNU gettext's `msgfmt` on `PATH` when compiling the French report catalog. Install the system `gettext` package if the command is unavailable. The `media` extra installs Pillow and pypdfium2 for media conversion, which the test suite imports.
 
 For the real Gramps integration runner, use Python 3.12 or later with Gramps 6.0 installed:
 

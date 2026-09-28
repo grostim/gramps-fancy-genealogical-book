@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from html import escape
+from html.parser import HTMLParser
 from pathlib import PurePosixPath
 
 from ..domain import BookModel
-from .html_notes import render_html_note, safe_html_url
+from .html_notes import render_html_inline_note, render_html_note, safe_html_url
 
 _PART_LABELS = {
     "front_matter": "Avant-propos",
@@ -68,11 +69,20 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
         "</style></head><body>\n",
         '<a class="skip-link" href="#main-content">Aller au contenu principal</a>\n',
         '<header class="cover" id="cover">\n',
-        f"<h1>{_text(title)}</h1>\n",
+        f"<h1>{_render_cover_note(model, editorial, 'BOOK_TITLE') or _text(title)}</h1>\n",
     ]
-    subtitle = _book_note_text(model, editorial, "BOOK_SUBTITLE")
+    subtitle = _render_cover_note(model, editorial, "BOOK_SUBTITLE")
     if subtitle:
-        output.append(f"<p>{_text(subtitle)}</p>\n")
+        output.append(f"<p>{subtitle}</p>\n")
+    for role, label in (
+        ("BOOK_AUTHOR", "Auteur"),
+        ("BOOK_PUBLICATION_DATE", "Date de publication"),
+    ):
+        cover_note = _render_cover_note(model, editorial, role)
+        if cover_note:
+            output.append(
+                f'<p><span class="muted">{_text(label)} : </span>{cover_note}</p>\n'
+            )
     if couple:
         output.append(f"<p>{_text(couple)}</p>\n")
     output.append(_render_cover_portraits(model, people, media_context))
@@ -234,8 +244,14 @@ def _render_front_matter(model) -> str:
         item.role: model.notes.get(item.note_handle)
         for item in model.editorial_book.front_matter_notes
     }
+    cover_roles = {
+        "BOOK_TITLE",
+        "BOOK_SUBTITLE",
+        "BOOK_AUTHOR",
+        "BOOK_PUBLICATION_DATE",
+    }
     for role, note in notes.items():
-        if note is None or role == "BOOK_TITLE" or not (note.text or "").strip():
+        if note is None or role in cover_roles or not (note.text or "").strip():
             continue
         heading = _NOTE_ROLE_LABELS.get(role, role)
         output.append(
@@ -262,6 +278,8 @@ def _render_genealogy(
         for generation in generations
         if generation.number == 0
         for occurrence in generation.occurrences
+        if getattr(occurrence, "roles", None) is None
+        or "central" in occurrence.roles
     }
     if generations:
         output.append(
@@ -468,16 +486,24 @@ def _render_family_notice(
                     f'<li><a href="#{_attr(occurrence_id)}">'
                     f"{_text(_person_name(person, occurrence.person_handle))}</a>"
                 )
-                relation_labels = list(
-                    dict.fromkeys(
-                        str(link.relationship_type)
-                        for link in links_by_child.get(occurrence_id, ())
-                        if link.relationship_type not in (None, "")
+                relation_labels = []
+                for link in links_by_child.get(occurrence_id, ()):
+                    if link.relationship_type in (None, ""):
+                        continue
+                    parent = occurrences.get(link.parent_occurrence_id)
+                    if parent is None:
+                        continue
+                    parent_person = people.get(parent.person_handle)
+                    relation = (
+                        f"{_person_name(parent_person, parent.person_handle)} : "
+                        f"{link.relationship_type}"
                     )
-                )
+                    if relation not in relation_labels:
+                        relation_labels.append(relation)
                 if relation_labels:
+                    relation_text = _text(" ; ".join(relation_labels))
                     output.append(
-                        f' <span class="muted">— filiation : {_text(", ".join(relation_labels))}</span>'
+                        f' <span class="muted">— filiation : {relation_text}</span>'
                     )
                 output.append("</li>\n")
             output.append("</ul>\n")
@@ -526,6 +552,8 @@ def _render_events(references, target_ids, model) -> str:
     for index, reference in enumerate(references):
         event = model.events.get(reference.event_handle)
         details = []
+        if reference.role:
+            details.append(f"Rôle : {reference.role}")
         if event is not None:
             if event.date is not None and event.date.display:
                 details.append(event.date.display)
@@ -811,19 +839,35 @@ def _media_external_links(artifact, reference, model) -> list[str]:
 
 
 def _book_title(model, editorial) -> str:
-    title = _book_note_text(model, editorial, "BOOK_TITLE")
-    return title or "Livre généalogique"
+    note = _book_note(model, editorial, "BOOK_TITLE")
+    if note is None:
+        return "Livre généalogique"
+    parser = _HTMLTextParser()
+    parser.feed(render_html_inline_note(note))
+    return "".join(parser.parts).strip() or "Livre généalogique"
 
 
-def _book_note_text(model, editorial, role) -> str:
+def _render_cover_note(model, editorial, role) -> str:
+    note = _book_note(model, editorial, role)
+    return render_html_inline_note(note) if note is not None else ""
+
+
+def _book_note(model, editorial, role):
     if editorial is None:
-        return ""
+        return None
     for item in editorial.front_matter_notes:
         if item.role == role:
-            note = model.notes.get(item.note_handle)
-            if note is not None and note.text:
-                return note.text.strip()
-    return ""
+            return model.notes.get(item.note_handle)
+    return None
+
+
+class _HTMLTextParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+
+    def handle_data(self, data: str) -> None:
+        self.parts.append(data)
 
 
 def _occurrences_by_id(genealogy):

@@ -24,7 +24,7 @@
 | REF-08 | Citations partagées entre faits, annexes compactes | S2 | L3, L5–L7 | Appels réutilisés, numérotation, renvois et annexe présents en HTML/LaTeX ; validation des scénarios de bout en bout restante |
 | REF-09 | URL complètes et régions de médias Gramps | S2 | L2, L5–L7 | URL, régions et règles de conversion raster/PDF implémentées ; recette avec les quatre cas Gramps et revue visuelle restantes |
 | REF-10 | BOOK_PUBLICATION, BOOK_PROFILE, BOOK_EXCLUDE, BOOK_FEATURED | S1 | L3–L5 | Règles BOOK_* implémentées dans l’extraction, le modèle et les rendus ; recette native complète restante |
-| REF-11 | Respect des droits, objets privés lisibles selon Gramps | S1 | L2–L3, L8 | L’adaptateur utilise les accesseurs Gramps et préserve les indicateurs privés accessibles ; recette dédiée Desktop/Web restante |
+| REF-11 | Respect des droits, objets privés lisibles selon Gramps et avertissement avant export | S1 | L2–L3, L8 | L’adaptateur utilise les accesseurs Gramps et préserve les indicateurs privés accessibles ; l’avertissement préalable à tout export susceptible d’inclure des données privées ou de personnes vivantes reste à implémenter, puis à valider sur Desktop/Web |
 | REF-12 | LaTeX/PDF, HTML et ZIP ; faisabilité Gramps Web | S1 | L2, L6–L8 | Rapport Gramps avec PDF LuaLaTeX, HTML ZIP et JSON ; compilation dans Gramps, revue visuelle et compatibilité Gramps Web restent à qualifier |
 
 ## Décision d’intégration du premier jalon
@@ -36,6 +36,7 @@ Le statut d’enregistrement est `EXPERIMENTAL` : le statut `UNSTABLE` utilisé 
 ## Points ouverts
 
 - Exécuter les recettes de bout en bout des 27 scénarios sur les versions Desktop/Web réellement prises en charge et conserver leur environnement comme preuve.
+- Implémenter et valider l’avertissement préalable à chaque génération susceptible de contenir des données privées ou de personnes vivantes ; demander confirmation avant toute écriture de sortie et conserver l’inclusion prévue par la spécification.
 - Rétablir les exécutions GitHub Actions : les derniers workflows ont été bloqués avant les jobs par un message de paiement ou de plafond de dépenses.
 - Réaliser les revues visuelles PDF/HTML, l’essai du ZIP hors ligne, les vérifications clavier/lecteur d’écran et les mesures de performance.
 - Qualifier Gramps Web ainsi que l’installation de Pillow et pypdfium2 dans les paquets Desktop/Web.

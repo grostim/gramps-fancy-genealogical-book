@@ -8,6 +8,10 @@ CI installs the `media` extra across the Python 3.10–3.13 matrix and exercises
 
 The integration uses no real family data. Source files are unchanged; the portrait exists only in the test's temporary directory.
 
+## Remaining publication check
+
+In Gramps, tag one fictional media object with both `BOOK_EXCLUDE` and `BOOK_FEATURED`, then create an HTML ZIP book. This acceptance check passes only if the excluded object is absent from every rendered `<img>` reference in `index.html` and absent from every `media/` entry in the ZIP. The same object must not be opened or converted during generation. This manual scenario has not yet been run.
+
 ## Installation
 
 For development, install the project together with test and media dependencies:

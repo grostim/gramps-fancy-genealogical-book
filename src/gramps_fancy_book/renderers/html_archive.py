@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -48,7 +49,7 @@ def write_html_archive(
     Gramps media paths are never read or copied by this function.
     """
     output = validate_html_archive_destination(destination, overwrite=overwrite)
-    assets = _media_assets(model, media_asset_directory)
+    assets = _media_asset_paths(model, media_asset_directory)
     html = render_html(model, include_media=True)
     temporary = None
     try:
@@ -66,8 +67,8 @@ def write_html_archive(
             compresslevel=9,
         ) as archive:
             _write_entry(archive, "index.html", html.encode("utf-8"))
-            for name, content in sorted(assets.items()):
-                _write_entry(archive, name, content)
+            for name, source in sorted(assets.items()):
+                _write_file_entry(archive, name, source)
         if overwrite:
             os.replace(temporary, output)
         else:
@@ -84,10 +85,10 @@ def write_html_archive(
     return output
 
 
-def _media_assets(
+def _media_asset_paths(
     model: BookModel,
     media_asset_directory: str | Path | None,
-) -> dict[str, bytes]:
+) -> dict[str, Path]:
     reproduced = [
         artifact
         for artifact in model.media_artifacts
@@ -102,7 +103,7 @@ def _media_assets(
         raise ValueError("The media asset directory must be an existing real directory.")
     root = root.resolve(strict=True)
 
-    assets = {}
+    assets: dict[str, Path] = {}
     for artifact in reproduced:
         cache_key = artifact.cache_key
         asset_path = artifact.asset_path
@@ -126,13 +127,29 @@ def _media_assets(
             raise FileNotFoundError(f"Required media asset is missing: {cache_key}.png")
         if source.resolve(strict=True).parent != root:
             raise ValueError("A media asset resolves outside its asset directory.")
-        assets.setdefault(f"media/{cache_key}.png", source.read_bytes())
+        assets.setdefault(f"media/{cache_key}.png", source)
     return assets
 
 
 def _write_entry(archive: zipfile.ZipFile, name: str, content: bytes) -> None:
+    archive.writestr(_zip_info(name), content)
+
+
+def _write_file_entry(archive: zipfile.ZipFile, name: str, source: Path) -> None:
+    if source.is_symlink() or not source.is_file():
+        raise FileNotFoundError(f"Required media asset is missing: {source.name}")
+    entry = _zip_info(name)
+    entry.file_size = source.stat().st_size
+    with source.open("rb") as input_stream:
+        with archive.open(
+            entry, mode="w", force_zip64=entry.file_size >= zipfile.ZIP64_LIMIT
+        ) as output_stream:
+            shutil.copyfileobj(input_stream, output_stream, length=1024 * 1024)
+
+
+def _zip_info(name: str) -> zipfile.ZipInfo:
     entry = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
     entry.compress_type = zipfile.ZIP_DEFLATED
     entry.external_attr = 0o100644 << 16
     entry.create_system = 3
-    archive.writestr(entry, content)
+    return entry

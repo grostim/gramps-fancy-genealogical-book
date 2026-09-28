@@ -246,3 +246,4 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 4. Vérifier le rendu HTML aux tailles prévues, au clavier et avec un lecteur d’écran ; consigner AC-10, AC-12, AC-15, AC-20 et AC-23.
 5. Examiner visuellement les PDF riches et peu documentés par rapport à la v1.1 et aux maquettes.
 6. Qualifier Gramps Web, l’installation des dépendances optionnelles, les mesures de performance et les procédures de distribution L8.
+7. Implémenter l’avertissement avant tout export susceptible d’inclure des données privées ou concernant des personnes vivantes, puis vérifier que l’export ne démarre pas sans confirmation.

@@ -19,13 +19,13 @@ Le paquet prend en charge Python 3.10 et versions ultérieures. Depuis la racine
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/python -m pip install -e '.[dev,media]'
 .venv/bin/ruff check .
 .venv/bin/pytest -q
 .venv/bin/python build_addon.py
 ```
 
-La construction du module complémentaire nécessite aussi `msgfmt` de GNU gettext dans le `PATH` lorsqu’elle compile le catalogue français du rapport. Installer le paquet système `gettext` si la commande manque. L’extra `media` installe Pillow et pypdfium2, facultatifs, pour convertir les médias.
+La construction du module complémentaire nécessite aussi `msgfmt` de GNU gettext dans le `PATH` lorsqu’elle compile le catalogue français du rapport. Installer le paquet système `gettext` si la commande manque. L’extra `media` installe Pillow et pypdfium2 pour convertir les médias ; la suite de tests importe ces dépendances.
 
 Pour le script d’intégration avec Gramps réel, utiliser Python 3.12 ou ultérieur et Gramps 6.0 :
 
