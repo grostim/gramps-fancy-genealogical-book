@@ -29,11 +29,11 @@ Le rapport séparé de cohérence ne regroupe des événements qu’en présence
 
 L’utilitaire média résout les chemins relatifs de la base via Gramps et refuse les médias portant `BOOK_EXCLUDE`. Les images raster sont orientées selon EXIF, recadrées selon la région demandée puis enregistrées en PNG sans perte. Pour les PDF, l’URL d’une citation est prioritaire ; un PDF multipage sans URL reste une référence, tandis qu’un PDF monopage sans URL peut être rastérisé à 300 ppp, sous un plafond de pixels. Pillow et pypdfium2 sont facultatifs. Les erreurs de conversion récupérables deviennent des diagnostics structurés.
 
-Le rendu LaTeX compose la couverture et les préliminaires, la généalogie, les fiches, les notices familiales, les citations, les médias, l’index et les renvois. Il écrit du LaTeX ; la compilation et la revue visuelle page par page restent à valider. Le rapport Gramps propose actuellement une archive HTML ZIP et un instantané JSON, pas une destination PDF.
+Le rendu LaTeX compose la couverture et les préliminaires, la généalogie, les fiches, les notices familiales, les citations, les médias, l’index et les renvois. Le rapport Gramps peut compiler cette source en PDF avec LuaLaTeX ; le compilateur désactive l’exécution shell, répète les passes jusqu’à stabilisation des fichiers auxiliaires et refuse les renvois non résolus ou les dépassements de marge. LuaLaTeX est facultatif et n’est requis que pour la sortie PDF. Ce mode reste expérimental ; son installation dans Gramps et sa revue visuelle page par page restent à valider.
 
 Le rendu HTML produit un livre statique avec navigation interne, liens de citations, notes, médias et index. Le ZIP comprend `index.html`, les styles intégrés et les dérivés PNG autorisés avec des chemins relatifs ; il peut être consulté hors ligne après extraction. Le rendu comprend une mise en page adaptative, un lien d’accès direct au contenu, un focus clavier visible et des textes alternatifs informatifs.
 
-La sélection automatique du format conserve l’instantané JSON pour les destinations `.json` historiques et choisit l’archive HTML pour `.zip` ; les formats explicites restent disponibles. Cette compatibilité ne vaut pas qualification de Gramps Web.
+La sélection automatique associe `.pdf` à la sortie PDF LuaLaTeX, `.zip` au livre HTML et `.json` historique à l’instantané JSON ; les formats peuvent aussi être choisis explicitement. Cette compatibilité ne vaut pas qualification de Gramps Web.
 
 ## Validations restantes
 
