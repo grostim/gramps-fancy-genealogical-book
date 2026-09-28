@@ -42,6 +42,7 @@ def render_latex(model: BookModel) -> str:
         )
         for call in entry.calls
     }
+    citation_numbers = _citation_number_map(model)
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
@@ -68,7 +69,7 @@ def render_latex(model: BookModel) -> str:
         for notice in model.editorial_book.family_notices:
             document.append(
                 _render_family_notice(
-                    notice, model, emitted_targets, citation_by_call
+                    notice, model, emitted_targets, citation_by_call, citation_numbers
                 )
             )
 
@@ -82,13 +83,14 @@ def render_latex(model: BookModel) -> str:
                     people_by_handle,
                     emitted_targets,
                     citation_by_call,
+                    citation_numbers,
                 )
             )
 
     if model.editorial_book is not None and model.editorial_book.citation_entries:
         document.append(
             _render_citation_appendix(
-                model.editorial_book.citation_entries, model, emitted_targets
+                model.editorial_book.citation_entries, model, emitted_targets, citation_numbers
             )
         )
 
@@ -251,6 +253,7 @@ def _render_profile(
     people_by_handle: dict[str, Person],
     emitted_targets: set[str],
     citation_by_call: dict[str, EditorialCitationEntry],
+    citation_numbers: dict[str, int],
 ) -> str:
     person = people_by_handle.get(profile.person_handle)
     name = person.name if person is not None else ""
@@ -345,11 +348,7 @@ def _render_profile(
     if citation_entries:
         output.append("\\paragraph{Sources}\n\\begin{itemize}\n")
         for entry in citation_entries.values():
-            label = _citation_title(entry, model)
-            output.append(
-                f"\\item \\hyperlink{{{_latex_target(entry.entry_id)}}}"
-                f"{{{escape_latex_text(label)}}}\n"
-            )
+            output.append(f"\\item {_citation_reference(entry, citation_numbers)}\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
 
@@ -359,6 +358,7 @@ def _render_family_notice(
     model: BookModel,
     emitted_targets: set[str],
     citation_by_call: dict[str, EditorialCitationEntry],
+    citation_numbers: dict[str, int],
 ) -> str:
     family = model.families.get(notice.family_handle)
     title = _family_title(family, notice.family_handle)
@@ -454,10 +454,7 @@ def _render_family_notice(
     if citations:
         output.append("\\paragraph{Sources}\n\\begin{itemize}\n")
         for entry in citations.values():
-            output.append(
-                f"\\item \\hyperlink{{{_latex_target(entry.entry_id)}}}"
-                f"{{{escape_latex_text(_citation_title(entry, model))}}}\n"
-            )
+            output.append(f"\\item {_citation_reference(entry, citation_numbers)}\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
 
@@ -477,6 +474,7 @@ def _render_citation_appendix(
     entries: tuple[EditorialCitationEntry, ...],
     model: BookModel,
     emitted_targets: set[str],
+    citation_numbers: dict[str, int],
 ) -> str:
     output = [_section_heading("Documentary appendix"), "\\begin{itemize}\n"]
     profiles = {
@@ -490,15 +488,18 @@ def _render_citation_appendix(
         )
     }
     people_by_handle = {person.handle: person for person in model.people}
-    for entry in entries:
+    ordered_entries = sorted(entries, key=lambda entry: citation_numbers.get(entry.entry_id, 0))
+    for entry in ordered_entries:
         citation = model.citations.get(entry.citation_handle)
         source_handle = entry.source_handle or (
             citation.source_handle if citation is not None else None
         )
         source = model.sources.get(source_handle) if source_handle else None
+        citation_number = citation_numbers.get(entry.entry_id)
+        number_label = f"[{citation_number}] " if citation_number is not None else ""
         output.append(
             f"\\item {_latex_anchor(entry.entry_id, emitted_targets)}"
-            f"\\textbf{{{escape_latex_text(_citation_title(entry, model))}}}\n"
+            f"\\textbf{{{number_label}{escape_latex_text(_citation_title(entry, model))}}}\n"
         )
         details = []
         if source is not None and source.author:
@@ -600,6 +601,47 @@ def _render_citation_appendix(
             output.append("\\end{itemize}\n")
     output.append("\\end{itemize}\n")
     return "".join(output)
+
+
+def _citation_number_map(model: BookModel) -> dict[str, int]:
+    """Assign citation numbers in the order they first appear in the book."""
+    editorial_book = model.editorial_book
+    if editorial_book is None:
+        return {}
+
+    entries = editorial_book.citation_entries
+    entries_by_call = {
+        call.call_id: entry
+        for entry in entries
+        for call in entry.calls
+    }
+    ordered_entry_ids = []
+    seen_entry_ids = set()
+    for context in (*editorial_book.family_notices, *editorial_book.profiles):
+        for call_id in context.citation_call_ids:
+            entry = entries_by_call.get(call_id)
+            if entry is not None and entry.entry_id not in seen_entry_ids:
+                ordered_entry_ids.append(entry.entry_id)
+                seen_entry_ids.add(entry.entry_id)
+    for entry in entries:
+        if entry.entry_id not in seen_entry_ids:
+            ordered_entry_ids.append(entry.entry_id)
+            seen_entry_ids.add(entry.entry_id)
+    return {
+        entry_id: number
+        for number, entry_id in enumerate(ordered_entry_ids, start=1)
+    }
+
+
+def _citation_reference(
+    entry: EditorialCitationEntry, citation_numbers: dict[str, int]
+) -> str:
+    number = citation_numbers.get(entry.entry_id)
+    label = f"[{number}]" if number is not None else entry.entry_id
+    return (
+        f"\\hyperlink{{{_latex_target(entry.entry_id)}}}"
+        f"{{{escape_latex_text(label)}}}"
+    )
 
 
 def _citation_title(entry: EditorialCitationEntry, model: BookModel) -> str:
