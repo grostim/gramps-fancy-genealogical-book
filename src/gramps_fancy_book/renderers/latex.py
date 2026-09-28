@@ -7,6 +7,7 @@ from ..domain import (
     BookModel,
     EditorialCitationCall,
     EditorialCitationEntry,
+    EditorialFamilyNotice,
     EditorialMediaArtifact,
     EditorialPortrait,
     EditorialProfile,
@@ -33,6 +34,13 @@ def render_latex(model: BookModel) -> str:
 
     emitted_targets: set[str] = set()
     people_by_handle = {person.handle: person for person in model.people}
+    citation_by_call = {
+        call.call_id: entry
+        for entry in (
+            model.editorial_book.citation_entries if model.editorial_book else ()
+        )
+        for call in entry.calls
+    }
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
@@ -54,13 +62,17 @@ def render_latex(model: BookModel) -> str:
                 )
             )
 
+    if model.editorial_book is not None and model.editorial_book.family_notices:
+        document.append("\\section*{Family notices}\n")
+        for notice in model.editorial_book.family_notices:
+            document.append(
+                _render_family_notice(
+                    notice, model, emitted_targets, citation_by_call
+                )
+            )
+
     if model.editorial_book is not None and model.editorial_book.profiles:
         document.append("\\section*{Person profiles}\n")
-        citation_by_call = {
-            call.call_id: entry
-            for entry in model.editorial_book.citation_entries
-            for call in entry.calls
-        }
         for profile in model.editorial_book.profiles:
             document.append(
                 _render_profile(
@@ -143,6 +155,10 @@ def _render_family_sections(
     emitted_targets: set[str],
 ) -> str:
     people_by_handle = {person.handle: person for person in model.people}
+    notices_by_family = {
+        notice.family_handle: notice
+        for notice in (model.editorial_book.family_notices if model.editorial_book else ())
+    }
     output = ["\\section*{Family connections}\n\\begin{itemize}\n"]
     for section in sections:
         family = model.families.get(section.family_handle)
@@ -167,6 +183,13 @@ def _render_family_sections(
             f"\\textbf{{{title}}}"
             f" ({escape_latex_text(section.part)}, generation {section.generation})\n"
         )
+        notice = notices_by_family.get(section.family_handle)
+        if notice is not None:
+            output.append(
+                "\\par "
+                f"\\hyperlink{{{_latex_target(notice.notice_id)}}}"
+                "{Family details}\n"
+            )
         if children:
             output.append(
                 "\\par Children: " + ", ".join(item for item in children if item) + "\n"
@@ -329,6 +352,125 @@ def _render_profile(
     return "".join(output)
 
 
+def _render_family_notice(
+    notice: EditorialFamilyNotice,
+    model: BookModel,
+    emitted_targets: set[str],
+    citation_by_call: dict[str, EditorialCitationEntry],
+) -> str:
+    family = model.families.get(notice.family_handle)
+    title = _family_title(family, notice.family_handle)
+    output = [
+        f"\\hypertarget{{{_latex_target(notice.notice_id)}}}{{}}"
+        f"\\subsection*{{{escape_latex_text(title)}}}\n"
+    ]
+    if notice.primary_section_id in emitted_targets:
+        output.append(
+            "\\noindent See "
+            f"\\hyperlink{{{_latex_target(notice.primary_section_id)}}}"
+            "{family section}.\\par\n"
+        )
+
+    if notice.event_refs:
+        output.append("\\paragraph{Events}\n\\begin{itemize}\n")
+        for index, reference in enumerate(notice.event_refs):
+            target_id = (
+                notice.event_target_ids[index]
+                if index < len(notice.event_target_ids)
+                else ""
+            )
+            anchor = _latex_anchor(target_id, emitted_targets)
+            event = model.events.get(reference.event_handle)
+            event_name = (
+                event.description if event is not None else ""
+            ) or (event.type if event is not None else "") or reference.event_handle
+            details = []
+            if (
+                event is not None
+                and event.type
+                and event.type.casefold() != event_name.casefold()
+            ):
+                details.append(escape_latex_text(event.type))
+            if event is not None and event.date is not None and event.date.display:
+                details.append(escape_latex_text(event.date.display))
+            if event is not None and event.place_handle:
+                place = model.places.get(event.place_handle)
+                place_name = (
+                    (place.title or place.name) if place is not None else ""
+                )
+                if place_name:
+                    details.append(escape_latex_text(place_name))
+            if reference.role:
+                details.append(escape_latex_text(reference.role))
+            suffix = f" ({'; '.join(details)})" if details else ""
+            output.append(
+                f"\\item {anchor}{escape_latex_text(event_name)}{suffix}\n"
+            )
+        output.append("\\end{itemize}\n")
+
+    notes = []
+    for index, handle in enumerate(notice.note_handles):
+        note = model.notes.get(handle)
+        if note is not None and note.is_publishable:
+            notes.append((index, note))
+    if notes:
+        output.append("\\paragraph{Notes}\n")
+        for index, note in notes:
+            target_id = (
+                notice.note_target_ids[index]
+                if index < len(notice.note_target_ids)
+                else ""
+            )
+            note_text = (
+                escape_latex_text(note.text)
+                if note.text
+                else r"\emph{No text supplied.}"
+            )
+            output.append(
+                f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
+                f"{note_text}\n"
+                "\\end{quote}\n"
+            )
+
+    for reference in notice.media_refs:
+        media = model.media.get(reference.media_handle)
+        caption = media.description if media is not None else ""
+        output.append(
+            _render_media_image(
+                reference,
+                caption,
+                model.media_artifacts,
+                width="0.7\\linewidth",
+            )
+        )
+
+    citations = {
+        citation_by_call[call_id].entry_id: citation_by_call[call_id]
+        for call_id in notice.citation_call_ids
+        if call_id in citation_by_call
+    }
+    if citations:
+        output.append("\\paragraph{Sources}\n\\begin{itemize}\n")
+        for entry in citations.values():
+            output.append(
+                f"\\item \\hyperlink{{{_latex_target(entry.entry_id)}}}"
+                f"{{{escape_latex_text(_citation_title(entry, model))}}}\n"
+            )
+        output.append("\\end{itemize}\n")
+    return "".join(output)
+
+
+def _family_title(family, fallback: str) -> str:
+    if family is None:
+        return fallback
+    partners = [
+        person.name or person.handle
+        for person in (family.father, family.mother)
+        if person is not None
+    ]
+    return " and ".join(partners) or family.gramps_id or family.handle or fallback
+
+
 def _render_citation_appendix(
     entries: tuple[EditorialCitationEntry, ...],
     model: BookModel,
@@ -338,6 +480,12 @@ def _render_citation_appendix(
     profiles = {
         profile.profile_id: profile
         for profile in (model.editorial_book.profiles if model.editorial_book else ())
+    }
+    notices = {
+        notice.notice_id: notice
+        for notice in (
+            model.editorial_book.family_notices if model.editorial_book else ()
+        )
     }
     people_by_handle = {person.handle: person for person in model.people}
     for entry in entries:
@@ -419,17 +567,28 @@ def _render_citation_appendix(
             )
 
         call_labels = [
-            (call, _citation_call_label(call, profiles, people_by_handle, model))
+            (
+                call,
+                _citation_call_label(
+                    call, profiles, notices, people_by_handle, model
+                ),
+            )
             for call in entry.calls
         ]
         if call_labels:
             output.append("\\begin{itemize}\n")
             for call, label in call_labels:
-                context = profiles.get(call.context_id)
+                context_profile = profiles.get(call.context_id)
+                context_notice = notices.get(call.context_id)
+                context_target = (
+                    context_profile.profile_id
+                    if context_profile is not None
+                    else context_notice.notice_id if context_notice is not None else ""
+                )
                 linked_label = escape_latex_text(label)
-                if context is not None and context.profile_id in emitted_targets:
+                if context_target and context_target in emitted_targets:
                     linked_label = (
-                        f"\\hyperlink{{{_latex_target(context.profile_id)}}}"
+                        f"\\hyperlink{{{_latex_target(context_target)}}}"
                         f"{{{linked_label}}}"
                     )
                 output.append(
@@ -477,12 +636,19 @@ def _format_url(url: Url) -> str:
 def _citation_call_label(
     call: EditorialCitationCall,
     profiles: dict[str, EditorialProfile],
+    notices: dict[str, EditorialFamilyNotice],
     people_by_handle: dict[str, Person],
     model: BookModel,
 ) -> str:
     profile = profiles.get(call.context_id)
     person = people_by_handle.get(profile.person_handle) if profile is not None else None
-    context_name = person.name if person is not None else ""
+    notice = notices.get(call.context_id)
+    family = model.families.get(notice.family_handle) if notice is not None else None
+    context_name = (
+        person.name
+        if person is not None
+        else _family_title(family, notice.family_handle) if notice is not None else ""
+    )
     if call.owner_type == "event":
         event = model.events.get(call.owner_handle)
         owner_name = (
@@ -498,6 +664,10 @@ def _citation_call_label(
     elif call.owner_type == "note":
         note = model.notes.get(call.owner_handle)
         owner_name = (note.gramps_id or "Note") if note is not None else ""
+    elif call.owner_type == "family":
+        owner_name = _family_title(
+            model.families.get(call.owner_handle), call.owner_handle
+        )
     else:
         owner_name = person.name if call.owner_type == "person" and person else ""
     owner_name = owner_name or call.owner_handle
