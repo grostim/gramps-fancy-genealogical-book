@@ -16,4 +16,4 @@ Gramps’ native event attributes are serialized by the [official XML exporter](
 
 ## Validation status
 
-The separate report and ambiguous-ID diagnostic are implemented in [Decision 006](006-consistency-report.md). Native Gramps fixture coverage and validation of the attribute-entry workflow in Gramps 6 remain outstanding.
+The separate report and ambiguous-ID diagnostic are implemented in [Decision 006](006-consistency-report.md). The Gramps 6.0.8 integration fixture loads two native XML Birth events carrying the same `BOOK_FACT_ID` into the add-on export, verifies that they remain separate model events, and checks that the report compares them. The user-interface workflow for entering this attribute in Gramps remains a manual validation item.

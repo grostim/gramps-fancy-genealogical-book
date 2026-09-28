@@ -6,6 +6,7 @@ Usage: python scripts/verify_gramps.py --gramps /path/to/gramps
 from __future__ import annotations
 
 import argparse
+import copy
 import gzip
 import json
 import os
@@ -29,6 +30,123 @@ def _qualified_name(root: ET.Element, name: str) -> str:
 
 def _children(element: ET.Element, name: str) -> list[ET.Element]:
     return [child for child in element if child.tag.rsplit("}", 1)[-1] == name]
+
+
+def _text_content(element: ET.Element | None) -> str:
+    if element is None:
+        return ""
+    return " ".join(part.strip() for part in element.itertext() if part.strip())
+
+
+def _insert_event_attribute(root: ET.Element, event: ET.Element, name: str, value: str) -> None:
+    for attribute in _children(event, "attribute"):
+        if attribute.get("type") == name:
+            event.remove(attribute)
+    trailing_reference_tags = {"noteref", "citationref", "mediaref", "tagref"}
+    index = next(
+        (
+            position
+            for position, child in enumerate(event)
+            if child.tag.rsplit("}", 1)[-1] in trailing_reference_tags
+        ),
+        len(event),
+    )
+    event.insert(
+        index,
+        ET.Element(
+            _qualified_name(root, "attribute"),
+            {"type": name, "value": value},
+        ),
+    )
+
+
+def _add_same_fact_birth_version(
+    root: ET.Element, events: ET.Element, person: ET.Element
+) -> tuple[str, str]:
+    event_items = _children(events, "event")
+
+    def event_type(event: ET.Element) -> str:
+        return _text_content(next(iter(_children(event, "type")), None))
+
+    birth = next((event for event in event_items if event_type(event) == "Birth"), None)
+    marriage = next((event for event in event_items if event_type(event) == "Marriage"), None)
+    if birth is None or marriage is None:
+        raise AssertionError("Native fixture needs a Birth and Marriage event.")
+
+    date_value = next(
+        (
+            item
+            for item in birth
+            if item.tag.rsplit("}", 1)[-1] in {"dateval", "daterange", "datespan", "datestr"}
+        ),
+        None,
+    )
+    if date_value is None:
+        raise AssertionError("Native fixture Birth event needs a Gramps date element.")
+    source_place = next(iter(_children(marriage, "place")), None)
+    place_handle = source_place.get("hlink") if source_place is not None else None
+    if not place_handle:
+        raise AssertionError("Native fixture Marriage event needs a place reference.")
+
+    birth_handle = birth.get("handle")
+    birth_ref = next(
+        (
+            reference
+            for reference in _children(person, "eventref")
+            if reference.get("hlink") == birth_handle
+        ),
+        None,
+    )
+    if not birth_handle or birth_ref is None:
+        raise AssertionError("Native fixture person needs a reference to the Birth event.")
+
+    used_ids = {event.get("id") for event in event_items}
+    event_number = 1
+    while f"E{event_number:04d}" in used_ids:
+        event_number += 1
+    second_birth = copy.deepcopy(birth)
+    second_handle = f"_{uuid.uuid4().hex}"
+    second_birth.set("handle", second_handle)
+    second_birth.set("id", f"E{event_number:04d}")
+    second_date = next(
+        item
+        for item in second_birth
+        if item.tag.rsplit("}", 1)[-1] in {"dateval", "daterange", "datespan", "datestr"}
+    )
+    second_date_index = list(second_birth).index(second_date)
+    second_birth.remove(second_date)
+    second_birth.insert(
+        second_date_index,
+        ET.Element(
+            _qualified_name(root, "dateval"),
+            {"val": "2000-01-01"},
+        ),
+    )
+    second_place = next(iter(_children(second_birth, "place")), None)
+    if second_place is None:
+        second_place = ET.Element(_qualified_name(root, "place"))
+        second_birth.insert(
+            next(
+                (
+                    position
+                    for position, child in enumerate(second_birth)
+                    if child.tag.rsplit("}", 1)[-1] in {"description", "attribute", "noteref", "citationref", "mediaref", "tagref"}
+                ),
+                len(second_birth),
+            ),
+            second_place,
+        )
+    second_place.set("hlink", place_handle)
+
+    fact_id = "AC19-birth-of-I0001"
+    _insert_event_attribute(root, birth, "BOOK_FACT_ID", fact_id)
+    _insert_event_attribute(root, second_birth, "BOOK_FACT_ID", fact_id)
+    events.append(second_birth)
+
+    second_ref = copy.deepcopy(birth_ref)
+    second_ref.set("hlink", second_handle)
+    person.insert(list(person).index(birth_ref) + 1, second_ref)
+    return birth_handle, second_handle
 
 
 def _section(root: ET.Element, name: str) -> ET.Element:
@@ -112,11 +230,12 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ET.register_namespace("", namespace)
 
     people = next(iter(_children(root, "people")), None)
+    events = next(iter(_children(root, "events")), None)
     objects = next(iter(_children(root, "objects")), None)
     notes = _section(root, "notes")
     tags = _section(root, "tags")
-    if people is None or objects is None:
-        raise AssertionError("Gramps XML export is missing people or media objects.")
+    if people is None or events is None or objects is None:
+        raise AssertionError("Gramps XML export is missing people, events or media objects.")
 
     person = next(
         (
@@ -136,6 +255,8 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     )
     if person is None or media is None:
         raise AssertionError("Gramps XML export is missing fixture person I0001 or media M0001.")
+
+    _add_same_fact_birth_version(root, events, person)
 
     media_file = next(
         (item for item in _children(media, "file") if item.get("src")),
@@ -257,6 +378,57 @@ def verify(executable: str) -> None:
         if not output.exists():
             raise AssertionError(log)
         model = json.loads(output.read_text(encoding="utf-8"))
+        consistency_path = output.with_name("family_consistency.json")
+        if not consistency_path.is_file():
+            raise AssertionError("The export is missing its consistency companion JSON.")
+        consistency = json.loads(consistency_path.read_text(encoding="utf-8"))
+        birth_events = [
+            event for event in model["events"].values() if event["type"] == "Birth"
+        ]
+        assert len(birth_events) >= 2, (birth_events, model["diagnostics"])
+        birth_fact_events = [
+            event
+            for event in birth_events
+            if any(
+                attribute["type"] == "BOOK_FACT_ID"
+                and attribute["value"] == "AC19-birth-of-I0001"
+                for attribute in event["links"]["attributes"]
+            )
+        ]
+        assert len(birth_fact_events) == 2, birth_fact_events
+        assert {event["date"]["ymd"][0] for event in birth_fact_events} == {1900, 2000}
+        assert len({event["place_handle"] for event in birth_fact_events}) == 2
+        assert consistency["scope"]["compared_groups"] == 1
+        assert consistency["groups"][0]["book_fact_id"] == "AC19-birth-of-I0001"
+        assert set(consistency["groups"][0]["event_handles"]) == {
+            event["handle"] for event in birth_fact_events
+        }
+        actual_findings = {
+            (finding["field"], finding["classification"])
+            for finding in consistency["findings"]
+        }
+        expected_findings = {
+            ("date", "confirmed_conflict"),
+            ("place", "review_required"),
+        }
+        assert actual_findings == expected_findings, {
+            "actual_findings": actual_findings,
+            "groups": consistency["groups"],
+            "findings": consistency["findings"],
+        }
+        book_conflict_codes = {
+            "disjoint_event_date_ranges",
+            "different_event_place_references",
+        }
+        assert not any(
+            diagnostic["code"] in book_conflict_codes
+            for diagnostic in model["diagnostics"]
+        )
+        print(
+            "PASS: AC-19 native BOOK_FACT_ID, separate date/place report, "
+            "and unchanged book diagnostics"
+        )
+
         assert model["reference_family"]["gramps_id"] == "F0001"
         assert [person["gramps_id"] for person in model["people"]] == ["I0001", "I0002", "I0003"]
         assert "Émile" in model["people"][0]["name"]

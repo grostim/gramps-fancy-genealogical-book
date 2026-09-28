@@ -20,4 +20,4 @@ Le JSON de contrôle contient une version de schéma, la famille de référence,
 
 ## Validation restante
 
-La fixture native Gramps doit encore vérifier la saisie et la lecture de `BOOK_FACT_ID`, les plages calendaires réelles et la gestion des divergences de lieux. Les divergences de lieux demandent une revue humaine tant qu'aucune identité canonique de lieu n'est déclarée dans Gramps.
+La fixture d'intégration Gramps 6.0.8 vérifie maintenant l'import natif de deux versions d'un événement portant le même `BOOK_FACT_ID`, la comparaison de leurs plages calendaires et le classement d'identifiants de lieux distincts en `review_required`. Elle confirme aussi que les deux versions restent dans le modèle du livre et que les conclusions sont absentes de ses diagnostics. Le parcours de saisie de l'attribut dans l'interface Gramps reste à valider manuellement. Les divergences de lieux demandent toujours une revue humaine tant qu'aucune identité canonique n'est déclarée dans Gramps.
