@@ -12,7 +12,6 @@ import mistune
 from ..domain import Note
 from .latex_text import escape_latex_text
 
-
 # Markdown is parsed into tokens only. This renderer never accepts generated HTML
 # or user-provided LaTeX as executable output.
 _MARKDOWN = mistune.create_markdown(
