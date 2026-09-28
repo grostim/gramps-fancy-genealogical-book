@@ -6,15 +6,186 @@ Usage: python scripts/verify_gramps.py --gramps /path/to/gramps
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import os
 import subprocess
 import tarfile
 import tempfile
+import uuid
 from pathlib import Path
+from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
+
+
+def _qualified_name(root: ET.Element, name: str) -> str:
+    namespace = root.tag[1:].split("}", 1)[0] if root.tag.startswith("{") else ""
+    return f"{{{namespace}}}{name}" if namespace else name
+
+
+def _children(element: ET.Element, name: str) -> list[ET.Element]:
+    return [child for child in element if child.tag.rsplit("}", 1)[-1] == name]
+
+
+def _section(root: ET.Element, name: str) -> ET.Element:
+    existing = next(iter(_children(root, name)), None)
+    if existing is not None:
+        return existing
+    section = ET.Element(_qualified_name(root, name))
+    if name == "notes":
+        index = next(
+            (
+                position
+                for position, child in enumerate(root)
+                if child.tag.rsplit("}", 1)[-1] in {"bookmarks", "namemaps"}
+            ),
+            len(root),
+        )
+    else:
+        data_sections = {
+            "events",
+            "people",
+            "families",
+            "citations",
+            "sources",
+            "places",
+            "objects",
+            "repositories",
+            "notes",
+            "bookmarks",
+            "namemaps",
+        }
+        index = next(
+            (
+                position
+                for position, child in enumerate(root)
+                if child.tag.rsplit("}", 1)[-1] in data_sections
+            ),
+            len(root),
+        )
+    root.insert(index, section)
+    return section
+
+
+def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
+    """Round-trip GEDCOM through Gramps, then add native Gramps XML fields."""
+    fixture = work / "reference-family-native.gramps"
+    result = subprocess.run(
+        [
+            executable,
+            "-i",
+            str(ROOT / "tests/fixtures/reference-family.ged"),
+            "-e",
+            str(fixture),
+        ],
+        env=env,
+        cwd=work,
+        text=True,
+        capture_output=True,
+        timeout=90,
+    )
+    log = result.stdout + result.stderr
+    if result.returncode or "Traceback" in log or not fixture.is_file():
+        raise AssertionError(log or "Gramps did not export the native XML fixture.")
+
+    raw = fixture.read_bytes()
+    compressed = raw.startswith(b"\x1f\x8b")
+    xml = gzip.decompress(raw) if compressed else raw
+    root = ET.fromstring(xml)
+    namespace = root.tag[1:].split("}", 1)[0] if root.tag.startswith("{") else ""
+    if namespace:
+        ET.register_namespace("", namespace)
+
+    people = next(iter(_children(root, "people")), None)
+    objects = next(iter(_children(root, "objects")), None)
+    notes = _section(root, "notes")
+    tags = _section(root, "tags")
+    if people is None or objects is None:
+        raise AssertionError("Gramps XML export is missing people or media objects.")
+
+    person = next(
+        (
+            item
+            for item in _children(people, "person")
+            if item.get("id") == "I0001"
+        ),
+        None,
+    )
+    media = next(
+        (
+            item
+            for item in _children(objects, "object")
+            if item.get("id") == "M0001"
+        ),
+        None,
+    )
+    if person is None or media is None:
+        raise AssertionError("Gramps XML export is missing fixture person I0001 or media M0001.")
+
+    media_handle = media.get("handle")
+    media_ref = next(
+        (
+            item for item in _children(person, "objref")
+            if item.get("hlink") == media_handle
+        ),
+        None,
+    )
+    if not media_handle or media_ref is None:
+        raise AssertionError("Gramps XML export is missing I0001's native media reference.")
+
+    ET.SubElement(
+        person,
+        _qualified_name(root, "attribute"),
+        {"type": "BOOK_PROFILE", "value": "YES"},
+    )
+    rectangle = {
+        "corner1_x": "10",
+        "corner1_y": "20",
+        "corner2_x": "90",
+        "corner2_y": "80",
+    }
+    ET.SubElement(media_ref, _qualified_name(root, "region"), rectangle)
+
+    tag_handle = f"_{uuid.uuid4().hex}"
+    ET.SubElement(
+        tags,
+        _qualified_name(root, "tag"),
+        {
+            "handle": tag_handle,
+            "change": "0",
+            "name": "BOOK_PUBLICATION",
+            "color": "#000000000000",
+            "priority": "0",
+        },
+    )
+
+    existing_note_ids = {item.get("id") for item in _children(notes, "note")}
+    note_number = 1
+    while f"N{note_number:04d}" in existing_note_ids:
+        note_number += 1
+    note_handle = f"_{uuid.uuid4().hex}"
+    note = ET.SubElement(
+        notes,
+        _qualified_name(root, "note"),
+        {
+            "handle": note_handle,
+            "change": "0",
+            "id": f"N{note_number:04d}",
+            "type": "General",
+        },
+    )
+    ET.SubElement(
+        note,
+        _qualified_name(root, "text"),
+    ).text = "Note de publication du fixture natif."
+    ET.SubElement(note, _qualified_name(root, "tagref"), {"hlink": tag_handle})
+    ET.SubElement(person, _qualified_name(root, "noteref"), {"hlink": note_handle})
+
+    updated = ET.tostring(root, encoding="utf-8", xml_declaration=True)
+    fixture.write_bytes(gzip.compress(updated, mtime=0) if compressed else updated)
+    return fixture
 
 
 def verify(executable: str) -> None:
@@ -29,6 +200,8 @@ def verify(executable: str) -> None:
         with tarfile.open(ROOT / "gramps60/download/GrampsFancyBook.addon.tgz") as archive:
             archive.extractall(plugins, filter="data")
 
+        native_fixture = _native_fixture(executable, env, work)
+
         def report(family: str, output: Path | None, *, overwrite=False) -> str:
             options = f"name={PLUGIN_ID},reference_family={family}"
             if output is not None:
@@ -39,7 +212,7 @@ def verify(executable: str) -> None:
                 [
                     executable,
                     "-i",
-                    str(ROOT / "tests/fixtures/reference-family.ged"),
+                    str(native_fixture),
                     "-a",
                     "report",
                     "-p",
@@ -97,6 +270,21 @@ def verify(executable: str) -> None:
         assert media["path"] == "media/portrait.jpg"
         assert "portrait" in media["description"].lower()
         assert model["people"][0]["links"]["media"][0]["media_handle"] == media["handle"]
+        assert model["people"][0]["links"]["media"][0]["rectangle"] == [10, 20, 90, 80]
+        assert any(
+            attribute["type"] == "BOOK_PROFILE" and attribute["value"] == "YES"
+            for attribute in model["people"][0]["links"]["attributes"]
+        )
+        publishable_note = next(
+            (note for note in model["notes"].values() if note["is_publishable"]),
+            None,
+        )
+        assert publishable_note is not None
+        assert publishable_note["text"] == "Note de publication du fixture natif."
+        assert any(
+            model["tags"][handle]["name"] == "BOOK_PUBLICATION"
+            for handle in publishable_note["links"]["tag_handles"]
+        )
         # The GEDCOM references a portrait file not shipped with this fixture.
         # Its recoverable derivative warning is expected; unrelated diagnostics are not.
         assert all(
@@ -106,7 +294,10 @@ def verify(executable: str) -> None:
             for diagnostic in model["diagnostics"]
         )
         assert model["privacy"]["contains_private_data"] is False
-        print("PASS: installed add-on, rich Gramps snapshot, uncertain dates, sources and repositories")
+        print(
+            "PASS: native Gramps XML fixture, BOOK_PROFILE, BOOK_PUBLICATION, media rectangles, "
+            "rich snapshot, sources and repositories"
+        )
 
         single = work / "single.json"
         log = report("F0002", single)
