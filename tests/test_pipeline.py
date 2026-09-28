@@ -27,7 +27,9 @@ def test_select_family_and_build_shared_model():
     assert model.metadata["BOOK_REFERENCE_FAMILY"] == "F0001"
     assert [person.handle for person in model.people] == ["I0001", "I0002", "I0003"]
     assert "F0001" in render_html(model)
-    assert "F0001" in render_latex(model)
+    rendered_latex = render_latex(model)
+    assert "F0001" in rendered_latex
+    assert r"\usepackage{xurl}" in rendered_latex
 
 
 def test_model_is_json_serializable_shape():
