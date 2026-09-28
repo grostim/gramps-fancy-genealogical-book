@@ -310,6 +310,23 @@ class Diagnostic:
     context: str = ""
 
 
+@dataclass(frozen=True)
+class EditorialMediaArtifact:
+    media_handle: str
+    rectangle: tuple[int | float, ...] | None
+    action: str
+    context_ids: tuple[str, ...] = ()
+    citation_handles: tuple[str, ...] = ()
+    cache_key: str | None = None
+    asset_path: str | None = None
+    mime_type: str | None = None
+    width: int | None = None
+    height: int | None = None
+    dpi: int | None = None
+    page_count: int | None = None
+    diagnostic_code: str | None = None
+
+
 @dataclass
 class Snapshot:
     reference_family: Family
@@ -431,6 +448,7 @@ class BookModel:
     media: dict[str, Media] = field(default_factory=dict)
     tags: dict[str, Tag] = field(default_factory=dict)
     diagnostics: list[Diagnostic] = field(default_factory=list)
+    media_artifacts: list[EditorialMediaArtifact] = field(default_factory=list)
     genealogy: Genealogy | None = None
     editorial_book: EditorialBook | None = None
 
@@ -459,6 +477,7 @@ class BookModel:
                 "media": self.media,
                 "tags": self.tags,
                 "diagnostics": diagnostics,
+                "media_artifacts": self.media_artifacts,
                 "genealogy": genealogy,
                 "editorial_book": self.editorial_book,
                 "privacy": {"contains_private_data": _contains_private_data(self)},

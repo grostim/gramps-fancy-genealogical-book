@@ -2,7 +2,7 @@
 
 [English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
 
-Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille, extrait son graphe d’ascendance et de descendance selon les profondeurs choisies, puis exporte un modèle JSON commun. Les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
+Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille, extrait son graphe d’ascendance et de descendance selon les profondeurs choisies, puis exporte un modèle JSON commun avec les dérivés médias disponibles. Les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
 
 ## Fonctionnement actuel
 
@@ -12,7 +12,7 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
 - Texte des notes exporté uniquement si elles portent l’étiquette Gramps `BOOK_PUBLICATION`; les notes de travail restent référencées sans leur contenu.
-- JSON Unicode, diagnostic des références indisponibles et publication atomique du fichier.
+- JSON Unicode, diagnostics structurés de conversion média et remplacement coordonné du modèle avec son dossier de PNG.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
 
@@ -30,7 +30,9 @@ Extraire `gramps60/download/GrampsFancyBook.addon.tgz` dans le dossier des exten
 - Linux : `${XDG_DATA_HOME:-$HOME/.local/share}/gramps/gramps60/plugins/`
 - Profil isolé : `$GRAMPSHOME/gramps/gramps60/plugins/`
 
-Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. Ce jalon produit uniquement du JSON. Choisir une famille, une destination `.json` et laisser le remplacement désactivé sauf besoin explicite. Le répertoire de destination doit déjà exister.
+Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. Ce jalon produit un modèle `.json` et, s’il y a des images convertibles, un dossier voisin nommé `<nom>_media/`. Le JSON référence les PNG dérivés et signale les médias qui n’ont pas pu être préparés. Choisir une famille et une destination `.json` ; **Replace an existing file** remplace aussi les dérivés voisins. Le répertoire de destination doit déjà exister.
+
+Les convertisseurs d’images et de PDF sont facultatifs. Pour le développement, les installer dans l’environnement Python utilisé par Gramps avec `python -m pip install -e '.[media]'`. Tant que leur installation dans les paquets Gramps Desktop/Web n’est pas automatisée, une dépendance absente produit un diagnostic et laisse le modèle JSON exportable.
 
 L’interface utilise des chaînes traduisibles ; les traductions françaises propres au plugin restent à compléter.
 

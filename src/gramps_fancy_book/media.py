@@ -9,8 +9,15 @@ from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
-from .domain import Media
+from .domain import (
+    BookModel,
+    Diagnostic,
+    EditorialMediaArtifact,
+    EditorialMediaUse,
+    Media,
+)
 
 Region = tuple[int | float, int | float, int | float, int | float]
 PixelBox = tuple[int, int, int, int]
@@ -95,7 +102,7 @@ def read_local_media(database: object, media: Media) -> bytes:
     if media.is_excluded:
         raise ValueError("Media marked BOOK_EXCLUDE cannot be read for publication.")
     resolved_path = resolve_media_path(database, media.path)
-    if resolved_path.startswith(("http://", "https://")):
+    if _is_external_url(resolved_path):
         raise ValueError("Remote media is not downloaded for book generation.")
     return Path(resolved_path).read_bytes()
 
@@ -110,15 +117,15 @@ def prepare_media_derivative(
     """Prepare one eligible image or PDF reference from the active Gramps DB."""
     if media.is_excluded:
         raise ValueError("Media marked BOOK_EXCLUDE cannot be published.")
-    media_type = media.mime_type.partition(";")[0].strip().casefold()
-    if media_type in {"application/pdf", "application/x-pdf"}:
+    media_kind = _media_kind(media)
+    if media_kind == "pdf":
         return prepare_pdf_media_derivative(
             database,
             media,
             rectangle,
             external_url_available=external_url_available,
         )
-    if media_type and not media_type.startswith("image/"):
+    if media_kind != "raster":
         raise ValueError("Only raster images can be prepared by this helper.")
     return prepare_raster_derivative(read_local_media(database, media), rectangle)
 
@@ -151,19 +158,24 @@ def prepare_pdf_media_derivative(
     """
     if media.is_excluded:
         raise ValueError("Media marked BOOK_EXCLUDE cannot be published.")
-    media_type = media.mime_type.partition(";")[0].strip().casefold()
-    if media_type not in {"application/pdf", "application/x-pdf"}:
+    if _media_kind(media) != "pdf":
         raise ValueError("PDF processing requires a PDF media record.")
 
     if external_url_available:
         return PdfMediaResult(action="external-link", page_count=None)
 
+    return prepare_pdf_derivative(read_local_media(database, media), rectangle)
+
+
+def prepare_pdf_derivative(
+    source_content: bytes, rectangle: Region | None
+) -> PdfMediaResult:
+    """Inspect and rasterize PDF bytes under the single-page publication rule."""
     try:
         import pypdfium2 as pdfium
     except ImportError as error:
         raise RuntimeError("pypdfium2 is required to inspect and prepare PDF media.") from error
 
-    source_content = read_local_media(database, media)
     pdf = pdfium.PdfDocument(source_content)
     try:
         page_count = len(pdf)
@@ -230,13 +242,22 @@ def prepare_pdf_media_derivative(
     )
 
 
+def _media_kind(media: Media) -> Literal["pdf", "raster", "reference"]:
+    media_type = media.mime_type.partition(";")[0].strip().casefold()
+    suffix = Path(media.path).suffix.casefold()
+    if media_type in {"application/pdf", "application/x-pdf"} or suffix == ".pdf":
+        return "pdf"
+    if media_type.startswith("image/") or not media_type:
+        return "raster"
+    return "reference"
+
+
 def prepare_raster_derivative(
     source_content: bytes, rectangle: Region | None, *, dpi: int | None = None
 ) -> RasterDerivative:
     """Orient, crop and losslessly encode a raster image as PNG.
 
-    Pillow is imported only when image processing is requested. PDF rasterization
-    and non-raster media policies belong to the caller.
+    Pillow is imported only when image processing is requested.
     """
     try:
         from PIL import Image, ImageOps
@@ -298,4 +319,245 @@ def _normalized_region(rectangle: Region | None) -> tuple[int | float, ...]:
     return tuple(
         int(value) if float(value).is_integer() else float(value)
         for value in (left, top, right, bottom)
+    )
+
+
+def prepare_editorial_media(
+    database: object,
+    model: BookModel,
+    asset_directory_name: str,
+    asset_staging_directory: str | Path,
+) -> None:
+    """Prepare each unique editorial media region and attach its manifest.
+
+    PNG files are written one at a time to the supplied staging directory. The
+    book model records relative asset paths and structured diagnostics for the
+    JSON export; the caller commits the staged directory beside that export.
+    """
+    if (
+        not asset_directory_name
+        or asset_directory_name in {".", ".."}
+        or Path(asset_directory_name).name != asset_directory_name
+    ):
+        raise ValueError("The media asset directory must be a single relative name.")
+    staging_directory = Path(asset_staging_directory)
+    if not staging_directory.is_dir() or staging_directory.is_symlink():
+        raise ValueError("The media asset staging path must be an existing directory.")
+    model.media_artifacts = []
+    if model.editorial_book is None:
+        return
+
+    uses_by_media: dict[
+        str, dict[tuple[int | float, ...] | None, list[EditorialMediaUse]]
+    ] = {}
+    for placement in model.editorial_book.media_placements:
+        for use in placement.uses:
+            rectangle = use.media_ref.rectangle
+            uses_by_media.setdefault(placement.media_handle, {}).setdefault(
+                rectangle, []
+            ).append(use)
+
+    diagnostics: list[Diagnostic] = []
+    written_cache_keys: set[str] = set()
+
+    for media_handle, uses_by_region in uses_by_media.items():
+        media = model.media.get(media_handle)
+        all_citation_handles = list(media.links.citations) if media is not None else []
+        for uses in uses_by_region.values():
+            all_citation_handles.extend(_media_citations(uses))
+        all_citation_handles = tuple(dict.fromkeys(all_citation_handles))
+        if media is None:
+            for rectangle, uses in uses_by_region.items():
+                _append_media_failure(
+                    model,
+                    diagnostics,
+                    media_handle,
+                    rectangle,
+                    _media_contexts(uses),
+                    _media_citations(uses),
+                    "MEDIA_REFERENCE_UNAVAILABLE",
+                )
+            continue
+        if media.is_excluded:
+            continue
+
+        external_url_available = any(
+            _citation_has_url(model, citation_handle)
+            for citation_handle in all_citation_handles
+        )
+        media_kind = _media_kind(media)
+        if media_kind == "pdf" and external_url_available:
+            for rectangle, uses in uses_by_region.items():
+                model.media_artifacts.append(
+                    EditorialMediaArtifact(
+                        media_handle=media_handle,
+                        rectangle=rectangle,
+                        action="external-link",
+                        context_ids=_media_contexts(uses),
+                        citation_handles=_all_media_citations(media, uses),
+                    )
+                )
+            continue
+
+        if media_kind == "reference":
+            action = "external-link" if external_url_available else "reference-only"
+            for rectangle, uses in uses_by_region.items():
+                model.media_artifacts.append(
+                    EditorialMediaArtifact(
+                        media_handle=media_handle,
+                        rectangle=rectangle,
+                        action=action,
+                        context_ids=_media_contexts(uses),
+                        citation_handles=_all_media_citations(media, uses),
+                    )
+                )
+            continue
+
+        source_content: bytes | None = None
+        source_error: Exception | None = None
+        try:
+            source_content = read_local_media(database, media)
+        except Exception as error:
+            source_error = error
+
+        for rectangle, uses in uses_by_region.items():
+            contexts = _media_contexts(uses)
+            citation_handles = _all_media_citations(media, uses)
+            if source_error is not None or source_content is None:
+                _append_media_failure(
+                    model,
+                    diagnostics,
+                    media_handle,
+                    rectangle,
+                    contexts,
+                    citation_handles,
+                    "MEDIA_DERIVATIVE_FAILED",
+                )
+                continue
+            try:
+                if media_kind == "pdf":
+                    prepared_pdf = prepare_pdf_derivative(source_content, rectangle)
+                    if prepared_pdf.derivative is None:
+                        model.media_artifacts.append(
+                            EditorialMediaArtifact(
+                                media_handle=media_handle,
+                                rectangle=rectangle,
+                                action=prepared_pdf.action,
+                                context_ids=contexts,
+                                citation_handles=citation_handles,
+                                page_count=prepared_pdf.page_count,
+                            )
+                        )
+                        continue
+                    derivative = prepared_pdf.derivative
+                    page_count = prepared_pdf.page_count
+                    action = prepared_pdf.action
+                else:
+                    derivative = prepare_raster_derivative(source_content, rectangle)
+                    page_count = None
+                    action = "reproduce"
+            except Exception:
+                _append_media_failure(
+                    model,
+                    diagnostics,
+                    media_handle,
+                    rectangle,
+                    contexts,
+                    citation_handles,
+                    "MEDIA_DERIVATIVE_FAILED",
+                )
+                continue
+
+            if derivative.cache_key not in written_cache_keys:
+                asset_file = staging_directory / f"{derivative.cache_key}.png"
+                with asset_file.open("xb") as stream:
+                    stream.write(derivative.content)
+                written_cache_keys.add(derivative.cache_key)
+            model.media_artifacts.append(
+                EditorialMediaArtifact(
+                    media_handle=media_handle,
+                    rectangle=rectangle,
+                    action=action,
+                    context_ids=contexts,
+                    citation_handles=citation_handles,
+                    cache_key=derivative.cache_key,
+                    asset_path=f"{asset_directory_name}/{derivative.cache_key}.png",
+                    mime_type=derivative.mime_type,
+                    width=derivative.width,
+                    height=derivative.height,
+                    dpi=derivative.dpi,
+                    page_count=page_count,
+                )
+            )
+
+    model.diagnostics.extend(item for item in diagnostics if item not in model.diagnostics)
+
+
+def _media_contexts(uses: list[EditorialMediaUse]) -> tuple[str, ...]:
+    return tuple(dict.fromkeys(f"{use.context_type}:{use.context_id}" for use in uses))
+
+
+def _media_citations(uses: list[EditorialMediaUse]) -> tuple[str, ...]:
+    return tuple(
+        dict.fromkeys(
+            citation_handle
+            for use in uses
+            for citation_handle in (*use.citation_handles, *use.media_ref.citations)
+        )
+    )
+
+
+def _all_media_citations(media: Media, uses: list[EditorialMediaUse]) -> tuple[str, ...]:
+    return tuple(dict.fromkeys((*media.links.citations, *_media_citations(uses))))
+
+
+def _citation_has_url(model: BookModel, citation_handle: str) -> bool:
+    citation = model.citations.get(citation_handle)
+    if citation is None:
+        return False
+    if any(_is_external_url(url.path) for url in citation.urls):
+        return True
+    source = model.sources.get(citation.source_handle or "")
+    return bool(source and any(_is_external_url(url.path) for url in source.urls))
+
+
+def _is_external_url(value: str) -> bool:
+    try:
+        parsed = urlsplit(value.strip())
+    except ValueError:
+        return False
+    return parsed.scheme.casefold() in {"http", "https"} and bool(parsed.netloc)
+
+
+def _append_media_failure(
+    model: BookModel,
+    diagnostics: list[Diagnostic],
+    media_handle: str,
+    rectangle: tuple[int | float, ...] | None,
+    contexts: tuple[str, ...],
+    citation_handles: tuple[str, ...],
+    diagnostic_code: str,
+) -> None:
+    diagnostics.append(
+        Diagnostic(
+            code=diagnostic_code,
+            severity="warning",
+            object_type="media",
+            handle=media_handle,
+            message=(
+                "Media could not be prepared. Check its Gramps path, crop region, "
+                "file format and optional media dependencies."
+            ),
+            context=contexts[0] if contexts else str(rectangle),
+        )
+    )
+    model.media_artifacts.append(
+        EditorialMediaArtifact(
+            media_handle=media_handle,
+            rectangle=rectangle,
+            action="failed",
+            context_ids=contexts,
+            citation_handles=citation_handles,
+            diagnostic_code=diagnostic_code,
+        )
     )
