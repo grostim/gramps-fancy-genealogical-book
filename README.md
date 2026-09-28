@@ -1,6 +1,6 @@
 # Gramps Fancy Genealogical Book
 
-[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md)
+[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md) · [Media validation](docs/validation-media.md)
 
 An experimental Gramps 6 add-on for a family genealogical book. The current milestone exports a shared JSON model and a preliminary LaTeX book with genealogy sections, profiles, family notices, citations, page references and a person index. The final PDF layout and multipass output still need visual validation; HTML remains in a later milestone.
 
@@ -39,7 +39,7 @@ In Gramps, the report is registered under **Reports → Web Pages**. This catego
 
 The LaTeX note renderer requires Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
 
-Image and PDF converters are optional. For development, install them into Gramps' Python environment with `python -m pip install -e '.[media]'`. Until installation of these dependencies is automated in Gramps Desktop/Web packages, a missing dependency becomes a diagnostic and the JSON model can still be exported.
+Image and PDF converters remain optional so JSON export works without them. For development, install the project and its dependencies with `python -m pip install -e '.[dev,media]'`. In a Gramps Desktop environment that supports pip, install `Pillow` and `pypdfium2` with the same Python interpreter that launches Gramps, then restart Gramps: `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. A missing dependency produces a diagnostic and the affected derivatives are omitted. CI currently qualifies Ubuntu 24.04, Python 3.12 and Gramps 6.0.8; see the [media validation record](docs/validation-media.md). Gramps Web execution remains unqualified: the packages would need to be installed in the server environment, and no test instance has been validated.
 
 ## CLI example
 
@@ -63,6 +63,6 @@ python3 -m venv .venv
 
 Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.8 for integration.
 
-See the [L1 validation record](docs/validation-l1.md) and the [L3 validation record](docs/validation-l3.md) for executed checks and remaining limitations.
+See the [L1 validation record](docs/validation-l1.md), the [L3 validation record](docs/validation-l3.md), and the [media validation record](docs/validation-media.md) for executed checks and remaining limitations.
 
 The reference family must have two known partners (AC-02). Full source requirements: [original specification](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), with [provenance](docs/reference/README.md).

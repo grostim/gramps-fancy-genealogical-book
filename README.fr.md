@@ -1,6 +1,6 @@
 # Gramps Fancy Genealogical Book
 
-[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
+[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md) · [Validation des médias](docs/validation-media.fr.md)
 
 Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel exporte un modèle JSON commun et un premier rendu LaTeX comprenant les parties généalogiques, les fiches, les notices familiales, les citations, les renvois de pages et l’index. La mise en page définitive et la compilation multipasse du PDF restent à vérifier visuellement ; le rendu HTML est prévu dans un jalon ultérieur.
 
@@ -39,7 +39,7 @@ Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend 
 
 Le rendu LaTeX des notes requiert Mistune 3.x. Installez-la dans l’environnement Python utilisé par Gramps Desktop ou le service Gramps Web : `python -m pip install 'mistune>=3,<4'`. L’extension déclare `mistune` comme module requis ; l’installation du paquet Python depuis ce dépôt installe également la dépendance déclarée dans `pyproject.toml`.
 
-Les convertisseurs d’images et de PDF sont facultatifs. Pour le développement, les installer dans l’environnement Python utilisé par Gramps avec `python -m pip install -e '.[media]'`. Tant que leur installation dans les paquets Gramps Desktop/Web n’est pas automatisée, une dépendance absente produit un diagnostic et laisse le modèle JSON exportable.
+Les convertisseurs d’images et de PDF restent facultatifs afin que l’export JSON fonctionne aussi sans eux. Pour le développement, installez le projet et ses dépendances avec `python -m pip install -e '.[dev,media]'`. Dans un environnement Gramps Desktop où pip est pris en charge, installez `Pillow` et `pypdfium2` avec le même interpréteur Python que celui qui lance Gramps, puis redémarrez Gramps : `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. Une dépendance absente produit un diagnostic et les dérivés concernés sont omis. La CI qualifie actuellement Ubuntu 24.04, Python 3.12 et Gramps 6.0.8 ; voir le [compte rendu de validation média](docs/validation-media.fr.md). L’exécution dans Gramps Web reste non qualifiée : les paquets devraient être installés dans l’environnement serveur, et aucune instance de test n’a été validée.
 
 L’interface utilise des chaînes traduisibles ; les traductions françaises propres au plugin restent à compléter.
 
@@ -65,6 +65,6 @@ python3 -m venv .venv
 
 Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration nécessite Python 3.12+ et Gramps 6.0 ; il vérifie les fichiers et diagnostics car Gramps peut renvoyer un code de sortie zéro malgré l’échec d’un rapport. La CI cible Python 3.10 à 3.13 pour le domaine et Gramps 6.0.8 pour l’intégration.
 
-Le [compte rendu L1](docs/validation-l1.fr.md) et le [suivi L3](docs/validation-l3.fr.md) distinguent les contrôles effectués et les limites restantes.
+Le [compte rendu L1](docs/validation-l1.fr.md), le [suivi L3](docs/validation-l3.fr.md) et la [validation des médias](docs/validation-media.fr.md) distinguent les contrôles effectués et les limites restantes.
 
 La famille de référence doit avoir deux partenaires connus (AC-02). Exigences intégrales : [spécification originale](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), avec sa [provenance](docs/reference/README.md).
