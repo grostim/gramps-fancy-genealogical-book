@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from itertools import combinations
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .conventions import BOOK_FACT_ID
 
