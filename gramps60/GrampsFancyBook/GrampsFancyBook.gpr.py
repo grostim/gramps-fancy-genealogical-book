@@ -14,7 +14,7 @@ register(
     id="gramps_fancy_genealogical_book",
     name=_("Gramps Fancy Genealogical Book"),
     description=_("Generate a static HTML book archive for the selected reference family."),
-    version="0.7.0",
+    version="0.8.0",
     gramps_target_version="6.0",
     # UNSTABLE add-ons are hidden by release builds of Gramps.
     status=EXPERIMENTAL,
