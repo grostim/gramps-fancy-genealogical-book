@@ -817,8 +817,10 @@ def _render_citation_appendix(
                     )
                 else:
                     output.append(
-                    _render_featured_media_link(placement, caption, emitted_targets)
-                )
+                        _render_featured_media_link(
+                            placement, caption, emitted_targets
+                        )
+                    )
             else:
                 output.append(
                     _render_media_image(
