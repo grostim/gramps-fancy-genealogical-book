@@ -31,6 +31,7 @@ def render_latex(model: BookModel) -> str:
         f"\\section*{{{escape_latex_text(family.handle)}}}\n",
         f"{len(model.people)} people in the intermediate model.\n",
     ]
+    document.append("\\section*{Contents}\n\\tableofcontents\n\\clearpage\n")
 
     emitted_targets: set[str] = set()
     people_by_handle = {person.handle: person for person in model.people}
@@ -63,7 +64,7 @@ def render_latex(model: BookModel) -> str:
             )
 
     if model.editorial_book is not None and model.editorial_book.family_notices:
-        document.append("\\section*{Family notices}\n")
+        document.append(_section_heading("Family notices"))
         for notice in model.editorial_book.family_notices:
             document.append(
                 _render_family_notice(
@@ -72,7 +73,7 @@ def render_latex(model: BookModel) -> str:
             )
 
     if model.editorial_book is not None and model.editorial_book.profiles:
-        document.append("\\section*{Person profiles}\n")
+        document.append(_section_heading("Person profiles"))
         for profile in model.editorial_book.profiles:
             document.append(
                 _render_profile(
@@ -96,7 +97,8 @@ def render_latex(model: BookModel) -> str:
             target.target_id: target
             for target in model.editorial_book.navigation_targets
         }
-        document.append("\\section*{Person index}\n\\begin{itemize}\n")
+        document.append(_section_heading("Person index"))
+        document.append("\\begin{itemize}\n")
         for entry in model.editorial_book.person_index:
             display_name = entry.display_name or entry.person_handle
             label = escape_latex_text(display_name)
@@ -128,7 +130,7 @@ def _render_genealogy_part(
     if not part.generations:
         return ""
 
-    output = [f"\\section*{{{escape_latex_text(part.name.title())}}}\n"]
+    output = [_section_heading(part.name.title())]
     for generation in part.generations:
         output.append(
             f"\\subsection*{{Generation {generation.number}}}\n"
@@ -159,7 +161,7 @@ def _render_family_sections(
         notice.family_handle: notice
         for notice in (model.editorial_book.family_notices if model.editorial_book else ())
     }
-    output = ["\\section*{Family connections}\n\\begin{itemize}\n"]
+    output = [_section_heading("Family connections"), "\\begin{itemize}\n"]
     for section in sections:
         family = model.families.get(section.family_handle)
         partners = [
@@ -476,7 +478,7 @@ def _render_citation_appendix(
     model: BookModel,
     emitted_targets: set[str],
 ) -> str:
-    output = ["\\section*{Documentary appendix}\n\\begin{itemize}\n"]
+    output = [_section_heading("Documentary appendix"), "\\begin{itemize}\n"]
     profiles = {
         profile.profile_id: profile
         for profile in (model.editorial_book.profiles if model.editorial_book else ())
@@ -743,6 +745,14 @@ def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
         return ""
     emitted_targets.add(target_id)
     return f"\\hypertarget{{{_latex_target(target_id)}}}{{}}"
+
+
+def _section_heading(title: str) -> str:
+    escaped = escape_latex_text(title)
+    return (
+        f"\\section*{{{escaped}}}\n"
+        f"\\addcontentsline{{toc}}{{section}}{{{escaped}}}\n"
+    )
 
 
 def _latex_target(target_id: str) -> str:
