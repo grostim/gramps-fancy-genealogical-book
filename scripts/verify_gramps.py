@@ -97,7 +97,14 @@ def verify(executable: str) -> None:
         assert media["path"] == "media/portrait.jpg"
         assert "portrait" in media["description"].lower()
         assert model["people"][0]["links"]["media"][0]["media_handle"] == media["handle"]
-        assert model["diagnostics"] == []
+        # The GEDCOM references a portrait file not shipped with this fixture.
+        # Its recoverable derivative warning is expected; unrelated diagnostics are not.
+        assert all(
+            diagnostic["code"] == "MEDIA_DERIVATIVE_FAILED"
+            and diagnostic["object_type"] == "media"
+            and diagnostic["handle"] == media["handle"]
+            for diagnostic in model["diagnostics"]
+        )
         assert model["privacy"]["contains_private_data"] is False
         print("PASS: installed add-on, rich Gramps snapshot, uncertain dates, sources and repositories")
 
