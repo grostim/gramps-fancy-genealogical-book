@@ -53,16 +53,20 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n',
         f"<title>{_text(title)}</title>\n",
         "<style>\n",
-        "body{font:1rem/1.6 system-ui,sans-serif;margin:0 auto;max-width:70rem;padding:1.5rem;color:#202124}\n",
-        "a{color:#174ea6}a:focus-visible{outline:3px solid #174ea6;outline-offset:2px}\n",
+        "body{font:1rem/1.6 system-ui,sans-serif;margin:0 auto;max-width:70rem;padding:clamp(.75rem,3vw,1.5rem);color:#202124;overflow-wrap:anywhere}\n",
+        "a{color:#174ea6}:focus-visible{outline:3px solid #174ea6;outline-offset:2px}\n",
+        ".skip-link{position:absolute;left:.75rem;top:-5rem;background:#fff;color:#174ea6;padding:.5rem .75rem;border:2px solid #174ea6;z-index:10}.skip-link:focus-visible{top:.75rem}\n",
+        "h1{font-size:clamp(1.75rem,6vw,3rem);line-height:1.15}\n",
         ".cover,.book-part{padding:1rem 0 2rem;border-bottom:1px solid #dadce0}\n",
         ".cover{text-align:center;padding:4rem 1rem}.generation{margin:1.5rem 0}\n",
         ".occurrences,.family-children,.family-partners{padding-left:1.5rem}\n",
         ".person-profile,.family-notice,.citation-entry{margin:1rem 0;padding:1rem;border-left:3px solid #9aa0a6}\n",
         ".cover-portraits{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}.media-item{margin:1rem auto;text-align:center}.media-item img{display:block;max-width:100%;height:auto;margin:auto}.featured-media img{max-height:80vh;object-fit:contain}.media-reference{padding:.5rem 0}\n",
-        ".muted{color:#5f6368}.note-text{white-space:normal}.note-text p:first-child{margin-top:0}.note-text p:last-child{margin-bottom:0}.note-text pre{white-space:pre-wrap}.family-links,.branch-links{font-size:.95rem}\n",
+        ".muted{color:#5f6368}.note-text{white-space:normal}.note-text p:first-child{margin-top:0}.note-text p:last-child{margin-bottom:0}.note-text pre{white-space:pre-wrap;overflow-wrap:anywhere}.family-links,.branch-links{font-size:.95rem}\n",
+        "@media(max-width:40rem){.cover{padding:2.5rem .5rem 1.5rem}.generation{margin:1rem 0}.occurrences,.family-children,.family-partners{padding-left:1rem}.person-profile,.family-notice,.citation-entry{padding:.75rem}}\n",
         "@media print{body{max-width:none;margin:0;padding:0}.book-part{break-before:page}a{color:inherit;text-decoration:none}}\n",
         "</style></head><body>\n",
+        '<a class="skip-link" href="#main-content">Aller au contenu principal</a>\n',
         '<header class="cover" id="cover">\n',
         f"<h1>{_text(title)}</h1>\n",
     ]
@@ -73,7 +77,7 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
         output.append(f"<p>{_text(couple)}</p>\n")
     output.append(_render_cover_portraits(model, people, media_context))
     output.append(f'<p class="muted">Famille de référence : {_text(family.gramps_id or family.handle)}</p>\n')
-    output.append("</header>\n<main>\n")
+    output.append("</header>\n<main id=\"main-content\" tabindex=\"-1\">\n")
 
     if editorial is None:
         output.append(
@@ -724,7 +728,7 @@ def _render_media_figure(
     if asset_href is not None:
         image_alt = alt or caption or (media.description if media is not None else "")
         if not image_alt:
-            image_alt = "Illustration"
+            image_alt = "Image documentaire sans description"
         dimensions = ""
         width = getattr(artifact, "width", None)
         height = getattr(artifact, "height", None)
