@@ -232,7 +232,7 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - **L7 — HTML ZIP livré dans les PR #51–57.** L’archive contient la page d’entrée, les styles et les dérivés PNG approuvés avec des chemins relatifs. Les corrections de commentaires sur #55 sont intégrées. L’ouverture réelle hors ligne avec médias, les tailles d’écran, le clavier et le lecteur d’écran restent à vérifier.
 - **État des contrôles automatisés :** les exécutions GitHub Actions récentes ont été arrêtées avant les jobs avec un message relatif aux paiements ou au plafond de dépenses du compte. Ces exécutions ne fournissent donc pas de résultat de test ; le suivi [validation L7](validation-l7.fr.md) garde cette limite visible.
 - **Recette Gramps :** un contrôle graphique macOS a confirmé la sélection de F0001, la conservation d’options et le refus de remplacement sur le parcours JSON. Cela ne valide pas l’archive HTML, l’ensemble d’AC-22 ni Gramps Web.
-- **Travail L8.4 en cours :** les pages d’architecture et de suivi sont réalignées ici avec le code livré. Les guides complets d’installation, dépendances, configuration, dépannage, contribution et les traductions d’interface restent à achever.
+- **Travail L8.4 en cours :** les pages d’architecture et de suivi sont réalignées avec le code livré ; le catalogue français des libellés Gramps est compilé et inclus dans l’archive. Les guides complets d’installation, dépendances, configuration, dépannage et contribution restent à achever ; les prochaines chaînes d’interface devront être ajoutées au catalogue.
 
 ### Prochaines actions
 
