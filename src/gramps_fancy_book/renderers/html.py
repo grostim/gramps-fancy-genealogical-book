@@ -5,6 +5,7 @@ from __future__ import annotations
 from html import escape
 
 from ..domain import BookModel
+from .html_notes import render_html_note
 
 _PART_LABELS = {
     "front_matter": "Avant-propos",
@@ -56,7 +57,7 @@ def render_html(model: BookModel) -> str:
         ".cover{text-align:center;padding:4rem 1rem}.generation{margin:1.5rem 0}\n",
         ".occurrences,.family-children,.family-partners{padding-left:1.5rem}\n",
         ".person-profile,.family-notice,.citation-entry{margin:1rem 0;padding:1rem;border-left:3px solid #9aa0a6}\n",
-        ".muted{color:#5f6368}.note-text{white-space:pre-wrap}.family-links,.branch-links{font-size:.95rem}\n",
+        ".muted{color:#5f6368}.note-text{white-space:normal}.note-text p:first-child{margin-top:0}.note-text p:last-child{margin-bottom:0}.note-text pre{white-space:pre-wrap}.family-links,.branch-links{font-size:.95rem}\n",
         "@media print{body{max-width:none;margin:0;padding:0}.book-part{break-before:page}a{color:inherit;text-decoration:none}}\n",
         "</style></head><body>\n",
         '<header class="cover" id="cover">\n',
@@ -227,7 +228,7 @@ def _render_front_matter(model) -> str:
         heading = _NOTE_ROLE_LABELS.get(role, role)
         output.append(
             f'<section><h3>{_text(heading)}</h3>'
-            f'<div class="note-text">{_note_text(note.text)}</div></section>\n'
+            f'<div class="note-text">{render_html_note(note)}</div></section>\n'
         )
     return "".join(output)
 
@@ -334,7 +335,7 @@ def _render_profile(profile, model, calls_by_id) -> str:
         note = model.notes.get(handle)
         if note is not None:
             output.append(
-                f'<div id="{_attr(target)}" class="note-text">{_note_text(note.text or "")}</div>\n'
+                f'<div id="{_attr(target)}" class="note-text">{render_html_note(note)}</div>\n'
             )
     citations = [
         calls_by_id[call_id]
@@ -423,7 +424,7 @@ def _render_family_notice(
         note = model.notes.get(handle)
         if note is not None:
             output.append(
-                f'<div id="{_attr(target)}" class="note-text">{_note_text(note.text or "")}</div>\n'
+                f'<div id="{_attr(target)}" class="note-text">{render_html_note(note)}</div>\n'
             )
     citations = [
         calls_by_id[call_id]
@@ -547,10 +548,6 @@ def _generation_id(part_name: str, generation_number: int) -> str:
 
 def _person_name(person, fallback: str) -> str:
     return str(person.name) if person is not None and person.name else fallback
-
-
-def _note_text(value: str) -> str:
-    return _text(value)
 
 
 def _text(value) -> str:
