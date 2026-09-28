@@ -79,5 +79,6 @@ jobs:
             .work/latex-spike/rendered-sparse-book.pdf
             .work/latex-spike/rendered-sparse-book.tex
             .work/latex-spike/rendered-sparse-book.log
+            .work/latex-spike/media/*.png
           if-no-files-found: error
           retention-days: 14
