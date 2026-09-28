@@ -14,7 +14,7 @@ An experimental Gramps 6 add-on for a family genealogical book. The current mile
 - Published notes are rendered in LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
 - Unicode JSON, structured media-conversion diagnostics and coordinated replacement of the model and its PNG sidecar directory.
 - Existing files preserved unless **Replace an existing file** is enabled.
-- Preliminary LaTeX output renders the main genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. The PDF still needs multipass and visual validation.
+- Preliminary LaTeX output includes an automatic A4 cover with couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. F0 editorial notes and final PDF visual validation remain outstanding.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
 
 Traversal follows recorded parent-child links. Unions, partners and siblings are included as context without automatically expanding their own lineages. The LaTeX renderer is experimental; final typography, a converged PDF and visual acceptance remain outstanding. See the [L3 validation record](docs/validation-l3.md), the [L4 progress note](docs/validation-l4.md), [note markup policy](docs/decisions/003-note-markup.md), and [requirement tracking](docs/requirements.fr.md).
