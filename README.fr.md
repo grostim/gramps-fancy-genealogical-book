@@ -2,7 +2,7 @@
 
 [English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md)
 
-Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel sélectionne une famille, extrait son graphe d’ascendance et de descendance selon les profondeurs choisies, puis exporte un modèle JSON commun avec les dérivés médias disponibles. Les rendus éditoriaux LaTeX/PDF et HTML viendront ensuite.
+Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel exporte un modèle JSON commun et un premier rendu LaTeX comprenant les parties généalogiques, les fiches, les notices familiales, les citations, les renvois de pages et l’index. La mise en page définitive et la compilation multipasse du PDF restent à vérifier visuellement ; le rendu HTML est prévu dans un jalon ultérieur.
 
 ## Fonctionnement actuel
 
@@ -11,12 +11,13 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 - Extraction des ascendants et descendants en profondeur illimitée par défaut, ou limitée séparément avec un entier ≥ 0.
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
-- Texte des notes exporté uniquement si elles portent l’étiquette Gramps `BOOK_PUBLICATION`; les notes de travail restent référencées sans leur contenu.
+- Les notes publiables sont rendues en LaTeX depuis l’AST Mistune ; le HTML brut reste du texte littéral, et les styles sémantiques Gramps priment sur la syntaxe Markdown d’une même note. Voir la [règle de normalisation documentée](docs/decisions/003-note-markup.md).
 - JSON Unicode, diagnostics structurés de conversion média et remplacement coordonné du modèle avec son dossier de PNG.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
+- Premier rendu LaTeX des grandes parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. La convergence multipasse et la validation visuelle du PDF restent à faire.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
 
-Le parcours suit les filiations parent–enfant explicitement enregistrées. Les unions, partenaires et fratries sont ajoutés comme contexte sans étendre automatiquement leur propre lignée. Le résultat reste un modèle de données : les fonctions HTML et LaTeX sont encore des démonstrations de contrat. Voir le [suivi L3](docs/validation-l3.fr.md), le [démarrage L4](docs/validation-l4.fr.md) et le [suivi des exigences](docs/requirements.fr.md).
+Le parcours suit les filiations parent–enfant explicitement enregistrées. Les unions, partenaires et fratries sont ajoutés comme contexte sans étendre automatiquement leur propre lignée. Le rendu LaTeX reste expérimental : typographie définitive, convergence PDF et recette visuelle restent à réaliser. Voir le [suivi L3](docs/validation-l3.fr.md), le [démarrage L4](docs/validation-l4.fr.md), la [règle de rendu des notes](docs/decisions/003-note-markup.md) et le [suivi des exigences](docs/requirements.fr.md).
 
 ## Construction et installation
 
@@ -31,6 +32,8 @@ Extraire `gramps60/download/GrampsFancyBook.addon.tgz` dans le dossier des exten
 - Profil isolé : `$GRAMPSHOME/gramps/gramps60/plugins/`
 
 Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. Ce jalon produit un modèle `.json` et, s’il y a des images convertibles, un dossier voisin nommé `<nom>_media/`. Le JSON référence les PNG dérivés et signale les médias qui n’ont pas pu être préparés. Choisir une famille et une destination `.json` ; **Replace an existing file** remplace aussi les dérivés voisins. Le répertoire de destination doit déjà exister.
+
+Le rendu LaTeX des notes requiert Mistune 3.x. Installez-la dans l’environnement Python utilisé par Gramps Desktop ou le service Gramps Web : `python -m pip install 'mistune>=3,<4'`. L’extension déclare `mistune` comme module requis ; l’installation du paquet Python depuis ce dépôt installe également la dépendance déclarée dans `pyproject.toml`.
 
 Les convertisseurs d’images et de PDF sont facultatifs. Pour le développement, les installer dans l’environnement Python utilisé par Gramps avec `python -m pip install -e '.[media]'`. Tant que leur installation dans les paquets Gramps Desktop/Web n’est pas automatisée, une dépendance absente produit un diagnostic et laisse le modèle JSON exportable.
 
