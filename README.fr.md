@@ -14,7 +14,7 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 - Les notes publiables sont rendues en LaTeX depuis l’AST Mistune ; le HTML brut reste du texte littéral, et les styles sémantiques Gramps priment sur la syntaxe Markdown d’une même note. Voir la [règle de normalisation documentée](docs/decisions/003-note-markup.md).
 - JSON Unicode, diagnostics structurés de conversion média et remplacement coordonné du modèle avec son dossier de PNG.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
-- Premier rendu LaTeX des grandes parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. La convergence multipasse et la validation visuelle du PDF restent à faire.
+- Premier rendu LaTeX avec couverture A4 automatique, noms du couple et médaillons circulaires pour ses portraits disponibles, puis grandes parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. Les notes éditoriales F0 et la validation visuelle du PDF restent à faire.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
 
 Le parcours suit les filiations parent–enfant explicitement enregistrées. Les unions, partenaires et fratries sont ajoutés comme contexte sans étendre automatiquement leur propre lignée. Le rendu LaTeX reste expérimental : typographie définitive, convergence PDF et recette visuelle restent à réaliser. Voir le [suivi L3](docs/validation-l3.fr.md), le [démarrage L4](docs/validation-l4.fr.md), la [règle de rendu des notes](docs/decisions/003-note-markup.md) et le [suivi des exigences](docs/requirements.fr.md).

@@ -1,4 +1,4 @@
-"""LaTeX renderer for the genealogy overview and person index."""
+"""LaTeX renderer for the genealogy book."""
 
 from pathlib import PurePosixPath
 
@@ -23,15 +23,130 @@ from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
 
 
-def render_latex(model: BookModel) -> str:
+def _render_cover(model: BookModel) -> str:
+    """Render the generated cover and any available partner portrait medallions."""
     family = model.reference_family
+    partners = [
+        person
+        for person in (family.father, family.mother)
+        if person is not None
+    ]
+    partner_names = [person.name or person.handle for person in partners]
+    subtitle = " and ".join(partner_names) or family.gramps_id or family.handle
+    safe_handle = "".join(
+        character for character in family.handle if character.isalnum() or character in "_-"
+    )
+
+    output = [
+        f"% Gramps family handle: {safe_handle}\n",
+        "\\begin{titlepage}\n"
+        "\\thispagestyle{empty}\n"
+        "\\centering\n"
+        "\\vspace*{2.4cm}\n"
+        "{\\Large\\bfseries Family history\\par}\n"
+        "\\vspace{0.7cm}\n"
+        f"{{\\Huge\\bfseries {escape_latex_text(subtitle)}\\par}}\n"
+        "\\vspace{1.8cm}\n"
+    ]
+
+    people_by_handle = {person.handle: person for person in model.people}
+    portraits = (
+        model.editorial_book.cover_portraits
+        if model.editorial_book is not None
+        else ()
+    )
+    rendered_portraits = []
+    for portrait in portraits[:2]:
+        graphic = _render_cover_portrait(portrait, model.media_artifacts)
+        if graphic:
+            person = people_by_handle.get(portrait.person_handle)
+            label = (person.name if person is not None else "") or portrait.person_handle
+            rendered_portraits.append((graphic, label))
+
+    if rendered_portraits:
+        output.append("\\begin{center}\n")
+        for index, (graphic, label) in enumerate(rendered_portraits):
+            if index:
+                output.append("\\hspace{0.04\\textwidth}\n")
+            output.append(
+                "\\begin{minipage}[t]{0.4\\textwidth}\n"
+                "\\centering\n"
+                f"{graphic}\\par\\smallskip\n"
+                f"{{\\large {escape_latex_text(label)}\\par}}\n"
+                "\\end{minipage}\n"
+            )
+        output.append("\\end{center}\n")
+    else:
+        output.append("\\vspace{1cm}\n")
+
+    output.extend(("\\vfill\n", "\\end{titlepage}\n"))
+    return "".join(output)
+
+
+def _render_cover_portrait(
+    portrait: EditorialPortrait,
+    artifacts: list[EditorialMediaArtifact],
+) -> str:
+    """Return a centered, circularly clipped image for one safe cover artifact."""
+    media_ref = portrait.media_ref
+    artifact = next(
+        (
+            item
+            for item in artifacts
+            if item.media_handle == media_ref.media_handle
+            and item.rectangle == media_ref.rectangle
+            and item.action == "reproduce"
+        ),
+        None,
+    )
+    if artifact is None or artifact.asset_path is None:
+        return ""
+    path = _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
+    if path is None:
+        return ""
+
+    width = artifact.width
+    height = artifact.height
+    dimensions_known = (
+        isinstance(width, (int, float))
+        and not isinstance(width, bool)
+        and isinstance(height, (int, float))
+        and not isinstance(height, bool)
+        and width > 0
+        and height > 0
+    )
+    fit_dimension = (
+        "height=3.2cm"
+        if dimensions_known and width > height
+        else "width=3.2cm"
+    )
+    graphic = (
+        "\\includegraphics["
+        + fit_dimension
+        + "]{\\detokenize{"
+        + path
+        + "}}"
+    )
+    return (
+        "\\begin{tikzpicture}\n"
+        "\\begin{scope}\n"
+        "\\clip (0,0) circle (1.6cm);\n"
+        f"\\node[inner sep=0pt] at (0,0) {{{graphic}}};\n"
+        "\\end{scope}\n"
+        "\\draw[line width=0.6pt] (0,0) circle (1.6cm);\n"
+        "\\end{tikzpicture}\n"
+    )
+
+
+def render_latex(model: BookModel) -> str:
     document = [
-        "\\documentclass{article}\n"
+        "\\documentclass[a4paper]{article}\n"
         "\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
+        "\\usepackage{tikz}\n"
+        "\\renewcommand{\\familydefault}{\\sfdefault}\n"
         "\\begin{document}\n",
-        f"\\section*{{{escape_latex_text(family.handle)}}}\n",
-        f"{len(model.people)} people in the intermediate model.\n",
+        _render_cover(model),
     ]
     document.append("\\section*{Contents}\n\\tableofcontents\n\\clearpage\n")
 
