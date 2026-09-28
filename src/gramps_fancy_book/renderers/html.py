@@ -56,7 +56,7 @@ def render_html(model: BookModel) -> str:
         ".cover{text-align:center;padding:4rem 1rem}.generation{margin:1.5rem 0}\n",
         ".occurrences,.family-children,.family-partners{padding-left:1.5rem}\n",
         ".person-profile,.family-notice,.citation-entry{margin:1rem 0;padding:1rem;border-left:3px solid #9aa0a6}\n",
-        ".muted{color:#5f6368}.note-text{white-space:pre-wrap}.family-links{font-size:.95rem}\n",
+        ".muted{color:#5f6368}.note-text{white-space:pre-wrap}.family-links,.branch-links{font-size:.95rem}\n",
         "@media print{body{max-width:none;margin:0;padding:0}.book-part{break-before:page}a{color:inherit;text-decoration:none}}\n",
         "</style></head><body>\n",
         '<header class="cover" id="cover">\n',
@@ -162,6 +162,7 @@ def _render_part(
         if genealogy_part is not None:
             output.append(
                 _render_genealogy(
+                    part.kind,
                     genealogy_part,
                     model,
                     people,
@@ -232,6 +233,7 @@ def _render_front_matter(model) -> str:
 
 
 def _render_genealogy(
+    part_name,
     genealogy_part,
     model,
     people,
@@ -240,9 +242,29 @@ def _render_genealogy(
     calls_by_id,
 ) -> str:
     output = []
-    for generation in genealogy_part.generations:
+    generations = genealogy_part.generations
+    root_occurrences = {
+        occurrence.person_handle: occurrence
+        for generation in generations
+        if generation.number == 0
+        for occurrence in generation.occurrences
+    }
+    if generations:
         output.append(
-            f'<section class="generation"><h3>Génération {generation.number}</h3>\n'
+            '<nav class="generation-nav" aria-label="Navigation des générations">\n'
+            "<h3>Parcourir les générations</h3>\n<ul>\n"
+        )
+        for generation in generations:
+            target_id = _generation_id(part_name, generation.number)
+            output.append(
+                f'<li><a href="#{_attr(target_id)}">'
+                f"Génération {generation.number}</a></li>\n"
+            )
+        output.append("</ul>\n</nav>\n")
+    for generation in generations:
+        output.append(
+            f'<section class="generation" id="{_attr(_generation_id(part_name, generation.number))}">'
+            f"<h3>Génération {generation.number}</h3>\n"
             '<ol class="occurrences">\n'
         )
         for occurrence in generation.occurrences:
@@ -252,6 +274,22 @@ def _render_genealogy(
             output.append(
                 f'<li id="{_attr(occurrence.occurrence_id)}"><span>{_text(name)}</span>'
             )
+            branch_links = []
+            for branch_handle in getattr(occurrence, "branch_handles", ()):
+                root = root_occurrences.get(branch_handle)
+                if root is None or root.occurrence_id == occurrence.occurrence_id:
+                    continue
+                root_person = people.get(branch_handle)
+                branch_links.append(
+                    f'<a href="#{_attr(root.occurrence_id)}">'
+                    f"{_text(_person_name(root_person, branch_handle))}</a>"
+                )
+            if branch_links:
+                output.append(
+                    ' <span class="branch-links"><span class="muted">Branche :</span> '
+                    + " · ".join(branch_links)
+                    + "</span>"
+                )
             if profile is not None and (
                 occurrence.occurrence_id == profile.primary_occurrence_id
                 or occurrence.is_primary_profile
@@ -501,6 +539,10 @@ def _occurrences_by_id(genealogy):
         for generation in part.generations
         for occurrence in generation.occurrences
     }
+
+
+def _generation_id(part_name: str, generation_number: int) -> str:
+    return f"generation:{part_name}:{generation_number}"
 
 
 def _person_name(person, fallback: str) -> str:

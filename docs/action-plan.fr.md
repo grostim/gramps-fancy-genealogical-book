@@ -255,12 +255,13 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - L4 en cours : les PR #43 et #44 exercent AC-01 et AC-03 à AC-09 sur des graphes de référence et vérifient le contrat LaTeX : autres unions, filiations typées, personne commune et cycles, collatéraux, éligibilité des fiches, événements familiaux, familles monoparentales et profondeur frontière. Les validations HTML et graphiques restent distinctes.
 - Fixture Gramps native : la PR #42 crée une base synthétique avec de vrais objets Gramps et vérifie BOOK_PUBLICATION, BOOK_PROFILE, le recadrage média ainsi que le remplacement des sorties. La recette complète sur Desktop/Web reste à réaliser.
 - PR #49 et #50 fusionnées : portrait, index, justificatifs et reproduction unique de BOOK_FEATURED sont intégrés à la fixture LaTeX. CI complète réussie sur la tête finale 09c7b59 ; la revue visuelle page par page reste ouverte.
-- L7.1 en cours : le rendu HTML consomme les parties éditoriales, le parcours généalogique, les notices, citations et index ; ancres et renvois internes sont déterministes. Le ZIP autonome, les médias et la vérification multi-écran restent à réaliser.
+- PR #51 fusionnée : première sortie HTML unique issue du modèle éditorial, avec couverture, sommaire, parcours, notices, citations, index, liens internes et échappement. La CI complète passe ; la recette visuelle du PDF L6 reste ouverte.
+- L7.2 en cours : ancres de génération et navigation de branche ajoutées au HTML ; la suite de la navigation vers les profils, familles et annexes est en cours.
 - Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
 1. Terminer L6.6 en examinant visuellement les PDF riches et peu documentés depuis l’artefact CI de la [PR #50](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/36443972281), puis consigner les écarts par rapport aux règles de la v1.1 et aux maquettes.
-2. Poursuivre L7.1–L7.3 : compléter les liens généalogiques, le balisage des notes et les contrôles de sécurité du rendu HTML.
+2. Poursuivre L7.2–L7.3 : compléter la navigation entre occurrences, profils, familles et annexes, puis définir le rendu sûr des notes et des liens.
 3. Réaliser L7.4–L7.5 : archive autonome avec médias/styles, puis vérification clavier, textes alternatifs et tailles d’écran.
 4. Qualifier l’installation et le parcours complet sur les versions Desktop et Web de Gramps effectivement prises en charge (AC-22).

@@ -21,6 +21,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         occurrence_id="ancestry:0:f0:p0",
         person_handle="p0",
         generation=0,
+        branch_handles=("p0",),
         family_section_ids=("family:ancestry:0:f0",),
         primary_occurrence_id="ancestry:0:f0:p0",
         is_primary_profile=True,
@@ -29,6 +30,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         occurrence_id="ancestry:0:f0:p1",
         person_handle="p1",
         generation=0,
+        branch_handles=("p1",),
         family_section_ids=("family:ancestry:0:f0",),
         primary_occurrence_id="ancestry:0:f0:p1",
         is_primary_profile=False,
@@ -37,6 +39,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         occurrence_id="descent:1:f0:child",
         person_handle="child",
         generation=1,
+        branch_handles=("p0",),
         family_section_ids=(),
         primary_occurrence_id="descent:1:f0:child",
         is_primary_profile=False,
@@ -68,6 +71,29 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         ),
         descent=SimpleNamespace(
             generations=(
+                SimpleNamespace(
+                    number=0,
+                    occurrences=(
+                        SimpleNamespace(
+                            occurrence_id="descent:0:f0:p0",
+                            person_handle="p0",
+                            generation=0,
+                            branch_handles=("p0",),
+                            family_section_ids=(),
+                            primary_occurrence_id=p0_occurrence.occurrence_id,
+                            is_primary_profile=False,
+                        ),
+                        SimpleNamespace(
+                            occurrence_id="descent:0:f0:p1",
+                            person_handle="p1",
+                            generation=0,
+                            branch_handles=("p1",),
+                            family_section_ids=(),
+                            primary_occurrence_id=p1_occurrence.occurrence_id,
+                            is_primary_profile=False,
+                        ),
+                    ),
+                ),
                 SimpleNamespace(number=1, occurrences=(child_occurrence,)),
             ),
         ),
@@ -167,7 +193,11 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     assert 'id="family:ancestry:0:f0"' in rendered
     assert 'id="person:p0"' in rendered
     assert 'id="citation-entry:c1"' in rendered
+    assert 'id="generation:descent:0"' in rendered
+    assert 'href="#generation:descent:1"' in rendered
+    assert 'href="#descent:0:f0:p0"' in rendered
     assert 'href="#person:p0"' in rendered
+    assert "Branche :" in rendered
     assert "filiation : Adopted" in rendered
     assert "Ada &amp; &lt;img src=x onerror=alert(1)&gt;" in rendered
     assert "<img src=x" not in rendered
