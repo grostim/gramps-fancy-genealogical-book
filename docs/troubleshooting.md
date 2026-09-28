@@ -12,7 +12,7 @@ The reference family (F0) must have two known partners. Select a complete couple
 
 ## The output path is rejected or no output appears
 
-The destination directory must already exist. The automatic format selection uses a `.zip` destination for the HTML book and preserves `.json` for the diagnostic snapshot. Choose the matching explicit format and extension if automatic selection is not suitable. Enable **Replace an existing file** only when replacing output is intended; otherwise existing files are preserved.
+The destination directory must already exist. The automatic format selection uses `.pdf` for PDF, `.zip` for the HTML book, and preserves `.json` for the diagnostic snapshot. Choose the matching explicit format and extension if automatic selection is not suitable. Enable **Replace an existing file** only when replacing output is intended; otherwise existing files are preserved.
 
 For a JSON snapshot, the report also writes a separate `<name>_consistency.json` file and may write a neighboring `<name>_media/` folder when images can be converted.
 
@@ -27,6 +27,10 @@ Extract the ZIP first and open its `index.html`. The archive is designed to use 
 ## A command-line run exits successfully but appears to have failed
 
 Gramps may return exit code zero even when a report fails. Check that the requested output was created and inspect the report diagnostics. Use the supplied fictional fixture and integration runner when preparing a reproducible report; do not attach a real family export or unredacted logs to an issue.
+
+## PDF generation fails
+
+PDF output requires LuaLaTeX. Install TeX Live and ensure the Gramps process can find `lualatex` on `PATH`; the application may have a different `PATH` from an interactive shell. If compilation fails, the report will indicate whether LuaLaTeX was unavailable, references failed to stabilize, or the log reported unresolved references or overfull boxes. Use HTML ZIP output when LuaLaTeX is unavailable.
 
 ## Gramps Web
 
