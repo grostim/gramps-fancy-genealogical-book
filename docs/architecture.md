@@ -15,7 +15,7 @@ The project has six responsibilities:
 
 The extraction pipeline emits JSON schema 0.8. Stable family-section and person-occurrence IDs connect partners, children, parent-child relationships, and repeated appearances. Occurrences retain generation, branch, and lineage-path information, including alternative paths to the same person. Each person points to a primary occurrence even when no full profile is created. Ancestry and descendant limits are independent and default to unlimited; partners encountered through marriage do not start additional ancestry expansion.
 
-The adapter reads through Gramps database getters and does not modify the database. It reports missing or inaccessible references as diagnostics and preserves private flags on data that the supplied database makes readable. It does not bypass Gramps access controls. The required warning before generating a book that may include private or living-person data has not yet been implemented; each export must prompt the user before writing files.
+The adapter reads through Gramps database getters and does not modify the database. It reports missing or inaccessible references as diagnostics and preserves private flags on data that the supplied database makes readable. It does not bypass Gramps access controls. Before each export, the user must acknowledge that readable private data and information about living people may be included; previous Desktop acknowledgements are reset for each run. This confirmation does not filter or anonymize the output.
 
 ## Editorial model and publication rules
 

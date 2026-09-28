@@ -56,6 +56,19 @@ class GrampsFancyBookOptions(MenuReportOptions):
         )
         menu.add_option(_("Book"), "output_format", output_format)
 
+        privacy_acknowledged = BooleanOption(
+            _(
+                "I understand this export may include private data and information about living people."
+            ),
+            False,
+        )
+        privacy_acknowledged.set_help(
+            _(
+                "Gramps access permissions remain in force, but this report does not filter or anonymize readable data. Confirm that you are authorized to create and share this export."
+            )
+        )
+        menu.add_option(_("Privacy"), "privacy_acknowledged", privacy_acknowledged)
+
         destination = DestinationOption(_("Output file"), "")
         # The report supports multiple formats; get_destination() adds the
         # format-specific extension when the selected path has no suffix.
@@ -115,6 +128,17 @@ class GrampsFancyBookOptions(MenuReportOptions):
 
     def get_overwrite(self) -> bool:
         return self.menu.get_option_by_name("overwrite").get_value()
+
+    def get_privacy_acknowledged(self) -> bool:
+        return bool(self.menu.get_option_by_name("privacy_acknowledged").get_value())
+
+    def load_previous_values(self) -> None:
+        super().load_previous_values()
+        option = self.menu.get_option_by_name("privacy_acknowledged")
+        if option is not None:
+            # An earlier acknowledgement must not carry over to a new export.
+            option.set_value(False)
+            self.options_dict["privacy_acknowledged"] = False
 
     def get_subject(self) -> str:
         return self.menu.get_option_by_name("reference_family").get_value()

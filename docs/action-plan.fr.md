@@ -222,7 +222,7 @@ Les statuts de suivi seront : à préparer, prêt, en cours, à revoir, validé 
 
 Les estimations calendaires seront établies après L0 et L1 : le détail des 27 scénarios et les contraintes constatées dans Gramps peuvent modifier sensiblement la charge. Le périmètre des futurs rendus ne doit pas être chiffré à partir des seuls exemples actuels.
 
-## 8. Suivi d’exécution — 28 septembre 2026
+## 8. Suivi d’exécution — 29 septembre 2026
 
 - Le dépôt reste privé et les PR #55, #56 et #57 sont fusionnées. Elles livrent l’archive HTML ZIP, préservent la compatibilité des appels JSON historiques, puis ajoutent les améliorations d’accessibilité et d’affichage mobile.
 - **L0–L3 — socle livré.** Référentiel, schéma JSON 0.8, extraction Gramps, métadonnées `BOOK_*`, médias et rapport séparé de cohérence sont présents. Les règles restent à prouver par les scénarios de bout en bout sur les environnements cibles.
@@ -235,8 +235,9 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - **L8.4 — Documentation et langue :** les README et guides complets FR/EN couvrent l’installation, les dépendances, la contribution et le dépannage ; les pages d’architecture et la matrice sont actualisées. Le catalogue français est compilé à la construction. La recette d’affichage dans Gramps et l’obtention d’une CI reproductible restent à faire.
 
 - **L8.5 — Archive/version :** `build_addon.py` compile le catalogue français temporairement et l’inclut via le manifeste. La PR #66 synchronise paquet, module et enregistrement à `0.9.0` pour l’export PDF. Depuis `main` au commit `f4250a9`, deux constructions ont produit la même archive SHA-256 `140df4dd46f4ba1535c2a2ebf0990ec51e780e8bc9258316a65ef630609820ee`, contenant `renderers/latex_pdf.py` et `locale/fr/LC_MESSAGES/addon.mo`. L’installation dans Gramps, la mise à jour et le retrait restent à valider.
+- **Confidentialité — confirmation ajoutée :** chaque export requiert une validation explicite des options ; la confirmation n’est pas mémorisée entre deux lancements Desktop. Le descriptif avertit aussi les utilisateurs Gramps Web avant la génération. Le refus sans fichier produit et l’interface Web restent à vérifier sur les environnements Desktop/Web ciblés.
 - **Revue statique AC-23 :** texte et attributs dynamiques échappés, liens externes limités à `http`, `https` et `mailto`, chemins médias ZIP contraints à `media/<64 caractères hexadécimaux>.png`. Aucune interpolation de texte ou d’attribut non échappée ni émission de HTML brut n’a été repérée dans les chemins examinés ; la recette de sécurité dédiée reste à faire.
-- **PR #58–#67 fusionnées :** suivi/architecture réalignés, recette L7 actualisée, catalogue français ajouté, version de l’extension synchronisée à `0.8.0`, guides complets de contribution/dépannage FR/EN ajoutés, puis export PDF LuaLaTeX et version `0.9.0` intégrés ; dernier état CI consigné.
+- **PR #58–#71 fusionnées :** suivi/architecture réalignés, recette L7 actualisée, catalogue français ajouté, guides de contribution/dépannage FR/EN ajoutés, export PDF LuaLaTeX intégré, construction reproductible consignée, sélection de destination et chargement des traductions Gramps corrigés, puis remarques de revue traitées.
 
 ### Prochaines actions
 
@@ -246,4 +247,4 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 4. Vérifier le rendu HTML aux tailles prévues, au clavier et avec un lecteur d’écran ; consigner AC-10, AC-12, AC-15, AC-20 et AC-23.
 5. Examiner visuellement les PDF riches et peu documentés par rapport à la v1.1 et aux maquettes.
 6. Qualifier Gramps Web, l’installation des dépendances optionnelles, les mesures de performance et les procédures de distribution L8.
-7. Implémenter l’avertissement avant tout export susceptible d’inclure des données privées ou concernant des personnes vivantes, puis vérifier que l’export ne démarre pas sans confirmation.
+7. Vérifier dans un profil Desktop que la confirmation est redemandée à chaque export et qu’un refus ne crée aucun fichier ; vérifier le champ de confirmation et le descriptif préalable dans Gramps Web.

@@ -1,6 +1,6 @@
 # Avancement L7 — livre HTML
 
-Compte rendu du 28 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa navigation par génération et branche, les notes HTML sûres, l’archive ZIP, la compatibilité des anciennes commandes JSON et les améliorations clavier/petit écran.
+Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa navigation par génération et branche, les notes HTML sûres, l’archive ZIP, la compatibilité des anciennes commandes JSON et les améliorations clavier/petit écran.
 
 ## Contenu livré
 
@@ -19,7 +19,7 @@ Compte rendu du 28 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 
 ## Recette manuelle à terminer
 
-1. Installer l’archive du module dans une version Desktop de Gramps prise en charge, ouvrir le rapport **Pages Web → Gramps Fancy Genealogical Book**, choisir une famille et produire une sortie `.zip`.
+1. Installer l’archive du module dans une version Desktop de Gramps prise en charge, ouvrir le rapport **Pages Web → Gramps Fancy Genealogical Book** et choisir une famille. Vérifier que la confirmation de confidentialité est décochée à chaque lancement ; sans la cocher, vérifier que le rapport refuse de générer un fichier ; la cocher pour produire le `.zip`.
 2. Marquer un média fictif à la fois `BOOK_EXCLUDE` et `BOOK_FEATURED`. Après génération, vérifier que l’objet n’est référencé par aucun `<img>` de `index.html` et qu’aucun fichier correspondant n’existe dans `media/` dans le ZIP. Cette absence est le critère de réussite, même si le média est aussi mis en avant.
 3. Extraire l’archive dans un dossier local, déconnecter le réseau, ouvrir `index.html` et vérifier les liens, les notes, les citations et les images recadrées.
 4. Pour AC-10, attacher la même note Markdown fictive marquée `BOOK_PUBLICATION` à deux contextes éditoriaux distincts. Vérifier qu’elle apparaît dans chacun, que le format Markdown et les styles natifs sont rendus, et que chaque contexte reste navigable.
@@ -28,4 +28,4 @@ Compte rendu du 28 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 7. Examiner la lecture et le reflow sur plusieurs tailles de fenêtre, parcourir tout le livre au clavier et vérifier les annonces avec un lecteur d’écran.
 8. Reprendre séparément la revue visuelle des PDF L6 : typographie, pagination, images, index et renvois par rapport à la v1.1 et aux maquettes.
 
-Les étapes 2, 4, 5 et 6 définissent explicitement les critères des AC-13, AC-10, AC-20 et AC-23. La recette reste à exécuter : ces critères ne sont pas encore qualifiés. La qualification complète Desktop/Web AC-22 demeure ouverte ; Gramps Web n’a pas encore été validé. Voir le [plan d’action](action-plan.fr.md#l7--livre-html-et-archive-autonome) et le [suivi des exigences](requirements.fr.md).
+Les étapes 1, 2, 4, 5 et 6 définissent explicitement les critères des AC-22, AC-13, AC-10, AC-20 et AC-23. La recette reste à exécuter : ces critères ne sont pas encore qualifiés. Gramps Web n’a pas encore été validé. Voir le [plan d’action](action-plan.fr.md#l7--livre-html-et-archive-autonome) et le [suivi des exigences](requirements.fr.md).
