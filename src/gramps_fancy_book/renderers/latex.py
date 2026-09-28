@@ -16,6 +16,8 @@ from ..domain import (
     EditorialCitationEntry,
     EditorialFamilyNotice,
     EditorialMediaArtifact,
+    EditorialMediaPlacement,
+    EditorialMediaUse,
     EditorialPortrait,
     EditorialProfile,
     FamilySection,
@@ -457,6 +459,32 @@ def _render_profile(
                 width="0.75\\linewidth",
             )
         )
+    for reference in profile.media_refs:
+        placement = _media_placement_for_reference(model, reference)
+        if placement is None or not placement.is_featured:
+            continue
+        primary_use = _featured_media_primary_use(placement)
+        if (
+            primary_use is not None
+            and primary_use.context_type == "profile"
+            and primary_use.context_id == profile.profile_id
+        ):
+            output.append(
+                _render_featured_media(
+                    placement,
+                    primary_use.media_ref,
+                    placement.caption,
+                    model.media_artifacts,
+                    emitted_targets,
+                )
+            )
+        else:
+            output.append(
+                _render_featured_media_link(
+                    placement, placement.caption, emitted_targets
+                )
+            )
+
     if profile.primary_occurrence_id in emitted_targets:
         output.append(
             "\\noindent See "
@@ -594,6 +622,44 @@ def _render_family_notice(
             )
         output.append("\\end{itemize}\n")
 
+    for reference in notice.media_refs:
+        media = model.media.get(reference.media_handle)
+        placement = _media_placement_for_reference(model, reference)
+        caption = (
+            placement.caption
+            if placement is not None and placement.caption
+            else media.description if media is not None else ""
+        )
+        if placement is not None and placement.is_featured:
+            primary_use = _featured_media_primary_use(placement)
+            if (
+                primary_use is not None
+                and primary_use.context_type == "family_notice"
+                and primary_use.context_id == notice.notice_id
+            ):
+                output.append(
+                    _render_featured_media(
+                        placement,
+                        primary_use.media_ref,
+                        caption,
+                        model.media_artifacts,
+                        emitted_targets,
+                    )
+                )
+            else:
+                output.append(
+                    _render_featured_media_link(placement, caption, emitted_targets)
+                )
+        else:
+            output.append(
+                _render_media_image(
+                    reference,
+                    caption,
+                    model.media_artifacts,
+                    width="0.7\\linewidth",
+                )
+            )
+
     notes = []
     for index, handle in enumerate(notice.note_handles):
         note = model.notes.get(handle)
@@ -613,18 +679,6 @@ def _render_family_notice(
                 f"{note_text}\n"
                 "\\end{quote}\n"
             )
-
-    for reference in notice.media_refs:
-        media = model.media.get(reference.media_handle)
-        caption = media.description if media is not None else ""
-        output.append(
-            _render_media_image(
-                reference,
-                caption,
-                model.media_artifacts,
-                width="0.7\\linewidth",
-            )
-        )
 
     citations = {
         citation_by_call[call_id].entry_id: citation_by_call[call_id]
@@ -739,15 +793,43 @@ def _render_citation_appendix(
             )
         for reference in entry.media_refs:
             media = model.media.get(reference.media_handle)
-            caption = media.description if media is not None else ""
-            output.append(
-                _render_media_image(
-                    reference,
-                    caption,
-                    model.media_artifacts,
-                    width="0.6\\linewidth",
-                )
+            placement = _media_placement_for_reference(model, reference)
+            caption = (
+                placement.caption
+                if placement is not None and placement.caption
+                else media.description if media is not None else ""
             )
+            if placement is not None and placement.is_featured:
+                primary_use = _featured_media_primary_use(placement)
+                if (
+                    primary_use is not None
+                    and primary_use.context_type == "citation"
+                    and primary_use.context_id == entry.entry_id
+                ):
+                    output.append(
+                        _render_featured_media(
+                            placement,
+                            primary_use.media_ref,
+                            caption,
+                            model.media_artifacts,
+                            emitted_targets,
+                        )
+                    )
+                else:
+                    output.append(
+                        _render_featured_media_link(
+                            placement, caption, emitted_targets
+                        )
+                    )
+            else:
+                output.append(
+                    _render_media_image(
+                        reference,
+                        caption,
+                        model.media_artifacts,
+                        width="0.6\\linewidth",
+                    )
+                )
 
         call_labels = [
             (
@@ -904,6 +986,99 @@ def _unique_urls(urls: list[Url]) -> tuple[Url, ...]:
             unique.append(url)
             seen.add(url.path)
     return tuple(unique)
+
+
+def _media_placement_for_reference(
+    model: BookModel, reference: MediaReference
+) -> EditorialMediaPlacement | None:
+    editorial_book = model.editorial_book
+    if editorial_book is None:
+        return None
+    return next(
+        (
+            placement
+            for placement in editorial_book.media_placements
+            if placement.media_handle == reference.media_handle
+        ),
+        None,
+    )
+
+
+def _featured_media_primary_use(
+    placement: EditorialMediaPlacement,
+) -> EditorialMediaUse | None:
+    for context_type in ("family_notice", "profile"):
+        use = next(
+            (
+                candidate
+                for candidate in placement.uses
+                if candidate.context_type == context_type
+            ),
+            None,
+        )
+        if use is not None:
+            return use
+    return placement.uses[0] if placement.uses else None
+
+
+def _render_featured_media_link(
+    placement: EditorialMediaPlacement,
+    caption: str,
+    emitted_targets: set[str],
+) -> str:
+    if placement.placement_id not in emitted_targets:
+        label = escape_latex_text(caption or "Featured image")
+        return f"\\par {label} (reproduction unavailable).\\par\n"
+    label = caption or "Featured image"
+    return (
+        "\\par Full-page reproduction: "
+        + _latex_page_link(placement.placement_id, label)
+        + ".\\par\n"
+    )
+
+
+def _render_featured_media(
+    placement: EditorialMediaPlacement,
+    reference: MediaReference,
+    caption: str,
+    artifacts: list[EditorialMediaArtifact],
+    emitted_targets: set[str],
+) -> str:
+    if placement.placement_id in emitted_targets:
+        return _render_featured_media_link(placement, caption, emitted_targets)
+
+    artifact = next(
+        (
+            item
+            for item in artifacts
+            if item.media_handle == reference.media_handle
+            and item.rectangle == reference.rectangle
+            and item.action == "reproduce"
+        ),
+        None,
+    )
+    path = (
+        _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
+        if artifact is not None and artifact.asset_path is not None
+        else None
+    )
+    if path is None:
+        label = escape_latex_text(caption or "Featured image")
+        return f"\\par {label} (reproduction unavailable).\\par\n"
+
+    anchor = _latex_anchor(placement.placement_id, emitted_targets)
+    output = [
+        "\\clearpage\n"
+        "\\thispagestyle{plain}\n"
+        f"{anchor}\n"
+        "\\begin{center}\n"
+        f"\\includegraphics[width=0.92\\textwidth,height=0.80\\textheight,"
+        f"keepaspectratio]{{\\detokenize{{{path}}}}}\n"
+    ]
+    if caption:
+        output.append(f"{{\\small {escape_latex_text(caption)}}}\\par\n")
+    output.extend(("\\end{center}\n", "\\clearpage\n"))
+    return "".join(output)
 
 
 def _render_media_image(
