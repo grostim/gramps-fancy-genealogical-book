@@ -374,7 +374,7 @@ def _render_profile(profile, model, calls_by_id, media_context) -> str:
         if profile.portrait is not None
         else None
     )
-    for reference in profile.media_refs:
+    for reference in getattr(profile, "media_refs", ()):
         if portrait_ref is not None and reference == portrait_ref:
             continue
         media = model.media.get(reference.media_handle)
@@ -574,7 +574,7 @@ def _render_citation_entry(entry, model, media_context) -> str:
             f"<p>{_text(repository_name)}"
             f"{': ' + _text(call_number) if call_number else ''}</p>\n"
         )
-    for reference in entry.media_refs:
+    for reference in getattr(entry, "media_refs", ()):
         media = model.media.get(reference.media_handle)
         output.append(
             _render_media_reference(
