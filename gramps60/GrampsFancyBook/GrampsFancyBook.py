@@ -54,6 +54,13 @@ class GrampsFancyBookReport(Report):
             max_descendant_depth = self.options_class.get_max_descendant_depth()
             destination = self.options_class.get_destination()
             overwrite = self.options_class.get_overwrite()
+            if not self.options_class.get_privacy_acknowledged():
+                raise ReportError(
+                    _("Privacy warning not acknowledged"),
+                    _(
+                        "Confirm that you are authorized to export and share data about living people and records marked private."
+                    ),
+                )
 
             adapter = GrampsDatabaseAdapter(self.database)
             snapshot = adapter.read_snapshot_by_gramps_id(

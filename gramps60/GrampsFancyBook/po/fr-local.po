@@ -146,3 +146,23 @@ msgstr "LuaLaTeX n’a pas produit de journal de compilation."
 #: gramps60/GrampsFancyBook/GrampsFancyBook.py
 msgid "LuaLaTeX could not produce a valid PDF."
 msgstr "LuaLaTeX n’a pas pu produire un PDF valide."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py
+msgid "Generate a PDF or static HTML book for the selected reference family. Exports may include readable private data and information about living people; confirm that you are authorized to create and share the file."
+msgstr "Générer un livre PDF ou HTML statique pour la famille de référence sélectionnée. L’export peut inclure des données privées accessibles et des informations sur des personnes vivantes ; confirmez que vous êtes autorisé à créer et partager le fichier."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "I understand this export may include private data and information about living people."
+msgstr "Je comprends que cet export peut contenir des données privées et des informations sur des personnes vivantes."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Gramps access permissions remain in force, but this report does not filter or anonymize readable data. Confirm that you are authorized to create and share this export."
+msgstr "Les autorisations d’accès de Gramps restent appliquées, mais ce rapport ne filtre ni n’anonymise les données accessibles. Confirmez que vous êtes autorisé à créer et partager cet export."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "Privacy warning not acknowledged"
+msgstr "L’avertissement de confidentialité n’a pas été confirmé"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "Confirm that you are authorized to export and share data about living people and records marked private."
+msgstr "Confirmez que vous êtes autorisé à exporter et partager des données sur des personnes vivantes et des enregistrements marqués privés."

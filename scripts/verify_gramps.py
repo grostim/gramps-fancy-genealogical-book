@@ -348,7 +348,7 @@ def verify(executable: str) -> None:
         def report(family: str, output: Path | None, *, overwrite=False) -> str:
             options = (
                 f"name={PLUGIN_ID},reference_family={family},"
-                "output_format=json_snapshot"
+                "output_format=json_snapshot,privacy_acknowledged=True"
             )
             if output is not None:
                 options += f",destination={output}"

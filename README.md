@@ -47,16 +47,16 @@ Image and PDF converters remain optional so JSON export works without them. For 
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,output_format=json_snapshot,destination=/absolute/path/family.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,output_format=json_snapshot,privacy_acknowledged=True,destination=/absolute/path/family.json"
 ```
 
-Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
+The `privacy_acknowledged=True` option is required for every CLI export. In Desktop and Web, confirm the privacy option for each export. The report does not filter or anonymize readable data. Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
 
 ## Development and validation
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/python -m pip install -e '.[dev,media]'
 .venv/bin/ruff check .
 .venv/bin/pytest -q
 .venv/bin/python build_addon.py
