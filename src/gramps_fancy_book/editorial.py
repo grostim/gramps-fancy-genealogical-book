@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator
 from dataclasses import fields, is_dataclass, replace
+from unicodedata import combining, normalize
 
 from .domain import (
     Citation,
@@ -11,7 +12,9 @@ from .domain import (
     EditorialFamilyNotice,
     EditorialMediaPlacement,
     EditorialMediaUse,
+    EditorialNavigationTarget,
     EditorialPart,
+    EditorialPersonIndexEntry,
     EditorialPortrait,
     EditorialProfile,
     Event,
@@ -78,15 +81,26 @@ def build_editorial_book(
         family = families_by_handle.get(family_handle)
         if family is None:
             continue
+        notice_id = f"family-notice:{family_handle}"
+        note_handles = _published_note_handles(family.links.notes, notes_by_handle)
+        event_refs = _chronological_event_refs(family.links.events, events_by_handle)
         family_notices.append(
             EditorialFamilyNotice(
-                notice_id=f"family-notice:{family_handle}",
+                notice_id=notice_id,
                 family_handle=family_handle,
                 primary_section_id=family_sections[0].section_id,
                 family_section_ids=tuple(section.section_id for section in family_sections),
-                note_handles=_published_note_handles(family.links.notes, notes_by_handle),
-                event_refs=_chronological_event_refs(family.links.events, events_by_handle),
+                note_handles=note_handles,
+                event_refs=event_refs,
                 media_refs=family.links.media,
+                note_target_ids=tuple(
+                    _contextual_target_id("note", notice_id, handle, index)
+                    for index, handle in enumerate(note_handles)
+                ),
+                event_target_ids=tuple(
+                    _contextual_target_id("event", notice_id, reference.event_handle, index)
+                    for index, reference in enumerate(event_refs)
+                ),
             )
         )
 
@@ -127,30 +141,41 @@ def build_editorial_book(
                 for section_id in occurrence.family_section_ids
             )
         )
+        note_handles = (
+            _published_note_handles(person.links.notes, notes_by_handle)
+            if person is not None
+            else ()
+        )
+        event_refs = (
+            _chronological_event_refs(person.links.events, events_by_handle)
+            if person is not None
+            else ()
+        )
+        profile_id = f"person:{person_handle}"
         profiles.append(
             EditorialProfile(
-                profile_id=f"person:{person_handle}",
+                profile_id=profile_id,
                 person_handle=person_handle,
                 primary_occurrence_id=(
                     primary.occurrence_id if primary is not None else None
                 ),
                 family_section_ids=family_section_ids,
-                note_handles=(
-                    _published_note_handles(person.links.notes, notes_by_handle)
-                    if person is not None
-                    else ()
-                ),
+                note_handles=note_handles,
                 portrait=(
                     _primary_portrait(person, media_by_handle)
                     if person is not None
                     else None
                 ),
-                event_refs=(
-                    _chronological_event_refs(person.links.events, events_by_handle)
-                    if person is not None
-                    else ()
-                ),
+                event_refs=event_refs,
                 media_refs=person.links.media if person is not None else (),
+                note_target_ids=tuple(
+                    _contextual_target_id("note", profile_id, handle, index)
+                    for index, handle in enumerate(note_handles)
+                ),
+                event_target_ids=tuple(
+                    _contextual_target_id("event", profile_id, reference.event_handle, index)
+                    for index, reference in enumerate(event_refs)
+                ),
             )
         )
 
@@ -208,48 +233,276 @@ def build_editorial_book(
         "documentary-appendix",
         "person-index",
     )
-    return EditorialBook(
-        parts=(
-            EditorialPart("cover", "cover"),
-            EditorialPart("front-matter", "front_matter"),
-            EditorialPart("contents", "table_of_contents", part_ids=body_parts),
-            EditorialPart(
-                "ancestry",
-                "ancestry",
-                family_section_ids=tuple(section.section_id for section in ancestry_sections),
-                family_notice_ids=tuple(
-                    notice.notice_id
-                    for notice in family_notices
-                    if notice.primary_section_id in ancestry_section_ids
-                ),
-            ),
-            EditorialPart(
-                "descent",
-                "descent",
-                family_section_ids=tuple(section.section_id for section in descent_sections),
-                family_notice_ids=tuple(
-                    notice.notice_id
-                    for notice in family_notices
-                    if notice.primary_section_id in descent_section_ids
-                ),
-            ),
-            EditorialPart(
-                "documentary-appendix",
-                "documentary_appendix",
-                citation_entry_ids=tuple(entry.entry_id for entry in citation_entries),
-            ),
-            EditorialPart(
-                "person-index",
-                "person_index",
-                person_occurrence_ids=tuple(person_occurrence_ids),
+    parts = (
+        EditorialPart("cover", "cover"),
+        EditorialPart("front-matter", "front_matter"),
+        EditorialPart("contents", "table_of_contents", part_ids=body_parts),
+        EditorialPart(
+            "ancestry",
+            "ancestry",
+            family_section_ids=tuple(section.section_id for section in ancestry_sections),
+            family_notice_ids=tuple(
+                notice.notice_id
+                for notice in family_notices
+                if notice.primary_section_id in ancestry_section_ids
             ),
         ),
+        EditorialPart(
+            "descent",
+            "descent",
+            family_section_ids=tuple(section.section_id for section in descent_sections),
+            family_notice_ids=tuple(
+                notice.notice_id
+                for notice in family_notices
+                if notice.primary_section_id in descent_section_ids
+            ),
+        ),
+        EditorialPart(
+            "documentary-appendix",
+            "documentary_appendix",
+            citation_entry_ids=tuple(entry.entry_id for entry in citation_entries),
+        ),
+        EditorialPart(
+            "person-index",
+            "person_index",
+            person_occurrence_ids=tuple(person_occurrence_ids),
+        ),
+    )
+    person_index = _build_person_index(genealogy, people_by_handle)
+    parts = tuple(
+        replace(part, person_index_entry_ids=tuple(item.entry_id for item in person_index))
+        if part.part_id == "person-index"
+        else part
+        for part in parts
+    )
+    book = EditorialBook(
+        parts=parts,
         profiles=tuple(profiles),
         family_notices=tuple(family_notices),
         cover_portraits=tuple(cover_portraits),
         citation_entries=citation_entries,
         media_placements=media_placements,
     )
+    book = replace(book, person_index=person_index)
+    return replace(
+        book,
+        navigation_targets=_build_navigation_targets(book, genealogy),
+    )
+
+
+def _build_person_index(
+    genealogy: Genealogy, people_by_handle: dict[str, Person]
+) -> tuple[EditorialPersonIndexEntry, ...]:
+    occurrences_by_person: dict[str, list[PersonOccurrence]] = {}
+    for part in (genealogy.ancestry, genealogy.descent):
+        for generation in part.generations:
+            for occurrence in generation.occurrences:
+                occurrences_by_person.setdefault(occurrence.person_handle, []).append(
+                    occurrence
+                )
+
+    profile_handles = set(genealogy.profile_handles)
+    entries = []
+    for person_handle, occurrences in occurrences_by_person.items():
+        occurrence_ids = tuple(
+            dict.fromkeys(occurrence.occurrence_id for occurrence in occurrences)
+        )
+        primary_occurrence_id = next(
+            (
+                occurrence.primary_occurrence_id
+                for occurrence in occurrences
+                if occurrence.primary_occurrence_id
+            ),
+            occurrence_ids[0],
+        )
+        profile_id = (
+            f"person:{person_handle}" if person_handle in profile_handles else None
+        )
+        person = people_by_handle.get(person_handle)
+        display_name = person.name if person is not None else ""
+        entries.append(
+            EditorialPersonIndexEntry(
+                entry_id=f"person-index:{person_handle}",
+                person_handle=person_handle,
+                display_name=display_name,
+                target_id=profile_id or primary_occurrence_id,
+                occurrence_ids=occurrence_ids,
+                profile_id=profile_id,
+                alternate_names=person.alternate_names if person is not None else (),
+            )
+        )
+    return tuple(sorted(entries, key=_person_index_sort_key))
+
+
+def _person_index_sort_key(
+    entry: EditorialPersonIndexEntry,
+) -> tuple[bool, str, str, str]:
+    decomposed = normalize("NFKD", entry.display_name)
+    primary_key = "".join(
+        character for character in decomposed if not combining(character)
+    ).casefold()
+    return (
+        not bool(primary_key),
+        primary_key,
+        entry.display_name.casefold(),
+        entry.person_handle,
+    )
+
+
+def _build_navigation_targets(
+    book: EditorialBook, genealogy: Genealogy
+) -> tuple[EditorialNavigationTarget, ...]:
+    targets: dict[str, EditorialNavigationTarget] = {}
+    references: set[str] = set()
+
+    def add_target(
+        target_id: str,
+        target_type: str,
+        object_id: str,
+        *,
+        context_id: str | None = None,
+    ) -> None:
+        targets.setdefault(
+            target_id,
+            EditorialNavigationTarget(
+                target_id=target_id,
+                target_type=target_type,
+                object_id=object_id,
+                context_id=context_id,
+            ),
+        )
+
+    _add_references(
+        references,
+        *(part.part_ids for part in book.parts),
+        *(part.family_section_ids for part in book.parts),
+        *(part.family_notice_ids for part in book.parts),
+        *(part.citation_entry_ids for part in book.parts),
+        *(part.person_occurrence_ids for part in book.parts),
+        *(part.person_index_entry_ids for part in book.parts),
+    )
+    for part in book.parts:
+        add_target(part.part_id, "part", part.part_id)
+
+    for section in genealogy.family_sections:
+        add_target(section.section_id, "family_section", section.family_handle)
+        _add_references(
+            references,
+            section.partner_occurrence_ids,
+            section.child_occurrence_ids,
+            tuple(link.parent_occurrence_id for link in section.parent_child_links),
+            tuple(link.child_occurrence_id for link in section.parent_child_links),
+        )
+    for genealogy_part in (genealogy.ancestry, genealogy.descent):
+        for generation in genealogy_part.generations:
+            for occurrence in generation.occurrences:
+                add_target(occurrence.occurrence_id, "person_occurrence", occurrence.person_handle)
+                _add_references(
+                    references,
+                    (occurrence.primary_occurrence_id,) if occurrence.primary_occurrence_id else (),
+                    occurrence.family_section_ids,
+                    (occurrence.profile_anchor,) if occurrence.profile_anchor else (),
+                )
+
+    for profile in book.profiles:
+        add_target(profile.profile_id, "person_profile", profile.person_handle)
+        _add_references(
+            references,
+            (profile.primary_occurrence_id,) if profile.primary_occurrence_id else (),
+            profile.family_section_ids,
+            profile.citation_call_ids,
+            profile.note_target_ids,
+            profile.event_target_ids,
+            tuple(f"media:{reference.media_handle}" for reference in profile.media_refs),
+            (
+                (f"media:{profile.portrait.media_ref.media_handle}",)
+                if profile.portrait is not None
+                else ()
+            ),
+        )
+        for target_id, note_handle in zip(profile.note_target_ids, profile.note_handles):
+            add_target(
+                target_id,
+                "published_note",
+                note_handle,
+                context_id=profile.profile_id,
+            )
+        for target_id, event_ref in zip(profile.event_target_ids, profile.event_refs):
+            add_target(
+                target_id,
+                "event_reference",
+                event_ref.event_handle,
+                context_id=profile.profile_id,
+            )
+
+    for notice in book.family_notices:
+        add_target(notice.notice_id, "family_notice", notice.family_handle)
+        _add_references(
+            references,
+            (notice.primary_section_id,),
+            notice.family_section_ids,
+            notice.citation_call_ids,
+            notice.note_target_ids,
+            notice.event_target_ids,
+            tuple(f"media:{reference.media_handle}" for reference in notice.media_refs),
+        )
+        for target_id, note_handle in zip(notice.note_target_ids, notice.note_handles):
+            add_target(
+                target_id,
+                "published_note",
+                note_handle,
+                context_id=notice.notice_id,
+            )
+        for target_id, event_ref in zip(notice.event_target_ids, notice.event_refs):
+            add_target(
+                target_id,
+                "event_reference",
+                event_ref.event_handle,
+                context_id=notice.notice_id,
+            )
+
+    for entry in book.citation_entries:
+        add_target(entry.entry_id, "citation_entry", entry.citation_handle)
+        _add_references(
+            references,
+            tuple(call.call_id for call in entry.calls),
+            tuple(f"citation:{call.citation_handle}" for call in entry.calls),
+            tuple(f"media:{reference.media_handle}" for reference in entry.media_refs),
+        )
+        for call in entry.calls:
+            add_target(call.call_id, "citation_call", call.citation_handle)
+            _add_references(references, (call.context_id,))
+
+    for placement in book.media_placements:
+        add_target(placement.placement_id, "media_placement", placement.media_handle)
+        for use in placement.uses:
+            _add_references(references, (use.context_id,))
+
+    for portrait in book.cover_portraits:
+        _add_references(references, (f"media:{portrait.media_ref.media_handle}",))
+    for entry in book.person_index:
+        add_target(entry.entry_id, "person_index_entry", entry.person_handle)
+        _add_references(references, (entry.target_id,))
+
+    for target_id in references.difference(targets):
+        targets[target_id] = EditorialNavigationTarget(
+            target_id=target_id,
+            target_type="out_of_scope",
+            object_id=target_id,
+            availability="out_of_scope",
+        )
+    return tuple(targets[target_id] for target_id in sorted(targets))
+
+
+def _add_references(references: set[str], *groups: tuple[str, ...]) -> None:
+    for group in groups:
+        references.update(item for item in group if item)
+
+
+def _contextual_target_id(
+    target_type: str, context_id: str, object_id: str, index: int
+) -> str:
+    return f"{target_type}:{context_id}:{object_id}:{index}"
 
 
 def _published_note_handles(

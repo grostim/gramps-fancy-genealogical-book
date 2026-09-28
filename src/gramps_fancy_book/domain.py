@@ -352,6 +352,27 @@ class EditorialPart:
     citation_entry_ids: tuple[str, ...] = ()
     person_occurrence_ids: tuple[str, ...] = ()
     part_ids: tuple[str, ...] = ()
+    person_index_entry_ids: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class EditorialNavigationTarget:
+    target_id: str
+    target_type: str
+    object_id: str
+    context_id: str | None = None
+    availability: str = "available"
+
+
+@dataclass(frozen=True)
+class EditorialPersonIndexEntry:
+    entry_id: str
+    person_handle: str
+    display_name: str
+    target_id: str
+    occurrence_ids: tuple[str, ...] = ()
+    profile_id: str | None = None
+    alternate_names: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -365,6 +386,8 @@ class EditorialProfile:
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
     citation_call_ids: tuple[str, ...] = ()
+    note_target_ids: tuple[str, ...] = ()
+    event_target_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -384,6 +407,8 @@ class EditorialFamilyNotice:
     event_refs: tuple[EventReference, ...] = ()
     media_refs: tuple[MediaReference, ...] = ()
     citation_call_ids: tuple[str, ...] = ()
+    note_target_ids: tuple[str, ...] = ()
+    event_target_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -431,6 +456,8 @@ class EditorialBook:
     cover_portraits: tuple[EditorialPortrait, ...] = ()
     citation_entries: tuple[EditorialCitationEntry, ...] = ()
     media_placements: tuple[EditorialMediaPlacement, ...] = ()
+    navigation_targets: tuple[EditorialNavigationTarget, ...] = ()
+    person_index: tuple[EditorialPersonIndexEntry, ...] = ()
 
 
 @dataclass
