@@ -432,10 +432,9 @@ def _link_family_sections(
                 )
                 if section_branches.intersection(occurrence.branch_handles)
                 and (
+                    # The reference couple is recorded under the central family.
                     occurrence.family_handle == family.handle
-                    or "lineage" in occurrence.roles
                     or "central" in occurrence.roles
-                    or "sibling" in occurrence.roles
                 )
             ]
             for occurrence in candidates:
