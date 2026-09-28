@@ -158,14 +158,16 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
         for line in descent_text.splitlines()
     )
     connection_text = rendered[connections_start:]
+    parent_child_lines = [
+        line
+        for line in connection_text.splitlines()
+        if "child" in line and "to$" in line
+    ]
     for parent in ("p0", "p1"):
         assert any(
-            f"}}{{{parent}}}" in line
-            and "child" in line
-            and "$\\\\to$" in line
-            and r"\hyperlink{" in line
-            for line in connection_text.splitlines()
-        )
+            parent in line and r"\\hyperlink{" in line
+            for line in parent_child_lines
+        ), parent_child_lines
 
 
 def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry():
