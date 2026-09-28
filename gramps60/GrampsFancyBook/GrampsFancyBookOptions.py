@@ -57,7 +57,9 @@ class GrampsFancyBookOptions(MenuReportOptions):
         menu.add_option(_("Book"), "output_format", output_format)
 
         destination = DestinationOption(_("Output file"), "")
-        destination.set_extension("zip")
+        # The report supports multiple formats; get_destination() adds the
+        # format-specific extension when the selected path has no suffix.
+        destination.set_extension("")
         destination.set_help(
             _(
                 "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development "
