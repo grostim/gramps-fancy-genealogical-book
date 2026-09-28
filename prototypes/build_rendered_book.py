@@ -175,15 +175,71 @@ def build_model() -> BookModel:
     )
 
 
+def build_sparse_model() -> BookModel:
+    father = Person(handle="sparse-father", name="Alexandre Sobre", gramps_id="I0101")
+    mother = Person(handle="sparse-mother", name="Louise Discrète", gramps_id="I0102")
+    family = Family(
+        handle="sparse-family",
+        father=father,
+        mother=mother,
+        gramps_id="F0101",
+    )
+    father_occurrence = PersonOccurrence(
+        occurrence_id="sparse-occurrence-father",
+        person_handle=father.handle,
+        generation=0,
+        family_handle=family.handle,
+    )
+    mother_occurrence = PersonOccurrence(
+        occurrence_id="sparse-occurrence-mother",
+        person_handle=mother.handle,
+        generation=0,
+        family_handle=family.handle,
+    )
+    family_section = FamilySection(
+        family_handle=family.handle,
+        part="descent",
+        generation=1,
+        section_id="sparse-family-section",
+        partner_occurrence_ids=(
+            father_occurrence.occurrence_id,
+            mother_occurrence.occurrence_id,
+        ),
+    )
+    genealogy = Genealogy(
+        ancestry=GenealogyPart(
+            name="ancestry",
+            generations=(Generation(
+                number=0,
+                occurrences=(father_occurrence, mother_occurrence),
+            ),),
+        ),
+        descent=GenealogyPart(name="descent"),
+        family_sections=(family_section,),
+    )
+    return BookModel(
+        reference_family=family,
+        people=[father, mother],
+        families={family.handle: family},
+        genealogy=genealogy,
+        editorial_book=EditorialBook(),
+    )
+
+
 def main() -> None:
     default_output = (
         Path(__file__).resolve().parents[1] / ".work" / "latex-spike"
         / "rendered-book.tex"
     )
+    sparse_default = default_output.with_name("rendered-sparse-book.tex")
     output = Path(os.environ.get("LATEX_RENDERED_BOOK_OUTPUT", default_output))
+    sparse_output = Path(os.environ.get("LATEX_SPARSE_BOOK_OUTPUT", sparse_default))
     output.parent.mkdir(parents=True, exist_ok=True)
+    sparse_output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(render_latex(build_model()), encoding="utf-8")
+    sparse_output.write_text(render_latex(build_sparse_model()), encoding="utf-8")
     print(output)
+    print(sparse_output)
 
 
 if __name__ == "__main__":

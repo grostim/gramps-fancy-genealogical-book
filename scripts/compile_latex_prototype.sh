@@ -9,10 +9,12 @@ work_dir="$(cd "$work_dir" && pwd)"
 LAYOUT_SPIKE_OUTPUT="$work_dir/layout-spike.tex" \
   python3 "$repo_root/prototypes/build_layout.py"
 
-if [[ ! -f "$work_dir/rendered-book.tex" ]]; then
-  echo "The production-rendered book fixture is missing: $work_dir/rendered-book.tex" >&2
-  exit 1
-fi
+for document in rendered-book.tex rendered-sparse-book.tex; do
+  if [[ ! -f "$work_dir/$document" ]]; then
+    echo "The production-rendered book fixture is missing: $work_dir/$document" >&2
+    exit 1
+  fi
+done
 
 cd "$work_dir"
 
@@ -61,3 +63,4 @@ compile_document() {
 
 compile_document "layout-spike"
 compile_document "rendered-book"
+compile_document "rendered-sparse-book"

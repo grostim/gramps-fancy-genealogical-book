@@ -6,9 +6,9 @@ These development files are excluded from the add-on archive. They contain only 
 
 `python prototypes/build_layout.py` writes the standalone `layout-spike.tex`. Open it in the Codex LaTeX editor. It exercises a long chronology, repeated citations, long footnotes, final-page references, compact profiles, a large image placeholder, escaped characters, contents and a reduced person index. Images remain placeholders; PDF incorporation and automated full indexing are future probes.
 
-On 2026-09-27 the built-in compiler failed before reading the source: its Tectonic bundle was not cached and could not be downloaded. No PDF, actual page count, resolved references or visual correctness is claimed. The source is preserved in the editor. LuaLaTeX remains the proposed production engine; native-editor compilation alone would not qualify it.
+The built-in compiler failed before reading the source on 2026-09-27 because its Tectonic bundle was not cached or downloadable; that attempt provided no evidence about the document. The pinned LuaLaTeX CI now compiles the layout spike and both production-rendered fixtures with stable references and no overfull boxes. This establishes compilation, not page-by-page visual correctness against the original mockups.
 
-When a LuaLaTeX environment is available, compile in an isolated directory with shell escape disabled, bounded runtime, and repeat until references stabilize. Inspect logs and every page before accepting the spike. Aim for 15–30 pages; adjust synthetic chronology length after actual pagination.
+The CI harness now compiles the layout spike and both production-rendered books in an isolated directory with shell escape disabled, up to five passes, and log checks for unresolved references and overfull boxes. Inspect the resulting PDFs page by page before declaring visual acceptance; the original mockups remain local because they contain real family examples. The rich fixture is intended to land in the 15–30 page range.
 
 ## Media
 
@@ -28,9 +28,9 @@ Ces fichiers de développement, exclusivement fictifs, sont exclus de l’archiv
 
 `python prototypes/build_layout.py` génère `layout-spike.tex`, ouvert dans l’éditeur LaTeX Codex. Il couvre chronologie longue, citations réutilisées, notes longues, renvois de pages, fiches compactes, cadre pleine page, caractères échappés, sommaire et index réduit. Les images sont des cadres ; incorporation de PDF et index complet automatisé restent à éprouver.
 
-Le 27 septembre 2026, le compilateur intégré a échoué avant lecture du source : ressources Tectonic absentes du cache et téléchargement impossible. Aucun PDF, nombre de pages, renvoi résolu ou qualité visuelle n’est donc validé. Le source est conservé dans l’éditeur. LuaLaTeX reste le moteur de production proposé ; la compilation dans l’éditeur ne suffirait pas à le qualifier.
+Le compilateur intégré a échoué avant lecture du source le 27 septembre 2026, car ses ressources Tectonic n’étaient pas en cache et leur téléchargement était impossible ; cet essai ne fournissait aucune preuve sur le document. La CI LuaLaTeX épinglée compile maintenant le prototype de mise en page et les deux fixtures issues du moteur de rendu, avec renvois stabilisés et sans débordement. Cela confirme la compilation, pas encore la qualité visuelle page par page face aux maquettes originales.
 
-Avec un environnement LuaLaTeX disponible : compiler dans un répertoire isolé, sans shell escape, avec délai maximal et passes jusqu’à stabilisation. Examiner les journaux et chaque page. Viser 15–30 pages et ajuster la chronologie fictive après pagination réelle.
+La CI compile maintenant le prototype et les deux livres produits par le moteur dans un répertoire isolé, sans shell escape, avec cinq passes maximum et vérification des journaux de renvois et débordements. Examiner les PDF page par page avant de déclarer la recette visuelle terminée ; les maquettes originales restent locales puisqu’elles contiennent des exemples familiaux réels. La fixture riche vise 15–30 pages.
 
 ### Médias
 
@@ -44,11 +44,13 @@ Voir [web-spike.md](web-spike.md). Aucune instance de développement fournie et 
 
 ## Reproducible LuaLaTeX build
 
-The layout spike now uses LuaLaTeX and can be compiled with the TeX Live container image pinned by digest in the CI workflow. The build script disables shell escape, performs up to five passes until the auxiliary reference files stop changing, rejects unresolved references and overfull text boxes, and writes the source, log, and PDF under `.work/latex-spike/`.
+The pinned LuaLaTeX CI compiles the standalone layout spike and two synthetic books generated through the production `render_latex(BookModel)` renderer. The rich fixture has a long profile, 80 events, a publishable note, and a cited source; the sparse fixture has a central couple but no events, notes, or citations. Each document is compiled for up to five passes until its reference files stabilize. The build fails on unresolved references or overfull boxes and writes PDFs, TeX sources, and logs under `.work/latex-spike/`.
 
-To reproduce it locally on macOS or Linux with Docker installed:
+To reproduce the generated books locally on macOS or Linux with Python and Docker:
 
 ```sh
+python -m pip install 'mistune>=3,<4'
+PYTHONPATH=src python prototypes/build_rendered_book.py
 docker run --rm \
   --user "$(id -u):$(id -g)" \
   --env HOME=/tmp \
@@ -58,15 +60,17 @@ docker run --rm \
   bash scripts/compile_latex_prototype.sh
 ```
 
-The `latex-prototype` CI job runs the same command and keeps the PDF, source, and LuaLaTeX log as a 14-day artifact. The image is intentionally pinned by its upstream multi-platform digest; refresh it only alongside a successful compilation.
+The `latex-prototype` CI job keeps the PDFs, sources, and LuaLaTeX logs for all three documents as a 14-day artifact. Compilation success does not replace the pending visual review against the local-only reference mockups. The TeX Live image is pinned by its upstream multi-platform digest; refresh it only alongside a successful compilation.
 
 ## Compilation LuaLaTeX reproductible
 
-Le prototype de composition utilise maintenant LuaLaTeX et se compile dans l’image TeX Live dont le digest est épinglé dans le workflow CI. Le script désactive le shell escape, relance la compilation jusqu’à stabilisation des fichiers de références (cinq passes maximum), échoue si des renvois restent non résolus ou si le texte déborde; il place le source, le journal et le PDF dans `.work/latex-spike/`.
+La CI LuaLaTeX épinglée compile le prototype de mise en page autonome et deux livres fictifs générés par le vrai `render_latex(BookModel)`. La fixture riche contient une fiche longue, 80 événements, une note publiable et une source citée ; la fixture peu documentée contient un couple central sans événements, notes ni citations. Chaque document est compilé jusqu’à stabilisation des fichiers de références, en cinq passes maximum. La compilation échoue si des renvois restent non résolus ou si le texte déborde ; PDF, sources TeX et journaux sont écrits dans `.work/latex-spike/`.
 
-Pour le reproduire localement sous macOS ou Linux avec Docker :
+Pour générer et compiler les livres localement sous macOS ou Linux avec Python et Docker :
 
 ```sh
+python -m pip install 'mistune>=3,<4'
+PYTHONPATH=src python prototypes/build_rendered_book.py
 docker run --rm \
   --user "$(id -u):$(id -g)" \
   --env HOME=/tmp \
@@ -76,5 +80,4 @@ docker run --rm \
   bash scripts/compile_latex_prototype.sh
 ```
 
-La tâche CI `latex-prototype` exécute la même commande et conserve le PDF, le source et le journal LuaLaTeX comme artefact pendant 14 jours. L’image est épinglée par le digest multi-architecture publié en amont; toute mise à jour du digest doit être suivie d’une compilation réussie.
-
+La tâche CI `latex-prototype` conserve les PDF, sources et journaux des trois documents dans un artefact pendant 14 jours. La réussite de compilation ne remplace pas la revue visuelle à venir face aux maquettes de référence, qui restent stockées localement. L’image TeX Live est épinglée par son digest multiarchitecture publié en amont ; toute mise à jour doit être suivie d’une compilation réussie.
