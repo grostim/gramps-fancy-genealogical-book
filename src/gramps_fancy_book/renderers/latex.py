@@ -2,6 +2,14 @@
 
 from pathlib import PurePosixPath
 
+from ..conventions import (
+    BOOK_AUTHOR,
+    BOOK_DEDICATION,
+    BOOK_INTRODUCTION,
+    BOOK_PUBLICATION_DATE,
+    BOOK_SUBTITLE,
+    BOOK_TITLE,
+)
 from ..domain import (
     BookModel,
     EditorialCitationCall,
@@ -23,31 +31,68 @@ from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
 
 
+def _front_matter_notes_by_role(model: BookModel) -> dict[str, Note]:
+    editorial_book = model.editorial_book
+    if editorial_book is None:
+        return {}
+    return {
+        item.role: note
+        for item in editorial_book.front_matter_notes
+        if (note := model.notes.get(item.note_handle)) is not None
+    }
+
+
 def _render_cover(model: BookModel) -> str:
     """Render the generated cover and any available partner portrait medallions."""
     family = model.reference_family
     partners = [
-        person
-        for person in (family.father, family.mother)
-        if person is not None
+        person for person in (family.father, family.mother) if person is not None
     ]
-    partner_names = [person.name or person.handle for person in partners]
-    subtitle = " and ".join(partner_names) or family.gramps_id or family.handle
+    couple_names = " and ".join(person.name or person.handle for person in partners)
+    fallback_subtitle = couple_names or family.gramps_id or family.handle
     safe_handle = "".join(
         character for character in family.handle if character.isalnum() or character in "_-"
     )
+    role_notes = _front_matter_notes_by_role(model)
+    title_note = role_notes.get(BOOK_TITLE)
+    subtitle_note = role_notes.get(BOOK_SUBTITLE)
 
     output = [
         f"% Gramps family handle: {safe_handle}\n",
         "\\begin{titlepage}\n"
         "\\thispagestyle{empty}\n"
         "\\centering\n"
-        "\\vspace*{2.4cm}\n"
-        "{\\Large\\bfseries Family history\\par}\n"
-        "\\vspace{0.7cm}\n"
-        f"{{\\Huge\\bfseries {escape_latex_text(subtitle)}\\par}}\n"
-        "\\vspace{1.8cm}\n"
+        "\\vspace*{2.4cm}\n",
     ]
+    if title_note is not None:
+        output.extend(
+            (
+                "{\\Large\\bfseries\n",
+                render_latex_note(title_note),
+                "\\par}\n",
+            )
+        )
+    else:
+        output.append("{\\Large\\bfseries Family history\\par}\n")
+
+    output.append("\\vspace{0.7cm}\n")
+    if subtitle_note is not None:
+        output.extend(
+            (
+                "{\\Huge\\bfseries\n",
+                render_latex_note(subtitle_note),
+                "\\par}\n",
+            )
+        )
+        if couple_names:
+            output.append(
+                f"{{\\large {escape_latex_text(couple_names)}\\par}}\n"
+            )
+    else:
+        output.append(
+            f"{{\\Huge\\bfseries {escape_latex_text(fallback_subtitle)}\\par}}\n"
+        )
+    output.append("\\vspace{1.8cm}\n")
 
     people_by_handle = {person.handle: person for person in model.people}
     portraits = (
@@ -79,9 +124,39 @@ def _render_cover(model: BookModel) -> str:
     else:
         output.append("\\vspace{1cm}\n")
 
+    for role, style in (
+        (BOOK_AUTHOR, "\\large\\itshape By: "),
+        (BOOK_PUBLICATION_DATE, "\\large "),
+    ):
+        note = role_notes.get(role)
+        if note is not None:
+            output.append("{" + style)
+            output.append(render_latex_note(note))
+            output.append("\\par}\n")
+
     output.extend(("\\vfill\n", "\\end{titlepage}\n"))
     return "".join(output)
 
+
+def _render_front_matter(model: BookModel) -> str:
+    role_notes = _front_matter_notes_by_role(model)
+    output = []
+    for role, heading in (
+        (BOOK_DEDICATION, "Dedication"),
+        (BOOK_INTRODUCTION, "Introduction"),
+    ):
+        note = role_notes.get(role)
+        if note is None:
+            continue
+        output.extend(
+            (
+                "\\clearpage\n",
+                f"\\section*{{{heading}}}\n",
+                render_latex_note(note),
+                "\\clearpage\n",
+            )
+        )
+    return "".join(output)
 
 def _render_cover_portrait(
     portrait: EditorialPortrait,
@@ -148,6 +223,7 @@ def render_latex(model: BookModel) -> str:
         "\\begin{document}\n",
         _render_cover(model),
     ]
+    document.append(_render_front_matter(model))
     document.append("\\section*{Contents}\n\\tableofcontents\n\\clearpage\n")
 
     emitted_targets: set[str] = set()

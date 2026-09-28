@@ -1,15 +1,18 @@
 """Editorial book skeleton assembled from the genealogy model."""
 
 from collections.abc import Iterator
-from dataclasses import fields, is_dataclass, replace
+from dataclasses import dataclass, fields, is_dataclass, replace
 from unicodedata import combining, normalize
 
+from .conventions import BOOK_F0_EDITORIAL_ROLES
 from .domain import (
     Citation,
+    Diagnostic,
     EditorialBook,
     EditorialCitationCall,
     EditorialCitationEntry,
     EditorialFamilyNotice,
+    EditorialFrontMatterNote,
     EditorialMediaPlacement,
     EditorialMediaUse,
     EditorialNavigationTarget,
@@ -30,7 +33,119 @@ from .domain import (
     Place,
     RepositoryReference,
     Source,
+    Tag,
 )
+
+
+@dataclass(frozen=True)
+class F0EditorialNoteSelection:
+    front_matter_notes: tuple[EditorialFrontMatterNote, ...]
+    reserved_note_handles: tuple[str, ...]
+    diagnostics: tuple[Diagnostic, ...]
+
+
+def select_f0_editorial_notes(
+    reference_family: Family,
+    notes_by_handle: dict[str, Note],
+    tags_by_handle: dict[str, Tag],
+) -> F0EditorialNoteSelection:
+    """Select publishable role notes linked directly to the chosen family."""
+    role_names = frozenset(BOOK_F0_EDITORIAL_ROLES)
+    selected: dict[str, EditorialFrontMatterNote] = {}
+    reserved_note_handles: list[str] = []
+    diagnostics: list[Diagnostic] = []
+    seen_note_handles: set[str] = set()
+
+    for note_handle in reference_family.links.notes:
+        if note_handle in seen_note_handles:
+            continue
+        seen_note_handles.add(note_handle)
+        note = notes_by_handle.get(note_handle)
+        if note is None:
+            continue
+        note_roles = tuple(
+            dict.fromkeys(
+                tag.name
+                for tag_handle in note.links.tag_handles
+                if (tag := tags_by_handle.get(tag_handle)) is not None
+                and tag.name in role_names
+            )
+        )
+        if not note_roles:
+            continue
+        reserved_note_handles.append(note_handle)
+        if len(note_roles) > 1:
+            diagnostics.append(
+                Diagnostic(
+                    code="F0_EDITORIAL_NOTE_AMBIGUOUS_ROLE",
+                    severity="warning",
+                    object_type="note",
+                    handle=note_handle,
+                    message=(
+                        "F0 editorial note has multiple role tags and was omitted: "
+                        + ", ".join(note_roles)
+                    ),
+                    context=reference_family.handle,
+                )
+            )
+            continue
+
+        role = note_roles[0]
+        if not note.is_publishable:
+            diagnostics.append(
+                Diagnostic(
+                    code="F0_EDITORIAL_NOTE_NOT_PUBLISHABLE",
+                    severity="warning",
+                    object_type="note",
+                    handle=note_handle,
+                    message=(
+                        f"F0 editorial note tagged {role} must also carry "
+                        "BOOK_PUBLICATION; it was omitted."
+                    ),
+                    context=reference_family.handle,
+                )
+            )
+            continue
+        if not (note.text or "").strip():
+            diagnostics.append(
+                Diagnostic(
+                    code="F0_EDITORIAL_NOTE_EMPTY",
+                    severity="warning",
+                    object_type="note",
+                    handle=note_handle,
+                    message=(
+                        f"F0 editorial note tagged {role} is empty and was omitted."
+                    ),
+                    context=reference_family.handle,
+                )
+            )
+            continue
+        if role in selected:
+            diagnostics.append(
+                Diagnostic(
+                    code="F0_EDITORIAL_NOTE_DUPLICATE_ROLE",
+                    severity="warning",
+                    object_type="note",
+                    handle=note_handle,
+                    message=(
+                        f"Another F0 editorial note already supplies {role}; "
+                        "the first valid note in family link order was kept."
+                    ),
+                    context=reference_family.handle,
+                )
+            )
+            continue
+        selected[role] = EditorialFrontMatterNote(
+            role=role, note_handle=note_handle
+        )
+
+    return F0EditorialNoteSelection(
+        front_matter_notes=tuple(
+            selected[role] for role in BOOK_F0_EDITORIAL_ROLES if role in selected
+        ),
+        reserved_note_handles=tuple(reserved_note_handles),
+        diagnostics=tuple(diagnostics),
+    )
 
 
 def build_editorial_book(
@@ -44,6 +159,8 @@ def build_editorial_book(
     places_by_handle: dict[str, Place],
     citations_by_handle: dict[str, Citation],
     sources_by_handle: dict[str, Source],
+    front_matter_notes: tuple[EditorialFrontMatterNote, ...] = (),
+    reserved_front_matter_note_handles: tuple[str, ...] = (),
 ) -> EditorialBook:
     """Create the stable top-level book order and link it to in-scope records."""
     ancestry_sections = [
@@ -83,6 +200,11 @@ def build_editorial_book(
             continue
         notice_id = f"family-notice:{family_handle}"
         note_handles = _published_note_handles(family.links.notes, notes_by_handle)
+        if family_handle == reference_family_handle:
+            reserved = set(reserved_front_matter_note_handles)
+            note_handles = tuple(
+                handle for handle in note_handles if handle not in reserved
+            )
         event_refs = _chronological_event_refs(family.links.events, events_by_handle)
         family_notices.append(
             EditorialFamilyNotice(
@@ -280,6 +402,7 @@ def build_editorial_book(
         profiles=tuple(profiles),
         family_notices=tuple(family_notices),
         cover_portraits=tuple(cover_portraits),
+        front_matter_notes=front_matter_notes,
         citation_entries=citation_entries,
         media_placements=media_placements,
     )

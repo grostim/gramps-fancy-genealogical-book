@@ -2,7 +2,7 @@
 
 from .conventions import BOOK_SCHEMA_VERSION
 from .domain import BookModel, Family, Snapshot
-from .editorial import build_editorial_book
+from .editorial import build_editorial_book, select_f0_editorial_notes
 from .traversal import build_genealogy
 
 
@@ -29,6 +29,9 @@ def build_book_model(
     if isinstance(family, Snapshot):
         genealogy = build_genealogy(family, max_ancestor_depth, max_descendant_depth)
         people = list(family.people.values())
+        front_matter_selection = select_f0_editorial_notes(
+            family.reference_family, family.notes, family.tags
+        )
         return BookModel(
             reference_family=family.reference_family,
             people=people,
@@ -45,7 +48,11 @@ def build_book_model(
             repositories=family.repositories,
             media=family.media,
             tags=family.tags,
-            diagnostics=[*family.diagnostics, *genealogy.diagnostics],
+            diagnostics=[
+                *family.diagnostics,
+                *genealogy.diagnostics,
+                *front_matter_selection.diagnostics,
+            ],
             genealogy=genealogy,
             editorial_book=build_editorial_book(
                 genealogy,
@@ -58,6 +65,8 @@ def build_book_model(
                 family.places,
                 family.citations,
                 family.sources,
+                front_matter_selection.front_matter_notes,
+                front_matter_selection.reserved_note_handles,
             ),
         )
 

@@ -7,15 +7,19 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 ## Fonctionnement actuel
 
 - Sélecteur de famille Gramps et destination JSON explicite.
-- Modèle JSON v0.7 avec occurrences généalogiques, liens typés et cibles de renvoi, accompagné d’une structure éditoriale ordonnée. Un index alphabétique renvoie à chaque fiche ou à sa première occurrence. Les fiches de personnes éligibles et une notice par famille du périmètre référencent les notes publiables, portraits et légendes, événements, médias et sections familiales.
+- Modèle JSON v0.8 avec occurrences généalogiques, liens typés et cibles de renvoi, accompagné d’une structure éditoriale ordonnée. Un index alphabétique renvoie à chaque fiche ou à sa première occurrence. Les fiches de personnes éligibles et une notice par famille du périmètre référencent les notes publiables, portraits et légendes, événements, médias et sections familiales.
 - Extraction des ascendants et descendants en profondeur illimitée par défaut, ou limitée séparément avec un entier ≥ 0.
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
 - Les notes publiables sont rendues en LaTeX depuis l’AST Mistune ; le HTML brut reste du texte littéral, et les styles sémantiques Gramps priment sur la syntaxe Markdown d’une même note. Voir la [règle de normalisation documentée](docs/decisions/003-note-markup.md).
 - JSON Unicode, diagnostics structurés de conversion média et remplacement coordonné du modèle avec son dossier de PNG.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
-- Premier rendu LaTeX avec couverture A4 automatique, noms du couple et médaillons circulaires pour ses portraits disponibles, puis grandes parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. Les notes éditoriales F0 et la validation visuelle du PDF restent à faire.
+- Premier rendu LaTeX avec couverture A4 automatique, titres et textes éditoriaux F0, noms du couple et médaillons circulaires pour ses portraits disponibles, puis grandes parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. La validation visuelle du PDF reste à faire.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
+
+## Notes éditoriales de la famille F0
+
+Pour personnaliser les préliminaires, créez une note Gramps par rôle et associez-lui l’étiquette native `BOOK_PUBLICATION` ainsi qu’une seule étiquette de rôle : `BOOK_TITLE`, `BOOK_SUBTITLE`, `BOOK_INTRODUCTION`, `BOOK_DEDICATION`, `BOOK_AUTHOR` ou `BOOK_PUBLICATION_DATE`. Rattachez chaque note directement à la famille sélectionnée. Les doublons sont départagés selon l’ordre des notes dans Gramps ; une note portant plusieurs rôles est ignorée avec un diagnostic. Le parcours dans l’interface Gramps 6 et la compilation visuelle du PDF restent à valider.
 
 Le parcours suit les filiations parent–enfant explicitement enregistrées. Les unions, partenaires et fratries sont ajoutés comme contexte sans étendre automatiquement leur propre lignée. Le rendu LaTeX reste expérimental : typographie définitive, convergence PDF et recette visuelle restent à réaliser. Voir le [suivi L3](docs/validation-l3.fr.md), le [démarrage L4](docs/validation-l4.fr.md), la [règle de rendu des notes](docs/decisions/003-note-markup.md) et le [suivi des exigences](docs/requirements.fr.md).
 

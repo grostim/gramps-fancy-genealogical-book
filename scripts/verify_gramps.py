@@ -66,7 +66,7 @@ def verify(executable: str) -> None:
         assert [person["gramps_id"] for person in model["people"]] == ["I0001", "I0002", "I0003"]
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
-        assert model["metadata"]["BOOK_SCHEMA_VERSION"] == "0.7"
+        assert model["metadata"]["BOOK_SCHEMA_VERSION"] == "0.8"
         assert model["reference_family"]["handle"] in model["families"]
         assert model["reference_family"]["child_relationships"][0]["father_relation"] == "Birth"
         assert model["reference_family"]["child_relationships"][0]["mother_relation"] == "Birth"
