@@ -230,14 +230,18 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - **L5 — modèle éditorial livré.** Notices familiales, fiches, notes publiables, citations réutilisées, médias et index sont reliés. Le rapport de contradictions regroupe uniquement les événements explicitement associés par `BOOK_FACT_ID`.
 - **L6 — rendu LaTeX/PDF disponible.** Le rendu compose le livre et ses renvois ; des PDF de fixtures ont été compilés en CI. La comparaison page par page à la v1.1 et aux maquettes locales n’est pas encore faite.
 - **L7 — HTML ZIP livré dans les PR #51–57.** L’archive contient la page d’entrée, les styles et les dérivés PNG approuvés avec des chemins relatifs. Les corrections de commentaires sur #55 sont intégrées. L’ouverture réelle hors ligne avec médias, les tailles d’écran, le clavier et le lecteur d’écran restent à vérifier.
-- **État des contrôles automatisés :** les exécutions GitHub Actions récentes ont été arrêtées avant les jobs avec un message relatif aux paiements ou au plafond de dépenses du compte. Ces exécutions ne fournissent donc pas de résultat de test ; le suivi [validation L7](validation-l7.fr.md) garde cette limite visible.
+- **État CI :** les runs associés aux PR #60 et #61 sont en échec ; leurs jobs sont marqués en échec ou annulés, sans étapes ni journaux accessibles via l’API GitHub. Ils ne permettent donc pas d’identifier une erreur de code. Le catalogue compile localement avec `msgfmt` et la fabrication de l’archive depuis `main` réussit ; les matrices CI restent à obtenir.
 - **Recette Gramps :** un contrôle graphique macOS a confirmé la sélection de F0001, la conservation d’options et le refus de remplacement sur le parcours JSON. Cela ne valide pas l’archive HTML, l’ensemble d’AC-22 ni Gramps Web.
-- **Travail L8.4 en cours :** les pages d’architecture et de suivi sont réalignées avec le code livré ; le catalogue français des libellés Gramps est compilé et inclus dans l’archive. Les guides complets d’installation, dépendances, configuration, dépannage et contribution restent à achever ; les prochaines chaînes d’interface devront être ajoutées au catalogue.
+- **L8.4 — Documentation et langue :** les pages d’architecture, README et matrice sont actualisés ; un catalogue français couvre les libellés du rapport Gramps. La recette d’affichage en Gramps reste à faire ; les guides complets d’installation, configuration, dépannage et contribution restent à achever.
+
+- **L8.5 — Archive/version :** `build_addon.py` compile le catalogue français temporairement et l’inclut via le manifeste ; les versions du paquet, du module et de l’enregistrement Gramps sont toutes à `0.8.0`. Une construction depuis `main` a réussi et l’archive contient `locale/fr/LC_MESSAGES/addon.mo`. L’installation, la mise à jour et le retrait restent à éprouver dans Gramps.
+- **PR #58–#61 fusionnées :** suivi/architecture réalignés, recette L7 actualisée, catalogue français ajouté et version de l’extension synchronisée.
 
 ### Prochaines actions
 
-1. Après rétablissement des exécutions GitHub Actions, relancer les contrôles bloqués et consigner le résultat de chaque matrice.
-2. Dans une version Gramps Desktop prise en charge, générer un HTML ZIP réel, l’extraire, puis vérifier navigation hors ligne, notes, médias recadrés, citations et liens vers un document partagé.
-3. Vérifier le rendu HTML aux tailles prévues, au clavier et avec un lecteur d’écran ; rattacher les observations aux scénarios AC-10, AC-12, AC-15, AC-20 et AC-23.
-4. Examiner visuellement les PDF riches et peu documentés, notamment pagination, images et renvois, puis consigner les écarts aux règles de la v1.1 et aux maquettes.
-5. Qualifier Gramps Web et l’installation des dépendances optionnelles dans chaque environnement pris en charge (AC-22), puis finaliser les mesures de performance et les procédures de distribution L8.
+1. Dans un profil Gramps Desktop isolé en français, installer l’archive construite et vérifier le nom du rapport, ses options, les messages d’erreur et la version `0.8.0`.
+2. Obtenir des exécutions GitHub Actions exploitables puis consigner les matrices Python, Gramps et rendu LaTeX.
+3. Générer un vrai HTML ZIP dans Gramps, l’extraire et vérifier navigation hors ligne, notes, médias recadrés, citations et liens vers un document partagé.
+4. Vérifier le rendu HTML aux tailles prévues, au clavier et avec un lecteur d’écran ; consigner AC-10, AC-12, AC-15, AC-20 et AC-23.
+5. Examiner visuellement les PDF riches et peu documentés par rapport à la v1.1 et aux maquettes.
+6. Qualifier Gramps Web, l’installation des dépendances optionnelles, les mesures de performance et les procédures de distribution L8.
