@@ -61,6 +61,56 @@ def render_html_note(note: Note) -> str:
     return _render_blocks(_MARKDOWN(text), formatted=formatted)
 
 
+def render_html_inline_note(note: Note) -> str:
+    """Render note content as safe inline HTML for headings and cover metadata."""
+    text = note.text or ""
+    if not text:
+        return ""
+
+    if _is_html_code(note.type):
+        return _text(text)
+
+    formatted = _is_formatted(note.format)
+    ranges = _styled_ranges(note.styled_tags, text)
+    if ranges:
+        return _render_styled_text(text, ranges, formatted, inline=True)
+
+    return _render_inline_blocks(_MARKDOWN(text), formatted=formatted)
+
+
+def _render_inline_blocks(tokens: Any, *, formatted: bool) -> str:
+    fragments = []
+    if not isinstance(tokens, list):
+        return ""
+    for token in tokens:
+        if not isinstance(token, dict):
+            continue
+        kind = token.get("type")
+        if kind in {"paragraph", "heading", "block_text"}:
+            rendered = _render_inline(_children(token), formatted=formatted)
+        elif kind in {"block_code", "block_html"}:
+            raw = token.get("raw")
+            rendered = _text(raw if isinstance(raw, str) else "")
+        elif kind == "block_quote":
+            rendered = _render_inline_blocks(_children(token), formatted=formatted)
+        elif kind == "list":
+            rendered = _render_inline_list(token, formatted=formatted)
+        else:
+            rendered = ""
+        if rendered:
+            fragments.append(rendered)
+    return " ".join(fragments)
+
+
+def _render_inline_list(token: dict[str, Any], *, formatted: bool) -> str:
+    fragments = []
+    for item in _children(token):
+        text = _render_inline_blocks(_children(item), formatted=formatted)
+        if text:
+            fragments.append(text)
+    return " ".join(fragments)
+
+
 def _is_formatted(value: Any) -> bool:
     if isinstance(value, bool):
         return False
@@ -153,14 +203,20 @@ def _style_name(value: Any) -> str:
 
 
 def _render_styled_text(
-    text: str, ranges: tuple[_StyledRange, ...], formatted: bool
+    text: str,
+    ranges: tuple[_StyledRange, ...],
+    formatted: bool,
+    *,
+    inline: bool = False,
 ) -> str:
-    output = ["<p>"]
+    output = [] if inline else ["<p>"]
     cursor = 0
     for match in re.finditer(r"(?:\r\n|\r|\n)+", text):
         output.append(_render_styled_span(text, cursor, match.start(), ranges))
         breaks = len(re.findall(r"\r\n|\r|\n", match.group()))
-        if breaks > 1:
+        if inline:
+            output.append(" ")
+        elif breaks > 1:
             output.append("</p>\n")
             for _ in range(breaks - 2):
                 output.append("<p></p>\n")
@@ -171,7 +227,8 @@ def _render_styled_text(
             output.append(" ")
         cursor = match.end()
     output.append(_render_styled_span(text, cursor, len(text), ranges))
-    output.append("</p>\n")
+    if not inline:
+        output.append("</p>\n")
     return "".join(output)
 
 

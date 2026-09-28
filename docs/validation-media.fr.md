@@ -8,6 +8,10 @@ La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécu
 
 L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers originaux ne sont pas modifiés ; le portrait existe uniquement dans le répertoire temporaire du test.
 
+## Vérification de publication restante
+
+Dans Gramps, appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif, puis générer un livre HTML ZIP. Le contrôle d’acceptation ne réussit que si le média exclu est absent de toutes les références `<img>` de `index.html` et de toutes les entrées `media/` du ZIP. Le fichier ne doit pas non plus être ouvert ni converti pendant la génération. Ce scénario manuel n’a pas encore été exécuté.
+
 ## Installation
 
 Pour un environnement de développement, installer le projet et les dépendances de test et de conversion :

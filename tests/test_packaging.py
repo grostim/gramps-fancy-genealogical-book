@@ -13,7 +13,18 @@ def test_archive_is_reproducible_and_contains_only_runtime_files(tmp_path):
     assert first.read_bytes() == second.read_bytes()
     with tarfile.open(first) as archive:
         names = archive.getnames()
+        catalog_member = archive.extractfile(
+            "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
+        )
+        assert catalog_member is not None
+        catalog_magic = catalog_member.read(4)
     assert "GrampsFancyBook/GrampsFancyBook.gpr.py" in names
     assert "GrampsFancyBook/gramps_fancy_book/export.py" in names
-    assert all(name.endswith((".py", "/MANIFEST")) for name in names)
+    catalog = "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
+    assert catalog in names
+    assert all(
+        name.endswith((".py", "/MANIFEST")) or name == catalog
+        for name in names
+    )
+    assert catalog_magic in {b"\xde\x12\x04\x95", b"\x95\x04\x12\xde"}
     assert not any("__pycache__" in name or ".work" in name for name in names)

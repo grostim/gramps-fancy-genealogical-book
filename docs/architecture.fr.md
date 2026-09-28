@@ -15,7 +15,7 @@ Le projet comporte six responsabilités :
 
 L’extraction produit le schéma JSON 0.8. Des identifiants stables de sections familiales et d’occurrences relient les partenaires, enfants, liens de filiation et apparitions répétées. Les occurrences conservent la génération, la branche et les chemins de filiation, y compris les chemins alternatifs vers une même personne. Chaque personne référence une première occurrence, même si aucune fiche complète n’est créée. Les limites d’ascendance et de descendance sont indépendantes et illimitées par défaut ; les partenaires rencontrés par mariage ne déclenchent pas une nouvelle expansion de l’ascendance.
 
-L’adaptateur accède aux données par les accesseurs de la base Gramps et ne la modifie pas. Les références manquantes ou inaccessibles donnent des diagnostics ; les indicateurs de confidentialité sont conservés pour les données que la base fournie autorise à lire. L’adaptateur ne contourne pas les droits de Gramps.
+L’adaptateur accède aux données par les accesseurs de la base Gramps et ne la modifie pas. Les références manquantes ou inaccessibles donnent des diagnostics ; les indicateurs de confidentialité sont conservés pour les données que la base fournie autorise à lire. L’adaptateur ne contourne pas les droits de Gramps. L’avertissement requis avant de générer un livre susceptible d’inclure des données privées ou concernant des personnes vivantes n’est pas encore implémenté ; chaque export doit demander confirmation avant d’écrire les fichiers.
 
 ## Modèle éditorial et règles de publication
 

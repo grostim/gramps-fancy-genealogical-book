@@ -394,7 +394,7 @@ def prepare_editorial_media(
                         rectangle=rectangle,
                         action="external-link",
                         context_ids=_media_contexts(uses),
-                        citation_handles=_all_media_citations(media, uses),
+                        citation_handles=all_citation_handles,
                     )
                 )
             continue
@@ -408,7 +408,7 @@ def prepare_editorial_media(
                         rectangle=rectangle,
                         action=action,
                         context_ids=_media_contexts(uses),
-                        citation_handles=_all_media_citations(media, uses),
+                        citation_handles=all_citation_handles,
                     )
                 )
             continue
