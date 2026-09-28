@@ -47,11 +47,12 @@ class GrampsFancyBookOptions(MenuReportOptions):
             "auto", _("Automatic (use destination extension)")
         )
         output_format.add_item("html_zip", _("HTML book (ZIP archive)"))
+        output_format.add_item("pdf", _("PDF book (LuaLaTeX)"))
         output_format.add_item(
             "json_snapshot", _("JSON snapshot (development diagnostics)")
         )
         output_format.set_help(
-            _("Automatic mode uses .zip for HTML books and .json for diagnostic snapshots.")
+            _("Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots.")
         )
         menu.add_option(_("Book"), "output_format", output_format)
 
@@ -59,7 +60,7 @@ class GrampsFancyBookOptions(MenuReportOptions):
         destination.set_extension("zip")
         destination.set_help(
             _(
-                "Automatic mode uses .zip for HTML, or .json for the development "
+                "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development "
                 "snapshot."
             )
         )
@@ -85,7 +86,10 @@ class GrampsFancyBookOptions(MenuReportOptions):
             return output_format
 
         destination = self.menu.get_option_by_name("destination").get_value()
-        if Path(destination or "").suffix.casefold() == ".json":
+        suffix = Path(destination or "").suffix.casefold()
+        if suffix == ".pdf":
+            return "pdf"
+        if suffix == ".json":
             return "json_snapshot"
         return "html_zip"
 
@@ -93,6 +97,7 @@ class GrampsFancyBookOptions(MenuReportOptions):
         output_format = self.get_output_format()
         extension = {
             "html_zip": ".zip",
+            "pdf": ".pdf",
             "json_snapshot": ".json",
         }.get(output_format)
         if extension is None:

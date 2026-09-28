@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Gramps Fancy Genealogical Book 0.8.0\n"
+"Project-Id-Version: Gramps Fancy Genealogical Book 0.9.0\n"
 "Report-Msgid-Bugs-To: https://github.com/grostim/gramps-fancy-genealogical-book/issues\n"
 "PO-Revision-Date: 2026-09-28 00:00+0000\n"
 "Last-Translator: Gramps Fancy Genealogical Book contributors\n"
@@ -16,8 +16,8 @@ msgid "Gramps Fancy Genealogical Book"
 msgstr "Livre généalogique illustré pour Gramps"
 
 #: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:15
-msgid "Generate a static HTML book archive for the selected reference family."
-msgstr "Générer une archive contenant un livre HTML statique pour la famille de référence sélectionnée."
+msgid "Generate a PDF or static HTML book for the selected reference family."
+msgstr "Générer un livre PDF ou HTML statique pour la famille de référence sélectionnée."
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:29
 msgid "Book"
@@ -90,3 +90,59 @@ msgstr "Choisissez une autre destination ou activez « Remplacer un fichier exis
 #: gramps60/GrampsFancyBook/GrampsFancyBook.py:95
 msgid "Book generation failed"
 msgstr "La génération du livre a échoué"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "PDF book (LuaLaTeX)"
+msgstr "Livre PDF (LuaLaTeX)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots."
+msgstr "Le mode automatique utilise .pdf pour les livres PDF, .zip pour les livres HTML et .json pour les instantanés de diagnostic."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development snapshot."
+msgstr "Le mode automatique utilise .pdf pour le PDF, .zip pour le HTML ou .json pour l’instantané de développement."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "PDF output unavailable"
+msgstr "Sortie PDF indisponible"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."
+msgstr "LuaLaTeX est nécessaire pour produire un PDF. Installez TeX Live et rendez lualatex disponible dans le PATH."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "PDF generation failed"
+msgstr "La génération du PDF a échoué"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "LuaLaTeX could not compile the selected book."
+msgstr "LuaLaTeX n’a pas pu compiler le livre sélectionné."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "LuaLaTeX compilation timed out."
+msgstr "La compilation LuaLaTeX a dépassé le délai maximal."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "PDF references did not stabilize after five compilation passes."
+msgstr "Les renvois du PDF ne se sont pas stabilisés après cinq passes de compilation."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "PDF compilation reported unresolved references or overfull boxes."
+msgstr "La compilation du PDF signale des renvois non résolus ou des dépassements de marge."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "LuaLaTeX completed without producing a PDF file."
+msgstr "LuaLaTeX s’est terminé sans produire de fichier PDF."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "PDF compilation did not produce auxiliary files required to resolve references."
+msgstr "La compilation du PDF n’a pas produit les fichiers auxiliaires nécessaires à la résolution des renvois."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "LuaLaTeX did not produce a compilation log."
+msgstr "LuaLaTeX n’a pas produit de journal de compilation."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py
+msgid "LuaLaTeX could not produce a valid PDF."
+msgstr "LuaLaTeX n’a pas pu produire un PDF valide."

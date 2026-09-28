@@ -29,11 +29,11 @@ The separate consistency report groups events only when they share an explicit `
 
 The media utility resolves database-relative paths through Gramps and refuses media marked `BOOK_EXCLUDE`. Raster images are EXIF-oriented, cropped to the requested region, and written as lossless PNG. For PDFs, a citation URL takes precedence; an unlinked multipage PDF remains a reference, while an unlinked single-page PDF may be rasterized at 300 DPI subject to a pixel ceiling. Pillow and pypdfium2 are optional dependencies. Recoverable conversion errors become structured diagnostics.
 
-The LaTeX renderer composes the book's cover and front matter, genealogy, profiles, family notices, citations, media, index, and cross-references. It writes LaTeX; compilation and page-by-page visual review remain validation steps. The Gramps report currently offers HTML ZIP and JSON snapshot output, not a PDF destination.
+The LaTeX renderer composes the book's cover and front matter, genealogy, profiles, family notices, citations, media, index, and cross-references. The Gramps report can compile this source into a PDF with LuaLaTeX; the compiler runs without shell escape, repeats until auxiliary references stabilize, and rejects unresolved references or overfull boxes. LuaLaTeX is optional and required only for PDF output. The PDF mode is experimental; installation in Gramps and page-by-page visual review remain validation steps.
 
 The HTML renderer produces a static book with internal navigation, citation links, notes, media, and an index. The ZIP includes `index.html`, embedded styles, and approved PNG derivatives at relative paths, so it can be opened offline after extraction. The current renderer includes responsive layout, a skip link, visible keyboard focus, and informative image alternatives.
 
-The report's automatic format selection keeps legacy `.json` destinations on JSON snapshot output and selects HTML ZIP for `.zip`; explicit output formats remain available. This compatibility behavior does not imply that Gramps Web has been qualified.
+The report's automatic format selection maps `.pdf` to LuaLaTeX PDF output, `.zip` to HTML ZIP, and legacy `.json` destinations to JSON snapshots; explicit output formats remain available. This compatibility behavior does not imply that Gramps Web has been qualified.
 
 ## Remaining validation
 

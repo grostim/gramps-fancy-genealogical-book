@@ -25,11 +25,11 @@
 | REF-09 | URL complètes et régions de médias Gramps | S2 | L2, L5–L7 | URL, régions et règles de conversion raster/PDF implémentées ; recette avec les quatre cas Gramps et revue visuelle restantes |
 | REF-10 | BOOK_PUBLICATION, BOOK_PROFILE, BOOK_EXCLUDE, BOOK_FEATURED | S1 | L3–L5 | Règles BOOK_* implémentées dans l’extraction, le modèle et les rendus ; recette native complète restante |
 | REF-11 | Respect des droits, objets privés lisibles selon Gramps | S1 | L2–L3, L8 | L’adaptateur utilise les accesseurs Gramps et préserve les indicateurs privés accessibles ; recette dédiée Desktop/Web restante |
-| REF-12 | LaTeX/PDF, HTML et ZIP ; faisabilité Gramps Web | S1 | L2, L6–L8 | Rendu LaTeX/PDF et sortie HTML ZIP/JSON présents ; compatibilité Gramps Web et installation des extras restent à qualifier |
+| REF-12 | LaTeX/PDF, HTML et ZIP ; faisabilité Gramps Web | S1 | L2, L6–L8 | Rapport Gramps avec PDF LuaLaTeX, HTML ZIP et JSON ; compilation dans Gramps, revue visuelle et compatibilité Gramps Web restent à qualifier |
 
 ## Décision d’intégration du premier jalon
 
-Le rapport emploie `CATEGORY_WEB`, mécanisme natif pour les rapports qui génèrent leurs propres fichiers. Il conserve ainsi le sélecteur de famille et le cycle de rapport Gramps, sans ouvrir un document PDF/ODT avant validation. Le rapport propose désormais les formats `html_zip` et `json_snapshot`. En mode automatique, une destination `.zip` sélectionne le livre HTML hors ligne et `.json` conserve la compatibilité historique de l’instantané ; les formats peuvent aussi être choisis explicitement. La sélection de famille et le cycle de rapport Gramps sont conservés. Cela ne constitue pas une validation de Gramps Web.
+Le rapport emploie `CATEGORY_WEB`, mécanisme natif pour les rapports qui génèrent leurs propres fichiers. Il conserve le sélecteur de famille et le cycle Gramps, sans utiliser le moteur PDF/ODT intégré : le plugin compile lui-même un PDF via LuaLaTeX, ou écrit une archive HTML ZIP ou un instantané JSON. En mode automatique, `.pdf` sélectionne le PDF, `.zip` le livre HTML et `.json` conserve la compatibilité historique de l’instantané ; les formats peuvent aussi être choisis explicitement. LuaLaTeX est facultatif et requis seulement pour le PDF. Cette intégration n’est pas encore qualifiée dans Gramps Desktop et ne constitue pas une validation de Gramps Web.
 
 Le statut d’enregistrement est `EXPERIMENTAL` : le statut `UNSTABLE` utilisé initialement est masqué par les versions publiques de Gramps. Ce choix est fondé sur le code installé et sur un essai de découverte réel.
 
@@ -51,7 +51,7 @@ Le statut d’enregistrement est `EXPERIMENTAL` : le statut `UNSTABLE` utilisé 
 - Notes : étiquette native BOOK_PUBLICATION obligatoire ; une note partagée est publiée dans chaque contexte. Les six rôles éditoriaux de F0 sont reconnus par l’extraction et le rendu ; leur recette dans l’interface Gramps 6 reste à faire.
 - Médias : BOOK_EXCLUDE prime sur BOOK_FEATURED ; reproduction principale unique. PDF multipages jamais reproduit ; PDF monopage reproduit seulement sans URL externe.
 - Livre : couverture, préliminaires, sommaire, ascendance, descendance, annexe documentaire unique et index des personnes. Notes de bas de page et renvois vers la pagination définitive du PDF.
-- Gramps Web est une exigence de la version cible ; sa faisabilité reste à démontrer. LuaLaTeX est l’hypothèse initiale. Export de sources LaTeX/Git du livre : futur facultatif.
+- Gramps Web est une exigence de la version cible ; sa faisabilité reste à démontrer. LuaLaTeX est le compilateur du mode PDF Desktop ; Gramps Web et la présence du compilateur sur serveur ne sont pas qualifiées. L’export de sources LaTeX/Git du livre reste facultatif.
 - Rapport de contrôle séparé limité aux contradictions de dates/lieux d’un même fait. Aucun avertissement documentaire ajouté dans le livre.
 - La règle de recadrage retrouvée dans la discussion de conception n’est pas détaillée dans la v1.1 : conserver la provenance S2 et résoudre les variantes de régions dans le prototype médias, en respectant la reproduction principale unique.
 
@@ -77,10 +77,10 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-14 | Citations réutilisées et multiples | L3.4, L5.3–L5.4, L6.4 | Citations réutilisables, appels contextuels, numérotation, renvois et annexe implémentés ; scénario complet restant |
 | AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Placements dédupliqués par handle média et appels documentaires reliés ; cas partagé à vérifier dans les deux rendus |
 | AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Règles URL/PDF et rasterisation monopage implémentées ; les quatre cas restent à valider avec médias Gramps |
-| AC-17 | Pagination finale cohérente | L6.4–L6.5 | Cibles, liens et références de pages LaTeX implémentés ; revue visuelle de pagination et de renvois restante |
+| AC-17 | Pagination finale cohérente | L6.4–L6.5 | Sortie PDF depuis Gramps avec passes de résolution et refus des renvois instables ; pagination, débordements et renvois à revoir visuellement |
 | AC-18 | Fait sans citation et source sans dépôt | L3.4, L5.4 | Modèle de citations tolère appels et dépôts absents ; cas documentaires à vérifier dans la sortie finale |
 | AC-19 | Contradictions et rapport séparé | L3.7, L5.7 | Rapport séparé BOOK_FACT_ID implémenté : dates disjointes en conflit, lieux différents à examiner ; recette de données restante |
-| AC-20 | Équivalence PDF/HTML et usage hors ligne | L6, L7, L8.1 | HTML ZIP autonome et liens relatifs implémentés ; comparaison de contenu avec le PDF et essai hors ligne restant |
+| AC-20 | Équivalence PDF/HTML et usage hors ligne | L6, L7, L8.1 | Sorties PDF et HTML ZIP autonomes disponibles ; équivalence de contenu et navigation hors ligne restent à vérifier |
 | AC-21 | Livre long et limites graphiques | L2.3, L6.3, L6.6 | Plafond de pixels et fixtures de rendu présents ; livre long et limites graphiques à mesurer et examiner |
 | AC-22 | Desktop et Web complets | L1, L2.5, L8.2 | Sélection/export JSON contrôlés sur Desktop macOS ; installation et parcours complet Desktop/Web restent à qualifier |
 | AC-23 | Échappement et absence d’injection | L2.6, L6.2, L7.3 | Échappement HTML, liens restreints et chemins ZIP relatifs implémentés ; recette de sécurité dédiée restante |
