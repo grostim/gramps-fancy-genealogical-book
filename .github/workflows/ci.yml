@@ -46,7 +46,17 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Compile the layout prototype with pinned LuaLaTeX
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the renderer note parser
+        run: python -m pip install 'mistune>=3,<4'
+      - name: Render a synthetic book with the production renderer
+        env:
+          PYTHONPATH: src
+          LATEX_RENDERED_BOOK_OUTPUT: ${{ github.workspace }}/.work/latex-spike/rendered-book.tex
+        run: python prototypes/build_rendered_book.py
+      - name: Compile layout and rendered books with pinned LuaLaTeX
         run: |
           docker run --rm \
             --user "$(id -u):$(id -g)" \
@@ -57,10 +67,13 @@ jobs:
             bash scripts/compile_latex_prototype.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: lualatex-layout-spike
+          name: lualatex-book-fixtures
           path: |
             .work/latex-spike/layout-spike.pdf
             .work/latex-spike/layout-spike.tex
             .work/latex-spike/layout-spike.log
+            .work/latex-spike/rendered-book.pdf
+            .work/latex-spike/rendered-book.tex
+            .work/latex-spike/rendered-book.log
           if-no-files-found: error
           retention-days: 14
