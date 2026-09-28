@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Compte rendu actualisé le 28 septembre 2026. L4 reste en cours ; les scénarios AC-03 à AC-09 sont exercés sur le modèle et sur le contrat textuel du rendu LaTeX. La pagination visuelle du PDF reste à valider en L6.
+Compte rendu actualisé le 28 septembre 2026. L4 reste en cours ; les scénarios AC-01 et AC-03 à AC-09 sont exercés sur le modèle et sur le contrat textuel du rendu LaTeX. La pagination visuelle du PDF reste à valider en L6.
 
 ## Parcours disponibles
 
@@ -19,7 +19,7 @@ Compte rendu actualisé le 28 septembre 2026. L4 reste en cours ; les scénarios
 
 ## Limites avant la sortie de L4
 
-- `tests/test_genealogy_acceptance.py` qualifie AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX : contexte des autres unions, types de filiation, fiche unique et renvois, collatéraux, événements familiaux, familles monoparentales et profondeur frontière.
+- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX : couple central en tête de l’ascendance, renvois depuis la descendance et contexte des autres unions, types de filiation, fiche unique et renvois, collatéraux, événements familiaux, familles monoparentales et profondeur frontière.
 - Le rendu LaTeX consomme le modèle `genealogy` et dispose maintenant d’assertions de contrat pour ces scénarios. Le rendu HTML complet reste planifié en L7 ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
 - Le modèle éditorial fournit déjà profils, notices familiales, index et cibles de navigation au rendu LaTeX. La validation porte ici sur leur structure textuelle, pas sur la composition paginée finale.
 - Les six notes éditoriales de F0 et leurs conventions Gramps 6 restent à valider séparément.
