@@ -94,6 +94,82 @@ def _occurrences_in(genealogy, part):
     )
 
 
+def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
+    p0 = _person("p0", family_handles=("f0",))
+    p1 = _person("p1", family_handles=("f0",))
+    child = _person("child", parent_family_handles=("f0",))
+    central = _family("f0", p0, p1, (child,))
+    model = build_book_model(_snapshot(central, (central,), (p0, p1, child)))
+
+    ancestry_generations = model.genealogy.ancestry.generations
+    assert ancestry_generations[0].number == 0
+    ancestry_couple = ancestry_generations[0].occurrences
+    assert [item.person_handle for item in ancestry_couple] == ["p0", "p1"]
+    assert all("central" in item.roles for item in ancestry_couple)
+    ancestry_ids = {item.person_handle: item.occurrence_id for item in ancestry_couple}
+
+    descent_zero = next(
+        generation
+        for generation in model.genealogy.descent.generations
+        if generation.number == 0
+    )
+    assert [item.person_handle for item in descent_zero.occurrences] == ["p0", "p1"]
+    assert {
+        item.person_handle: item.primary_occurrence_id
+        for item in descent_zero.occurrences
+    } == ancestry_ids
+
+    central_section = next(
+        section
+        for section in model.genealogy.family_sections
+        if section.family_handle == "f0" and section.part == "ancestry"
+    )
+    assert [
+        next(
+            item.person_handle
+            for item in ancestry_couple
+            if item.occurrence_id == target_id
+        )
+        for target_id in central_section.partner_occurrence_ids
+    ] == ["p0", "p1"]
+    descent_one = next(
+        generation
+        for generation in model.genealogy.descent.generations
+        if generation.number == 1
+    )
+    assert set(central_section.child_occurrence_ids) == {
+        item.occurrence_id for item in descent_one.occurrences
+    }
+
+    rendered = render_latex(model)
+    ancestry_start = rendered.index(r"\section*{Ancestry}")
+    descent_start = rendered.index(r"\section*{Descent}", ancestry_start)
+    connections_start = rendered.index(r"\section*{Family connections}", descent_start)
+    ancestry_text = rendered[ancestry_start:descent_start]
+    generation_zero_text = ancestry_text.split(
+        r"\subsection*{Generation 0}", 1
+    )[1].split(r"\end{itemize}", 1)[0]
+    assert generation_zero_text.index("p0") < generation_zero_text.index("p1")
+
+    descent_text = rendered[descent_start:connections_start]
+    assert r"\subsection*{Generation 1}" in descent_text
+    assert any(
+        r"\hypertarget{" in line and "child" in line
+        for line in descent_text.splitlines()
+    )
+    connection_text = rendered[connections_start:]
+    parent_child_lines = [
+        line
+        for line in connection_text.splitlines()
+        if "child" in line and "to$" in line
+    ]
+    for parent in ("p0", "p1"):
+        assert any(
+            parent in line and r"\hyperlink{" in line
+            for line in parent_child_lines
+        ), parent_child_lines
+
+
 def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry():
     p0 = _person("p0", family_handles=("f0", "f1"))
     p1 = _person("p1", family_handles=("f0",))
