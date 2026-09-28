@@ -1,15 +1,18 @@
 """Generate a standalone, synthetic layout spike; not the production renderer."""
 
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 HEADER = r"""\documentclass[11pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\usepackage[french]{babel}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[margin=20mm,headheight=15pt]{geometry}
 \usepackage{longtable,array,fancyhdr}
+\usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \pagestyle{fancy}\fancyhf{}
 \fancyhead[L]{Famille Exemple -- prototype fictif}
@@ -122,7 +125,8 @@ def build():
     for title, label, content in sections:
         body += f"\\newpage\n\\section{{{title}}}\\label{{{label}}}\n{content}\n"
     body += "\\end{document}\n"
-    path = ROOT / "layout-spike.tex"
+    path = Path(os.environ.get("LAYOUT_SPIKE_OUTPUT", ROOT / "layout-spike.tex"))
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(body, encoding="utf-8")
     print(path)
 

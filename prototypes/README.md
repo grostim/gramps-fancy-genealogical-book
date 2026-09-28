@@ -41,3 +41,40 @@ Le JSON consigne aussi les quatre règles PDF/URL du § 7.3. Lecture/rastérisat
 ### Web
 
 Voir [web-spike.md](web-spike.md). Aucune instance de développement fournie et démon Docker local indisponible. L’inspection statique révèle des obstacles ; elle ne qualifie aucun déploiement.
+
+## Reproducible LuaLaTeX build
+
+The layout spike now uses LuaLaTeX and can be compiled with the TeX Live container image pinned by digest in the CI workflow. The build script disables shell escape, performs up to five passes until the auxiliary reference files stop changing, rejects unresolved references and overfull text boxes, and writes the source, log, and PDF under `.work/latex-spike/`.
+
+To reproduce it locally on macOS or Linux with Docker installed:
+
+```sh
+docker run --rm \
+  --user "$(id -u):$(id -g)" \
+  --env HOME=/tmp \
+  --volume "$PWD:/work" \
+  --workdir /work \
+  texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
+  bash scripts/compile_latex_prototype.sh
+```
+
+The `latex-prototype` CI job runs the same command and keeps the PDF, source, and LuaLaTeX log as a 14-day artifact. The image is intentionally pinned by its upstream multi-platform digest; refresh it only alongside a successful compilation.
+
+## Compilation LuaLaTeX reproductible
+
+Le prototype de composition utilise maintenant LuaLaTeX et se compile dans l’image TeX Live dont le digest est épinglé dans le workflow CI. Le script désactive le shell escape, relance la compilation jusqu’à stabilisation des fichiers de références (cinq passes maximum), échoue si des renvois restent non résolus ou si le texte déborde; il place le source, le journal et le PDF dans `.work/latex-spike/`.
+
+Pour le reproduire localement sous macOS ou Linux avec Docker :
+
+```sh
+docker run --rm \
+  --user "$(id -u):$(id -g)" \
+  --env HOME=/tmp \
+  --volume "$PWD:/work" \
+  --workdir /work \
+  texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
+  bash scripts/compile_latex_prototype.sh
+```
+
+La tâche CI `latex-prototype` exécute la même commande et conserve le PDF, le source et le journal LuaLaTeX comme artefact pendant 14 jours. L’image est épinglée par le digest multi-architecture publié en amont; toute mise à jour du digest doit être suivie d’une compilation réussie.
+

@@ -41,3 +41,26 @@ jobs:
         with:
           name: GrampsFancyBook-addon
           path: gramps60/download/GrampsFancyBook.addon.tgz
+
+  latex-prototype:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile the layout prototype with pinned LuaLaTeX
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$GITHUB_WORKSPACE:/work" \
+            --workdir /work \
+            texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
+            bash scripts/compile_latex_prototype.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lualatex-layout-spike
+          path: |
+            .work/latex-spike/layout-spike.pdf
+            .work/latex-spike/layout-spike.tex
+            .work/latex-spike/layout-spike.log
+          if-no-files-found: error
+          retention-days: 14

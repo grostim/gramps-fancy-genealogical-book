@@ -216,7 +216,7 @@ def _render_cover_portrait(
 def render_latex(model: BookModel) -> str:
     document = [
         "\\documentclass[a4paper]{article}\n"
-        "\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
+        "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
         "\\usepackage{tikz}\n"
         "\\renewcommand{\\familydefault}{\\sfdefault}\n"
