@@ -137,6 +137,14 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     if person is None or media is None:
         raise AssertionError("Gramps XML export is missing fixture person I0001 or media M0001.")
 
+    media_file = next(
+        (item for item in _children(media, "file") if item.get("src")),
+        None,
+    )
+    if media_file is None:
+        raise AssertionError("Gramps XML export is missing M0001's file path.")
+    media_file.set("src", str((work / "media" / "portrait.jpg").resolve()))
+
     media_handle = media.get("handle")
     media_ref = next(
         (
@@ -281,7 +289,7 @@ def verify(executable: str) -> None:
         assert len(model["repositories"]) == 1
         assert len(model["media"]) == 1
         media = next(iter(model["media"].values()))
-        assert media["path"] == "media/portrait.jpg"
+        assert media["path"] == str((work / "media" / "portrait.jpg").resolve())
         assert "portrait" in media["description"].lower()
         assert model["people"][0]["links"]["media"][0]["media_handle"] == media["handle"]
         assert model["people"][0]["links"]["media"][0]["rectangle"] == [10, 20, 90, 80]
