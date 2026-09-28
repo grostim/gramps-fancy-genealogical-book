@@ -105,7 +105,7 @@ def render_latex(model: BookModel) -> str:
             display_name = entry.display_name or entry.person_handle
             label = escape_latex_text(display_name)
             document.append(
-                f"\\item \\hypertarget{{{_latex_target(entry.entry_id)}}}{{}}"
+                f"\\item {_latex_anchor(entry.entry_id, emitted_targets)}"
             )
             target = targets.get(entry.target_id)
             if (
@@ -113,10 +113,7 @@ def render_latex(model: BookModel) -> str:
                 and target.availability == "available"
                 and entry.target_id in emitted_targets
             ):
-                label = (
-                    f"\\hyperlink{{{_latex_target(entry.target_id)}}}"
-                    f"{{{label}}}"
-                )
+                label = _latex_page_link(entry.target_id, display_name)
             document.append(f"{label}\n")
         document.append("\\end{itemize}\n")
 
@@ -145,8 +142,7 @@ def _render_genealogy_part(
             output.append("\\item ")
             target_id = occurrence.occurrence_id
             if target_id and target_id not in emitted_targets:
-                output.append(f"\\hypertarget{{{_latex_target(target_id)}}}{{}}")
-                emitted_targets.add(target_id)
+                output.append(_latex_anchor(target_id, emitted_targets))
             output.append(f"{escape_latex_text(name)}\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
@@ -190,9 +186,7 @@ def _render_family_sections(
         notice = notices_by_family.get(section.family_handle)
         if notice is not None:
             output.append(
-                "\\par "
-                f"\\hyperlink{{{_latex_target(notice.notice_id)}}}"
-                "{Family details}\n"
+                "\\par " + _latex_page_link(notice.notice_id, "Family details") + "\n"
             )
         if children:
             output.append(
@@ -233,7 +227,7 @@ def _occurrence_link(
         occurrence.person_handle if occurrence is not None else target_id
     )
     if target_id in emitted_targets:
-        return f"\\hyperlink{{{_latex_target(target_id)}}}{{{escape_latex_text(label)}}}"
+        return _latex_page_link(target_id, label)
     return escape_latex_text(label)
 
 
@@ -259,9 +253,7 @@ def _render_profile(
     name = person.name if person is not None else ""
     name = name or profile.person_handle
     output = []
-    if profile.profile_id not in emitted_targets:
-        output.append(f"\\hypertarget{{{_latex_target(profile.profile_id)}}}{{}}")
-        emitted_targets.add(profile.profile_id)
+    output.append(_latex_anchor(profile.profile_id, emitted_targets))
     output.append(f"\\subsection*{{{escape_latex_text(name)}}}\n")
     if profile.portrait is not None:
         output.append(
@@ -275,8 +267,11 @@ def _render_profile(
     if profile.primary_occurrence_id in emitted_targets:
         output.append(
             "\\noindent See "
-            f"\\hyperlink{{{_latex_target(profile.primary_occurrence_id or '')}}}"
-            "{first appearance in the genealogy}.\\par\n"
+            + _latex_page_link(
+                profile.primary_occurrence_id or "",
+                "first appearance in the genealogy",
+            )
+            + ".\\par\n"
         )
 
     if profile.event_refs:
@@ -363,14 +358,14 @@ def _render_family_notice(
     family = model.families.get(notice.family_handle)
     title = _family_title(family, notice.family_handle)
     output = [
-        f"\\hypertarget{{{_latex_target(notice.notice_id)}}}{{}}"
-        f"\\subsection*{{{escape_latex_text(title)}}}\n"
+        _latex_anchor(notice.notice_id, emitted_targets),
+        f"\\subsection*{{{escape_latex_text(title)}}}\n",
     ]
     if notice.primary_section_id in emitted_targets:
         output.append(
             "\\noindent See "
-            f"\\hyperlink{{{_latex_target(notice.primary_section_id)}}}"
-            "{family section}.\\par\n"
+            + _latex_page_link(notice.primary_section_id, "family section")
+            + ".\\par\n"
         )
 
     if notice.event_refs:
@@ -588,12 +583,11 @@ def _render_citation_appendix(
                     if context_profile is not None
                     else context_notice.notice_id if context_notice is not None else ""
                 )
-                linked_label = escape_latex_text(label)
-                if context_target and context_target in emitted_targets:
-                    linked_label = (
-                        f"\\hyperlink{{{_latex_target(context_target)}}}"
-                        f"{{{linked_label}}}"
-                    )
+                linked_label = (
+                    _latex_page_link(context_target, label)
+                    if context_target and context_target in emitted_targets
+                    else escape_latex_text(label)
+                )
                 output.append(
                     f"\\item {_latex_anchor(call.call_id, emitted_targets)}"
                     f"{linked_label}\n"
@@ -638,10 +632,7 @@ def _citation_reference(
 ) -> str:
     number = citation_numbers.get(entry.entry_id)
     label = f"[{number}]" if number is not None else entry.entry_id
-    return (
-        f"\\hyperlink{{{_latex_target(entry.entry_id)}}}"
-        f"{{{escape_latex_text(label)}}}"
-    )
+    return _latex_page_link(entry.entry_id, label)
 
 
 def _citation_title(entry: EditorialCitationEntry, model: BookModel) -> str:
@@ -782,11 +773,21 @@ def _safe_latex_media_path(asset_path: str, cache_key: str | None) -> str | None
     return asset_path
 
 
+def _latex_page_link(target_id: str, label: str) -> str:
+    target = _latex_target(target_id)
+    escaped_label = escape_latex_text(label)
+    return (
+        f"\\hyperlink{{{target}}}{{{escaped_label}}}"
+        f" (\\hyperlink{{{target}}}{{p.~\\pageref*{{{target}}}}})"
+    )
+
+
 def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
     if not target_id or target_id in emitted_targets:
         return ""
     emitted_targets.add(target_id)
-    return f"\\hypertarget{{{_latex_target(target_id)}}}{{}}"
+    target = _latex_target(target_id)
+    return f"\\hypertarget{{{target}}}{{}}\\label{{{target}}}"
 
 
 def _section_heading(title: str) -> str:
