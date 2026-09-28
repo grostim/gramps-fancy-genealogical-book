@@ -9,37 +9,55 @@ work_dir="$(cd "$work_dir" && pwd)"
 LAYOUT_SPIKE_OUTPUT="$work_dir/layout-spike.tex" \
   python3 "$repo_root/prototypes/build_layout.py"
 
+if [[ ! -f "$work_dir/rendered-book.tex" ]]; then
+  echo "The production-rendered book fixture is missing: $work_dir/rendered-book.tex" >&2
+  exit 1
+fi
+
 cd "$work_dir"
-previous_fingerprint=""
-stable=0
-for pass in 1 2 3 4 5; do
-  lualatex \
-    -no-shell-escape \
-    -interaction=nonstopmode \
-    -halt-on-error \
-    -file-line-error \
-    layout-spike.tex >"lualatex-pass-${pass}.stdout.log" 2>&1
 
-  files=(layout-spike.aux)
-  [[ ! -f layout-spike.toc ]] || files+=(layout-spike.toc)
-  [[ ! -f layout-spike.out ]] || files+=(layout-spike.out)
-  fingerprint="$(sha256sum "${files[@]}" | sha256sum)"
-  if [[ -n "$previous_fingerprint" && "$fingerprint" == "$previous_fingerprint" ]]; then
-    stable=1
-    break
+compile_document() {
+  local document_name="$1"
+  local previous_fingerprint=""
+  local stable=0
+  local pass
+  local extension
+  local fingerprint
+  local files
+
+  for pass in 1 2 3 4 5; do
+    lualatex \
+      -no-shell-escape \
+      -interaction=nonstopmode \
+      -halt-on-error \
+      -file-line-error \
+      "$document_name.tex" >"lualatex-${document_name}-pass-${pass}.stdout.log" 2>&1
+
+    files=("$document_name.aux")
+    for extension in toc out; do
+      [[ ! -f "$document_name.$extension" ]] || files+=("$document_name.$extension")
+    done
+    fingerprint="$(sha256sum "${files[@]}" | sha256sum)"
+    if [[ -n "$previous_fingerprint" && "$fingerprint" == "$previous_fingerprint" ]]; then
+      stable=1
+      break
+    fi
+    previous_fingerprint="$fingerprint"
+  done
+
+  if [[ "$stable" != "1" ]]; then
+    echo "LuaLaTeX references in $document_name.tex did not stabilize within five passes." >&2
+    return 1
   fi
-  previous_fingerprint="$fingerprint"
-done
 
-if [[ "$stable" != "1" ]]; then
-  echo "LuaLaTeX references did not stabilize within five passes." >&2
-  exit 1
-fi
+  if grep -Eq 'Reference .*undefined|There were undefined references|Label\(s\) may have changed|Overfull \\[hv]box' "$document_name.log"; then
+    echo "LuaLaTeX reported unresolved references, unstable references, or overfull boxes in $document_name.tex." >&2
+    return 1
+  fi
 
-if grep -Eq 'Reference .*undefined|There were undefined references|Label\(s\) may have changed|Overfull \\[hv]box' layout-spike.log; then
-  echo "LuaLaTeX reported unresolved references, unstable references, or overfull boxes." >&2
-  exit 1
-fi
+  printf 'LuaLaTeX references stabilized for %s after %s passes.\n' "$document_name" "$pass"
+  printf 'PDF: %s/%s.pdf\n' "$work_dir" "$document_name"
+}
 
-printf 'LuaLaTeX references stabilized after %s passes.\n' "$pass"
-printf 'PDF: %s/layout-spike.pdf\n' "$work_dir"
+compile_document "layout-spike"
+compile_document "rendered-book"
