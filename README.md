@@ -2,7 +2,7 @@
 
 [Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md) · [Media validation](docs/validation-media.md)
 
-An experimental Gramps 6 add-on for a family genealogical book. The Gramps report now creates a self-contained HTML book ZIP by default, while retaining a JSON snapshot mode for diagnostics and a preliminary LaTeX book. HTML accessibility checks and final PDF layout validation remain in progress.
+An experimental Gramps 6 add-on for a family genealogical book. The Gramps report now creates a self-contained HTML book ZIP by default, while retaining a JSON snapshot mode for diagnostics and a preliminary LaTeX book. Keyboard and small-screen improvements have been implemented; manual accessibility review and final PDF layout validation remain outstanding.
 
 ## What works now
 
@@ -11,7 +11,7 @@ An experimental Gramps 6 add-on for a family genealogical book. The Gramps repor
 - Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
-- Published notes are rendered in LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
+- Published notes are rendered in HTML and LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
 - Unicode JSON, structured media-conversion diagnostics, a separate event-fact consistency report and coordinated replacement of model/report/media outputs.
 - Existing files preserved unless **Replace an existing file** is enabled.
 - Preliminary LaTeX output includes an automatic A4 cover with F0 editorial titles and text, couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. Final PDF visual validation remains outstanding.
@@ -37,7 +37,7 @@ Extract `gramps60/download/GrampsFancyBook.addon.tgz` into the Gramps 6 user plu
 
 In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. The default report output is a self-contained `.zip` HTML book that can be extracted and viewed locally. The JSON snapshot remains available for diagnostics and writes a `.json` model, a separate `<name>_consistency.json` control report and, when images can be converted, a neighboring `<name>_media/` folder. The control report compares only events with the same native Gramps event attribute `BOOK_FACT_ID`; it records disjoint date ranges as conflicts and differing place references for manual review. For a diagnostic snapshot, select JSON snapshot and a `.json` destination; **Replace an existing file** also replaces the report and neighboring media directory. The destination directory must already exist.
 
-The LaTeX note renderer requires Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
+The HTML and LaTeX note renderers require Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
 
 Image and PDF converters remain optional so JSON export works without them. For development, install the project and its dependencies with `python -m pip install -e '.[dev,media]'`. In a Gramps Desktop environment that supports pip, install `Pillow` and `pypdfium2` with the same Python interpreter that launches Gramps, then restart Gramps: `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. A missing dependency produces a diagnostic and the affected derivatives are omitted. CI currently qualifies Ubuntu 24.04, Python 3.12 and Gramps 6.0.8; see the [media validation record](docs/validation-media.md). Gramps Web execution remains unqualified: the packages would need to be installed in the server environment, and no test instance has been validated.
 
