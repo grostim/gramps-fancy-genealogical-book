@@ -1,6 +1,6 @@
 # Gramps Fancy Genealogical Book
 
-[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md) · [Validation des médias](docs/validation-media.fr.md)
+[English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Contribution](CONTRIBUTING.fr.md) · [Dépannage](docs/troubleshooting.fr.md) · [Prototypes L2](prototypes/README.md) · [Validation des médias](docs/validation-media.fr.md)
 
 Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le rapport Gramps génère désormais par défaut un livre HTML autonome en archive ZIP, tout en conservant un mode d’export JSON de diagnostic et un premier rendu LaTeX. Les améliorations de navigation clavier et de mise en page sur petit écran sont intégrées ; leur revue manuelle d’accessibilité et la validation visuelle du PDF restent à faire.
 

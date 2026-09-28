@@ -1,6 +1,6 @@
 # Gramps Fancy Genealogical Book
 
-[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md) · [Media validation](docs/validation-media.md)
+[Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [Contributing](CONTRIBUTING.md) · [Troubleshooting](docs/troubleshooting.md) · [L2 prototypes](prototypes/README.md) · [Media validation](docs/validation-media.md)
 
 An experimental Gramps 6 add-on for a family genealogical book. The Gramps report now creates a self-contained HTML book ZIP by default, while retaining a JSON snapshot mode for diagnostics and a preliminary LaTeX book. Keyboard and small-screen improvements have been implemented; manual accessibility review and final PDF layout validation remain outstanding.
 
