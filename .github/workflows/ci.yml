@@ -55,6 +55,7 @@ jobs:
         env:
           PYTHONPATH: src
           LATEX_RENDERED_BOOK_OUTPUT: ${{ github.workspace }}/.work/latex-spike/rendered-book.tex
+          LATEX_SPARSE_BOOK_OUTPUT: ${{ github.workspace }}/.work/latex-spike/rendered-sparse-book.tex
         run: python prototypes/build_rendered_book.py
       - name: Compile layout and rendered books with pinned LuaLaTeX
         run: |
@@ -75,5 +76,8 @@ jobs:
             .work/latex-spike/rendered-book.pdf
             .work/latex-spike/rendered-book.tex
             .work/latex-spike/rendered-book.log
+            .work/latex-spike/rendered-sparse-book.pdf
+            .work/latex-spike/rendered-sparse-book.tex
+            .work/latex-spike/rendered-sparse-book.log
           if-no-files-found: error
           retention-days: 14
