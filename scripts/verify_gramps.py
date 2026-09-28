@@ -119,7 +119,7 @@ def _add_same_fact_birth_version(
         second_date_index,
         ET.Element(
             _qualified_name(root, "dateval"),
-            {"val": "1910-01-01"},
+            {"val": "2000-01-01"},
         ),
     )
     second_place = next(iter(_children(second_birth, "place")), None)
@@ -396,7 +396,7 @@ def verify(executable: str) -> None:
             )
         ]
         assert len(birth_fact_events) == 2, birth_fact_events
-        assert {event["date"]["ymd"][0] for event in birth_fact_events} == {1900, 1910}
+        assert {event["date"]["ymd"][0] for event in birth_fact_events} == {1900, 2000}
         assert len({event["place_handle"] for event in birth_fact_events}) == 2
         assert consistency["scope"]["compared_groups"] == 1
         assert consistency["groups"][0]["book_fact_id"] == "AC19-birth-of-I0001"
