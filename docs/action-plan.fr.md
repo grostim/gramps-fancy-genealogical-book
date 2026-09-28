@@ -235,7 +235,7 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - **L8.4 — Documentation et langue :** les README et guides complets FR/EN couvrent l’installation, les dépendances, la contribution et le dépannage ; les pages d’architecture et la matrice sont actualisées. Le catalogue français est compilé à la construction. La recette d’affichage dans Gramps et l’obtention d’une CI reproductible restent à faire.
 
 - **L8.5 — Archive/version :** `build_addon.py` compile le catalogue français temporairement et l’inclut via le manifeste ; les versions du paquet, du module et de l’enregistrement Gramps sont toutes à `0.8.0`. Une construction depuis `main` a réussi et l’archive contient `locale/fr/LC_MESSAGES/addon.mo`. L’installation, la mise à jour et le retrait restent à éprouver dans Gramps.
-- **Revue statique AC-23 :** texte et attributs dynamiques échappés, liens externes limités à `http`, `https` et `mailto`, chemins médias ZIP contraints à `media/<sha256>.png`. Aucune faille d’injection n’a été repérée dans ces chemins ; la recette de sécurité dédiée reste à faire.
+- **Revue statique AC-23 :** texte et attributs dynamiques échappés, liens externes limités à `http`, `https` et `mailto`, chemins médias ZIP contraints à `media/<64 caractères hexadécimaux>.png`. Aucune interpolation de texte ou d’attribut non échappée ni émission de HTML brut n’a été repérée dans les chemins examinés ; la recette de sécurité dédiée reste à faire.
 - **PR #58–#64 fusionnées :** suivi/architecture réalignés, recette L7 actualisée, catalogue français ajouté, version de l’extension synchronisée à `0.8.0`, guides complets de contribution/dépannage FR/EN ajoutés et dernier état CI consigné.
 
 ### Prochaines actions
