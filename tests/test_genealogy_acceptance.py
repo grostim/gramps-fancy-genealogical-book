@@ -179,26 +179,33 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
         )
     )
 
-    ancestry_handles = {
+    lineage_parent_handles = {
         occurrence.person_handle
         for occurrence in _occurrences_in(model.genealogy, "ancestry")
-        if occurrence.generation == -1
+        if occurrence.generation == -1 and "lineage" in occurrence.roles
     }
-    assert ancestry_handles == {"adoptive-father", "foster-father"}
+    assert lineage_parent_handles == {"adoptive-father", "foster-father"}
 
-    for family_handle, relationship_type in (
-        ("f-adoptive", "Adopted"),
-        ("f-foster", "Foster"),
+    occurrences_by_id = {
+        occurrence.occurrence_id: occurrence
+        for occurrence in _occurrences_in(model.genealogy, "ancestry")
+    }
+    for family_handle, parent_handle, relationship_type in (
+        ("f-adoptive", "adoptive-father", "Adopted"),
+        ("f-foster", "foster-father", "Foster"),
     ):
         section = next(
             section
             for section in model.genealogy.family_sections
             if section.family_handle == family_handle and section.part == "ancestry"
         )
-        assert any(
-            link.relationship_type == relationship_type
+        assert {
+            occurrences_by_id[link.parent_occurrence_id].person_handle
             for link in section.parent_child_links
-        )
+        } == {parent_handle}
+        assert {
+            link.relationship_type for link in section.parent_child_links
+        } == {relationship_type}
 
 
 def test_implex_creates_one_profile_and_cycle_paths_stop_expanding():
