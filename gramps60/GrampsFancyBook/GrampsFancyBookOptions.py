@@ -42,13 +42,16 @@ class GrampsFancyBookOptions(MenuReportOptions):
             "max_descendant_depth",
             StringOption(_("Maximum descendant generations ('unlimited' or a number)"), "unlimited"),
         )
-        output_format = EnumeratedListOption(_("Output format"), "html_zip")
+        output_format = EnumeratedListOption(_("Output format"), "auto")
+        output_format.add_item(
+            "auto", _("Automatic (use destination extension)")
+        )
         output_format.add_item("html_zip", _("HTML book (ZIP archive)"))
         output_format.add_item(
             "json_snapshot", _("JSON snapshot (development diagnostics)")
         )
         output_format.set_help(
-            _("The JSON snapshot is a development aid; use HTML ZIP for a book.")
+            _("Automatic mode uses .zip for HTML books and .json for diagnostic snapshots.")
         )
         menu.add_option(_("Book"), "output_format", output_format)
 
@@ -56,8 +59,8 @@ class GrampsFancyBookOptions(MenuReportOptions):
         destination.set_extension("zip")
         destination.set_help(
             _(
-                "Use a .zip destination for HTML, or a .json destination "
-                "for the development snapshot."
+                "Automatic mode uses .zip for HTML, or .json for the development "
+                "snapshot."
             )
         )
         menu.add_option(_("Book"), "destination", destination)
@@ -77,7 +80,14 @@ class GrampsFancyBookOptions(MenuReportOptions):
         return parse_depth_limit(self.menu.get_option_by_name("max_descendant_depth").get_value())
 
     def get_output_format(self) -> str:
-        return self.menu.get_option_by_name("output_format").get_value()
+        output_format = self.menu.get_option_by_name("output_format").get_value()
+        if output_format != "auto":
+            return output_format
+
+        destination = self.menu.get_option_by_name("destination").get_value()
+        if Path(destination or "").suffix.casefold() == ".json":
+            return "json_snapshot"
+        return "html_zip"
 
     def get_destination(self) -> str:
         output_format = self.get_output_format()
