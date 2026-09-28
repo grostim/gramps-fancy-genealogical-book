@@ -17,5 +17,6 @@ register(
     # Use the native custom-output lifecycle, without a PDF/ODT document backend.
     category=CATEGORY_WEB,
     report_modes=[REPORT_MODE_GUI, REPORT_MODE_CLI],
+    requires_mod=["mistune"],
     require_active=False,
 )
