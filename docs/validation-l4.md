@@ -1,6 +1,6 @@
 # L4 progress — genealogy traversal
 
-Fifth increment prepared on 27 September 2026. L4 is still in progress; this note describes the implemented contract and does not claim that all acceptance scenarios have been qualified.
+Updated on 28 September 2026. L4 remains in progress; scenarios AC-03 to AC-09 are exercised against both the model and the textual LaTeX renderer contract. Visual PDF pagination remains to be validated in L6.
 
 ## Available traversal
 
@@ -19,9 +19,9 @@ Fifth increment prepared on 27 September 2026. L4 is still in progress; this not
 
 ## Remaining before L4 exit
 
-- Complex scenarios AC-03 to AC-09 (other unions, multiple parentage, pedigree collapse, collateral relatives, family events, and depth boundaries) still need qualification against a reference graph.
-- The HTML and LaTeX renderers do not consume the `genealogy` model yet and remain contract demonstrations.
-- The model does not yet create profiles, timelines, indexes, or editorial positions from L5.
+- `tests/test_genealogy_acceptance.py` qualifies AC-03 to AC-09 with synthetic graphs and also checks their LaTeX output: other-union context, parentage labels, one profile with cross-references, collateral relatives, family events, single-parent families, and depth boundaries.
+- The LaTeX renderer consumes the `genealogy` model, with contract assertions for these scenarios. The full HTML renderer remains planned for L7; pagination, multipass references, and the final PDF appearance still need visual review in L6.
+- The editorial model already provides profiles, family notices, an index, and navigation targets to the LaTeX renderer. These checks cover their textual structure, not the final paginated composition.
 - The six central-family editorial notes and their Gramps 6 conventions still need separate validation.
 
 See the [action plan](action-plan.fr.md#l4--parcours-généalogiques-et-sélection) and [requirements](requirements.fr.md) for the full tasks and exit criteria.

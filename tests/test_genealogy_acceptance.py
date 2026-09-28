@@ -11,6 +11,7 @@ from gramps_fancy_book.domain import (
     Snapshot,
 )
 from gramps_fancy_book.normalization import build_book_model
+from gramps_fancy_book.renderers.latex import render_latex
 
 
 def _person(
@@ -141,6 +142,12 @@ def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry()
     }
     assert model.genealogy.profile_handles.count("shared-child") == 1
 
+    rendered = render_latex(model)
+    assert rendered.count(r"\subsection*{shared-child}") == 1
+    assert "other-partner" in rendered
+    person_index = rendered.split(r"\section*{Person index}", 1)[1]
+    assert person_index.count("shared-child") == 1
+
 
 def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_links():
     p0 = _person("p0", parent_family_handles=("f-adoptive", "f-foster"))
@@ -207,6 +214,11 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
             link.relationship_type for link in section.parent_child_links
         } == {relationship_type}
 
+    rendered = render_latex(model)
+    assert "(Adopted)" in rendered
+    assert "(Foster)" in rendered
+    assert "(None)" not in rendered
+
 
 def test_implex_creates_one_profile_and_cycle_paths_stop_expanding():
     p0 = _person("p0", family_handles=("f0", "f-cycle"), parent_family_handles=("f-p0",))
@@ -261,6 +273,10 @@ def test_implex_creates_one_profile_and_cycle_paths_stop_expanding():
         diagnostic.code == "genealogy_cycle"
         for diagnostic in model.genealogy.diagnostics
     )
+
+    rendered = render_latex(model)
+    assert rendered.count(r"\subsection*{shared-ancestor}") == 1
+    assert "first appearance in the genealogy" in rendered
 
 
 def test_ancestral_sibling_is_documented_without_expanding_the_siblings_family():
@@ -326,6 +342,10 @@ def test_ancestral_sibling_is_documented_without_expanding_the_siblings_family()
     )
     assert uncle_occurrences[0].occurrence_id in parent_section.child_occurrence_ids
 
+    rendered = render_latex(model)
+    assert r"\subsection*{uncle}" in rendered
+    assert "cousin" not in rendered
+
 
 def _spouse_book(force_profile=False, family_event=False):
     p0 = _person("p0", family_handles=("f0", "f-other-union"))
@@ -388,6 +408,12 @@ def test_birth_and_death_only_spouse_is_mentioned_but_book_profile_can_force_a_p
         if occurrence.person_handle == "spouse"
     ) == 1
 
+    unforced_render = render_latex(unforced)
+    forced_render = render_latex(forced)
+    assert "spouse" in unforced_render
+    assert r"\subsection*{spouse}" not in unforced_render
+    assert r"\subsection*{spouse}" in forced_render
+
 
 def test_family_event_qualifies_partner_but_stays_in_family_notice():
     model = build_book_model(_spouse_book(family_event=True))
@@ -405,6 +431,15 @@ def test_family_event_qualifies_partner_but_stays_in_family_notice():
         if notice.family_handle == "f-other-union"
     )
     assert [reference.event_handle for reference in family_notice.event_refs] == ["marriage"]
+
+    rendered = render_latex(model)
+    assert rendered.count("Union célébrée") == 1
+    notice_section = rendered.split(r"\section*{Family notices}", 1)[1].split(
+        r"\section*{Person profiles}", 1
+    )[0]
+    assert "Union célébrée" in notice_section
+    profile_section = rendered.split(r"\section*{Person profiles}", 1)[1]
+    assert "Union célébrée" not in profile_section
 
 
 def test_single_parent_family_section_has_only_the_recorded_parent():
@@ -435,6 +470,14 @@ def test_single_parent_family_section_has_only_the_recorded_parent():
     assert not any(
         diagnostic.code.startswith("missing_traversal")
         for diagnostic in model.genealogy.diagnostics
+    )
+
+    rendered = render_latex(model)
+    connection_section = rendered.split(r"\section*{Family connections}", 1)[1]
+    assert r"\textbf{p0} (descent, generation 1)" in connection_section
+    assert any(
+        "p0}" in line and "$\\to$" in line and "child" in line and "(Birth)" in line
+        for line in connection_section.splitlines()
     )
 
 
