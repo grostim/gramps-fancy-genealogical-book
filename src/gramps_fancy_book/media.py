@@ -28,6 +28,7 @@ class RasterDerivative:
     width: int
     height: int
     mime_type: str = "image/png"
+    dpi: int | None = None
 
 
 @dataclass(frozen=True)
@@ -211,7 +212,7 @@ def prepare_pdf_media_derivative(
     finally:
         pdf.close()
 
-    raster = prepare_raster_derivative(raster_content, rectangle)
+    raster = prepare_raster_derivative(raster_content, rectangle, dpi=PDF_RASTER_DPI)
     return PdfMediaResult(
         action="reproduce",
         page_count=page_count,
@@ -224,12 +225,13 @@ def prepare_pdf_media_derivative(
             content=raster.content,
             width=raster.width,
             height=raster.height,
+            dpi=PDF_RASTER_DPI,
         ),
     )
 
 
 def prepare_raster_derivative(
-    source_content: bytes, rectangle: Region | None
+    source_content: bytes, rectangle: Region | None, *, dpi: int | None = None
 ) -> RasterDerivative:
     """Orient, crop and losslessly encode a raster image as PNG.
 
@@ -240,6 +242,8 @@ def prepare_raster_derivative(
         from PIL import Image, ImageOps
     except ImportError as error:
         raise RuntimeError("Pillow is required to prepare raster media.") from error
+    if dpi is not None and dpi <= 0:
+        raise ValueError("Output resolution must be a positive number of DPI.")
 
     with BytesIO(source_content) as source_stream:
         with Image.open(source_stream) as opened:
@@ -257,6 +261,8 @@ def prepare_raster_derivative(
                     try:
                         with BytesIO() as output:
                             save_options = {"format": "PNG"}
+                            if dpi is not None:
+                                save_options["dpi"] = (dpi, dpi)
                             icc_profile = oriented.info.get("icc_profile")
                             if isinstance(icc_profile, bytes):
                                 save_options["icc_profile"] = icc_profile
@@ -276,6 +282,7 @@ def prepare_raster_derivative(
         content=content,
         width=width,
         height=height,
+        dpi=dpi,
     )
 
 
