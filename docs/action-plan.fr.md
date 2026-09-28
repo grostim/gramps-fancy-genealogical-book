@@ -182,7 +182,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 1. L8.1 — Exécuter les 27 scénarios originaux, complétés par les cas techniques nécessaires ; lier chaque résultat à une version du plugin et de l’environnement.
 2. L8.2 — Qualifier les versions Gramps, Python et moteurs documentaires retenues sur la base des essais, puis aligner la CI et la documentation sur cette matrice.
 3. L8.3 — Mesurer temps de génération, mémoire et taille des sorties sur de petits, moyens et grands jeux fictifs. Fixer les seuils acceptables après une première mesure représentative.
-4. L8.4 — Compléter les guides FR/EN : installation, dépendances LaTeX, configuration, `BOOK_*`, formats de sortie, dépannage, architecture et contribution. Compléter les traductions de l’interface.
+4. L8.4 — Compléter les guides FR/EN : installation, dépendances, configuration, `BOOK_*`, formats de sortie, dépannage, architecture et contribution. Maintenir le catalogue français du rapport synchronisé aux chaînes et qualifier son chargement dans Gramps.
 5. L8.5 — Fiabiliser la fabrication des archives, versionner de façon cohérente package/enregistrement/listings et vérifier installation, mise à jour et retrait du module complémentaire.
 6. L8.6 — Préparer une version candidate avec exemples fictifs, notes de version et limitations connues ; réaliser la revue avant publication de la version stable.
 
