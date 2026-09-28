@@ -129,7 +129,7 @@ def _render_cover_portrait(
         "\\begin{tikzpicture}\n"
         "\\begin{scope}\n"
         "\\clip (0,0) circle (1.6cm);\n"
-        f"\\node at (0,0) {{{graphic}}};\n"
+        f"\\node[inner sep=0pt] at (0,0) {{{graphic}}};\n"
         "\\end{scope}\n"
         "\\draw[line width=0.6pt] (0,0) circle (1.6cm);\n"
         "\\end{tikzpicture}\n"
