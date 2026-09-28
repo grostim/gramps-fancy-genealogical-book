@@ -23,7 +23,7 @@ from gramps_fancy_book.renderers.latex import render_latex
 def test_renderer_escapes_model_text_and_keeps_urls_usable():
     person = Person(
         handle="person-1",
-        name=r"Émile \\input{owned}_&",
+        name=r"Émile \input{owned}_&",
         gramps_id="I0001",
     )
     family = Family(handle="family-1", father=person, gramps_id="F0001")
@@ -31,14 +31,14 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
         handle="event-1",
         gramps_id="E0001",
         type="Birth",
-        description=r"Event \\input{owned} 50% value_a &",
+        description=r"Event \input{owned} 50% value_a &",
         date=DateValue(display="about 1900"),
         place_handle="place-1",
     )
     place = Place(handle="place-1", name=r"Place_&_One")
     note = Note(
         handle="note-1",
-        text=r"Literal command: \\input{owned}; percent 50%; key value_a & #",
+        text=r"Literal command: \input{owned}; percent 50%; key value_a & #",
         type=24,
         is_publishable=True,
     )
@@ -52,7 +52,7 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     source = Source(
         handle="source-1",
         gramps_id="S0001",
-        title=r"Source \\input{owned} #1_50%",
+        title=r"Source \input{owned} #1_50%",
         author="Author_&",
         publication_info="Edition_50%",
     )
@@ -103,12 +103,12 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
 
     rendered = render_latex(model)
 
-    assert r"\\textbackslash{}input\{owned\}" in rendered
-    assert r"\\input{owned}" not in rendered
+    assert r"\textbackslash{}input\{owned\}" in rendered
+    assert r"\input{owned}" not in rendered
     assert r"50\% value\_a \&" in rendered
     assert r"Place\_\&\_One" in rendered
-    assert r"Source \\textbackslash{}input\{owned\} \#1\_50\%" in rendered
+    assert r"Source \textbackslash{}input\{owned\} \#1\_50\%" in rendered
     assert r"Repository\_\&" in rendered
     assert r"R\_1\&" in rendered
-    assert r"\\url{https://example.org/archive?folio=1&format=full}" in rendered
+    assert r"\url{https://example.org/archive?folio=1&format=full}" in rendered
     assert r"(record\_\&)" in rendered
