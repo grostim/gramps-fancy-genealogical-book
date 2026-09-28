@@ -398,6 +398,12 @@ class EditorialPortrait:
 
 
 @dataclass(frozen=True)
+class EditorialFrontMatterNote:
+    role: str
+    note_handle: str
+
+
+@dataclass(frozen=True)
 class EditorialFamilyNotice:
     notice_id: str
     family_handle: str
@@ -454,6 +460,7 @@ class EditorialBook:
     profiles: tuple[EditorialProfile, ...] = ()
     family_notices: tuple[EditorialFamilyNotice, ...] = ()
     cover_portraits: tuple[EditorialPortrait, ...] = ()
+    front_matter_notes: tuple[EditorialFrontMatterNote, ...] = ()
     citation_entries: tuple[EditorialCitationEntry, ...] = ()
     media_placements: tuple[EditorialMediaPlacement, ...] = ()
     navigation_targets: tuple[EditorialNavigationTarget, ...] = ()

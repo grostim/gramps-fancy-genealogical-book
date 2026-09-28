@@ -7,15 +7,19 @@ An experimental Gramps 6 add-on for a family genealogical book. The current mile
 ## What works now
 
 - Native Gramps family selector and explicit JSON destination.
-- JSON v0.7 model with genealogy occurrences, typed relationship links and an ordered editorial structure. Stable navigation targets and an alphabetical person index point to each profile or its primary occurrence. Eligible person profiles and one family notice per in-scope family link to published notes, portraits and their captions, events, media and family sections.
+- JSON v0.8 model with genealogy occurrences, typed relationship links and an ordered editorial structure. Stable navigation targets and an alphabetical person index point to each profile or its primary occurrence. Eligible person profiles and one family notice per in-scope family link to published notes, portraits and their captions, events, media and family sections.
 - Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
 - Published notes are rendered in LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
 - Unicode JSON, structured media-conversion diagnostics and coordinated replacement of the model and its PNG sidecar directory.
 - Existing files preserved unless **Replace an existing file** is enabled.
-- Preliminary LaTeX output includes an automatic A4 cover with couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. F0 editorial notes and final PDF visual validation remain outstanding.
+- Preliminary LaTeX output includes an automatic A4 cover with F0 editorial titles and text, couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. Final PDF visual validation remains outstanding.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
+
+## F0 editorial notes
+
+To customize the front matter, create one Gramps note per role and attach the native `BOOK_PUBLICATION` tag plus exactly one role tag: `BOOK_TITLE`, `BOOK_SUBTITLE`, `BOOK_INTRODUCTION`, `BOOK_DEDICATION`, `BOOK_AUTHOR` or `BOOK_PUBLICATION_DATE`. Link each note directly to the selected family. Duplicate roles use the note order in Gramps; a note with multiple role tags is omitted with a diagnostic. The Gramps 6 interface workflow and visual PDF compilation still need validation.
 
 Traversal follows recorded parent-child links. Unions, partners and siblings are included as context without automatically expanding their own lineages. The LaTeX renderer is experimental; final typography, a converged PDF and visual acceptance remain outstanding. See the [L3 validation record](docs/validation-l3.md), the [L4 progress note](docs/validation-l4.md), [note markup policy](docs/decisions/003-note-markup.md), and [requirement tracking](docs/requirements.fr.md).
 
