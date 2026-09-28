@@ -16,7 +16,7 @@
 | --- | --- | --- | --- | --- |
 | REF-01 | Plugin Gramps 6 installable et sélection d’une famille | S1 | L1 | Archive extraite dans un profil isolé ; export CLI Gramps 6.0.8 validé |
 | REF-02 | Modèle intermédiaire indépendant et testable | S1 | L1–L3 | Tests unitaires ; JSON avec identifiants et relations |
-| REF-03 | Documentation FR/EN, code et métadonnées anglais | S1 | Tous | README FR/EN ; catalogue français des libellés du rapport Gramps compilé et inclus dans l’archive ; guides complets à achever |
+| REF-03 | Documentation FR/EN, code et métadonnées anglais | S1 | Tous | README FR/EN ; catalogue français compilé et inclus à la construction ; affichage dans Gramps et guides complets à valider |
 | REF-04 | Architecture en six responsabilités | S1 | L2–L7 | Architecture en six responsabilités décrite dans les guides ; extraction, parcours, modèle éditorial et rendus HTML/LaTeX présents. Recettes Desktop/Web et visuelles restantes |
 | REF-05 | Ascendance par générations et descendance par branches | S2 | L4 | Parcours et occurrences implémentés ; PR #43–44 qualifient les principaux graphes et le contrat LaTeX. Recette complète et revue HTML/graphique restantes |
 | REF-06 | Repères généalogiques en haut de page et renvois | S2 | L4–L7 | Ancres, navigation par génération/branche et renvois HTML/PDF implémentés ; ZIP hors ligne et apparence restent à vérifier |
@@ -39,7 +39,7 @@ Le statut d’enregistrement est `EXPERIMENTAL` : le statut `UNSTABLE` utilisé 
 - Rétablir les exécutions GitHub Actions : les derniers workflows ont été bloqués avant les jobs par un message de paiement ou de plafond de dépenses.
 - Réaliser les revues visuelles PDF/HTML, l’essai du ZIP hors ligne, les vérifications clavier/lecteur d’écran et les mesures de performance.
 - Qualifier Gramps Web ainsi que l’installation de Pillow et pypdfium2 dans les paquets Desktop/Web.
-- Achever le guide d’installation, de configuration, de dépannage et de contribution en français/anglais, ainsi que les traductions d’interface.
+- Achever le guide d’installation, de configuration, de dépannage et de contribution en français/anglais ; vérifier le chargement du catalogue français dans Gramps et le maintenir synchronisé aux chaînes.
 - Confirmer la licence de distribution déclarée GPL dans les métadonnées avant une version distribuée. Le dépôt reste privé ; la visibilité des distributions publiques doit être décidée.
 - Conserver les références et maquettes originales hors du dépôt public et organiser leur transmission privée aux intervenants qui en ont besoin.
 
@@ -86,5 +86,5 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-23 | Échappement et absence d’injection | L2.6, L6.2, L7.3 | Échappement HTML, liens restreints et chemins ZIP relatifs implémentés ; recette de sécurité dédiée restante |
 | AC-24 | Stabilité du contenu et des ancres | L4.6, L5.6, L8.1 | Identifiants et ancres stables produits par le modèle et les rendus ; stabilité entre générations à vérifier |
 | AC-25 | Métadonnées indépendantes de la langue | L3.3, L8.4 | Noms techniques et métadonnées BOOK_* en anglais ; test de comportement avec différentes langues Gramps restant |
-| AC-26 | Documentation FR/EN et contrôle CI | L1.8, L8.4 | README et guides FR/EN présents, catalogue français du rapport inclus ; guide complet, nouvelles traductions et CI reproductible restent à achever |
+| AC-26 | Documentation FR/EN et contrôle CI | L1.8, L8.4 | README et guides FR/EN présents, catalogue du rapport compilé à la construction ; parcours Gramps, guide complet et CI reproductible à valider |
 | AC-27 | Transmission des maquettes | L0.1, L6.1 | Originaux locaux récupérés et PDFs consultés ; transmission privée requise pour un nouveau clone |
