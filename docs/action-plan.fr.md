@@ -222,7 +222,7 @@ Les statuts de suivi seront : à préparer, prêt, en cours, à revoir, validé 
 
 Les estimations calendaires seront établies après L0 et L1 : le détail des 27 scénarios et les contraintes constatées dans Gramps peuvent modifier sensiblement la charge. Le périmètre des futurs rendus ne doit pas être chiffré à partir des seuls exemples actuels.
 
-## 8. Suivi d’exécution — 27 septembre 2026
+## 8. Suivi d’exécution — 28 septembre 2026
 
 - Dépôt privé créé : [grostim/gramps-fancy-genealogical-book](https://github.com/grostim/gramps-fancy-genealogical-book). Branches `main` et `codex/initial-project` publiées. L’accès GitHub fonctionne via le trousseau macOS ; le précédent échec était lié au sandbox.
 - L0 en cours : [matrice des 27 scénarios](requirements.fr.md) établie et texte intégral récupéré ; originaux récupérés et maquettes consultées ; licence de distribution restant à confirmer.
@@ -248,16 +248,16 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - PR #34 fusionnée : couverture A4 préliminaire avec noms du couple et médaillons pour les portraits disponibles ; premier réglage sans empattements. La matrice Python 3.10–3.13, Ruff et la construction passent ; l’intégration échoue encore uniquement sur l’assertion `0.3` périmée. Aucun commentaire ni avis de revue n’était en attente.
 - PR #35 fusionnée : vérificateur aligné sur le schéma `0.7`, diagnostic de média manquant attendu pour le fixture et assertion de remplacement alignée sur le message du rapport. La CI complète passe (Python 3.10–3.13, Ruff, build et intégration Gramps).
 - PR #36 fusionnée : six rôles éditoriaux F0 liés par étiquettes Gramps, couverture et préliminaires LaTeX, diagnostics de rôles invalides ; schéma JSON `0.8`. Tous les contrôles CI passent (Python 3.10–3.13, Ruff, build et intégration Gramps), sans commentaire ni avis de revue. La recette interactive Gramps 6 et la recette visuelle PDF restent ouvertes.
-- L6.3 en cours : chaque grande section du livre commence sur une nouvelle page ; les fiches et notices individuelles restent en flux continu et peuvent partager les pages. La fixture riche issue de `BookModel` (80 événements et note longue) compile désormais en CI sans débordement ; les actes pleine page, images et recette visuelle restent à traiter.
+- L6.3 en cours : chaque grande section du livre commence sur une nouvelle page ; les fiches et notices individuelles restent en flux continu et peuvent partager les pages. La fixture riche issue de `BookModel` (80 événements, note longue et portrait synthétique en couverture et fiche) compile en CI sans débordement. Les actes ou images pleine page et la recette visuelle restent à traiter.
 - L6.4 en cours : les cibles LaTeX de la généalogie, des liens familiaux, des notices, des fiches, des citations et des appels reçoivent un label de page ; les renvois affichent le numéro résolu par `\pageref*` en plus du lien cliquable. La PR #47 fusionnée compile la sortie réelle de `render_latex(BookModel)` jusqu’à stabilisation des références ; aucun renvoi non résolu n’est signalé.
-- L6.5 en cours : le sommaire et l’annexe de citations sont maintenant compilés dans la fixture riche, avec source, dépôt, détail, URL et renvoi de page. L’index de personnes, les médias dérivés, les justificatifs sans dérivé et leur rendu PDF restent à qualifier.
+- L6.5 en cours : la fixture riche compile le sommaire, un index de deux personnes lié aux occurrences et une annexe de citations avec un média dérivé et un justificatif dont le dérivé a échoué. La recette visuelle des médias et la validation des annexes sur des données plus variées restent à faire.
 - L6.6 en cours : la CI compile une fixture riche du moteur de rendu et, dans le présent incrément, un cas peu documenté. Les PDF sont conservés comme artefacts ; la comparaison visuelle page par page aux règles de la v1.1 et aux maquettes locales reste à faire.
 - Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
 1. Terminer L6.6 en examinant les PDF riches et peu documentés page par page, puis consigner les écarts par rapport aux règles de la v1.1 et aux constats de la revue des maquettes.
-2. Compléter L6.3/L6.5 dans la sortie du moteur : actes ou images pleine page, index des personnes et cas de justificatifs avec/sans dérivé média.
+2. Poursuivre L6.3 avec les actes ou images pleine page, puis examiner visuellement dans le PDF le portrait, l’index des personnes et les justificatifs présents ou sans dérivé ajoutés à la fixture.
 3. Poursuivre L4 en qualifiant AC-03 à AC-09 : autres unions, filiations multiples, implexes, collatéraux, familles monoparentales et frontières de profondeur selon la v1.1.
 4. Compléter la fixture native Gramps pour éprouver `BOOK_PUBLICATION`, `BOOK_PROFILE` et les rectangles médias avec de vrais objets Gramps.
 5. Automatiser l’installation de Pillow/PDFium dans les environnements Gramps Desktop/Web effectivement pris en charge ; qualifier le remplacement des artefacts et l’accès aux médias sur ces environnements.
