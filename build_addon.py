@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import io
+import re
 import shutil
 import subprocess
 import tarfile
@@ -30,7 +31,8 @@ def _compile_translations(plugin: Path, build_directory: Path) -> dict[str, Path
     compiled: dict[str, Path] = {}
     for source in sources:
         language = source.name.removesuffix("-local.po")
-        if not language:
+        language_pattern = r"[A-Za-z]{2,3}(?:[_-][A-Za-z0-9]{2,8})*(?:@[A-Za-z0-9]+)?"
+        if not re.fullmatch(language_pattern, language):
             raise ValueError(f"Invalid translation catalog filename: {source.name}")
 
         relative_path = Path("locale") / language / "LC_MESSAGES" / "addon.mo"
