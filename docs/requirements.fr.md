@@ -1,6 +1,6 @@
 # Suivi des références et exigences
 
-État au 27 septembre 2026. Les identifiants ci-dessous sont propres à ce suivi et ne remplacent pas ceux des 27 scénarios retrouvés dans la spécification originale.
+État au 28 septembre 2026. Les identifiants ci-dessous sont propres à ce suivi et ne remplacent pas ceux des 27 scénarios retrouvés dans la spécification originale.
 
 ## Sources
 
@@ -18,7 +18,7 @@
 | REF-02 | Modèle intermédiaire indépendant et testable | S1 | L1–L3 | Tests unitaires ; JSON avec identifiants et relations |
 | REF-03 | Documentation FR/EN, code et métadonnées anglais | S1 | Tous | README FR/EN ; interface traduisible, catalogue FR restant |
 | REF-04 | Architecture en six responsabilités | S1 | L2–L7 | Frontières initiales ; moteur généalogique et livre complet à réaliser |
-| REF-05 | Ascendance par générations et descendance par branches | S2 | L4 | En cours : modèle v0.7 avec structure éditoriale, liens typés et cibles de renvoi ; qualification AC-01, AC-03 à AC-09 restante |
+| REF-05 | Ascendance par générations et descendance par branches | S2 | L4 | En cours : modèle v0.7 et qualifications AC-01, AC-03 à AC-09 par graphes et contrat LaTeX ; intégration HTML et recette visuelle restent à faire |
 | REF-06 | Repères généalogiques en haut de page et renvois | S2 | L4–L7 | En cours : cibles stables prépagination et index alphabétique présents dans le modèle ; consommation par les rendus et références de pages à réaliser |
 | REF-07 | Événements de vie, portraits et photos complémentaires | S2 | L3, L5–L7 | À réaliser |
 | REF-08 | Citations partagées entre faits, annexes compactes | S2 | L3, L5–L7 | À réaliser |
@@ -58,15 +58,15 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 
 | Scénario | Sujet | Tâches | État |
 | --- | --- | --- | --- |
-| AC-01 | Couple central et génération zéro | L1.3, L4.1, L5.1 | À réaliser / recette complète restante |
+| AC-01 | Couple central et génération zéro | L1.3, L4.1, L5.1 | Qualifié sur graphe et contrat LaTeX (PR #44) ; recette visuelle restante |
 | AC-02 | Refus du couple incomplet | L1.3–L1.7 | Validé en CLI Gramps 6.0.8 ; CI 36288791405 |
-| AC-03 | Descendants des autres unions | L4.3–L4.4 | À réaliser / recette complète restante |
-| AC-04 | Filiations explicites multiples | L3.1, L4.4 | À réaliser / recette complète restante |
-| AC-05 | Implexes, fiche unique et cycles | L4.4–L4.5 | À réaliser / recette complète restante |
-| AC-06 | Collatéral documenté sans expansion | L4.1, L4.5 | À réaliser / recette complète restante |
-| AC-07 | Éligibilité et BOOK_PROFILE=YES | L3.3, L4.5 | À réaliser / recette complète restante |
-| AC-08 | Événement familial et fiche | L3.2, L5.2 | À réaliser / recette complète restante |
-| AC-09 | Famille monoparentale dans le parcours | L3.1, L4.4, L5.2 | À réaliser / recette complète restante |
+| AC-03 | Descendants des autres unions | L4.3–L4.4 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
+| AC-04 | Filiations explicites multiples | L3.1, L4.4 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
+| AC-05 | Implexes, fiche unique et cycles | L4.4–L4.5 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
+| AC-06 | Collatéral documenté sans expansion | L4.1, L4.5 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
+| AC-07 | Éligibilité et BOOK_PROFILE=YES | L3.3, L4.5 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
+| AC-08 | Événement familial et fiche | L3.2, L5.2 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
+| AC-09 | Famille monoparentale dans le parcours | L3.1, L4.4, L5.2 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette de bout en bout restante |
 | AC-10 | Note Markdown partagée | L3.3, L5.2, L6.2, L7.3 | À réaliser / recette complète restante |
 | AC-11 | Exclusion des notes non étiquetées | L3.3, L5.2 | À réaliser / recette complète restante |
 | AC-12 | Portraits et photo pleine page | L5.5, L6.1, L7.4 | À réaliser / recette complète restante |
