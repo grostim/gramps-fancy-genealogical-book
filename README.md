@@ -25,6 +25,8 @@ Traversal follows recorded parent-child links. Unions, partners and siblings are
 
 ## Build and install
 
+The archive build compiles the French Gramps report catalog from `gramps60/GrampsFancyBook/po/fr-local.po` and bundles it as `addon.mo`. GNU gettext (`msgfmt`) must be available on `PATH`; install the `gettext` package if needed (for example, `brew install gettext` on macOS).
+
 ```sh
 python3 build_addon.py
 ```
