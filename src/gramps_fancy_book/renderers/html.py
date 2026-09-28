@@ -478,7 +478,7 @@ def _render_family_notice(
                 output.append("</li>\n")
             output.append("</ul>\n")
         output.append("</section>\n")
-    for reference in notice.media_refs:
+    for reference in getattr(notice, "media_refs", ()):
         media = model.media.get(reference.media_handle)
         output.append(
             _render_media_reference(
@@ -791,7 +791,11 @@ def _media_external_links(artifact, reference, model) -> list[str]:
         citation = getattr(model, "citations", {}).get(citation_handle)
         if citation is None:
             continue
-        for url in citation.urls:
+        urls = list(getattr(citation, "urls", ()))
+        source_handle = getattr(citation, "source_handle", None)
+        source = getattr(model, "sources", {}).get(source_handle) if source_handle else None
+        urls.extend(getattr(source, "urls", ()))
+        for url in urls:
             target = safe_html_url(url.path)
             if target is None or target in links:
                 continue
