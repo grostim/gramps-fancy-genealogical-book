@@ -16,4 +16,4 @@ Gramps’ native event attributes are serialized by the [official XML exporter](
 
 ## Validation status
 
-The convention is defined and the existing event model already preserves attributes. The separate contradiction report, malformed-ID diagnostic and validation of the attribute-entry workflow in Gramps 6 remain to be implemented.
+The separate report and ambiguous-ID diagnostic are implemented in [Decision 006](006-consistency-report.md). Native Gramps fixture coverage and validation of the attribute-entry workflow in Gramps 6 remain outstanding.

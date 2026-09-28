@@ -12,7 +12,7 @@ An experimental Gramps 6 add-on for a family genealogical book. The current mile
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
 - Published notes are rendered in LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
-- Unicode JSON, structured media-conversion diagnostics and coordinated replacement of the model and its PNG sidecar directory.
+- Unicode JSON, structured media-conversion diagnostics, a separate event-fact consistency report and coordinated replacement of model/report/media outputs.
 - Existing files preserved unless **Replace an existing file** is enabled.
 - Preliminary LaTeX output includes an automatic A4 cover with F0 editorial titles and text, couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. Final PDF visual validation remains outstanding.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
@@ -35,7 +35,7 @@ Extract `gramps60/download/GrampsFancyBook.addon.tgz` into the Gramps 6 user plu
 - Linux: `${XDG_DATA_HOME:-$HOME/.local/share}/gramps/gramps60/plugins/`
 - Isolated profile: `$GRAMPSHOME/gramps/gramps60/plugins/`
 
-In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. This milestone writes a `.json` model and, when images can be converted, a neighboring `<name>_media/` folder. The JSON points to the derived PNG files and reports media that could not be prepared. Select a reference family and a `.json` destination; **Replace an existing file** also replaces the neighboring media directory. The destination directory must already exist.
+In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. This milestone writes a `.json` model, a separate `<name>_consistency.json` control report and, when images can be converted, a neighboring `<name>_media/` folder. The control report compares only events with the same native Gramps event attribute `BOOK_FACT_ID`; it records disjoint date ranges as conflicts and differing place references for manual review. Select a reference family and a `.json` destination; **Replace an existing file** also replaces the report and neighboring media directory. The destination directory must already exist.
 
 The LaTeX note renderer requires Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
 
