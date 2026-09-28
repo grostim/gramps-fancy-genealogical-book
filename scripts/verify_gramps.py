@@ -42,11 +42,12 @@ def _insert_event_attribute(root: ET.Element, event: ET.Element, name: str, valu
     for attribute in _children(event, "attribute"):
         if attribute.get("type") == name:
             event.remove(attribute)
+    trailing_reference_tags = {"noteref", "citationref", "mediaref", "tagref"}
     index = next(
         (
             position
             for position, child in enumerate(event)
-            if child.tag.rsplit("}", 1)[-1] == "eventref"
+            if child.tag.rsplit("}", 1)[-1] in trailing_reference_tags
         ),
         len(event),
     )
@@ -72,17 +73,16 @@ def _add_same_fact_birth_version(
     if birth is None or marriage is None:
         raise AssertionError("Native fixture needs a Birth and Marriage event.")
 
-    date_container = next(iter(_children(birth, "date")), None)
     date_value = next(
         (
             item
-            for item in date_container.iter()
-            if item.tag.rsplit("}", 1)[-1] == "dateval"
+            for item in birth
+            if item.tag.rsplit("}", 1)[-1] in {"dateval", "daterange", "datespan", "datestr"}
         ),
         None,
-    ) if date_container is not None else None
+    )
     if date_value is None:
-        raise AssertionError("Native fixture Birth event needs a simple date value.")
+        raise AssertionError("Native fixture Birth event needs a Gramps date element.")
     source_place = next(iter(_children(marriage, "place")), None)
     place_handle = source_place.get("hlink") if source_place is not None else None
     if not place_handle:
@@ -110,10 +110,18 @@ def _add_same_fact_birth_version(
     second_birth.set("id", f"E{event_number:04d}")
     second_date = next(
         item
-        for item in second_birth.iter()
-        if item.tag.rsplit("}", 1)[-1] == "dateval"
+        for item in second_birth
+        if item.tag.rsplit("}", 1)[-1] in {"dateval", "daterange", "datespan", "datestr"}
     )
-    second_date.set("val", "1910-01-01")
+    second_date_index = list(second_birth).index(second_date)
+    second_birth.remove(second_date)
+    second_birth.insert(
+        second_date_index,
+        ET.Element(
+            _qualified_name(root, "dateval"),
+            {"val": "1910-01-01"},
+        ),
+    )
     second_place = next(iter(_children(second_birth, "place")), None)
     if second_place is None:
         second_place = ET.Element(_qualified_name(root, "place"))
@@ -122,7 +130,7 @@ def _add_same_fact_birth_version(
                 (
                     position
                     for position, child in enumerate(second_birth)
-                    if child.tag.rsplit("}", 1)[-1] in {"description", "attribute", "eventref"}
+                    if child.tag.rsplit("}", 1)[-1] in {"description", "attribute", "noteref", "citationref", "mediaref", "tagref"}
                 ),
                 len(second_birth),
             ),
