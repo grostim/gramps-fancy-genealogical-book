@@ -14,6 +14,26 @@ from .html import render_html
 _CACHE_KEY = re.compile(r"^[0-9a-f]{64}$")
 
 
+def validate_html_archive_destination(
+    destination: str | Path, *, overwrite: bool = False
+) -> Path:
+    """Validate an HTML ZIP path before preparing media or writing the archive."""
+    if not str(destination).strip():
+        raise ValueError("Select an HTML ZIP output file.")
+    output = Path(destination).expanduser()
+    if output.suffix.casefold() != ".zip":
+        raise ValueError("The HTML archive destination must end in .zip.")
+    if not output.parent.is_dir():
+        raise FileNotFoundError(f"Output directory does not exist: {output.parent}")
+    if output.is_dir():
+        raise ValueError("The HTML archive destination cannot be a directory.")
+    if output.is_symlink():
+        raise ValueError("The HTML archive destination cannot be a symbolic link.")
+    if (output.exists() or output.is_symlink()) and not overwrite:
+        raise FileExistsError(output)
+    return output
+
+
 def write_html_archive(
     model: BookModel,
     destination: str | Path,
@@ -27,20 +47,7 @@ def write_html_archive(
     ``prepare_editorial_media`` or the installed model media directory. Original
     Gramps media paths are never read or copied by this function.
     """
-    if not str(destination).strip():
-        raise ValueError("Select an HTML ZIP output file.")
-    output = Path(destination)
-    if output.suffix.casefold() != ".zip":
-        raise ValueError("The HTML archive destination must end in .zip.")
-    if not output.parent.is_dir():
-        raise FileNotFoundError(f"Output directory does not exist: {output.parent}")
-    if output.is_dir():
-        raise ValueError("The HTML archive destination cannot be a directory.")
-    if output.is_symlink():
-        raise ValueError("The HTML archive destination cannot be a symbolic link.")
-    if (output.exists() or output.is_symlink()) and not overwrite:
-        raise FileExistsError(output)
-
+    output = validate_html_archive_destination(destination, overwrite=overwrite)
     assets = _media_assets(model, media_asset_directory)
     html = render_html(model, include_media=True)
     temporary = None

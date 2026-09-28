@@ -1,7 +1,15 @@
 """Minimal Gramps report options for the first milestone."""
 
 from gramps.gen.const import GRAMPS_LOCALE as glocale
-from gramps.gen.plug.menu import BooleanOption, DestinationOption, FamilyOption, StringOption
+from pathlib import Path
+
+from gramps.gen.plug.menu import (
+    BooleanOption,
+    DestinationOption,
+    EnumeratedListOption,
+    FamilyOption,
+    StringOption,
+)
 from gramps.gen.plug.report import MenuReportOptions
 
 from gramps_fancy_book.traversal import parse_depth_limit
@@ -34,8 +42,24 @@ class GrampsFancyBookOptions(MenuReportOptions):
             "max_descendant_depth",
             StringOption(_("Maximum descendant generations ('unlimited' or a number)"), "unlimited"),
         )
-        destination = DestinationOption(_("JSON output file"), "")
-        destination.set_extension("json")
+        output_format = EnumeratedListOption(_("Output format"), "html_zip")
+        output_format.add_item("html_zip", _("HTML book (ZIP archive)"))
+        output_format.add_item(
+            "json_snapshot", _("JSON snapshot (development diagnostics)")
+        )
+        output_format.set_help(
+            _("The JSON snapshot is a development aid; use HTML ZIP for a book.")
+        )
+        menu.add_option(_("Book"), "output_format", output_format)
+
+        destination = DestinationOption(_("Output file"), "")
+        destination.set_extension("zip")
+        destination.set_help(
+            _(
+                "Use a .zip destination for HTML, or a .json destination "
+                "for the development snapshot."
+            )
+        )
         menu.add_option(_("Book"), "destination", destination)
         menu.add_option(_("Book"), "overwrite", BooleanOption(_("Replace an existing file"), False))
 
@@ -52,8 +76,25 @@ class GrampsFancyBookOptions(MenuReportOptions):
     def get_max_descendant_depth(self) -> int | None:
         return parse_depth_limit(self.menu.get_option_by_name("max_descendant_depth").get_value())
 
+    def get_output_format(self) -> str:
+        return self.menu.get_option_by_name("output_format").get_value()
+
     def get_destination(self) -> str:
-        return self.menu.get_option_by_name("destination").get_value()
+        output_format = self.get_output_format()
+        extension = {
+            "html_zip": ".zip",
+            "json_snapshot": ".json",
+        }.get(output_format)
+        if extension is None:
+            raise ValueError(_("Select a supported output format."))
+
+        value = self.menu.get_option_by_name("destination").get_value()
+        if not str(value or "").strip():
+            return ""
+        output = Path(value).expanduser()
+        if not output.suffix:
+            output = output.with_suffix(extension)
+        return str(output)
 
     def get_overwrite(self) -> bool:
         return self.menu.get_option_by_name("overwrite").get_value()

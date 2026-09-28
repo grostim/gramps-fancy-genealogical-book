@@ -346,7 +346,10 @@ def verify(executable: str) -> None:
         native_fixture = _native_fixture(executable, env, work)
 
         def report(family: str, output: Path | None, *, overwrite=False) -> str:
-            options = f"name={PLUGIN_ID},reference_family={family}"
+            options = (
+                f"name={PLUGIN_ID},reference_family={family},"
+                "output_format=json_snapshot"
+            )
             if output is not None:
                 options += f",destination={output}"
             if overwrite:
