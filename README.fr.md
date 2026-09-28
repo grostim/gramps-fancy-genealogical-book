@@ -2,11 +2,11 @@
 
 [English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Prototypes L2](prototypes/README.md) · [Validation des médias](docs/validation-media.fr.md)
 
-Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le jalon actuel exporte un modèle JSON commun et un premier rendu LaTeX comprenant les parties généalogiques, les fiches, les notices familiales, les citations, les renvois de pages et l’index. La mise en page définitive et la compilation multipasse du PDF restent à vérifier visuellement ; le rendu HTML est prévu dans un jalon ultérieur.
+Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le rapport Gramps génère désormais par défaut un livre HTML autonome en archive ZIP, tout en conservant un mode d’export JSON de diagnostic et un premier rendu LaTeX. Les contrôles d’accessibilité HTML et la validation visuelle de la mise en page PDF restent à réaliser.
 
 ## Fonctionnement actuel
 
-- Sélecteur de famille Gramps et destination JSON explicite.
+- Sélecteur de famille Gramps, archive HTML ZIP par défaut et export JSON de diagnostic.
 - Modèle JSON v0.8 avec occurrences généalogiques, liens typés et cibles de renvoi, accompagné d’une structure éditoriale ordonnée. Un index alphabétique renvoie à chaque fiche ou à sa première occurrence. Les fiches de personnes éligibles et une notice par famille du périmètre référencent les notes publiables, portraits et légendes, événements, médias et sections familiales.
 - Extraction des ascendants et descendants en profondeur illimitée par défaut, ou limitée séparément avec un entier ≥ 0.
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
@@ -35,7 +35,7 @@ Extraire `gramps60/download/GrampsFancyBook.addon.tgz` dans le dossier des exten
 - Linux : `${XDG_DATA_HOME:-$HOME/.local/share}/gramps/gramps60/plugins/`
 - Profil isolé : `$GRAMPSHOME/gramps/gramps60/plugins/`
 
-Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. Ce jalon produit un modèle `.json`, un rapport de contrôle séparé `<nom>_consistency.json` et, s’il y a des images convertibles, un dossier voisin `<nom>_media/`. Le rapport de contrôle compare uniquement les événements portant le même attribut natif Gramps `BOOK_FACT_ID` ; il signale les plages de dates disjointes comme contradictions et les références de lieux différentes comme divergences à examiner. Choisir une famille et une destination `.json` ; **Replace an existing file** remplace aussi le rapport et les médias dérivés. Le répertoire de destination doit déjà exister.
+Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. La sortie par défaut du rapport est un livre HTML autonome en `.zip`, à extraire pour le consulter localement. Le mode JSON reste disponible pour le diagnostic et produit un modèle `.json`, un rapport de contrôle séparé `<nom>_consistency.json` et, s’il y a des images convertibles, un dossier voisin `<nom>_media/`. Le rapport de contrôle compare uniquement les événements portant le même attribut natif Gramps `BOOK_FACT_ID` ; il signale les plages de dates disjointes comme contradictions et les références de lieux différentes comme divergences à examiner. Pour un instantané de diagnostic, choisir le format JSON et une destination `.json` ; **Replace an existing file** remplace aussi le rapport et les médias dérivés. Le répertoire de destination doit déjà exister.
 
 Le rendu LaTeX des notes requiert Mistune 3.x. Installez-la dans l’environnement Python utilisé par Gramps Desktop ou le service Gramps Web : `python -m pip install 'mistune>=3,<4'`. L’extension déclare `mistune` comme module requis ; l’installation du paquet Python depuis ce dépôt installe également la dépendance déclarée dans `pyproject.toml`.
 
@@ -47,7 +47,7 @@ L’interface utilise des chaînes traduisibles ; les traductions françaises pr
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,destination=/chemin/absolu/famille.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,output_format=json_snapshot,destination=/chemin/absolu/famille.json"
 ```
 
 Ajouter `overwrite=True` aux options pour autoriser le remplacement. Le GEDCOM fourni ne contient que des personnes fictives. Le script ci-dessous automatise le test dans un profil Gramps temporaire et installe uniquement l’archive construite. Sur macOS, l’exécutable est `/Applications/Gramps.app/Contents/MacOS/Gramps`.
