@@ -12,7 +12,7 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
 - Les notes publiables sont rendues en LaTeX depuis l’AST Mistune ; le HTML brut reste du texte littéral, et les styles sémantiques Gramps priment sur la syntaxe Markdown d’une même note. Voir la [règle de normalisation documentée](docs/decisions/003-note-markup.md).
-- JSON Unicode, diagnostics structurés de conversion média et remplacement coordonné du modèle avec son dossier de PNG.
+- JSON Unicode, diagnostics structurés de conversion média, rapport séparé de cohérence des faits et remplacement coordonné du modèle, du rapport et des médias.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
 - Premier rendu LaTeX avec couverture A4 automatique, titres et textes éditoriaux F0, noms du couple et médaillons circulaires pour ses portraits disponibles, puis grandes parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. La validation visuelle du PDF reste à faire.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
@@ -35,7 +35,7 @@ Extraire `gramps60/download/GrampsFancyBook.addon.tgz` dans le dossier des exten
 - Linux : `${XDG_DATA_HOME:-$HOME/.local/share}/gramps/gramps60/plugins/`
 - Profil isolé : `$GRAMPSHOME/gramps/gramps60/plugins/`
 
-Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. Ce jalon produit un modèle `.json` et, s’il y a des images convertibles, un dossier voisin nommé `<nom>_media/`. Le JSON référence les PNG dérivés et signale les médias qui n’ont pas pu être préparés. Choisir une famille et une destination `.json` ; **Replace an existing file** remplace aussi les dérivés voisins. Le répertoire de destination doit déjà exister.
+Le rapport est enregistré dans **Rapports → Pages Web** (le libellé dépend de la traduction de Gramps). Cette catégorie permet au plugin d’écrire ses propres fichiers sans utiliser le moteur PDF/ODT intégré. Ce jalon produit un modèle `.json`, un rapport de contrôle séparé `<nom>_consistency.json` et, s’il y a des images convertibles, un dossier voisin `<nom>_media/`. Le rapport de contrôle compare uniquement les événements portant le même attribut natif Gramps `BOOK_FACT_ID` ; il signale les plages de dates disjointes comme contradictions et les références de lieux différentes comme divergences à examiner. Choisir une famille et une destination `.json` ; **Replace an existing file** remplace aussi le rapport et les médias dérivés. Le répertoire de destination doit déjà exister.
 
 Le rendu LaTeX des notes requiert Mistune 3.x. Installez-la dans l’environnement Python utilisé par Gramps Desktop ou le service Gramps Web : `python -m pip install 'mistune>=3,<4'`. L’extension déclare `mistune` comme module requis ; l’installation du paquet Python depuis ce dépôt installe également la dépendance déclarée dans `pyproject.toml`.
 

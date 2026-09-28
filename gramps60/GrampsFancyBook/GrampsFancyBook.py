@@ -21,6 +21,7 @@ if _ADDON_DIR not in sys.path:
 
 from GrampsFancyBookOptions import GrampsFancyBookOptions  # noqa: E402,F401
 
+from gramps_fancy_book.consistency import build_consistency_report  # noqa: E402
 from gramps_fancy_book.export import (  # noqa: E402
     media_asset_directory_name,
     media_asset_staging_directory,
@@ -55,8 +56,11 @@ class GrampsFancyBookReport(Report):
             )
             destination = self.options_class.get_destination()
             overwrite = self.options_class.get_overwrite()
+            consistency_report = build_consistency_report(model)
             with media_asset_staging_directory(
-                destination, overwrite=overwrite
+                destination,
+                overwrite=overwrite,
+                include_consistency_report=True,
             ) as asset_staging:
                 prepare_editorial_media(
                     self.database,
@@ -69,13 +73,14 @@ class GrampsFancyBookReport(Report):
                     destination,
                     overwrite=overwrite,
                     media_asset_staging=asset_staging,
+                    consistency_report=consistency_report,
                 )
         except FileExistsError as exc:
             raise ReportError(
                 _("Output file or media folder already exists"),
                 _(
                     "Choose another JSON destination or enable 'Replace an existing file' "
-                    "to replace the output and its media folder."
+                    "to replace the model, consistency report and media folder."
                 ),
             ) from exc
         except (LookupError, ValueError, OSError) as exc:
