@@ -257,12 +257,13 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - PR #49 et #50 fusionnées : portrait, index, justificatifs et reproduction unique de BOOK_FEATURED sont intégrés à la fixture LaTeX. CI complète réussie sur la tête finale 09c7b59 ; la revue visuelle page par page reste ouverte.
 - PR #51 fusionnée : première sortie HTML unique issue du modèle éditorial, avec couverture, sommaire, parcours, notices, citations, index, liens internes et échappement. La CI complète passe ; la recette visuelle du PDF L6 reste ouverte.
 - PR #52 fusionnée : ancres de génération, sommaire des générations et renvois de branches vers les occurrences centrales.
-- L7.3 en cours : rendu structuré des notes HTML, prise en compte des styles natifs Gramps, échappement du HTML fourni par l’utilisateur et limitation des liens actifs à HTTP, HTTPS et mailto.
+- PR #53 fusionnée : notes HTML formatées selon le Markdown ou les styles natifs Gramps ; HTML brut littéral et liens limités à HTTP, HTTPS et mailto.
+- L7.4 en cours : archive ZIP avec `index.html`, styles embarqués et dérivés PNG uniques sous chemins relatifs.
 - Contrôle graphique macOS effectué : sélection F0001, export JSON, options conservées et refus de remplacement validés. AC-22 complet reste à réaliser sur les environnements cibles.
 
 ### Prochaines actions
 
 1. Terminer L6.6 en examinant visuellement les PDF riches et peu documentés depuis l’artefact CI de la [PR #50](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/36443972281), puis consigner les écarts par rapport aux règles de la v1.1 et aux maquettes.
 2. Terminer L7.3 avec la recette des notes publiables et les cas de sécurité AC-10/AC-23.
-3. Réaliser L7.4–L7.5 : archive autonome avec médias/styles, puis vérification clavier, textes alternatifs et tailles d’écran.
+3. Terminer L7.4–L7.5 : éprouver l’archive autonome avec médias, puis vérifier le clavier, les textes alternatifs et les tailles d’écran.
 4. Qualifier l’installation et le parcours complet sur les versions Desktop et Web de Gramps effectivement prises en charge (AC-22).

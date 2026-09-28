@@ -239,6 +239,11 @@ def _href_target(value: Any) -> str | None:
     return None
 
 
+def safe_html_url(value: Any) -> str | None:
+    """Return a URL usable in an HTML link when its scheme is explicitly allowed."""
+    return _href_target(value)
+
+
 def _render_blocks(tokens: Any, *, formatted: bool, list_depth: int = 0) -> str:
     if not isinstance(tokens, list):
         return ""
