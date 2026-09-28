@@ -1,13 +1,17 @@
 """LaTeX renderer for the genealogy overview and person index."""
 
+from pathlib import PurePosixPath
 from urllib.parse import quote, urlsplit
 
 from ..domain import (
     BookModel,
     EditorialCitationCall,
     EditorialCitationEntry,
+    EditorialMediaArtifact,
+    EditorialPortrait,
     EditorialProfile,
     GenealogyPart,
+    MediaReference,
     Note,
     Person,
     RepositoryReference,
@@ -18,7 +22,8 @@ from ..domain import (
 def render_latex(model: BookModel) -> str:
     family = model.reference_family
     document = [
-        "\\documentclass{article}\n\\usepackage[hidelinks]{hyperref}\n"
+        "\\documentclass{article}\n"
+        "\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\begin{document}\n",
         f"\\section*{{{escape_latex_text(family.handle)}}}\n",
         f"{len(model.people)} people in the intermediate model.\n",
@@ -129,6 +134,15 @@ def _render_profile(
         output.append(f"\\hypertarget{{{_latex_target(profile.profile_id)}}}{{}}")
         emitted_targets.add(profile.profile_id)
     output.append(f"\\subsection*{{{escape_latex_text(name)}}}\n")
+    if profile.portrait is not None:
+        output.append(
+            _render_media_image(
+                profile.portrait,
+                profile.portrait.caption,
+                model.media_artifacts,
+                width="0.75\\linewidth",
+            )
+        )
     if profile.primary_occurrence_id in emitted_targets:
         output.append(
             "\\noindent See "
@@ -291,6 +305,17 @@ def _render_citation_appendix(
                 + "; ".join(escape_latex_text(label) for label in media_labels)
                 + "\n"
             )
+        for reference in entry.media_refs:
+            media = model.media.get(reference.media_handle)
+            caption = media.description if media is not None else ""
+            output.append(
+                _render_media_image(
+                    reference,
+                    caption,
+                    model.media_artifacts,
+                    width="0.6\\linewidth",
+                )
+            )
 
         call_labels = [
             (call, _citation_call_label(call, profiles, people_by_handle, model))
@@ -388,6 +413,58 @@ def _unique_urls(urls: list[Url]) -> tuple[Url, ...]:
             unique.append(url)
             seen.add(url.path)
     return tuple(unique)
+
+
+def _render_media_image(
+    reference: EditorialPortrait | MediaReference,
+    caption: str,
+    artifacts: list[EditorialMediaArtifact],
+    *,
+    width: str,
+) -> str:
+    media_ref = reference.media_ref if isinstance(reference, EditorialPortrait) else reference
+    artifact = next(
+        (
+            item
+            for item in artifacts
+            if item.media_handle == media_ref.media_handle
+            and item.rectangle == media_ref.rectangle
+            and item.action == "reproduce"
+        ),
+        None,
+    )
+    if artifact is None or artifact.asset_path is None:
+        return ""
+    path = _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
+    if path is None:
+        return ""
+    output = [
+        "\\begin{center}\n"
+        f"\\includegraphics[width={width}]{{\\detokenize{{{path}}}}}\n"
+    ]
+    if caption:
+        output.append(f"{{\\small {escape_latex_text(caption)}}}\n")
+    output.append("\\end{center}\n")
+    return "".join(output)
+
+
+def _safe_latex_media_path(asset_path: str, cache_key: str | None) -> str | None:
+    if (
+        cache_key is None
+        or len(cache_key) != 64
+        or any(char not in "0123456789abcdef" for char in cache_key)
+    ):
+        return None
+    parts = PurePosixPath(asset_path)
+    if (
+        parts.is_absolute()
+        or len(parts.parts) != 2
+        or parts.parts[0] in {".", ".."}
+        or parts.parts[1] != f"{cache_key}.png"
+        or any(char in asset_path for char in "\\{}%#\n\r\0")
+    ):
+        return None
+    return asset_path
 
 
 def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
