@@ -14,9 +14,9 @@ import tarfile
 import tempfile
 import uuid
 from pathlib import Path
+from xml.etree import ElementTree as ET
 
 from PIL import Image
-from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
@@ -82,12 +82,14 @@ def _create_media_fixture(work: Path) -> None:
 
 def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     """Round-trip GEDCOM through Gramps, then add native Gramps XML fields."""
+    gedcom = work / "reference-family.ged"
+    gedcom.write_bytes((ROOT / "tests/fixtures/reference-family.ged").read_bytes())
     fixture = work / "reference-family-native.gramps"
     result = subprocess.run(
         [
             executable,
             "-i",
-            str(ROOT / "tests/fixtures/reference-family.ged"),
+            str(gedcom),
             "-e",
             str(fixture),
         ],
@@ -302,7 +304,7 @@ def verify(executable: str) -> None:
         artifact = next(
             item for item in model["media_artifacts"] if item["media_handle"] == media["handle"]
         )
-        assert artifact["action"] == "reproduce"
+        assert artifact["action"] == "reproduce", (artifact, model["diagnostics"])
         assert artifact["asset_path"].startswith("family_media/")
         with Image.open(work / artifact["asset_path"]) as derivative:
             assert derivative.format == "PNG"
