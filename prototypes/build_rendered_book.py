@@ -129,6 +129,8 @@ SYNTHETIC_MEDIA_PATHS = {
     name: "media/" + key + ".png"
     for name, key in SYNTHETIC_MEDIA_KEYS.items()
 }
+
+
 def build_model() -> BookModel:
     father = Person(handle="person-father", name="Émile Exemple", gramps_id="I0001")
     mother = Person(handle="person-mother", name="Jeanne Fictive", gramps_id="I0002")

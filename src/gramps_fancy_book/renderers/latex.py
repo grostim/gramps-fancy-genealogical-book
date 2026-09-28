@@ -622,26 +622,6 @@ def _render_family_notice(
             )
         output.append("\\end{itemize}\n")
 
-    notes = []
-    for index, handle in enumerate(notice.note_handles):
-        note = model.notes.get(handle)
-        if note is not None and note.is_publishable:
-            notes.append((index, note))
-    if notes:
-        output.append("\\paragraph{Notes}\n")
-        for index, note in notes:
-            target_id = (
-                notice.note_target_ids[index]
-                if index < len(notice.note_target_ids)
-                else ""
-            )
-            note_text = render_latex_note(note)
-            output.append(
-                f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
-                f"{note_text}\n"
-                "\\end{quote}\n"
-            )
-
     for reference in notice.media_refs:
         media = model.media.get(reference.media_handle)
         placement = _media_placement_for_reference(model, reference)
@@ -667,7 +647,9 @@ def _render_family_notice(
                     )
                 )
             else:
-                output.append(_render_featured_media_link(placement, caption, emitted_targets))
+                output.append(
+                    _render_featured_media_link(placement, caption, emitted_targets)
+                )
         else:
             output.append(
                 _render_media_image(
@@ -676,6 +658,26 @@ def _render_family_notice(
                     model.media_artifacts,
                     width="0.7\\linewidth",
                 )
+            )
+
+    notes = []
+    for index, handle in enumerate(notice.note_handles):
+        note = model.notes.get(handle)
+        if note is not None and note.is_publishable:
+            notes.append((index, note))
+    if notes:
+        output.append("\\paragraph{Notes}\n")
+        for index, note in notes:
+            target_id = (
+                notice.note_target_ids[index]
+                if index < len(notice.note_target_ids)
+                else ""
+            )
+            note_text = render_latex_note(note)
+            output.append(
+                f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
+                f"{note_text}\n"
+                "\\end{quote}\n"
             )
 
     citations = {
@@ -814,7 +816,9 @@ def _render_citation_appendix(
                         )
                     )
                 else:
-                    output.append(_render_featured_media_link(placement, caption, emitted_targets))
+                    output.append(
+                    _render_featured_media_link(placement, caption, emitted_targets)
+                )
             else:
                 output.append(
                     _render_media_image(
