@@ -6,10 +6,29 @@ import os
 from pathlib import Path
 
 from gramps_fancy_book.domain import (
-    BookModel, Citation, DateValue, EditorialBook, EditorialCitationCall,
-    EditorialCitationEntry, EditorialFamilyNotice, EditorialProfile, Event,
-    EventReference, Family, FamilySection, Genealogy, GenealogyPart, Generation,
-    Note, Person, PersonOccurrence, Place, Repository, RepositoryReference, Source, Url,
+    BookModel,
+    Citation,
+    DateValue,
+    EditorialBook,
+    EditorialCitationCall,
+    EditorialCitationEntry,
+    EditorialFamilyNotice,
+    EditorialProfile,
+    Event,
+    EventReference,
+    Family,
+    FamilySection,
+    Genealogy,
+    GenealogyPart,
+    Generation,
+    Note,
+    Person,
+    PersonOccurrence,
+    Place,
+    Repository,
+    RepositoryReference,
+    Source,
+    Url,
 )
 from gramps_fancy_book.renderers.latex import render_latex
 
