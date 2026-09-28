@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import re
+from dataclasses import dataclass
 from typing import Any
 from urllib.parse import quote, urlsplit
 
 import mistune
 
-from ..domain import Note
 from .latex_text import escape_latex_text
+from ..domain import Note
 
 
 # Markdown is parsed into tokens only. This renderer never accepts generated HTML
