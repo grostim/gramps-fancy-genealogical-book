@@ -16,6 +16,8 @@ import uuid
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
+from PIL import Image
+
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
 
@@ -69,14 +71,25 @@ def _section(root: ET.Element, name: str) -> ET.Element:
     return section
 
 
+def _create_media_fixture(work: Path) -> None:
+    """Write the synthetic portrait referenced by the GEDCOM fixture."""
+    from PIL import Image
+
+    media_path = work / "media" / "portrait.jpg"
+    media_path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (10, 10), color=(90, 130, 170)).save(media_path, format="JPEG")
+
+
 def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     """Round-trip GEDCOM through Gramps, then add native Gramps XML fields."""
+    gedcom = work / "reference-family.ged"
+    gedcom.write_bytes((ROOT / "tests/fixtures/reference-family.ged").read_bytes())
     fixture = work / "reference-family-native.gramps"
     result = subprocess.run(
         [
             executable,
             "-i",
-            str(ROOT / "tests/fixtures/reference-family.ged"),
+            str(gedcom),
             "-e",
             str(fixture),
         ],
@@ -123,6 +136,14 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     )
     if person is None or media is None:
         raise AssertionError("Gramps XML export is missing fixture person I0001 or media M0001.")
+
+    media_file = next(
+        (item for item in _children(media, "file") if item.get("src")),
+        None,
+    )
+    if media_file is None:
+        raise AssertionError("Gramps XML export is missing M0001's file path.")
+    media_file.set("src", str((work / "media" / "portrait.jpg").resolve()))
 
     media_handle = media.get("handle")
     media_ref = next(
@@ -200,6 +221,7 @@ def verify(executable: str) -> None:
         with tarfile.open(ROOT / "gramps60/download/GrampsFancyBook.addon.tgz") as archive:
             archive.extractall(plugins, filter="data")
 
+        _create_media_fixture(work)
         native_fixture = _native_fixture(executable, env, work)
 
         def report(family: str, output: Path | None, *, overwrite=False) -> str:
@@ -267,7 +289,7 @@ def verify(executable: str) -> None:
         assert len(model["repositories"]) == 1
         assert len(model["media"]) == 1
         media = next(iter(model["media"].values()))
-        assert media["path"] == "media/portrait.jpg"
+        assert media["path"] == str((work / "media" / "portrait.jpg").resolve())
         assert "portrait" in media["description"].lower()
         assert model["people"][0]["links"]["media"][0]["media_handle"] == media["handle"]
         assert model["people"][0]["links"]["media"][0]["rectangle"] == [10, 20, 90, 80]
@@ -285,18 +307,24 @@ def verify(executable: str) -> None:
             model["tags"][handle]["name"] == "BOOK_PUBLICATION"
             for handle in publishable_note["links"]["tag_handles"]
         )
-        # The GEDCOM references a portrait file not shipped with this fixture.
-        # Its recoverable derivative warning is expected; unrelated diagnostics are not.
-        assert all(
+        # The synthetic media file is read through Gramps' database media path,
+        # cropped using the recorded rectangle, and installed beside the JSON.
+        artifact = next(
+            item for item in model["media_artifacts"] if item["media_handle"] == media["handle"]
+        )
+        assert artifact["action"] == "reproduce", (artifact, model["diagnostics"])
+        assert artifact["asset_path"].startswith("family_media/")
+        with Image.open(work / artifact["asset_path"]) as derivative:
+            assert derivative.format == "PNG"
+            assert derivative.size == (8, 6)
+        assert not any(
             diagnostic["code"] == "MEDIA_DERIVATIVE_FAILED"
-            and diagnostic["object_type"] == "media"
             and diagnostic["handle"] == media["handle"]
             for diagnostic in model["diagnostics"]
         )
         assert model["privacy"]["contains_private_data"] is False
         print(
-            "PASS: native Gramps XML fixture, BOOK_PROFILE, BOOK_PUBLICATION, media rectangles, "
-            "rich snapshot, sources and repositories"
+            "PASS: native Gramps XML, synthetic media crop, rich snapshot, sources and repositories"
         )
 
         single = work / "single.json"
@@ -315,10 +343,16 @@ def verify(executable: str) -> None:
         assert output.read_bytes() == original
         print("PASS: invalid/empty selection and existing-output protection")
 
+        media_output = work / "family_media"
+        stale_asset = media_output / "stale.txt"
+        stale_asset.write_text("old media output", encoding="utf-8")
         output.write_text("previous export", encoding="utf-8")
         log = report("F0001", output, overwrite=True)
         assert json.loads(output.read_text())["reference_family"]["gramps_id"] == "F0001", log
-        print("PASS: explicit replacement")
+        assert media_output.is_dir()
+        assert not stale_asset.exists()
+        assert len(list(media_output.glob("*.png"))) == 1
+        print("PASS: explicit replacement of JSON and media assets")
 
         for destination in (None, work / "missing" / "file.json", work / "not-json.pdf"):
             log = report("F0001", destination)
@@ -326,6 +360,7 @@ def verify(executable: str) -> None:
             if destination is not None:
                 assert not destination.exists()
         assert not list(work.glob(".book-model-*"))
+        assert not list(work.glob(".book-media-stage-*"))
         print("PASS: missing, unavailable and invalid destinations; temporary-file cleanup")
 
 
