@@ -25,6 +25,8 @@ Le parcours suit les filiations parent–enfant explicitement enregistrées. Les
 
 ## Construction et installation
 
+La construction compile le catalogue français du rapport depuis `gramps60/GrampsFancyBook/po/fr-local.po` et l’inclut dans l’archive sous forme de `addon.mo`. GNU gettext (`msgfmt`) doit être disponible dans le `PATH` ; installez le paquet `gettext` si nécessaire (par exemple `brew install gettext` sur macOS).
+
 ```sh
 python3 build_addon.py
 ```
@@ -41,7 +43,7 @@ Les rendus HTML et LaTeX des notes requièrent Mistune 3.x. Installez-la dans l�
 
 Les convertisseurs d’images et de PDF restent facultatifs afin que l’export JSON fonctionne aussi sans eux. Pour le développement, installez le projet et ses dépendances avec `python -m pip install -e '.[dev,media]'`. Dans un environnement Gramps Desktop où pip est pris en charge, installez `Pillow` et `pypdfium2` avec le même interpréteur Python que celui qui lance Gramps, puis redémarrez Gramps : `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. Une dépendance absente produit un diagnostic et les dérivés concernés sont omis. La CI qualifie actuellement Ubuntu 24.04, Python 3.12 et Gramps 6.0.8 ; voir le [compte rendu de validation média](docs/validation-media.fr.md). L’exécution dans Gramps Web reste non qualifiée : les paquets devraient être installés dans l’environnement serveur, et aucune instance de test n’a été validée.
 
-L’interface utilise des chaînes traduisibles ; les traductions françaises propres au plugin restent à compléter.
+Les libellés du rapport Gramps ont un catalogue français dans `gramps60/GrampsFancyBook/po/fr-local.po` ; la construction le compile et l’inclut dans l’archive. Les nouvelles chaînes du plugin doivent aussi être ajoutées au catalogue.
 
 ## Exemple en ligne de commande
 

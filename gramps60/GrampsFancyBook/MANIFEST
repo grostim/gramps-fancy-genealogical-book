@@ -1,3 +1,4 @@
 GrampsFancyBook.gpr.py
 GrampsFancyBook.py
 GrampsFancyBookOptions.py
+GrampsFancyBook/locale/*/LC_MESSAGES/addon.mo

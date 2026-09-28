@@ -1,5 +1,14 @@
 """Gramps 6 report registration."""
 
+from gramps.gen.const import GRAMPS_LOCALE as glocale
+
+try:
+    _trans = glocale.get_addon_translator(__file__)
+except ValueError:
+    _trans = glocale.translation
+_ = _trans.gettext
+
+
 register(
     REPORT,
     id="gramps_fancy_genealogical_book",

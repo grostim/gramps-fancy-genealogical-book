@@ -1,0 +1,87 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Gramps Fancy Genealogical Book 0.8.0\n"
+"POT-Creation-Date: 2026-09-28 00:00+0000\n"
+"Report-Msgid-Bugs-To: https://github.com/grostim/gramps-fancy-genealogical-book/issues\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:14
+msgid "Gramps Fancy Genealogical Book"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:15
+msgid "Generate a static HTML book archive for the selected reference family."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:29
+msgid "Book"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:31
+msgid "Reference family"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:35
+msgid "Maximum ancestry generations ('unlimited' or a number)"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:40
+msgid "Maximum descendant generations ('unlimited' or a number)"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:44
+msgid "Output format"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:46
+msgid "Automatic (use destination extension)"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:48
+msgid "HTML book (ZIP archive)"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:50
+msgid "JSON snapshot (development diagnostics)"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:53
+msgid "Automatic mode uses .zip for HTML books and .json for diagnostic snapshots."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:56
+msgid "Output file"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:59
+msgid "Automatic mode uses .zip for HTML, or .json for the development snapshot."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:64
+msgid "Replace an existing file"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:70
+msgid "Select a reference family."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:95
+msgid "Select a supported output format."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:49
+msgid "The reference family must have two known partners."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:90
+msgid "Output already exists"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:91
+msgid "Choose another destination or enable 'Replace an existing file'."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:95
+msgid "Book generation failed"
+msgstr ""

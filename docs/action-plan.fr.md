@@ -182,7 +182,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 1. L8.1 — Exécuter les 27 scénarios originaux, complétés par les cas techniques nécessaires ; lier chaque résultat à une version du plugin et de l’environnement.
 2. L8.2 — Qualifier les versions Gramps, Python et moteurs documentaires retenues sur la base des essais, puis aligner la CI et la documentation sur cette matrice.
 3. L8.3 — Mesurer temps de génération, mémoire et taille des sorties sur de petits, moyens et grands jeux fictifs. Fixer les seuils acceptables après une première mesure représentative.
-4. L8.4 — Compléter les guides FR/EN : installation, dépendances LaTeX, configuration, `BOOK_*`, formats de sortie, dépannage, architecture et contribution. Compléter les traductions de l’interface.
+4. L8.4 — Compléter les guides FR/EN : installation, dépendances, configuration, `BOOK_*`, formats de sortie, dépannage, architecture et contribution. Maintenir le catalogue français du rapport synchronisé aux chaînes et qualifier son chargement dans Gramps.
 5. L8.5 — Fiabiliser la fabrication des archives, versionner de façon cohérente package/enregistrement/listings et vérifier installation, mise à jour et retrait du module complémentaire.
 6. L8.6 — Préparer une version candidate avec exemples fictifs, notes de version et limitations connues ; réaliser la revue avant publication de la version stable.
 
@@ -232,7 +232,7 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 - **L7 — HTML ZIP livré dans les PR #51–57.** L’archive contient la page d’entrée, les styles et les dérivés PNG approuvés avec des chemins relatifs. Les corrections de commentaires sur #55 sont intégrées. L’ouverture réelle hors ligne avec médias, les tailles d’écran, le clavier et le lecteur d’écran restent à vérifier.
 - **État des contrôles automatisés :** les exécutions GitHub Actions récentes ont été arrêtées avant les jobs avec un message relatif aux paiements ou au plafond de dépenses du compte. Ces exécutions ne fournissent donc pas de résultat de test ; le suivi [validation L7](validation-l7.fr.md) garde cette limite visible.
 - **Recette Gramps :** un contrôle graphique macOS a confirmé la sélection de F0001, la conservation d’options et le refus de remplacement sur le parcours JSON. Cela ne valide pas l’archive HTML, l’ensemble d’AC-22 ni Gramps Web.
-- **Travail L8.4 en cours :** les pages d’architecture et de suivi sont réalignées ici avec le code livré. Les guides complets d’installation, dépendances, configuration, dépannage, contribution et les traductions d’interface restent à achever.
+- **Travail L8.4 en cours :** les pages d’architecture et de suivi sont réalignées avec le code livré ; le catalogue français des libellés Gramps est compilé et inclus dans l’archive. Les guides complets d’installation, dépendances, configuration, dépannage et contribution restent à achever ; les prochaines chaînes d’interface devront être ajoutées au catalogue.
 
 ### Prochaines actions
 
