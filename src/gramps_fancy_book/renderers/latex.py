@@ -10,10 +10,12 @@ from ..domain import (
     EditorialMediaArtifact,
     EditorialPortrait,
     EditorialProfile,
+    FamilySection,
     GenealogyPart,
     MediaReference,
     Note,
     Person,
+    PersonOccurrence,
     RepositoryReference,
     Url,
 )
@@ -35,6 +37,21 @@ def render_latex(model: BookModel) -> str:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
                 _render_genealogy_part(part, people_by_handle, emitted_targets)
+            )
+        if model.genealogy.family_sections:
+            occurrences_by_id = {
+                occurrence.occurrence_id: occurrence
+                for part in (model.genealogy.ancestry, model.genealogy.descent)
+                for generation in part.generations
+                for occurrence in generation.occurrences
+            }
+            document.append(
+                _render_family_sections(
+                    model.genealogy.family_sections,
+                    model,
+                    occurrences_by_id,
+                    emitted_targets,
+                )
             )
 
     if model.editorial_book is not None and model.editorial_book.profiles:
@@ -117,6 +134,90 @@ def _render_genealogy_part(
             output.append(f"{escape_latex_text(name)}\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
+
+
+def _render_family_sections(
+    sections: tuple[FamilySection, ...],
+    model: BookModel,
+    occurrences_by_id: dict[str, PersonOccurrence],
+    emitted_targets: set[str],
+) -> str:
+    people_by_handle = {person.handle: person for person in model.people}
+    output = ["\\section*{Family connections}\n\\begin{itemize}\n"]
+    for section in sections:
+        family = model.families.get(section.family_handle)
+        partners = [
+            _occurrence_link(target_id, occurrences_by_id, people_by_handle, emitted_targets)
+            for target_id in section.partner_occurrence_ids
+        ]
+        children = [
+            _occurrence_link(target_id, occurrences_by_id, people_by_handle, emitted_targets)
+            for target_id in section.child_occurrence_ids
+        ]
+        partner_label = " and ".join(item for item in partners if item)
+        title = (
+            partner_label
+            or escape_latex_text(
+                (family.gramps_id if family is not None else "")
+                or section.family_handle
+            )
+        )
+        output.append(
+            f"\\item {_latex_anchor(section.section_id, emitted_targets)}"
+            f"\\textbf{{{title}}}"
+            f" ({escape_latex_text(section.part)}, generation {section.generation})\n"
+        )
+        if children:
+            output.append(
+                "\\par Children: " + ", ".join(item for item in children if item) + "\n"
+            )
+        if section.parent_child_links:
+            output.append("\\begin{itemize}\n")
+            for link in section.parent_child_links:
+                parent = _occurrence_link(
+                    link.parent_occurrence_id,
+                    occurrences_by_id,
+                    people_by_handle,
+                    emitted_targets,
+                )
+                child = _occurrence_link(
+                    link.child_occurrence_id,
+                    occurrences_by_id,
+                    people_by_handle,
+                    emitted_targets,
+                )
+                relationship = _relationship_label(link.relationship_type)
+                suffix = f" ({escape_latex_text(relationship)})" if relationship else ""
+                output.append(f"\\item {parent} $\\to$ {child}{suffix}\n")
+            output.append("\\end{itemize}\n")
+    output.append("\\end{itemize}\n")
+    return "".join(output)
+
+
+def _occurrence_link(
+    target_id: str,
+    occurrences_by_id: dict[str, PersonOccurrence],
+    people_by_handle: dict[str, Person],
+    emitted_targets: set[str],
+) -> str:
+    occurrence = occurrences_by_id.get(target_id)
+    person = people_by_handle.get(occurrence.person_handle) if occurrence else None
+    label = (person.name if person is not None else "") or (
+        occurrence.person_handle if occurrence is not None else target_id
+    )
+    if target_id in emitted_targets:
+        return f"\\hyperlink{{{_latex_target(target_id)}}}{{{escape_latex_text(label)}}}"
+    return escape_latex_text(label)
+
+
+def _relationship_label(value: object) -> str:
+    if value is None or value is False:
+        return ""
+    if isinstance(value, dict):
+        value = value.get("string", value.get("value", value))
+    if isinstance(value, (tuple, list)):
+        return ", ".join(str(item) for item in value)
+    return str(value)
 
 
 def _render_profile(
