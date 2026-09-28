@@ -403,12 +403,18 @@ def verify(executable: str) -> None:
         assert set(consistency["groups"][0]["event_handles"]) == {
             event["handle"] for event in birth_fact_events
         }
-        assert {
+        actual_findings = {
             (finding["field"], finding["classification"])
             for finding in consistency["findings"]
-        } == {
+        }
+        expected_findings = {
             ("date", "confirmed_conflict"),
             ("place", "review_required"),
+        }
+        assert actual_findings == expected_findings, {
+            "actual_findings": actual_findings,
+            "groups": consistency["groups"],
+            "findings": consistency["findings"],
         }
         book_conflict_codes = {
             "disjoint_event_date_ranges",
