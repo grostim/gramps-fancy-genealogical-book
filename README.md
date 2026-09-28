@@ -2,7 +2,7 @@
 
 [Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [L2 prototypes](prototypes/README.md)
 
-An experimental Gramps 6 add-on for a family genealogical book. The current milestone selects a reference family, extracts its ancestry and descendant graph to the chosen depths, and exports a shared JSON model with available media derivatives. Publication-quality LaTeX/PDF and HTML remain future milestones.
+An experimental Gramps 6 add-on for a family genealogical book. The current milestone exports a shared JSON model and a preliminary LaTeX book with genealogy sections, profiles, family notices, citations, page references and a person index. The final PDF layout and multipass output still need visual validation; HTML remains in a later milestone.
 
 ## What works now
 
@@ -11,12 +11,13 @@ An experimental Gramps 6 add-on for a family genealogical book. The current mile
 - Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
-- Note text is exported only when the Gramps note has the `BOOK_PUBLICATION` tag; working notes remain referenced without their content.
+- Published notes are rendered in LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
 - Unicode JSON, structured media-conversion diagnostics and coordinated replacement of the model and its PNG sidecar directory.
 - Existing files preserved unless **Replace an existing file** is enabled.
+- Preliminary LaTeX output renders the main genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. The PDF still needs multipass and visual validation.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
 
-Traversal follows recorded parent-child links. Unions, partners and siblings are included as context without automatically expanding their own lineages. The output is still a data model: HTML and LaTeX functions remain contract demonstrations. See the [L3 validation record](docs/validation-l3.md), the [L4 progress note](docs/validation-l4.md), and [requirement tracking](docs/requirements.fr.md).
+Traversal follows recorded parent-child links. Unions, partners and siblings are included as context without automatically expanding their own lineages. The LaTeX renderer is experimental; final typography, a converged PDF and visual acceptance remain outstanding. See the [L3 validation record](docs/validation-l3.md), the [L4 progress note](docs/validation-l4.md), [note markup policy](docs/decisions/003-note-markup.md), and [requirement tracking](docs/requirements.fr.md).
 
 ## Build and install
 
@@ -31,6 +32,8 @@ Extract `gramps60/download/GrampsFancyBook.addon.tgz` into the Gramps 6 user plu
 - Isolated profile: `$GRAMPSHOME/gramps/gramps60/plugins/`
 
 In Gramps, the report is registered under **Reports → Web Pages**. This category supports add-ons that write their own files without the built-in PDF/ODT backend. This milestone writes a `.json` model and, when images can be converted, a neighboring `<name>_media/` folder. The JSON points to the derived PNG files and reports media that could not be prepared. Select a reference family and a `.json` destination; **Replace an existing file** also replaces the neighboring media directory. The destination directory must already exist.
+
+The LaTeX note renderer requires Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
 
 Image and PDF converters are optional. For development, install them into Gramps' Python environment with `python -m pip install -e '.[media]'`. Until installation of these dependencies is automated in Gramps Desktop/Web packages, a missing dependency becomes a diagnostic and the JSON model can still be exported.
 

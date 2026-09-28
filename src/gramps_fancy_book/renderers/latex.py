@@ -1,7 +1,6 @@
 """LaTeX renderer for the genealogy overview and person index."""
 
 from pathlib import PurePosixPath
-from urllib.parse import quote, urlsplit
 
 from ..domain import (
     BookModel,
@@ -20,6 +19,8 @@ from ..domain import (
     RepositoryReference,
     Url,
 )
+from .latex_notes import render_latex_note
+from .latex_text import escape_latex_text, format_latex_url
 
 
 def render_latex(model: BookModel) -> str:
@@ -27,6 +28,7 @@ def render_latex(model: BookModel) -> str:
     document = [
         "\\documentclass{article}\n"
         "\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
+        "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
         "\\begin{document}\n",
         f"\\section*{{{escape_latex_text(family.handle)}}}\n",
         f"{len(model.people)} people in the intermediate model.\n",
@@ -324,11 +326,7 @@ def _render_profile(
                 if index < len(profile.note_target_ids)
                 else ""
             )
-            note_text = (
-                escape_latex_text(note.text)
-                if note.text
-                else r"\emph{No text supplied.}"
-            )
+            note_text = render_latex_note(note)
             output.append(
                 f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
                 f"{note_text}\n"
@@ -418,11 +416,7 @@ def _render_family_notice(
                 if index < len(notice.note_target_ids)
                 else ""
             )
-            note_text = (
-                escape_latex_text(note.text)
-                if note.text
-                else r"\emph{No text supplied.}"
-            )
+            note_text = render_latex_note(note)
             output.append(
                 f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
                 f"{note_text}\n"
@@ -804,32 +798,3 @@ def _latex_target(target_id: str) -> str:
     return f"target-{target_id.encode('utf-8').hex()}"
 
 
-def escape_latex_text(value: str) -> str:
-    """Escape user supplied text so it cannot introduce LaTeX commands."""
-    return "".join(_TEXT_ESCAPE.get(char, char) for char in value)
-
-
-def format_latex_url(value: str) -> str:
-    """Render an HTTP(S) URL safely, preserving its usable link characters."""
-    try:
-        parsed = urlsplit(value.strip())
-    except ValueError:
-        return escape_latex_text(value)
-    if parsed.scheme.casefold() not in {"http", "https"} or not parsed.netloc:
-        return escape_latex_text(value)
-    normalized = quote(value.strip(), safe=":/?#[]@!$&'()*+,;=%")
-    return f"\\url{{{normalized}}}"
-
-
-_TEXT_ESCAPE = {
-    "\\": r"\textbackslash{}",
-    "{": r"\{",
-    "}": r"\}",
-    "&": r"\&",
-    "%": r"\%",
-    "$": r"\$",
-    "#": r"\#",
-    "_": r"\_",
-    "~": r"\textasciitilde{}",
-    "^": r"\textasciicircum{}",
-}
