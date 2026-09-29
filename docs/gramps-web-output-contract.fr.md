@@ -14,7 +14,7 @@ L’extension doit conserver son parcours Desktop. Gramps Web doit fournir un co
 2. **Types de sortie déclarés.** Un rapport peut déclarer les extensions et types MIME qu’il produit. Les premiers résultats requis sont le PDF (`application/pdf`) et le ZIP (`application/zip`) ; le serveur renvoie le nom de fichier et le type de contenu correspondants.
 3. **Chemin de sortie contrôlé par le serveur.** L’API crée une cible unique sous `REPORT_DIR` et la transmet au rapport par un champ documenté. Un rapport ne peut pas choisir un chemin arbitraire sur le serveur. Le serveur vérifie le fichier produit et supprime les sorties temporaires après téléchargement ou échec.
 4. **Options et confidentialité habituelles.** Les options de famille, de profondeur, de format et de confirmation de confidentialité apparaissent dans l’interface Web, sont validées côté serveur et parviennent au rapport sans altération. Sans confirmation de confidentialité, la génération est refusée.
-5. **État des tâches et diagnostics.** La génération utilise le cycle normal des tâches asynchrones. L’utilisateur voit une progression ou un état d’exécution explicite ; les échecs produisent des journaux exploitables sans révéler de données privées ni de chemins du serveur.
+5. **État des tâches et diagnostics.** La génération utilise le cycle normal des tâches asynchrones. L’API 3.22.3 ne transmet pas de callback de progression pour `generate_report` ; le contrat devra donc définir soit une progression prise en charge par les rapports, soit un état d’exécution indéterminé clairement affiché. Les échecs produisent des journaux exploitables sans révéler de données privées ni de chemins du serveur.
 
 Les mainteneurs choisiraient le point d’extension exact. Il pourrait s’agir d’une capacité déclarée par le rapport ou d’un autre adaptateur documenté ; la proposition ne demande ni d’activer globalement `CATEGORY_WEB`, ni d’intégrer en dur cette extension à l’API.
 
@@ -26,7 +26,7 @@ Sur une version épinglée de Gramps Web API et une base fictive :
 - Les options valides, dont la confirmation de confidentialité obligatoire, parviennent au rapport ; les valeurs invalides ou les confirmations absentes sont refusées avant toute écriture.
 - Les sorties PDF et ZIP sont générées sous `REPORT_DIR`, téléchargées avec l’extension et le type MIME déclarés, et reconnues comme fichiers valides.
 - Un rapport ne peut ni écrire hors de `REPORT_DIR`, ni écraser un fichier sans rapport, ni laisser de sortie partielle en cas d’échec.
-- Le point d’accès des tâches expose les états terminé/échoué ainsi qu’une progression et des journaux utiles.
+- L’interface expose les états en attente/en cours/terminé/échoué ; elle présente une progression si le contrat en fournit une, sinon un état d’exécution indéterminé. Les échecs donnent accès à des diagnostics utiles sans données privées ni chemins internes.
 - La génération existante dans l’interface Desktop et en CLI continue de fonctionner sans réglages propres au Web.
 
 ## Décision à obtenir
