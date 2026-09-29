@@ -17,7 +17,7 @@ def format_latex_url(value: str) -> str:
     if parsed.scheme.casefold() not in {"http", "https"} or not parsed.netloc:
         return escape_latex_text(value)
     normalized = quote(value.strip(), safe=":/?#[]@!$&'()*+,;=%")
-    return f"\\url{{{normalized}}}"
+    return f"\\bookurl{{{normalized}}}"
 
 
 _TEXT_ESCAPE = {

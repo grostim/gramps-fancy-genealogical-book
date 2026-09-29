@@ -115,7 +115,8 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     assert r"Source \textbackslash{}input\{owned\} \#1\_50\%" in rendered
     assert r"Repository\_\&" in rendered
     assert r"R\_1\&" in rendered
-    assert r"\url{https://example.org/archive?folio=1&format=full}" in rendered
+    assert r"\newcommand{\bookurl}[1]{{\useOriginalUrlSetting\url{#1}}}" in rendered
+    assert r"\bookurl{https://example.org/archive?folio=1&format=full}" in rendered
     assert r"(record\_\&)" in rendered
 
 
