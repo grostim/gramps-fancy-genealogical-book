@@ -1,7 +1,15 @@
 import re
 from types import SimpleNamespace
 
-from gramps_fancy_book.domain import Family, Person
+from gramps_fancy_book.domain import (
+    Citation,
+    Family,
+    Person,
+    Repository,
+    RepositoryReference,
+    Source,
+    Url,
+)
 from gramps_fancy_book.renderers.html import render_html
 
 
@@ -126,11 +134,15 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         owner_type="profile",
         owner_handle="p0",
     )
+    repository_reference = RepositoryReference(
+        repository_handle="r1",
+        call_number="3 E 12",
+    )
     citation_entry = SimpleNamespace(
         entry_id="citation-entry:c1",
         citation_handle="c1",
-        source_handle=None,
-        repository_refs=(),
+        source_handle="s1",
+        repository_refs=(repository_reference,),
         calls=(call,),
     )
     person_index_entry = SimpleNamespace(
@@ -180,9 +192,42 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         notes={},
         events={},
         places={},
-        citations={},
-        sources={},
-        repositories={},
+        citations={
+            "c1": Citation(
+                handle="c1",
+                gramps_id="C0001",
+                source_handle="s1",
+                urls=(Url("javascript:alert(1)", description="Unsafe URL"),),
+            )
+        },
+        sources={
+            "s1": Source(
+                handle="s1",
+                gramps_id="S0001",
+                title="Registre paroissial",
+                author="Archives fictives",
+                abbreviation="Registre",
+                urls=(
+                    Url(
+                        "https://example.invalid/source?record=one&image=two",
+                        description="Notice de la source",
+                    ),
+                ),
+            )
+        },
+        repositories={
+            "r1": Repository(
+                handle="r1",
+                gramps_id="R0001",
+                name="Dépôt municipal fictif",
+                urls=(
+                    Url(
+                        "https://example.invalid/shared-document?id=42&view=scan",
+                        description="Document partagé fictif",
+                    ),
+                ),
+            )
+        },
     )
 
     rendered = render_html(model)
@@ -193,6 +238,14 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     assert 'id="family:ancestry:0:f0"' in rendered
     assert 'id="person:p0"' in rendered
     assert 'id="citation-entry:c1"' in rendered
+    assert "C0001" in rendered
+    assert "S0001" in rendered
+    assert 'href="https://example.invalid/source?record=one&amp;image=two"' in rendered
+    assert (
+        'href="https://example.invalid/shared-document?id=42&amp;view=scan"'
+        in rendered
+    )
+    assert "javascript:alert(1)" not in rendered
     assert 'id="generation:descent:0"' in rendered
     assert 'href="#generation:descent:1"' in rendered
     assert 'href="#descent:0:f0:p0"' in rendered
