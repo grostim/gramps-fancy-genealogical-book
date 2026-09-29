@@ -52,7 +52,12 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
         gramps_id="C0001",
         source_handle="source-1",
         page="page_1&2",
-        urls=(Url("https://example.org/archive?folio=1&format=full", "record_&"),),
+        urls=(
+            Url(
+                "https://example.org/archive%2Fdocument?folio=1&format=full#record",
+                "record_&",
+            ),
+        ),
     )
     source = Source(
         handle="source-1",
@@ -115,8 +120,15 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     assert r"Source \textbackslash{}input\{owned\} \#1\_50\%" in rendered
     assert r"Repository\_\&" in rendered
     assert r"R\_1\&" in rendered
-    assert r"\newcommand{\bookurl}[1]{{\useOriginalUrlSetting\url{#1}}}" in rendered
-    assert r"\bookurl{https://example.org/archive?folio=1&format=full}" in rendered
+    assert (
+        r"\newcommand{\bookurl}[3]{\href{#1}{{\useOriginalUrlSetting\nolinkurl{#2}}\nolinkurl{#3}}}"
+        in rendered
+    )
+    assert (
+        r"\bookurl{https://example.org/archive\%2Fdocument?folio=1&format=full\#record}"
+        r"{https://example.org}{/archive\%2Fdocument?folio=1&format=full\#record}"
+        in rendered
+    )
     assert r"(record\_\&)" in rendered
 
 

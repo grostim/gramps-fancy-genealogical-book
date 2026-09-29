@@ -17,7 +17,24 @@ def format_latex_url(value: str) -> str:
     if parsed.scheme.casefold() not in {"http", "https"} or not parsed.netloc:
         return escape_latex_text(value)
     normalized = quote(value.strip(), safe=":/?#[]@!$&'()*+,;=%")
-    return f"\\bookurl{{{normalized}}}"
+    authority_start = normalized.find("://") + 3
+    authority_end = len(normalized)
+    for delimiter in "/?#":
+        index = normalized.find(delimiter, authority_start)
+        if index >= 0:
+            authority_end = min(authority_end, index)
+    authority = normalized[:authority_end]
+    suffix = normalized[authority_end:]
+    return (
+        f"\\bookurl{{{_escape_latex_url(normalized)}}}"
+        f"{{{_escape_latex_url(authority)}}}"
+        f"{{{_escape_latex_url(suffix)}}}"
+    )
+
+
+def _escape_latex_url(value: str) -> str:
+    """Protect characters TeX treats as comments or macro parameters."""
+    return value.replace("%", r"\%").replace("#", r"\#")
 
 
 _TEXT_ESCAPE = {
