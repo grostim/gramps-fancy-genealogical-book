@@ -154,6 +154,7 @@ def _render_front_matter(model: BookModel) -> str:
             (
                 "\\clearpage\n",
                 f"\\section*{{{heading}}}\n",
+                f"\\markboth{{{heading}}}{{}}\n",
                 render_latex_note(note),
                 "\\clearpage\n",
             )
@@ -220,13 +221,20 @@ def render_latex(model: BookModel) -> str:
         "\\documentclass[a4paper]{article}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
-        "\\usepackage{tikz}\n"
+        "\\usepackage{tikz}\n\\usepackage{fancyhdr}\n"
         "\\renewcommand{\\familydefault}{\\sfdefault}\n"
+        "\\pagestyle{fancy}\n"
+        "\\fancyhf{}\n"
+        "\\fancyhead[L]{\\footnotesize\\nouppercase{\\leftmark}}\n"
+        "\\fancyhead[R]{\\footnotesize\\nouppercase{\\rightmark}\\quad\\thepage}\n"
+        "\\renewcommand{\\headrulewidth}{0.2pt}\n"
+        "\\setlength{\\headheight}{14pt}\n"
+        "\\setlength{\\headsep}{18pt}\n"
         "\\begin{document}\n",
         _render_cover(model),
     ]
     document.append(_render_front_matter(model))
-    document.append("\\tableofcontents\n\\clearpage\n")
+    document.append("\\markboth{Contents}{}\n\\tableofcontents\n\\clearpage\n")
 
     emitted_targets: set[str] = set()
     people_by_handle = {person.handle: person for person in model.people}
@@ -324,13 +332,60 @@ def _render_genealogy_part(
     if not part.generations:
         return ""
 
-    output = [_section_heading(part.name.title())]
+    first_generation = part.generations[0]
+    first_occurrence = (
+        first_generation.occurrences[0]
+        if first_generation.occurrences
+        else None
+    )
+    first_context = _running_context_label(
+        first_generation.number,
+        first_occurrence.branch_handles if first_occurrence is not None else (),
+        people_by_handle,
+    )
+    output = [_section_heading(part.name.title(), first_context)]
     for generation in part.generations:
+        previous_branches = None
+        if generation.occurrences:
+            first_branches = generation.occurrences[0].branch_handles
+            output.append(
+                "\\markright{"
+                + escape_latex_text(
+                    _running_context_label(
+                        generation.number,
+                        first_branches,
+                        people_by_handle,
+                    )
+                )
+                + "}\n"
+            )
+            previous_branches = first_branches
+        else:
+            output.append(
+                "\\markright{"
+                + escape_latex_text(
+                    _running_context_label(generation.number, (), people_by_handle)
+                )
+                + "}\n"
+            )
         output.append(
             f"\\subsection*{{Generation {generation.number}}}\n"
             "\\begin{itemize}\n"
         )
         for occurrence in generation.occurrences:
+            if occurrence.branch_handles != previous_branches:
+                output.append(
+                    "\\markright{"
+                    + escape_latex_text(
+                        _running_context_label(
+                            generation.number,
+                            occurrence.branch_handles,
+                            people_by_handle,
+                        )
+                    )
+                    + "}\n"
+                )
+                previous_branches = occurrence.branch_handles
             person = people_by_handle.get(occurrence.person_handle)
             name = person.name if person is not None else ""
             name = name or occurrence.person_handle
@@ -354,8 +409,30 @@ def _render_family_sections(
         notice.family_handle: notice
         for notice in (model.editorial_book.family_notices if model.editorial_book else ())
     }
-    output = [_section_heading("Family connections"), "\\begin{itemize}\n"]
+    first_section = sections[0]
+    output = [
+        _section_heading(
+            "Family connections",
+            _running_context_label(
+                first_section.generation,
+                first_section.branch_handles,
+                people_by_handle,
+            ),
+        ),
+        "\\begin{itemize}\n",
+    ]
     for section in sections:
+        output.append(
+            "\\markright{"
+            + escape_latex_text(
+                _running_context_label(
+                    section.generation,
+                    section.branch_handles,
+                    people_by_handle,
+                )
+            )
+            + "}\n"
+        )
         family = model.families.get(section.family_handle)
         partners = [
             _occurrence_link(target_id, occurrences_by_id, people_by_handle, emitted_targets)
@@ -1069,7 +1146,7 @@ def _render_featured_media(
     anchor = _latex_anchor(placement.placement_id, emitted_targets)
     output = [
         "\\clearpage\n"
-        "\\thispagestyle{plain}\n"
+        "\\thispagestyle{fancy}\n"
         f"{anchor}\n"
         "\\begin{center}\n"
         f"\\includegraphics[width=0.92\\textwidth,height=0.80\\textheight,"
@@ -1151,11 +1228,30 @@ def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
     return f"\\hypertarget{{{target}}}{{}}\\label{{{target}}}"
 
 
-def _section_heading(title: str) -> str:
+def _running_context_label(
+    generation: int,
+    branch_handles: tuple[str, ...],
+    people_by_handle: dict[str, Person],
+) -> str:
+    label = f"Generation {generation}"
+    branches = []
+    for handle in branch_handles:
+        person = people_by_handle.get(handle)
+        name = (person.name if person is not None else "") or handle
+        if name not in branches:
+            branches.append(name)
+    if branches:
+        label += " / Branch: " + " + ".join(branches)
+    return label
+
+
+def _section_heading(title: str, context: str = "") -> str:
     escaped = escape_latex_text(title)
+    escaped_context = escape_latex_text(context)
     return (
         "\\clearpage\n"
         f"\\section*{{{escaped}}}\n"
+        f"\\markboth{{{escaped}}}{{{escaped_context}}}\n"
         f"\\addcontentsline{{toc}}{{section}}{{{escaped}}}\n"
     )
 
