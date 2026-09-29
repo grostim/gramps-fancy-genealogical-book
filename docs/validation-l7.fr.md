@@ -14,9 +14,11 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 ## Vérifications automatisées et état CI
 
 - `tests/test_html_renderer.py` couvre les parties, liens internes, identifiants uniques, l’échappement d’un nom hostile, les identifiants bibliographiques, l’affichage des URL et le rejet d’un lien `javascript:`.
+- `tests/test_html_notes.py` vérifie que les notes Markdown et `HtmlCode` affichent le HTML malveillant comme texte, sans balise active ni attribut événement, et que seul un lien HTTPS autorisé devient un lien.
 - Le test `test_renders_shared_citation_media_once_in_the_html_archive` vérifie qu’un ZIP contenant deux citations qui partagent un document a une seule entrée PNG, affiche la reproduction dans la première citation et lie la seconde vers son ancre.
 - Les commentaires pertinents de la PR #55 sur les extensions de fichier ont été corrigés. La PR #56 préserve la compatibilité JSON ; la PR #57 apporte les améliorations clavier et petit écran.
 - Les PR #78–#82 ont des exécutions CI complètes et réussies : tests Python 3.10–3.13, qualification Windows, intégration Gramps 6.0.8 et compilation LuaLaTeX. La CI automatise les tests unitaires et l’intégration JSON Gramps ; l’export HTML riche décrit ci-dessous demeure un contrôle manuel dans l’interface Gramps.
+- Sur macOS 27.0 arm64 avec CPython 3.14.0, la suite complète passe (38 tests), Ruff 0.16.9 est propre et `build_addon.py` construit l’archive. L’environnement local inclut aussi les dépendances optionnelles Pillow 12.3.0 et pypdfium2 5.13.0.
 
 ## Vérification statique du ZIP Gramps — 29 septembre 2026
 
@@ -32,9 +34,16 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 - Le test unitaire du rendu vérifie également qu’une URL `javascript:` de citation n’est pas produite comme lien.
 - L’analyse de l’archive ne démontre toujours pas son affichage dans un navigateur hors ligne, la navigation au clavier ni la lecture par un lecteur d’écran.
 
+## Recette Gramps Desktop interactive — 29 septembre 2026
+
+- Gramps Desktop 6.0.8 a été lancé avec la fixture GEDCOM du dépôt dans un profil temporaire isolé, sans ouvrir l’arbre Gramps personnel. Le rapport apparaît sous **Rapports → Pages web** et les libellés, options et onglet **Vie privée** sont en français. La famille fictive F0001 est sélectionnée.
+- À chaque ouverture du rapport, la case de confidentialité est décochée. Valider sans la cocher affiche « L’avertissement de confidentialité n’a pas été confirmé » et le fichier `denied-export.zip` reste absent.
+- Après avoir coché la case, le rapport aboutit et produit `approved-export.zip` dans le dossier temporaire. `unzip -t` passe ; l’archive contient `index.html` et un PNG sous `media/`.
+- Le parcours confirme le refus et l’export interactif, mais pas encore la consultation visuelle hors ligne dans un navigateur, l’accessibilité clavier ou la lecture par un lecteur d’écran.
+
 ## Recette manuelle à terminer
 
-1. Installer l’archive du module dans une version Desktop de Gramps prise en charge, ouvrir le rapport **Pages Web → Gramps Fancy Genealogical Book** et choisir une famille. Vérifier que la confirmation de confidentialité est décochée à chaque lancement ; sans la cocher, vérifier que le rapport refuse de générer un fichier ; la cocher pour produire le `.zip`.
+1. La recette interactive macOS décrite ci-dessus vérifie le rapport traduit, le refus sans consentement, l’absence de fichier et l’export `.zip` avec consentement. La répétition sur une installation propre et sur les autres versions Desktop ciblées reste à faire.
 2. Marquer un média fictif à la fois `BOOK_EXCLUDE` et `BOOK_FEATURED`. Après génération, vérifier que l’objet n’est référencé par aucun `<img>` de `index.html` et qu’aucun fichier correspondant n’existe dans `media/` dans le ZIP. Cette absence est le critère de réussite, même si le média est aussi mis en avant.
 3. Ouvrir le ZIP riche déjà généré dans un navigateur hors ligne et vérifier visuellement les liens du dépôt, les notes, les citations et les images recadrées.
 4. Pour AC-10, attacher la même note Markdown fictive marquée `BOOK_PUBLICATION` à deux contextes éditoriaux distincts. Vérifier qu’elle apparaît dans chacun, que le format Markdown et les styles natifs sont rendus, et que chaque contexte reste navigable.
@@ -44,4 +53,4 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 8. Examiner la lecture et le reflow sur plusieurs tailles de fenêtre, parcourir tout le livre au clavier et vérifier les annonces avec un lecteur d’écran.
 9. Reprendre séparément la revue visuelle des PDF L6 : typographie, pagination, images, index et renvois par rapport à la v1.1 et aux maquettes.
 
-Les étapes 1, 2 et 4–7 définissent explicitement les critères des AC-22, AC-13, AC-10, AC-15, AC-20 et AC-23. AC-15 est couvert par un test du moteur HTML et de l’archive ZIP ; sa recette réelle dans Gramps et sa vérification visuelle restent à faire. Les autres scénarios cités ne sont pas encore qualifiés. Gramps Web n’a pas encore été validé. Voir le [plan d’action](action-plan.fr.md#l7--livre-html-et-archive-autonome) et le [suivi des exigences](requirements.fr.md).
+Les étapes 1–7 définissent explicitement les critères des AC-22, AC-13, AC-10, AC-15, AC-20 et AC-23. AC-15 est couvert par un test du moteur HTML et de l’archive ZIP ; sa vérification visuelle reste à faire. AC-23 dispose de contrôles unitaires contre l’injection ; le scénario complet dans Gramps et le navigateur reste à exécuter. Le parcours interactif macOS confirme le rapport, le refus de confidentialité sans fichier et un export ZIP accepté. Les autres scénarios cités ne sont pas encore qualifiés. Gramps Web n’a pas encore été validé. Voir le [plan d’action](action-plan.fr.md#l7--livre-html-et-archive-autonome) et le [suivi des exigences](requirements.fr.md).
