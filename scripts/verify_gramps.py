@@ -10,10 +10,12 @@ import copy
 import gzip
 import json
 import os
+import re
 import subprocess
 import tarfile
 import tempfile
 import uuid
+import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -230,6 +232,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ET.register_namespace("", namespace)
 
     people = next(iter(_children(root, "people")), None)
+    families = _section(root, "families")
     events = next(iter(_children(root, "events")), None)
     objects = next(iter(_children(root, "objects")), None)
     notes = _section(root, "notes")
@@ -245,6 +248,14 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
+    family = next(
+        (
+            item
+            for item in _children(families, "family")
+            if item.get("id") == "F0001"
+        ),
+        None,
+    )
     media = next(
         (
             item
@@ -253,8 +264,10 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
-    if person is None or media is None:
-        raise AssertionError("Gramps XML export is missing fixture person I0001 or media M0001.")
+    if person is None or family is None or media is None:
+        raise AssertionError(
+            "Gramps XML export is missing fixture person I0001, family F0001 or media M0001."
+        )
 
     _add_same_fact_birth_version(root, events, person)
 
@@ -318,12 +331,23 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
             "type": "General",
         },
     )
-    ET.SubElement(
-        note,
-        _qualified_name(root, "text"),
-    ).text = "Note de publication du fixture natif."
+    note_text = "Note de publication native en gras et en italique."
+    ET.SubElement(note, _qualified_name(root, "text")).text = note_text
+    for style_name, fragment in (("bold", "gras"), ("italic", "italique")):
+        style = ET.SubElement(
+            note,
+            _qualified_name(root, "style"),
+            {"name": style_name},
+        )
+        start = note_text.index(fragment)
+        ET.SubElement(
+            style,
+            _qualified_name(root, "range"),
+            {"start": str(start), "end": str(start + len(fragment))},
+        )
     ET.SubElement(note, _qualified_name(root, "tagref"), {"hlink": tag_handle})
     ET.SubElement(person, _qualified_name(root, "noteref"), {"hlink": note_handle})
+    ET.SubElement(family, _qualified_name(root, "noteref"), {"hlink": note_handle})
 
     updated = ET.tostring(root, encoding="utf-8", xml_declaration=True)
     fixture.write_bytes(gzip.compress(updated, mtime=0) if compressed else updated)
@@ -345,10 +369,16 @@ def verify(executable: str) -> None:
         _create_media_fixture(work)
         native_fixture = _native_fixture(executable, env, work)
 
-        def report(family: str, output: Path | None, *, overwrite=False) -> str:
+        def report(
+            family: str,
+            output: Path | None,
+            *,
+            output_format: str = "json_snapshot",
+            overwrite=False,
+        ) -> str:
             options = (
                 f"name={PLUGIN_ID},reference_family={family},"
-                "output_format=json_snapshot,privacy_acknowledged=True"
+                f"output_format={output_format},privacy_acknowledged=True"
             )
             if output is not None:
                 options += f",destination={output}"
@@ -477,10 +507,39 @@ def verify(executable: str) -> None:
             None,
         )
         assert publishable_note is not None
-        assert publishable_note["text"] == "Note de publication du fixture natif."
+        assert publishable_note["text"] == "Note de publication native en gras et en italique."
         assert any(
             model["tags"][handle]["name"] == "BOOK_PUBLICATION"
             for handle in publishable_note["links"]["tag_handles"]
+        )
+        note_handle = publishable_note["handle"]
+        assert note_handle in model["people"][0]["links"]["notes"]
+        assert note_handle in model["reference_family"]["links"]["notes"]
+
+        html_output = work / "family-shared-note.zip"
+        log = report("F0001", html_output, output_format="html_zip")
+        if not html_output.is_file():
+            raise AssertionError(log or "Gramps did not write the shared-note HTML archive.")
+        with zipfile.ZipFile(html_output) as archive:
+            if archive.testzip() is not None:
+                raise AssertionError("Gramps produced an invalid shared-note HTML archive.")
+            html = archive.read("index.html").decode("utf-8")
+        rendered_note_nodes = [
+            (target, body)
+            for target, body in re.findall(
+                r'<div id="([^"]+)" class="note-text">(.*?)</div>',
+                html,
+                flags=re.DOTALL,
+            )
+            if "Note de publication native en " in body
+        ]
+        assert len(rendered_note_nodes) == 2, rendered_note_nodes
+        assert len({target for target, _ in rendered_note_nodes}) == 2, rendered_note_nodes
+        assert all("<strong>gras</strong>" in body for _, body in rendered_note_nodes)
+        assert all("<em>italique</em>" in body for _, body in rendered_note_nodes)
+        print(
+            "PASS: AC-10 native BOOK_PUBLICATION note shared by person and family, "
+            "with distinct HTML targets and native bold/italic styles"
         )
         # The synthetic media file is read through Gramps' database media path,
         # cropped using the recorded rectangle, and installed beside the JSON.
