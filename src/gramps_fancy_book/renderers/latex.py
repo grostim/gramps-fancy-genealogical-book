@@ -220,6 +220,7 @@ def render_latex(model: BookModel) -> str:
     document = [
         "\\documentclass[a4paper]{article}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
+        "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
         "\\usepackage{tikz}\n\\usepackage{fancyhdr}\n"
         "\\renewcommand{\\familydefault}{\\sfdefault}\n"
