@@ -42,7 +42,7 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 
 ## Renvois de citation numérotés — PR #103 — 29 septembre 2026
 
-- La PR #103, fusionnée dans `main` au commit `82d97d3`, réutilise la numérotation éditoriale commune au PDF et au HTML. Les appels HTML affichent des numéros cliquables et l’annexe trie les entrées selon ces numéros.
+- La PR #103, fusionnée dans `main` au commit `82d97d3`, a réutilisé le même ordre de numérotation que le PDF. Les appels HTML affichent des numéros cliquables et l’annexe trie les entrées selon ces numéros. Après l’observation de numéros visibles dans le désordre en HTML, la PR #106 ci-dessous aligne chaque format sur son propre ordre d’apparition.
 - Après reconstruction du module, Gramps Desktop 6.0.8 a produit `book.zip` en ligne de commande avec la fixture Gramps fictive `Arbre familial 1-2026-09-29-12-24-33.gramps`, dans un nouveau profil temporaire. L’archive contient `index.html` et un PNG.
 - Le livre a été ouvert dans le navigateur intégré via un serveur local sur `127.0.0.1`, sans ressource externe. La couverture, le portrait, les renvois `[1]` à `[3]` et les titres d’annexe numérotés ont été affichés ; l’ancre de la première entrée conduit à `[1] Registre fictif`. Les contrôles CI Linux (Python 3.10–3.13, intégration Gramps et LuaLaTeX) et Windows sont tous passés sur la PR.
 - L’ordre visible dans le corps HTML commence par `[2]`, `[3]`, puis `[1]`, car les fiches apparaissent dans le parcours généalogique avant les notices familiales, alors que la numérotation reste alignée sur l’ordre éditorial du PDF. L’export initial montrait encore les identifiants d’événement ; la PR #105 les remplace par des libellés descriptifs.
@@ -53,6 +53,12 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 - Dans l’annexe HTML, les liens de contexte d’une citation affichent maintenant le type d’événement traduit, sa date, sa description et le nom du lieu. Les liens vers une personne ou une famille utilisent également leurs noms. Les identifiants internes d’événement, de personne et de famille ne sont plus affichés.
 - Un second export du même arbre fictif a été généré par Gramps 6.0.8 dans un profil isolé. Le ZIP passe `unzip -t` ; le livre ouvert sur `127.0.0.1` affiche par exemple « événement : Naissance — vers 1900 — Lyon, France » et « événement : Profession — 1920 — Lyon, France ».
 - `tests/test_html_renderer.py` passe (4 tests) et Ruff ne signale aucun problème sur le renderer et son test. Le navigateur montre toujours `[2]`, `[3]`, puis `[1]` dans l’ordre de lecture HTML ; l’harmonisation de cet ordre avec le PDF reste à examiner.
+
+## Première apparition des citations — PR #106 — 29 septembre 2026
+
+- La numérotation HTML suit maintenant l’ordre réellement lu : appels des fiches rendues dans le parcours, puis appels des notices familiales pour chaque partie. La numérotation LaTeX garde l’ordre déjà rendu par le PDF : notices familiales, puis fiches. Un même objet Citation conserve un seul numéro dans chaque sortie ; ses numéros peuvent différer d’un format à l’autre puisque leur ordre de lecture diffère.
+- Un nouvel export Gramps 6.0.8 depuis la fixture native fictive donne `[1]` pour la naissance, `[2]` pour la profession et `[3]` pour le mariage dans le corps HTML et dans l’annexe. Les deux citations de la fiche individuelle précèdent celle de la notice familiale ; l’ouverture navigateur aux deux ancres confirme `[1]`, `[2]`, puis `[3]`.
+- Le ZIP passe `unzip -t`. Les tests de numérotation (1), de rendu HTML (4) et de rendu LaTeX (2), Ruff et `git diff --check` passent. La recette AC-14 comparative complète, notamment la vérification des numéros PDF correspondants, reste à réaliser.
 
 ## Recette Gramps Desktop interactive — 29 septembre 2026
 
