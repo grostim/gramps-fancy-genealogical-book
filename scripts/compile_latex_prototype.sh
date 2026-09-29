@@ -6,6 +6,9 @@ work_dir="${LATEX_WORK_DIR:-${repo_root}/.work/latex-spike}"
 mkdir -p "$work_dir"
 work_dir="$(cd "$work_dir" && pwd)"
 
+printf 'LuaLaTeX engine:\n'
+lualatex --version
+
 LAYOUT_SPIKE_OUTPUT="$work_dir/layout-spike.tex" \
   python3 "$repo_root/prototypes/build_layout.py"
 

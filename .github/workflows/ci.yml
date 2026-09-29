@@ -24,6 +24,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e '.[dev,media]'
+      - name: Record Python test environment
+        run: |
+          cat /etc/os-release
+          python -VV
+          python -m pip freeze
+          msgfmt --version
       - run: pytest
       - run: ruff check .
       - run: python build_addon.py
@@ -48,6 +54,13 @@ jobs:
       - run: python --version
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e ".[dev,media]"
+      - name: Record Windows test environment
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, BuildNumber | Format-List
+          python -VV
+          python -m pip freeze
+          msgfmt --version
       - run: pytest
       - run: ruff check .
       - run: python build_addon.py
@@ -63,6 +76,11 @@ jobs:
           /usr/bin/python3 -m venv --system-site-packages .venv-gramps
           .venv-gramps/bin/python -m pip install 'gramps==6.0.8'
           .venv-gramps/bin/python -m pip install 'mistune>=3,<4' 'Pillow>=10' 'pypdfium2>=4'
+      - name: Record Gramps integration environment
+        run: |
+          cat /etc/os-release
+          .venv-gramps/bin/python -VV
+          .venv-gramps/bin/python -m pip freeze
       - run: .venv-gramps/bin/python build_addon.py
       - run: .venv-gramps/bin/python scripts/verify_gramps.py --gramps "$PWD/.venv-gramps/bin/gramps"
       - uses: actions/upload-artifact@v4
