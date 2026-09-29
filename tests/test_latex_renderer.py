@@ -9,8 +9,13 @@ from gramps_fancy_book.domain import (
     Event,
     EventReference,
     Family,
+    FamilySection,
+    Generation,
+    Genealogy,
+    GenealogyPart,
     Note,
     Person,
+    PersonOccurrence,
     Place,
     Repository,
     RepositoryReference,
@@ -112,3 +117,84 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     assert r"R\_1\&" in rendered
     assert r"\url{https://example.org/archive?folio=1&format=full}" in rendered
     assert r"(record\_\&)" in rendered
+
+
+def test_running_headers_include_section_generation_branch_and_page_number():
+    alex = Person(handle="alex", name="Alex Exemple")
+    camille = Person(handle="camille", name="Camille Exemple")
+    child = Person(handle="child", name="Enfant Exemple")
+    family = Family(
+        handle="family",
+        father=alex,
+        mother=camille,
+        children=(child,),
+    )
+    model = BookModel(
+        reference_family=family,
+        people=[alex, camille, child],
+        families={family.handle: family},
+        genealogy=Genealogy(
+            ancestry=GenealogyPart(
+                "ancestry",
+                (
+                    Generation(
+                        0,
+                        (
+                            PersonOccurrence(
+                                "a-alex", "alex", 0, branch_handles=("alex",)
+                            ),
+                            PersonOccurrence(
+                                "a-camille", "camille", 0, branch_handles=("camille",)
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            descent=GenealogyPart(
+                "descent",
+                (
+                    Generation(
+                        0,
+                        (
+                            PersonOccurrence(
+                                "d-alex", "alex", 0, branch_handles=("alex",)
+                            ),
+                        ),
+                    ),
+                    Generation(
+                        1,
+                        (
+                            PersonOccurrence(
+                                "d-child", "child", 1, branch_handles=("alex",)
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            family_sections=(
+                FamilySection(
+                    family_handle="family",
+                    part="descent",
+                    generation=1,
+                    branch_handles=("alex",),
+                    section_id="family-section",
+                    partner_occurrence_ids=("d-alex",),
+                    child_occurrence_ids=("d-child",),
+                ),
+            ),
+        ),
+    )
+
+    rendered = render_latex(model)
+
+    assert r"\usepackage{fancyhdr}" in rendered
+    assert r"\fancyhead[R]" in rendered
+    assert r"\thepage" in rendered
+    assert rendered.index(r"\markboth{Contents}{}") < rendered.index(r"\tableofcontents")
+    assert r"\markboth{Ancestry}{Generation 0 / Branch: Alex Exemple}" in rendered
+    assert r"\markright{Generation 0 / Branch: Camille Exemple}" in rendered
+    assert r"\markright{Generation 1 / Branch: Alex Exemple}" in rendered
+    assert (
+        r"\markboth{Family connections}{Generation 1 / Branch: Alex Exemple}"
+        in rendered
+    )
