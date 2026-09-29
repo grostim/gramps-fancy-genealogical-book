@@ -14,7 +14,7 @@ The add-on needs to keep its Desktop flow. Gramps Web must provide a supported, 
 2. **Declared output types.** A report can declare supported extensions and MIME types. The first required results are PDF (`application/pdf`) and ZIP (`application/zip`); the server returns the matching filename and content type.
 3. **Server-controlled output path.** The API creates a unique target inside `REPORT_DIR` and passes that target to the report through a documented field. A report cannot choose an arbitrary server path. The server verifies the resulting file and removes temporary output after delivery or failure.
 4. **Normal option and privacy handling.** The report's family, depth, format, and privacy acknowledgement options appear in the Web UI, are validated server-side, and reach the report unchanged. A missing privacy acknowledgement must prevent generation.
-5. **Task status and diagnostics.** Generation uses the normal asynchronous task lifecycle. Users can see progress or a meaningful running state, and failures produce actionable logs without exposing private data or server paths.
+5. **Task status and diagnostics.** Generation uses the normal asynchronous task lifecycle. API 3.22.3 does not pass a progress callback for `generate_report`, so the contract must define either report-supported progress or a clearly presented indeterminate running state. Failures should produce actionable logs without exposing private data or server paths.
 
 The exact extension point is for maintainers to choose. It could be a report capability declaration or another documented adapter; the proposal does not require globally enabling `CATEGORY_WEB` or hard-coding this add-on into the API.
 
@@ -26,7 +26,7 @@ Against a pinned Gramps Web API version and a synthetic database:
 - Valid options, including the required privacy acknowledgement, reach the report; invalid or missing required values are rejected before writing.
 - PDF and ZIP results are generated under `REPORT_DIR`, downloaded with the declared extension and MIME type, and open as valid files.
 - A report cannot write outside `REPORT_DIR`, overwrite an unrelated file, or leave partial output after failure.
-- The task endpoint exposes completion and failure states and useful progress/log information.
+- The UI exposes pending/running/completed/failed states; it presents progress if the contract provides it, otherwise an indeterminate running state. Failures provide useful diagnostics without private data or internal paths.
 - Existing Desktop GUI and CLI generation continue to work without Web-specific settings.
 
 ## Decision needed
