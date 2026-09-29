@@ -588,6 +588,17 @@ def _render_citation_entry(entry, model, media_context) -> str:
         f'<article class="citation-entry" id="{_attr(entry.entry_id)}">\n',
         f"<h3>{_text(title)}</h3>\n",
     ]
+    identifiers = []
+    if citation is not None and citation.gramps_id:
+        identifiers.append(f"citation {_text(citation.gramps_id)}")
+    if source is not None and source.gramps_id:
+        identifiers.append(f"source {_text(source.gramps_id)}")
+    if identifiers:
+        output.append(
+            '<p class="muted">Identifiants Gramps : '
+            + " · ".join(identifiers)
+            + "</p>\n"
+        )
     details = []
     if citation is not None:
         if citation.page:
@@ -595,17 +606,30 @@ def _render_citation_entry(entry, model, media_context) -> str:
         if citation.date is not None and citation.date.display:
             details.append(citation.date.display)
     if source is not None:
-        details.extend(item for item in (source.author, source.publication_info) if item)
+        details.extend(
+            item
+            for item in (
+                source.author,
+                source.publication_info,
+                source.abbreviation,
+            )
+            if item
+        )
     if details:
         output.append(f"<p>{_text(' — '.join(details))}</p>\n")
     for reference in entry.repository_refs:
         repository = model.repositories.get(reference.repository_handle)
         repository_name = repository.name if repository is not None else reference.repository_handle
+        repository_details = [repository_name]
+        if repository is not None and repository.type:
+            repository_details.append(repository.type)
         call_number = reference.call_number
-        output.append(
-            f"<p>{_text(repository_name)}"
-            f"{': ' + _text(call_number) if call_number else ''}</p>\n"
-        )
+        if call_number:
+            repository_details.append(call_number)
+        output.append(f"<p>{_text(' — '.join(repository_details))}</p>\n")
+    for target, description in _citation_urls(entry, model):
+        link = _render_html_url(target, description, class_name="citation-url")
+        output.append(f"<p>{link}</p>\n")
     for reference in getattr(entry, "media_refs", ()):
         media = model.media.get(reference.media_handle)
         output.append(
@@ -628,6 +652,38 @@ def _render_citation_entry(entry, model, media_context) -> str:
         output.append("</ul>\n")
     output.append("</article>\n")
     return "".join(output)
+
+
+def _citation_urls(entry, model) -> list[tuple[str, str]]:
+    citation = model.citations.get(entry.citation_handle)
+    source = model.sources.get(entry.source_handle) if entry.source_handle else None
+    url_records = list(getattr(citation, "urls", ()))
+    url_records.extend(getattr(source, "urls", ()))
+    for reference in entry.repository_refs:
+        repository = model.repositories.get(reference.repository_handle)
+        url_records.extend(getattr(repository, "urls", ()))
+
+    result = []
+    seen = set()
+    for url in url_records:
+        target = safe_html_url(getattr(url, "path", ""))
+        if target is None or target in seen:
+            continue
+        seen.add(target)
+        result.append((target, getattr(url, "description", "")))
+    return result
+
+
+def _render_html_url(target: str, description: str, *, class_name: str) -> str:
+    detail = (
+        f' <span class="muted">— {_text(description)}</span>'
+        if description and description != target
+        else ""
+    )
+    return (
+        f'<a class="{_attr(class_name)}" href="{_attr(target)}">'
+        f"{_text(target)}</a>{detail}"
+    )
 
 
 def _media_context(model, enabled: bool) -> dict:
@@ -831,10 +887,7 @@ def _media_external_links(artifact, reference, model) -> list[str]:
             target = safe_html_url(url.path)
             if target is None or target in links:
                 continue
-            label = url.description or target
-            links.append(
-                f'<a href="{_attr(target)}">{_text(label)}</a>'
-            )
+            links.append(_render_html_url(target, url.description, class_name="media-url"))
     return links
 
 
