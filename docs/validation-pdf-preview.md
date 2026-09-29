@@ -41,3 +41,13 @@ No clipping, overlap, or missing page number was visible in the inspected pages.
 - The fictional model has 22 people, 11 families, 33 events, 3 notes, 33 citations, and two cropped PNG derivatives; the associated HTML ZIP was generated from this same model. The PDF has 22 A4 pages (109,106 bytes), compiled by LuaHBTeX 1.24.0.
 - All 22 pages were rendered at 90 dpi. A contact sheet and physical pages 7, 16, 19, and 22 were inspected separately; no overlap or clipped text was visible in those views. The appendix contains long URLs, and the portraits are synthetic pixels.
 - `pdfinfo` reports `Tagged: no`. Accessibility, comparison with the private mockups, and a full high-resolution review remain open.
+
+A high-resolution reinspection on 30 September confirms this historical file no longer represents the current header: on physical pages 16 and 17, the folio visually touches the section label. The file was generated from commit `5fb7bc7`, before the header correction in PR #114. The current AC-15 PDF below provides evidence for the corrected header.
+
+## Native AC-15 PDF — full review on 30 September 2026
+
+- Local, untracked file: `output/pdf/gramps-fancy-book-ac15-shared-media-review.pdf`; SHA-256 `f1ac11b304668363c92bcd31415b663ddd39c4ca16b56eea502f78ea5e2fe0df`.
+- Nine A4 pages, 45,802 bytes, LuaTeX 1.24.0. Synthetic Gramps AC-15/AC-23 fixture with a reproduction cited twice and injection strings used only for the security check.
+- All nine pages were rendered at 160 dpi and inspected: cover, contents, ancestry, descent, family links, family notice, profile, source appendix, and index. Header labels and folios are separated; no overlap or clipped text was observed.
+- The `<img ... onerror=...>` and `<script>...</script>` strings appear as text in the profile and family notice. The appendix shows one shared reproduction, and the other citation points to it. The fixture’s URLs remain legible within the page width.
+- `pdfinfo` reports `Tagged: no`. This security fixture contains fictional data and does not qualify final design, accessibility, or comparison with the private mockups.
