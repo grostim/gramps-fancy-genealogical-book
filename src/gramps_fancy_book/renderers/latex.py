@@ -226,7 +226,7 @@ def render_latex(model: BookModel) -> str:
         _render_cover(model),
     ]
     document.append(_render_front_matter(model))
-    document.append("\\section*{Contents}\n\\tableofcontents\n\\clearpage\n")
+    document.append("\\tableofcontents\n\\clearpage\n")
 
     emitted_targets: set[str] = set()
     people_by_handle = {person.handle: person for person in model.people}
@@ -1107,9 +1107,10 @@ def _render_media_image(
     output = [
         "\\begin{center}\n"
         f"\\includegraphics[width={width}]{{\\detokenize{{{path}}}}}\n"
+        "\\par\n"
     ]
     if caption:
-        output.append(f"{{\\small {escape_latex_text(caption)}}}\n")
+        output.append(f"{{\\small {escape_latex_text(caption)}}}\\par\n")
     output.append("\\end{center}\n")
     return "".join(output)
 
@@ -1162,5 +1163,3 @@ def _section_heading(title: str) -> str:
 def _latex_target(target_id: str) -> str:
     """Map arbitrary stable model IDs to safe, deterministic hyperref labels."""
     return f"target-{target_id.encode('utf-8').hex()}"
-
-

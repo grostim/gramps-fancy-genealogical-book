@@ -78,11 +78,11 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-14 | Citations réutilisées et multiples | L3.4, L5.3–L5.4, L6.4 | Citations réutilisables, appels contextuels, numérotation, renvois et annexe implémentés ; scénario complet restant |
 | AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Placements dédupliqués par handle média et appels documentaires reliés ; cas partagé à vérifier dans les deux rendus |
 | AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Un portrait fictif recadré est intégré au PDF depuis Gramps ; les quatre cas restent à valider avec médias Gramps |
-| AC-17 | Pagination finale cohérente | L6.4–L6.5 | PDF A4 de 9 pages compilé depuis Gramps avec renvois stabilisés sur une fixture synthétique ; livres longs, débordements et composition finale restent à revoir visuellement |
+| AC-17 | Pagination finale cohérente | L6.4–L6.5 | PDF Gramps fictif de 9 pages compilé avec renvois stabilisés ; livres synthétiques de 18 et 4 pages examinés, sommaire et légende du portrait corrigés ; comparaison aux maquettes et export Gramps complet à vérifier |
 | AC-18 | Fait sans citation et source sans dépôt | L3.4, L5.4 | Modèle de citations tolère appels et dépôts absents ; cas documentaires à vérifier dans la sortie finale |
 | AC-19 | Contradictions et rapport séparé | L3.7, L5.7 | Rapport séparé BOOK_FACT_ID implémenté : dates disjointes en conflit, lieux différents à examiner ; recette de données restante |
 | AC-20 | Équivalence PDF/HTML et usage hors ligne | L6, L7, L8.1 | Sorties PDF et HTML ZIP autonomes disponibles ; équivalence de contenu et navigation hors ligne restent à vérifier |
-| AC-21 | Livre long et limites graphiques | L2.3, L6.3, L6.6 | Plafond de pixels et fixtures de rendu présents ; livre long et limites graphiques à mesurer et examiner |
+| AC-21 | Livre long et limites graphiques | L2.3, L6.3, L6.6 | Fixture synthétique riche de 18 pages A4 avec 80 événements, note longue, portrait, photo pleine page, citations et annexe examinée ; limites graphiques avec médias Gramps réels et comparaison aux maquettes encore à qualifier |
 | AC-22 | Desktop et Web complets | L1, L2.5, L8.2 | Sélection/export JSON contrôlés sur Desktop macOS ; installation et parcours complet Desktop/Web restent à qualifier |
 | AC-23 | Échappement et absence d’injection | L2.6, L6.2, L7.3 | Échappement HTML, liens restreints et chemins ZIP relatifs implémentés ; recette de sécurité dédiée restante |
 | AC-24 | Stabilité du contenu et des ancres | L4.6, L5.6, L8.1 | Identifiants et ancres stables produits par le modèle et les rendus ; stabilité entre générations à vérifier |
