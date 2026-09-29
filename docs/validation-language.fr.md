@@ -37,11 +37,11 @@ La description d’événement saisie dans la fixture reste intacte. Le PDF fran
 
 ## Affichage des dates selon la langue du livre — 30 septembre 2026
 
-La vérification d’intégration native Gramps 6.0.8 compare le même événement `Birth` exporté avec le livre en anglais puis en français, alors que la locale du profil Gramps reste anglaise. Le texte affiché contient l’année 1900 dans les deux cas et diffère selon la langue sélectionnée. Les valeurs brutes et normalisées de la date restent identiques. Cette vérification porte sur une date structurée ; elle ne couvre pas encore les dates saisies en texte libre ni le choix graphique de l’option.
+La vérification d’intégration native Gramps 6.0.8 compare les mêmes événements exportés avec le livre en anglais puis en français, alors que la locale du profil Gramps reste anglaise. Pour `Birth`, le texte affiché contient l’année 1900 dans les deux cas et diffère selon la langue sélectionnée ; les valeurs brutes et normalisées restent identiques. La date textuelle du mariage, « Entre l’hiver 1924 et le printemps 1925 », reste exactement telle qu’elle a été saisie dans les deux langues, et sa valeur brute est identique.
 
 ## Limites
 
 - Ces essais invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés. Ils ne vérifient pas encore l’affichage graphique de l’option ni son choix dans la boîte de dialogue du rapport.
 - La recette ne compare pas toutes les chaînes de notes et d’événements ; elle confirme la conservation du nom saisi. Les données de la fixture sont fictives.
-- Les dates structurées sont maintenant formatées par Gramps dans la langue du livre ; la vérification native CLI ne couvre pas encore les dates en texte libre ni la sélection graphique de la langue.
+- Les dates structurées sont formatées par Gramps dans la langue du livre et la date libre de cette fixture reste intacte ; la sélection graphique de la langue n’est pas encore couverte.
 - Le PDF de démonstration utilise un petit arbre et des portraits synthétiques ; sa mise en page finale, l’accessibilité PDF et la comparaison avec les maquettes privées ne sont pas qualifiées par cette recette.
