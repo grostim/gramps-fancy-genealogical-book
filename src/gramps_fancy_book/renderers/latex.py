@@ -263,10 +263,12 @@ def render_latex(
         "\\renewcommand{\\familydefault}{\\sfdefault}\n"
         "\\pagestyle{fancy}\n"
         "\\fancyhf{}\n"
-        "\\fancyhead[L]{\\footnotesize\\nouppercase{\\leftmark}}\n"
-        "\\fancyhead[R]{\\footnotesize\\nouppercase{\\rightmark}\\quad\\thepage}\n"
+        "\\fancyhead[L]{\\parbox[t]{\\headwidth}{\\footnotesize"
+        "\\nouppercase{\\leftmark}\\hfill\\thepage\\\\[4pt]"
+        "\\nouppercase{\\rightmark}}}\n"
+        "\\fancyhead[R]{}\n"
         "\\renewcommand{\\headrulewidth}{0.2pt}\n"
-        "\\setlength{\\headheight}{14pt}\n"
+        "\\setlength{\\headheight}{30pt}\n"
         "\\setlength{\\headsep}{18pt}\n"
         "\\setlength{\\emergencystretch}{2em}\n"
         "\\begin{document}\n",
@@ -1060,10 +1062,13 @@ def _render_citation_appendix(
                     )
             else:
                 output.append(
-                    _render_media_image(
+                    _render_shared_media_reference(
                         reference,
                         caption,
+                        placement,
                         model.media_artifacts,
+                        emitted_targets,
+                        model_book_language(model, default="en"),
                         width="0.6\\linewidth",
                     )
                 )
@@ -1319,16 +1324,7 @@ def _render_media_image(
     width: str,
 ) -> str:
     media_ref = reference.media_ref if isinstance(reference, EditorialPortrait) else reference
-    artifact = next(
-        (
-            item
-            for item in artifacts
-            if item.media_handle == media_ref.media_handle
-            and item.rectangle == media_ref.rectangle
-            and item.action == "reproduce"
-        ),
-        None,
-    )
+    artifact = _reproduced_media_artifact(media_ref, artifacts)
     if artifact is None or artifact.asset_path is None:
         return ""
     path = _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
@@ -1343,6 +1339,68 @@ def _render_media_image(
         output.append(f"{{\\small {escape_latex_text(caption)}}}\\par\n")
     output.append("\\end{center}\n")
     return "".join(output)
+
+
+def _render_shared_media_reference(
+    reference: MediaReference,
+    caption: str,
+    placement: EditorialMediaPlacement | None,
+    artifacts: list[EditorialMediaArtifact],
+    emitted_targets: set[str],
+    language: str,
+    *,
+    width: str,
+) -> str:
+    same_asset_uses = (
+        [
+            use
+            for use in placement.uses
+            if use.media_ref.media_handle == reference.media_handle
+            and use.media_ref.rectangle == reference.rectangle
+        ]
+        if placement is not None
+        else []
+    )
+    artifact = _reproduced_media_artifact(reference, artifacts)
+    if len(same_asset_uses) < 2 or artifact is None or artifact.asset_path is None:
+        return _render_media_image(reference, caption, artifacts, width=width)
+
+    path = _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
+    if path is None or artifact.cache_key is None:
+        return _render_media_image(reference, caption, artifacts, width=width)
+
+    target_id = f"media-{artifact.cache_key}"
+    if target_id in emitted_targets:
+        display_label = caption or label_for_language(
+            language, "document_image_no_description"
+        )
+        return (
+            "\\par "
+            + escape_latex_text(label_for_language(language, "see_reproduction"))
+            + " "
+            + _latex_page_link(target_id, display_label)
+            + ".\\par\n"
+        )
+
+    anchor = _latex_anchor(target_id, emitted_targets)
+    return anchor + _render_media_image(reference, caption, artifacts, width=width)
+
+
+def _reproduced_media_artifact(
+    reference: EditorialPortrait | MediaReference,
+    artifacts: list[EditorialMediaArtifact],
+) -> EditorialMediaArtifact | None:
+    media_ref = reference.media_ref if isinstance(reference, EditorialPortrait) else reference
+    return next(
+        (
+            item
+            for item in artifacts
+            if item.media_handle == media_ref.media_handle
+            and item.rectangle == media_ref.rectangle
+            and item.action == "reproduce"
+        ),
+        None,
+    )
 
 
 def _safe_latex_media_path(asset_path: str, cache_key: str | None) -> str | None:

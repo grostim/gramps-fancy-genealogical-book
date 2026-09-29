@@ -5,6 +5,9 @@ from gramps_fancy_book.domain import (
     EditorialBook,
     EditorialCitationCall,
     EditorialCitationEntry,
+    EditorialMediaArtifact,
+    EditorialMediaPlacement,
+    EditorialMediaUse,
     EditorialProfile,
     Event,
     EventReference,
@@ -13,6 +16,8 @@ from gramps_fancy_book.domain import (
     Genealogy,
     GenealogyPart,
     Generation,
+    Media,
+    MediaReference,
     Note,
     Person,
     PersonOccurrence,
@@ -136,6 +141,70 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     assert r"(record\_\&)" in rendered
 
 
+def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
+    cache_key = "a" * 64
+    first_entry_id = "citation-entry:c1"
+    second_entry_id = "citation-entry:c2"
+    first_reference = MediaReference(media_handle="m1")
+    second_reference = MediaReference(media_handle="m1")
+    first_entry = EditorialCitationEntry(
+        entry_id=first_entry_id,
+        citation_handle="c1",
+        media_refs=(first_reference,),
+    )
+    second_entry = EditorialCitationEntry(
+        entry_id=second_entry_id,
+        citation_handle="c2",
+        media_refs=(second_reference,),
+    )
+    placement = EditorialMediaPlacement(
+        placement_id="media:m1",
+        media_handle="m1",
+        caption="Document partagé",
+        uses=(
+            EditorialMediaUse("citation", first_entry_id, first_reference),
+            EditorialMediaUse("citation", second_entry_id, second_reference),
+        ),
+    )
+    model = BookModel(
+        reference_family=Family(
+            handle="f0",
+            gramps_id="F0001",
+            father=None,
+            mother=None,
+            children=(),
+        ),
+        metadata={"BOOK_LANGUAGE": "fr"},
+        media={"m1": Media(handle="m1", description="Document partagé")},
+        media_artifacts=[
+            EditorialMediaArtifact(
+                media_handle="m1",
+                rectangle=None,
+                action="reproduce",
+                cache_key=cache_key,
+                asset_path=f"media/{cache_key}.png",
+                width=10,
+                height=10,
+            )
+        ],
+        editorial_book=EditorialBook(
+            citation_entries=(first_entry, second_entry),
+            media_placements=(placement,),
+        ),
+    )
+
+    rendered = render_latex(model)
+    target = "target-" + f"media-{cache_key}".encode().hex()
+
+    assert rendered.count(r"\includegraphics[width=0.6\linewidth]") == 1
+    assert rendered.count(f"\\hypertarget{{{target}}}") == 1
+    assert rendered.count(f"\\hyperlink{{{target}}}") == 2
+    assert "Voir la reproduction :" in rendered
+    assert rendered.index(r"\includegraphics[width=0.6\linewidth]") < rendered.index(
+        "Voir la reproduction :"
+    )
+
+
 def test_running_headers_include_section_generation_branch_and_page_number():
     alex = Person(handle="alex", name="Alex Exemple")
     camille = Person(handle="camille", name="Camille Exemple")
@@ -205,8 +274,14 @@ def test_running_headers_include_section_generation_branch_and_page_number():
     rendered = render_latex(model)
 
     assert r"\usepackage{fancyhdr}" in rendered
-    assert r"\fancyhead[R]" in rendered
+    assert (
+        r"\fancyhead[L]{\parbox[t]{\headwidth}{\footnotesize"
+        r"\nouppercase{\leftmark}\hfill\thepage\\[4pt]\nouppercase{\rightmark}}}"
+        in rendered
+    )
+    assert r"\fancyhead[R]{}" in rendered
     assert r"\thepage" in rendered
+    assert r"\setlength{\headheight}{30pt}" in rendered
     assert rendered.index(r"\markboth{Contents}{}") < rendered.index(r"\tableofcontents")
     assert r"\markboth{Ancestry}{Generation 0 / Branch: Alex Exemple}" in rendered
     assert r"\markright{Generation 0 / Branch: Camille Exemple}" in rendered
