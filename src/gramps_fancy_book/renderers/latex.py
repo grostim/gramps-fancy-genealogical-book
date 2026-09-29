@@ -30,9 +30,27 @@ from ..domain import (
     RepositoryReference,
     Url,
 )
-from .labels import label, label_for_language, owner_label
+from .labels import (
+    label as _shared_label,
+)
+from .labels import (
+    label_for_language,
+)
+from .labels import (
+    owner_label as _shared_owner_label,
+)
 from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
+
+
+def label(model: BookModel, key: str) -> str:
+    """Use English for legacy direct renderer calls without language metadata."""
+    return _shared_label(model, key, default="en")
+
+
+def owner_label(model: BookModel, owner_type: str) -> str:
+    """Use the LaTeX renderer's English fallback for record type labels."""
+    return _shared_owner_label(model, owner_type, default="en")
 
 
 def _front_matter_notes_by_role(model: BookModel) -> dict[str, Note]:

@@ -140,15 +140,15 @@ _LABELS = {
 }
 
 
-def label(model, key: str) -> str:
+def label(model, key: str, *, default: str = "fr") -> str:
     """Return a translated renderer label for this model."""
-    return _LABELS[model_book_language(model)].get(key, key)
+    return _LABELS[model_book_language(model, default=default)].get(key, key)
 
 
-def owner_label(model, owner_type: str) -> str:
+def owner_label(model, owner_type: str, *, default: str = "fr") -> str:
     """Translate known record types and retain unknown types as written."""
     key = f"owner_{owner_type}"
-    translated = label(model, key)
+    translated = label(model, key, default=default)
     return owner_type if translated == key else translated
 
 
