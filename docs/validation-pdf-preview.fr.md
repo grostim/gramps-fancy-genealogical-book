@@ -48,3 +48,13 @@ Aucun texte coupé, chevauchement ni folio manquant n’est visible sur les page
 - Le modèle fictif comprend 22 personnes, 11 familles, 33 événements, 3 notes, 33 citations et deux dérivés PNG ; l’archive HTML associée a été générée depuis le même modèle. Le PDF compte 22 pages A4 (109 106 octets), compilées sous LuaHBTeX 1.24.0.
 - Les 22 pages ont été rendues à 90 ppp. Une planche générale et les pages physiques 7, 16, 19 et 22 ont été examinées séparément ; aucun chevauchement ni texte tronqué n’a été observé dans ces vues. L’annexe contient des URL longues et les portraits sont des pixels synthétiques.
 - `pdfinfo` indique `Tagged: no`. L’accessibilité, la comparaison avec les maquettes privées et la revue complète à haute résolution restent à faire.
+
+La relecture haute résolution du 30 septembre confirme que ce fichier historique ne représente plus l’en-tête courant : aux pages physiques 16 et 17, le folio touche visuellement le libellé de section. Le fichier a été généré depuis le commit `5fb7bc7`, avant la correction d’en-tête de la PR #114. Le PDF AC-15 courant ci-dessous sert de preuve pour l’en-tête corrigé.
+
+## PDF natif AC-15 — revue complète du 30 septembre 2026
+
+- Fichier local non suivi : `output/pdf/gramps-fancy-book-ac15-shared-media-review.pdf` ; SHA-256 `f1ac11b304668363c92bcd31415b663ddd39c4ca16b56eea502f78ea5e2fe0df`.
+- PDF A4 de 9 pages, 45 802 octets, LuaTeX 1.24.0. Fixture Gramps synthétique AC-15/AC-23 avec une reproduction citée deux fois et des chaînes d’injection réservées au contrôle de sécurité.
+- Les neuf pages ont été rendues à 160 ppp et inspectées : couverture, sommaire, ascendance, descendance, liens familiaux, notice, fiche, annexe de sources et index. Les lignes d’en-tête et de folio sont séparées ; aucun chevauchement ni texte coupé n’a été observé.
+- Les chaînes `<img ... onerror=...>` et `<script>...</script>` apparaissent comme du texte dans la fiche et la notice. L’annexe affiche une seule reproduction partagée ; l’autre citation renvoie vers cette reproduction. Les URL de cette fixture restent lisibles dans la largeur disponible.
+- `pdfinfo` indique `Tagged: no`. Cette fixture de sécurité contient des données fictives et ne valide pas le design final, l’accessibilité ni la comparaison avec les maquettes privées.
