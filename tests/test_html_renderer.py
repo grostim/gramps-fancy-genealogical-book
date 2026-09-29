@@ -160,7 +160,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         event_target_ids=(),
         note_handles=(),
         note_target_ids=(),
-        citation_call_ids=("call-1",),
+        citation_call_ids=("call-1", "call-3"),
     )
     family_notice = SimpleNamespace(
         notice_id="family-notice:f0",
@@ -170,10 +170,22 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         event_target_ids=(),
         note_handles=(),
         note_target_ids=(),
-        citation_call_ids=(),
+        citation_call_ids=("call-2",),
     )
     call = SimpleNamespace(
         call_id="call-1",
+        context_id=profile.profile_id,
+        owner_type="profile",
+        owner_handle="p0",
+    )
+    family_call = SimpleNamespace(
+        call_id="call-2",
+        context_id=family_notice.notice_id,
+        owner_type="family",
+        owner_handle="f0",
+    )
+    second_profile_call = SimpleNamespace(
+        call_id="call-3",
         context_id=profile.profile_id,
         owner_type="profile",
         owner_handle="p0",
@@ -187,7 +199,14 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         citation_handle="c1",
         source_handle="s1",
         repository_refs=(repository_reference,),
-        calls=(call,),
+        calls=(call, family_call),
+    )
+    second_citation_entry = SimpleNamespace(
+        entry_id="citation-entry:c2",
+        citation_handle="c2",
+        source_handle="s2",
+        repository_refs=(),
+        calls=(second_profile_call,),
     )
     person_index_entry = SimpleNamespace(
         entry_id="person-index:p0",
@@ -211,7 +230,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         SimpleNamespace(
             part_id="appendix",
             kind="documentary_appendix",
-            citation_entry_ids=(citation_entry.entry_id,),
+            citation_entry_ids=(citation_entry.entry_id, second_citation_entry.entry_id),
         ),
         SimpleNamespace(
             part_id="index",
@@ -224,7 +243,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         profiles=(profile,),
         family_notices=(family_notice,),
         front_matter_notes=(),
-        citation_entries=(citation_entry,),
+        citation_entries=(citation_entry, second_citation_entry),
         person_index=(person_index_entry,),
     )
     model = SimpleNamespace(
@@ -242,7 +261,12 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
                 gramps_id="C0001",
                 source_handle="s1",
                 urls=(Url("javascript:alert(1)", description="Unsafe URL"),),
-            )
+            ),
+            "c2": Citation(
+                handle="c2",
+                gramps_id="C0002",
+                source_handle="s2",
+            ),
         },
         sources={
             "s1": Source(
@@ -257,7 +281,13 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
                         description="Notice de la source",
                     ),
                 ),
-            )
+            ),
+            "s2": Source(
+                handle="s2",
+                gramps_id="S0002",
+                title="Registre familial",
+                abbreviation="Registre familial",
+            ),
         },
         repositories={
             "r1": Repository(
@@ -285,6 +315,20 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     assert 'id="family:ancestry:0:f0"' in rendered
     assert 'id="person:p0"' in rendered
     assert 'id="citation-entry:c1"' in rendered
+    assert 'id="citation-entry:c2"' in rendered
+    assert (
+        '<a href="#citation-entry:c1"><span class="citation-number">[1]</span></a>'
+        in rendered
+    )
+    assert (
+        '<a href="#citation-entry:c2"><span class="citation-number">[2]</span></a>'
+        in rendered
+    )
+    assert rendered.count('href="#citation-entry:c1"><span class="citation-number">[1]') == 2
+    assert '<h3><span class="citation-number">[1] </span>Registre paroissial</h3>' in rendered
+    assert '<h3><span class="citation-number">[2] </span>Registre familial</h3>' in rendered
+    assert ">citation-entry:c1</a>" not in rendered
+    assert ">citation-entry:c2</a>" not in rendered
     assert "C0001" in rendered
     assert "S0001" in rendered
     assert 'href="https://example.invalid/source?record=one&amp;image=two"' in rendered
