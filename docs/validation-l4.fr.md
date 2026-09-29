@@ -25,3 +25,7 @@ Compte rendu actualisé le 28 septembre 2026. L4 reste en cours ; les scénarios
 - Les six notes éditoriales de F0 et leurs conventions Gramps 6 restent à valider séparément.
 
 Le détail des tâches et critères de sortie figure dans le [plan d’action](action-plan.fr.md#l4--parcours-généalogiques-et-sélection) et dans les [exigences](requirements.fr.md).
+
+## Essai PDF en CLI — 29 septembre 2026
+
+Gramps 6.0.8 sur macOS a produit un PDF A4 de 9 pages depuis la base native fictive avec LuaHBTeX 1.24.0. La fixture comprenait un dérivé de portrait, visible sur la couverture et dans la fiche de la personne. Cet essai confirme l’intégration Gramps–PDF sur un livre synthétique réduit ; il ne qualifie ni la pagination d’un livre long, ni tous les cas de médias/URL, ni l’accessibilité ou l’acceptation visuelle finale, qui restent à traiter en L6.

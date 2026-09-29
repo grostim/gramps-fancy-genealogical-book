@@ -1,8 +1,8 @@
 """Minimal Gramps report options for the first milestone."""
 
-from gramps.gen.const import GRAMPS_LOCALE as glocale
 from pathlib import Path
 
+from gramps.gen.const import GRAMPS_LOCALE as glocale
 from gramps.gen.plug.menu import (
     BooleanOption,
     DestinationOption,
