@@ -12,6 +12,7 @@ from gramps.gen.plug.menu import (
 )
 from gramps.gen.plug.report import MenuReportOptions
 
+from gramps_fancy_book.book_language import resolve_book_language
 from gramps_fancy_book.traversal import parse_depth_limit
 
 try:
@@ -42,6 +43,17 @@ class GrampsFancyBookOptions(MenuReportOptions):
             "max_descendant_depth",
             StringOption(_("Maximum descendant generations ('unlimited' or a number)"), "unlimited"),
         )
+        book_language = EnumeratedListOption(_("Book language"), "auto")
+        book_language.add_item("auto", _("Use Gramps language"))
+        book_language.add_item("fr", _("French"))
+        book_language.add_item("en", _("English"))
+        book_language.set_help(
+            _(
+                "Automatic mode follows the language configured in Gramps. If that language is not supported, the book uses English."
+            )
+        )
+        menu.add_option(_("Book"), "book_language", book_language)
+
         output_format = EnumeratedListOption(_("Output format"), "auto")
         output_format.add_item(
             "auto", _("Automatic (use destination extension)")
@@ -94,6 +106,13 @@ class GrampsFancyBookOptions(MenuReportOptions):
 
     def get_max_descendant_depth(self) -> int | None:
         return parse_depth_limit(self.menu.get_option_by_name("max_descendant_depth").get_value())
+
+    def get_book_language(self) -> str:
+        selected = self.menu.get_option_by_name("book_language").get_value()
+        configured = getattr(glocale, "language", None)
+        if isinstance(configured, (tuple, list)):
+            configured = configured[0] if configured else None
+        return resolve_book_language(selected, gramps_language=configured)
 
     def get_output_format(self) -> str:
         output_format = self.menu.get_option_by_name("output_format").get_value()

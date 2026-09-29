@@ -6,24 +6,10 @@ from html import escape
 from html.parser import HTMLParser
 from pathlib import PurePosixPath
 
+from ..book_language import model_book_language
 from ..domain import BookModel
 from .html_notes import render_html_inline_note, render_html_note, safe_html_url
-
-_PART_LABELS = {
-    "front_matter": "Avant-propos",
-    "table_of_contents": "Sommaire",
-    "ancestry": "Ascendance",
-    "descent": "Descendance",
-    "documentary_appendix": "Annexe documentaire",
-    "person_index": "Index des personnes",
-}
-
-_NOTE_ROLE_LABELS = {
-    "BOOK_DEDICATION": "Dédicace",
-    "BOOK_INTRODUCTION": "Introduction",
-    "BOOK_AUTHOR": "Auteur",
-    "BOOK_PUBLICATION_DATE": "Date de publication",
-}
+from .labels import label, owner_label
 
 
 def render_html(model: BookModel, *, include_media: bool = False) -> str:
@@ -40,17 +26,18 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
     editorial = getattr(model, "editorial_book", None)
     genealogy = getattr(model, "genealogy", None)
     media_context = _media_context(model, include_media)
+    language = model_book_language(model)
     title = _book_title(model, editorial)
     partner_names = [
         _person_name(person, person.handle)
         for person in (family.father, family.mother)
         if person is not None
     ]
-    couple = " et ".join(partner_names)
+    couple = label(model, "and").join(partner_names)
 
     output = [
         "<!doctype html>\n",
-        '<html lang="fr"><head><meta charset="utf-8">\n',
+        f'<html lang="{language}"><head><meta charset="utf-8">\n',
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n',
         f"<title>{_text(title)}</title>\n",
         "<style>\n",
@@ -67,34 +54,37 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
         "@media(max-width:40rem){.cover{padding:2.5rem .5rem 1.5rem}.generation{margin:1rem 0}.occurrences,.family-children,.family-partners{padding-left:1rem}.person-profile,.family-notice,.citation-entry{padding:.75rem}}\n",
         "@media print{body{max-width:none;margin:0;padding:0}.book-part{break-before:page}a{color:inherit;text-decoration:none}}\n",
         "</style></head><body>\n",
-        '<a class="skip-link" href="#main-content">Aller au contenu principal</a>\n',
+        f'<a class="skip-link" href="#main-content">{_text(label(model, "skip_to_content"))}</a>\n',
         '<header class="cover" id="cover">\n',
         f"<h1>{_render_cover_note(model, editorial, 'BOOK_TITLE') or _text(title)}</h1>\n",
     ]
     subtitle = _render_cover_note(model, editorial, "BOOK_SUBTITLE")
     if subtitle:
         output.append(f"<p>{subtitle}</p>\n")
-    for role, label in (
-        ("BOOK_AUTHOR", "Auteur"),
-        ("BOOK_PUBLICATION_DATE", "Date de publication"),
+    for role, role_label in (
+        ("BOOK_AUTHOR", label(model, "author")),
+        ("BOOK_PUBLICATION_DATE", label(model, "publication_date")),
     ):
         cover_note = _render_cover_note(model, editorial, role)
         if cover_note:
             output.append(
-                f'<p><span class="muted">{_text(label)} : </span>{cover_note}</p>\n'
+                f'<p><span class="muted">{_text(role_label)} : </span>{cover_note}</p>\n'
             )
     if couple:
         output.append(f"<p>{_text(couple)}</p>\n")
     output.append(_render_cover_portraits(model, people, media_context))
-    output.append(f'<p class="muted">Famille de référence : {_text(family.gramps_id or family.handle)}</p>\n')
+    output.append(
+        f'<p class="muted">{_text(label(model, "reference_family"))} : '
+        f'{_text(family.gramps_id or family.handle)}</p>\n'
+    )
     output.append("</header>\n<main id=\"main-content\" tabindex=\"-1\">\n")
 
     if editorial is None:
         output.append(
-            f"<p>{len(people)} personnes dans le modèle intermédiaire.</p>\n"
+            f"<p>{len(people)} {_text(label(model, 'intermediate_model'))}</p>\n"
         )
     else:
-        output.append(_render_table_of_contents(editorial.parts))
+        output.append(_render_table_of_contents(editorial.parts, model))
         occurrences = _occurrences_by_id(genealogy)
         sections = {
             section.section_id: section
@@ -129,7 +119,7 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
     return "".join(output)
 
 
-def _render_table_of_contents(parts) -> str:
+def _render_table_of_contents(parts, model) -> str:
     part_by_id = {part.part_id: part for part in parts}
     contents = next(
         (part for part in parts if part.kind == "table_of_contents"), None
@@ -144,15 +134,15 @@ def _render_table_of_contents(parts) -> str:
         part = part_by_id.get(part_id)
         if part is None:
             continue
-        label = _PART_LABELS.get(part.kind, part.kind.replace("_", " ").capitalize())
+        part_label = _part_label(model, part.kind)
         links.append(
-            f'<li><a href="#{_attr(part.part_id)}">{_text(label)}</a></li>\n'
+            f'<li><a href="#{_attr(part.part_id)}">{_text(part_label)}</a></li>\n'
         )
     if not links:
         return ""
     return (
-        '<nav class="book-part" id="contents" aria-label="Sommaire">\n'
-        "<h2>Sommaire</h2>\n<ul>\n"
+        f'<nav class="book-part" id="contents" aria-label="{_attr(label(model, "contents"))}">\n'
+        f"<h2>{_text(label(model, 'contents'))}</h2>\n<ul>\n"
         + "".join(links)
         + "</ul>\n</nav>\n"
     )
@@ -170,10 +160,10 @@ def _render_part(
     notices,
     media_context,
 ) -> str:
-    label = _PART_LABELS.get(part.kind, part.kind.replace("_", " ").capitalize())
+    part_label = _part_label(model, part.kind)
     output = [
         f'<section class="book-part" id="{_attr(part.part_id)}">\n',
-        f"<h2>{_text(label)}</h2>\n",
+        f"<h2>{_text(part_label)}</h2>\n",
     ]
     if part.kind == "front_matter":
         output.append(_render_front_matter(model))
@@ -238,6 +228,20 @@ def _render_part(
     return "".join(output)
 
 
+def _part_label(model, kind: str) -> str:
+    if kind == "table_of_contents":
+        return label(model, "contents")
+    if kind in {
+        "front_matter",
+        "ancestry",
+        "descent",
+        "documentary_appendix",
+        "person_index",
+    }:
+        return label(model, kind)
+    return kind.replace("_", " ").capitalize()
+
+
 def _render_front_matter(model) -> str:
     output = []
     notes = {
@@ -253,7 +257,12 @@ def _render_front_matter(model) -> str:
     for role, note in notes.items():
         if note is None or role in cover_roles or not (note.text or "").strip():
             continue
-        heading = _NOTE_ROLE_LABELS.get(role, role)
+        heading = {
+            "BOOK_DEDICATION": label(model, "dedication"),
+            "BOOK_INTRODUCTION": label(model, "introduction"),
+            "BOOK_AUTHOR": label(model, "author"),
+            "BOOK_PUBLICATION_DATE": label(model, "publication_date"),
+        }.get(role, role)
         output.append(
             f'<section><h3>{_text(heading)}</h3>'
             f'<div class="note-text">{render_html_note(note)}</div></section>\n'
@@ -283,20 +292,20 @@ def _render_genealogy(
     }
     if generations:
         output.append(
-            '<nav class="generation-nav" aria-label="Navigation des générations">\n'
-            "<h3>Parcourir les générations</h3>\n<ul>\n"
+            f'<nav class="generation-nav" aria-label="{_attr(label(model, "generation_navigation"))}">\n'
+            f"<h3>{_text(label(model, 'browse_generations'))}</h3>\n<ul>\n"
         )
         for generation in generations:
             target_id = _generation_id(part_name, generation.number)
             output.append(
                 f'<li><a href="#{_attr(target_id)}">'
-                f"Génération {generation.number}</a></li>\n"
+                f"{_text(label(model, 'generation'))} {generation.number}</a></li>\n"
             )
         output.append("</ul>\n</nav>\n")
     for generation in generations:
         output.append(
             f'<section class="generation" id="{_attr(_generation_id(part_name, generation.number))}">'
-            f"<h3>Génération {generation.number}</h3>\n"
+            f"<h3>{_text(label(model, 'generation'))} {generation.number}</h3>\n"
             '<ol class="occurrences">\n'
         )
         for occurrence in generation.occurrences:
@@ -318,7 +327,7 @@ def _render_genealogy(
                 )
             if branch_links:
                 output.append(
-                    ' <span class="branch-links"><span class="muted">Branche :</span> '
+                    f' <span class="branch-links"><span class="muted">{_text(label(model, "branch"))} :</span> '
                     + " · ".join(branch_links)
                     + "</span>"
                 )
@@ -336,9 +345,12 @@ def _render_genealogy(
                     else occurrence.primary_occurrence_id
                 )
                 if target and target != occurrence.occurrence_id:
-                    label = "Voir la fiche" if profile is not None else "Voir la première mention"
+                    link_label = label(
+                        model,
+                        "view_profile" if profile is not None else "view_first_mention",
+                    )
                     output.append(
-                        f' <span class="muted">(<a href="#{_attr(target)}">{label}</a>)</span>'
+                        f' <span class="muted">(<a href="#{_attr(target)}">{_text(link_label)}</a>)</span>'
                     )
             section_links = [
                 section_id
@@ -347,7 +359,7 @@ def _render_genealogy(
             ]
             if section_links:
                 links = " · ".join(
-                    f'<a href="#{_attr(section_id)}">Famille</a>'
+                    f'<a href="#{_attr(section_id)}">{_text(label(model, "family"))}</a>'
                     for section_id in section_links
                 )
                 output.append(f' <span class="family-links">[{links}]</span>')
@@ -358,7 +370,7 @@ def _render_genealogy(
 
 def _render_profile(profile, model, calls_by_id, media_context) -> str:
     output = [f'<section class="person-profile" id="{_attr(profile.profile_id)}">']
-    output.append("<h4>Notice individuelle</h4>\n")
+    output.append(f"<h4>{_text(label(model, 'individual_profile'))}</h4>\n")
     if (
         profile.portrait is not None
         and profile.portrait.caption
@@ -423,7 +435,7 @@ def _render_profile(profile, model, calls_by_id, media_context) -> str:
         if call_id in calls_by_id
     ]
     if citations:
-        output.append("<p>Références : ")
+        output.append(f"<p>{_text(label(model, 'references'))} : ")
         output.append(
             ", ".join(
                 f'<a href="#{_attr(entry_id)}">{_text(entry_id)}</a>'
@@ -451,17 +463,17 @@ def _render_family_notice(
     )
     output = [
         f'<article class="family-notice" id="{_attr(notice.notice_id)}">\n',
-        f"<h3>Famille {_text(family_label)}</h3>\n",
+        f"<h3>{_text(label(model, 'family'))} {_text(family_label)}</h3>\n",
     ]
     for section_id in notice.family_section_ids:
         section = sections.get(section_id)
         if section is None:
             continue
         output.append(
-            f'<section id="{_attr(section.section_id)}"><h4>Section familiale</h4>\n'
+            f'<section id="{_attr(section.section_id)}"><h4>{_text(label(model, "family_section"))}</h4>\n'
         )
         if section.partner_occurrence_ids:
-            output.append("<h5>Partenaires</h5><ul class=\"family-partners\">\n")
+            output.append(f"<h5>{_text(label(model, 'partners'))}</h5><ul class=\"family-partners\">\n")
             for occurrence_id in section.partner_occurrence_ids:
                 occurrence = occurrences.get(occurrence_id)
                 if occurrence is None:
@@ -473,7 +485,7 @@ def _render_family_notice(
                 )
             output.append("</ul>\n")
         if section.child_occurrence_ids:
-            output.append("<h5>Enfants et filiations</h5><ul class=\"family-children\">\n")
+            output.append(f"<h5>{_text(label(model, 'children_and_parentage'))}</h5><ul class=\"family-children\">\n")
             links_by_child = {}
             for link in section.parent_child_links:
                 links_by_child.setdefault(link.child_occurrence_id, []).append(link)
@@ -503,7 +515,7 @@ def _render_family_notice(
                 if relation_labels:
                     relation_text = _text(" ; ".join(relation_labels))
                     output.append(
-                        f' <span class="muted">— filiation : {relation_text}</span>'
+                        f' <span class="muted">— {_text(label(model, "filiation"))} : {relation_text}</span>'
                     )
                 output.append("</li>\n")
             output.append("</ul>\n")
@@ -533,7 +545,7 @@ def _render_family_notice(
         if call_id in calls_by_id
     ]
     if citations:
-        output.append("<p>Références : ")
+        output.append(f"<p>{_text(label(model, 'references'))} : ")
         output.append(
             ", ".join(
                 f'<a href="#{_attr(entry_id)}">{_text(entry_id)}</a>'
@@ -553,7 +565,7 @@ def _render_events(references, target_ids, model) -> str:
         event = model.events.get(reference.event_handle)
         details = []
         if reference.role:
-            details.append(f"Rôle : {reference.role}")
+            details.append(f"{label(model, 'role')} : {reference.role}")
         if event is not None:
             if event.date is not None and event.date.display:
                 details.append(event.date.display)
@@ -590,12 +602,12 @@ def _render_citation_entry(entry, model, media_context) -> str:
     ]
     identifiers = []
     if citation is not None and citation.gramps_id:
-        identifiers.append(f"citation {_text(citation.gramps_id)}")
+        identifiers.append(f"{_text(label(model, 'citation'))} {_text(citation.gramps_id)}")
     if source is not None and source.gramps_id:
-        identifiers.append(f"source {_text(source.gramps_id)}")
+        identifiers.append(f"{_text(label(model, 'source'))} {_text(source.gramps_id)}")
     if identifiers:
         output.append(
-            '<p class="muted">Identifiants Gramps : '
+            f'<p class="muted">{_text(label(model, "gramps_identifiers"))} : '
             + " · ".join(identifiers)
             + "</p>\n"
         )
@@ -646,7 +658,8 @@ def _render_citation_entry(entry, model, media_context) -> str:
         output.append("<ul>\n")
         for call in entry.calls:
             output.append(
-                f'<li><a href="#{_attr(call.context_id)}">{_text(call.owner_type)} '
+                f'<li><a href="#{_attr(call.context_id)}">'
+                f'{_text(owner_label(model, call.owner_type))} '
                 f"{_text(call.owner_handle)}</a></li>\n"
             )
         output.append("</ul>\n")
@@ -703,7 +716,9 @@ def _render_cover_portraits(model, people, media_context) -> str:
     editorial = getattr(model, "editorial_book", None)
     if editorial is None:
         return ""
-    output = ['<div class="cover-portraits" role="group" aria-label="Portraits du couple">\n']
+    output = [
+        f'<div class="cover-portraits" role="group" aria-label="{_attr(label(model, "couple_portraits"))}">\n'
+    ]
     for portrait in editorial.cover_portraits:
         person = people.get(portrait.person_handle)
         output.append(
@@ -714,7 +729,7 @@ def _render_cover_portraits(model, people, media_context) -> str:
                 media_context,
                 context_type="cover",
                 context_id="cover",
-                alt=f"Portrait de {_person_name(person, portrait.person_handle)}",
+                alt=f"{label(model, 'portrait_of')} {_person_name(person, portrait.person_handle)}",
             )
         )
     output.append("</div>\n")
@@ -727,7 +742,7 @@ def _portrait_alt(person_handle: str, model) -> str:
         (person for person in getattr(model, "people", ()) if person.handle == person_handle),
         None,
     )
-    return f"Portrait de {_person_name(person, person_handle)}"
+    return f"{label(model, 'portrait_of')} {_person_name(person, person_handle)}"
 
 
 def _render_media_reference(
@@ -744,7 +759,9 @@ def _render_media_reference(
         return ""
     placement = media_context["placements"].get(reference.media_handle)
     media = getattr(model, "media", {}).get(reference.media_handle)
-    label = caption or (media.description if media is not None else "") or "Document"
+    display_label = (
+        caption or (media.description if media is not None else "") or label(model, "document")
+    )
 
     if placement is not None and placement.is_featured and context_type not in {
         "cover",
@@ -758,11 +775,11 @@ def _render_media_reference(
             and primary_use.media_ref == reference
         )
         if not is_primary or placement.placement_id in media_context["emitted_featured"]:
-            return _media_reference_link(placement.placement_id, label)
+            return _media_reference_link(placement.placement_id, display_label, model)
         media_context["emitted_featured"].add(placement.placement_id)
         return _render_media_figure(
             reference,
-            label,
+            display_label,
             model,
             featured=True,
             target_id=placement.placement_id,
@@ -781,17 +798,17 @@ def _render_media_reference(
         if len(same_asset_uses) > 1:
             target_id = f"media-{artifact.cache_key}"
             if asset_href in media_context["emitted_shared_assets"]:
-                return _media_reference_link(target_id, label)
+                return _media_reference_link(target_id, display_label, model)
             media_context["emitted_shared_assets"].add(asset_href)
             return _render_media_figure(
                 reference,
-                label,
+                display_label,
                 model,
                 target_id=target_id,
                 alt=alt,
             )
 
-    return _render_media_figure(reference, label, model, alt=alt)
+    return _render_media_figure(reference, display_label, model, alt=alt)
 
 
 def _featured_media_primary_use(placement):
@@ -805,10 +822,10 @@ def _featured_media_primary_use(placement):
     return placement.uses[0] if placement.uses else None
 
 
-def _media_reference_link(target_id: str, caption: str) -> str:
+def _media_reference_link(target_id: str, caption: str, model) -> str:
     return (
         f'<p class="media-reference"><a href="#{_attr(target_id)}">'
-        f"Voir la reproduction : {_text(caption)}</a></p>\n"
+        f"{_text(label(model, 'see_reproduction'))} {_text(caption)}</a></p>\n"
     )
 
 
@@ -827,7 +844,7 @@ def _render_media_figure(
     if asset_href is not None:
         image_alt = alt or caption or (media.description if media is not None else "")
         if not image_alt:
-            image_alt = "Image documentaire sans description"
+            image_alt = label(model, "document_image_no_description")
         dimensions = ""
         width = getattr(artifact, "width", None)
         height = getattr(artifact, "height", None)
@@ -847,14 +864,16 @@ def _render_media_figure(
         return "".join(output)
 
     link_items = _media_external_links(artifact, reference, model)
-    fallback = f"{_text(caption or (media.description if media is not None else 'Document'))}"
+    fallback = _text(
+        caption or (media.description if media is not None else label(model, "document"))
+    )
     target = f' id="{_attr(target_id)}"' if target_id else ""
     if link_items:
         links = " · ".join(link_items)
         return (
             f'<p{target} class="media-reference">{fallback} — {links}</p>\n'
         )
-    message = "Reproduction indisponible" if featured else "Référence documentaire"
+    message = label(model, "reproduction_unavailable" if featured else "document_reference")
     return f'<p{target} class="media-reference">{fallback} — {message}.</p>\n'
 
 
@@ -920,11 +939,12 @@ def _media_external_links(artifact, reference, model) -> list[str]:
 
 def _book_title(model, editorial) -> str:
     note = _book_note(model, editorial, "BOOK_TITLE")
+    fallback = label(model, "book_title_fallback")
     if note is None:
-        return "Livre généalogique"
+        return fallback
     parser = _HTMLTextParser()
     parser.feed(render_html_inline_note(note))
-    return "".join(parser.parts).strip() or "Livre généalogique"
+    return "".join(parser.parts).strip() or fallback
 
 
 def _render_cover_note(model, editorial, role) -> str:

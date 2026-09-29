@@ -52,6 +52,7 @@ class GrampsFancyBookReport(Report):
             gramps_id = self.options_class.get_reference_family_id()
             max_ancestor_depth = self.options_class.get_max_ancestor_depth()
             max_descendant_depth = self.options_class.get_max_descendant_depth()
+            book_language = self.options_class.get_book_language()
             destination = self.options_class.get_destination()
             overwrite = self.options_class.get_overwrite()
             if not self.options_class.get_privacy_acknowledged():
@@ -75,6 +76,7 @@ class GrampsFancyBookReport(Report):
                 snapshot,
                 max_ancestor_depth=max_ancestor_depth,
                 max_descendant_depth=max_descendant_depth,
+                book_language=book_language,
             )
 
             if output_format == "html_zip":

@@ -2,6 +2,7 @@
 
 from pathlib import PurePosixPath
 
+from ..book_language import model_book_language
 from ..conventions import (
     BOOK_AUTHOR,
     BOOK_DEDICATION,
@@ -29,8 +30,27 @@ from ..domain import (
     RepositoryReference,
     Url,
 )
+from .labels import (
+    label as _shared_label,
+)
+from .labels import (
+    label_for_language,
+)
+from .labels import (
+    owner_label as _shared_owner_label,
+)
 from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
+
+
+def label(model: BookModel, key: str) -> str:
+    """Use English for legacy direct renderer calls without language metadata."""
+    return _shared_label(model, key, default="en")
+
+
+def owner_label(model: BookModel, owner_type: str) -> str:
+    """Use the LaTeX renderer's English fallback for record type labels."""
+    return _shared_owner_label(model, owner_type, default="en")
 
 
 def _front_matter_notes_by_role(model: BookModel) -> dict[str, Note]:
@@ -50,7 +70,9 @@ def _render_cover(model: BookModel) -> str:
     partners = [
         person for person in (family.father, family.mother) if person is not None
     ]
-    couple_names = " and ".join(person.name or person.handle for person in partners)
+    couple_names = label(model, "and").join(
+        person.name or person.handle for person in partners
+    )
     fallback_subtitle = couple_names or family.gramps_id or family.handle
     safe_handle = "".join(
         character for character in family.handle if character.isalnum() or character in "_-"
@@ -75,7 +97,11 @@ def _render_cover(model: BookModel) -> str:
             )
         )
     else:
-        output.append("{\\Large\\bfseries Family history\\par}\n")
+        output.append(
+            "{\\Large\\bfseries "
+            + escape_latex_text(label(model, "family_history"))
+            + "\\par}\n"
+        )
 
     output.append("\\vspace{0.7cm}\n")
     if subtitle_note is not None:
@@ -107,19 +133,19 @@ def _render_cover(model: BookModel) -> str:
         graphic = _render_cover_portrait(portrait, model.media_artifacts)
         if graphic:
             person = people_by_handle.get(portrait.person_handle)
-            label = (person.name if person is not None else "") or portrait.person_handle
-            rendered_portraits.append((graphic, label))
+            portrait_label = (person.name if person is not None else "") or portrait.person_handle
+            rendered_portraits.append((graphic, portrait_label))
 
     if rendered_portraits:
         output.append("\\begin{center}\n")
-        for index, (graphic, label) in enumerate(rendered_portraits):
+        for index, (graphic, portrait_label) in enumerate(rendered_portraits):
             if index:
                 output.append("\\hspace{0.04\\textwidth}\n")
             output.append(
                 "\\begin{minipage}[t]{0.4\\textwidth}\n"
                 "\\centering\n"
                 f"{graphic}\\par\\smallskip\n"
-                f"{{\\large {escape_latex_text(label)}\\par}}\n"
+                f"{{\\large {escape_latex_text(portrait_label)}\\par}}\n"
                 "\\end{minipage}\n"
             )
         output.append("\\end{center}\n")
@@ -127,7 +153,7 @@ def _render_cover(model: BookModel) -> str:
         output.append("\\vspace{1cm}\n")
 
     for role, style in (
-        (BOOK_AUTHOR, "\\large\\itshape By: "),
+        (BOOK_AUTHOR, "\\large\\itshape " + label(model, "by")),
         (BOOK_PUBLICATION_DATE, "\\large "),
     ):
         note = role_notes.get(role)
@@ -144,8 +170,8 @@ def _render_front_matter(model: BookModel) -> str:
     role_notes = _front_matter_notes_by_role(model)
     output = []
     for role, heading in (
-        (BOOK_DEDICATION, "Dedication"),
-        (BOOK_INTRODUCTION, "Introduction"),
+        (BOOK_DEDICATION, label(model, "dedication")),
+        (BOOK_INTRODUCTION, label(model, "introduction")),
     ):
         note = role_notes.get(role)
         if note is None:
@@ -217,8 +243,11 @@ def _render_cover_portrait(
 
 
 def render_latex(model: BookModel) -> str:
+    language = model_book_language(model, default="en")
+    babel_language = "french" if language == "fr" else "english"
     document = [
         "\\documentclass[a4paper]{article}\n"
+        f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
@@ -231,11 +260,16 @@ def render_latex(model: BookModel) -> str:
         "\\renewcommand{\\headrulewidth}{0.2pt}\n"
         "\\setlength{\\headheight}{14pt}\n"
         "\\setlength{\\headsep}{18pt}\n"
+        "\\setlength{\\emergencystretch}{2em}\n"
         "\\begin{document}\n",
         _render_cover(model),
     ]
     document.append(_render_front_matter(model))
-    document.append("\\markboth{Contents}{}\n\\tableofcontents\n\\clearpage\n")
+    document.append(
+        "\\markboth{"
+        + escape_latex_text(label(model, "contents"))
+        + "}{}\n\\tableofcontents\n\\clearpage\n"
+    )
 
     emitted_targets: set[str] = set()
     people_by_handle = {person.handle: person for person in model.people}
@@ -250,7 +284,7 @@ def render_latex(model: BookModel) -> str:
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
-                _render_genealogy_part(part, people_by_handle, emitted_targets)
+                _render_genealogy_part(part, people_by_handle, emitted_targets, model)
             )
         if model.genealogy.family_sections:
             occurrences_by_id = {
@@ -269,7 +303,7 @@ def render_latex(model: BookModel) -> str:
             )
 
     if model.editorial_book is not None and model.editorial_book.family_notices:
-        document.append(_section_heading("Family notices"))
+        document.append(_section_heading(label(model, "family_notices")))
         for notice in model.editorial_book.family_notices:
             document.append(
                 _render_family_notice(
@@ -278,7 +312,7 @@ def render_latex(model: BookModel) -> str:
             )
 
     if model.editorial_book is not None and model.editorial_book.profiles:
-        document.append(_section_heading("Person profiles"))
+        document.append(_section_heading(label(model, "person_profiles")))
         for profile in model.editorial_book.profiles:
             document.append(
                 _render_profile(
@@ -303,11 +337,11 @@ def render_latex(model: BookModel) -> str:
             target.target_id: target
             for target in model.editorial_book.navigation_targets
         }
-        document.append(_section_heading("Person index"))
+        document.append(_section_heading(label(model, "person_index")))
         document.append("\\begin{itemize}\n")
         for entry in model.editorial_book.person_index:
             display_name = entry.display_name or entry.person_handle
-            label = escape_latex_text(display_name)
+            display_label = escape_latex_text(display_name)
             document.append(
                 f"\\item {_latex_anchor(entry.entry_id, emitted_targets)}"
             )
@@ -317,8 +351,8 @@ def render_latex(model: BookModel) -> str:
                 and target.availability == "available"
                 and entry.target_id in emitted_targets
             ):
-                label = _latex_page_link(entry.target_id, display_name)
-            document.append(f"{label}\n")
+                display_label = _latex_page_link(entry.target_id, display_name)
+            document.append(f"{display_label}\n")
         document.append("\\end{itemize}\n")
 
     document.append("\\end{document}\n")
@@ -329,6 +363,7 @@ def _render_genealogy_part(
     part: GenealogyPart,
     people_by_handle: dict[str, Person],
     emitted_targets: set[str],
+    model: BookModel,
 ) -> str:
     if not part.generations:
         return ""
@@ -343,8 +378,12 @@ def _render_genealogy_part(
         first_generation.number,
         first_occurrence.branch_handles if first_occurrence is not None else (),
         people_by_handle,
+        model,
     )
-    output = [_section_heading(part.name.title(), first_context)]
+    part_name = label(model, part.name.casefold())
+    if part_name == part.name.casefold():
+        part_name = part.name.title()
+    output = [_section_heading(part_name, first_context)]
     for generation in part.generations:
         previous_branches = None
         if generation.occurrences:
@@ -356,6 +395,7 @@ def _render_genealogy_part(
                         generation.number,
                         first_branches,
                         people_by_handle,
+                        model,
                     )
                 )
                 + "}\n"
@@ -365,12 +405,14 @@ def _render_genealogy_part(
             output.append(
                 "\\markright{"
                 + escape_latex_text(
-                    _running_context_label(generation.number, (), people_by_handle)
+                    _running_context_label(
+                        generation.number, (), people_by_handle, model
+                    )
                 )
                 + "}\n"
             )
         output.append(
-            f"\\subsection*{{Generation {generation.number}}}\n"
+            f"\\subsection*{{{escape_latex_text(label(model, 'generation'))} {generation.number}}}\n"
             "\\begin{itemize}\n"
         )
         for occurrence in generation.occurrences:
@@ -382,6 +424,7 @@ def _render_genealogy_part(
                             generation.number,
                             occurrence.branch_handles,
                             people_by_handle,
+                            model,
                         )
                     )
                     + "}\n"
@@ -413,11 +456,12 @@ def _render_family_sections(
     first_section = sections[0]
     output = [
         _section_heading(
-            "Family connections",
+            label(model, "family_connections"),
             _running_context_label(
                 first_section.generation,
                 first_section.branch_handles,
                 people_by_handle,
+                model,
             ),
         ),
         "\\begin{itemize}\n",
@@ -430,6 +474,7 @@ def _render_family_sections(
                     section.generation,
                     section.branch_handles,
                     people_by_handle,
+                    model,
                 )
             )
             + "}\n"
@@ -443,7 +488,10 @@ def _render_family_sections(
             _occurrence_link(target_id, occurrences_by_id, people_by_handle, emitted_targets)
             for target_id in section.child_occurrence_ids
         ]
-        partner_label = " and ".join(item for item in partners if item)
+        partner_label = label(model, "and").join(item for item in partners if item)
+        section_part = label(model, section.part).lower()
+        if section_part == section.part:
+            section_part = section.part
         title = (
             partner_label
             or escape_latex_text(
@@ -454,16 +502,23 @@ def _render_family_sections(
         output.append(
             f"\\item {_latex_anchor(section.section_id, emitted_targets)}"
             f"\\textbf{{{title}}}"
-            f" ({escape_latex_text(section.part)}, generation {section.generation})\n"
+            f" ({escape_latex_text(section_part)}, "
+            f"{escape_latex_text(label(model, 'generation').lower())} {section.generation})\n"
         )
         notice = notices_by_family.get(section.family_handle)
         if notice is not None:
             output.append(
-                "\\par " + _latex_page_link(notice.notice_id, "Family details") + "\n"
+                "\\par "
+                + _latex_page_link(notice.notice_id, label(model, "family_details"))
+                + "\n"
             )
         if children:
             output.append(
-                "\\par Children: " + ", ".join(item for item in children if item) + "\n"
+                "\\par "
+                + escape_latex_text(label(model, "children"))
+                + ": "
+                + ", ".join(item for item in children if item)
+                + "\n"
             )
         if section.parent_child_links:
             output.append("\\begin{itemize}\n")
@@ -554,27 +609,36 @@ def _render_profile(
                     placement.caption,
                     model.media_artifacts,
                     emitted_targets,
+                    model_book_language(model, default="en"),
                 )
             )
         else:
             output.append(
                 _render_featured_media_link(
-                    placement, placement.caption, emitted_targets
+                    placement,
+                    placement.caption,
+                    emitted_targets,
+                    model_book_language(model, default="en"),
                 )
             )
 
     if profile.primary_occurrence_id in emitted_targets:
         output.append(
-            "\\noindent See "
+            "\\noindent "
+            + escape_latex_text(label(model, "see"))
+            + " "
             + _latex_page_link(
                 profile.primary_occurrence_id or "",
-                "first appearance in the genealogy",
+                label(model, "first_appearance"),
             )
             + ".\\par\n"
         )
 
     if profile.event_refs:
-        output.append("\\paragraph{Events}\n\\begin{itemize}\n")
+        output.append(
+            "\\paragraph{" + escape_latex_text(label(model, "events"))
+            + "}\n\\begin{itemize}\n"
+        )
         for index, reference in enumerate(profile.event_refs):
             target_id = (
                 profile.event_target_ids[index]
@@ -616,7 +680,7 @@ def _render_profile(
         if note is not None and note.is_publishable:
             notes.append((index, note))
     if notes:
-        output.append("\\paragraph{Notes}\n")
+        output.append("\\paragraph{" + escape_latex_text(label(model, "notes")) + "}\n")
         for index, note in notes:
             target_id = (
                 profile.note_target_ids[index]
@@ -636,7 +700,10 @@ def _render_profile(
         if call_id in citation_by_call
     }
     if citation_entries:
-        output.append("\\paragraph{Sources}\n\\begin{itemize}\n")
+        output.append(
+            "\\paragraph{" + escape_latex_text(label(model, "sources"))
+            + "}\n\\begin{itemize}\n"
+        )
         for entry in citation_entries.values():
             output.append(f"\\item {_citation_reference(entry, citation_numbers)}\n")
         output.append("\\end{itemize}\n")
@@ -651,20 +718,25 @@ def _render_family_notice(
     citation_numbers: dict[str, int],
 ) -> str:
     family = model.families.get(notice.family_handle)
-    title = _family_title(family, notice.family_handle)
+    title = _family_title(family, notice.family_handle, model)
     output = [
         _latex_anchor(notice.notice_id, emitted_targets),
         f"\\subsection*{{{escape_latex_text(title)}}}\n",
     ]
     if notice.primary_section_id in emitted_targets:
         output.append(
-            "\\noindent See "
-            + _latex_page_link(notice.primary_section_id, "family section")
+            "\\noindent "
+            + escape_latex_text(label(model, "see"))
+            + " "
+            + _latex_page_link(notice.primary_section_id, label(model, "family_section"))
             + ".\\par\n"
         )
 
     if notice.event_refs:
-        output.append("\\paragraph{Events}\n\\begin{itemize}\n")
+        output.append(
+            "\\paragraph{" + escape_latex_text(label(model, "events"))
+            + "}\n\\begin{itemize}\n"
+        )
         for index, reference in enumerate(notice.event_refs):
             target_id = (
                 notice.event_target_ids[index]
@@ -722,11 +794,17 @@ def _render_family_notice(
                         caption,
                         model.media_artifacts,
                         emitted_targets,
+                        model_book_language(model, default="en"),
                     )
                 )
             else:
                 output.append(
-                    _render_featured_media_link(placement, caption, emitted_targets)
+                    _render_featured_media_link(
+                        placement,
+                        caption,
+                        emitted_targets,
+                        model_book_language(model, default="en"),
+                    )
                 )
         else:
             output.append(
@@ -744,7 +822,7 @@ def _render_family_notice(
         if note is not None and note.is_publishable:
             notes.append((index, note))
     if notes:
-        output.append("\\paragraph{Notes}\n")
+        output.append("\\paragraph{" + escape_latex_text(label(model, "notes")) + "}\n")
         for index, note in notes:
             target_id = (
                 notice.note_target_ids[index]
@@ -764,14 +842,17 @@ def _render_family_notice(
         if call_id in citation_by_call
     }
     if citations:
-        output.append("\\paragraph{Sources}\n\\begin{itemize}\n")
+        output.append(
+            "\\paragraph{" + escape_latex_text(label(model, "sources"))
+            + "}\n\\begin{itemize}\n"
+        )
         for entry in citations.values():
             output.append(f"\\item {_citation_reference(entry, citation_numbers)}\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
 
 
-def _family_title(family, fallback: str) -> str:
+def _family_title(family, fallback: str, model: BookModel) -> str:
     if family is None:
         return fallback
     partners = [
@@ -779,7 +860,7 @@ def _family_title(family, fallback: str) -> str:
         for person in (family.father, family.mother)
         if person is not None
     ]
-    return " and ".join(partners) or family.gramps_id or family.handle or fallback
+    return label(model, "and").join(partners) or family.gramps_id or family.handle or fallback
 
 
 def _render_citation_appendix(
@@ -788,7 +869,10 @@ def _render_citation_appendix(
     emitted_targets: set[str],
     citation_numbers: dict[str, int],
 ) -> str:
-    output = [_section_heading("Documentary appendix"), "\\begin{itemize}\n"]
+    output = [
+        _section_heading(label(model, "documentary_appendix")),
+        "\\begin{itemize}\n",
+    ]
     profiles = {
         profile.profile_id: profile
         for profile in (model.editorial_book.profiles if model.editorial_book else ())
@@ -819,7 +903,10 @@ def _render_citation_appendix(
         if source is not None and source.publication_info:
             details.append(escape_latex_text(source.publication_info))
         if citation is not None and citation.page:
-            details.append(f"p. {escape_latex_text(citation.page)}")
+            details.append(
+                f"{escape_latex_text(label(model, 'page_abbreviation'))} "
+                f"{escape_latex_text(citation.page)}"
+            )
         if citation is not None and citation.date is not None and citation.date.display:
             details.append(escape_latex_text(citation.date.display))
         if details:
@@ -842,7 +929,7 @@ def _render_citation_appendix(
             if repository is not None:
                 urls.extend(repository.urls)
         if repositories:
-            output.append("\\par Repositories: ")
+            output.append("\\par " + escape_latex_text(label(model, "repositories")) + ": ")
             output.append(
                 "; ".join(
                     _format_repository(repository_name, reference)
@@ -852,7 +939,7 @@ def _render_citation_appendix(
             output.append("\n")
 
         if urls:
-            output.append("\\par URLs: ")
+            output.append("\\par " + escape_latex_text(label(model, "urls")) + ": ")
             output.append("; ".join(_format_url(item) for item in _unique_urls(urls)))
             output.append("\n")
 
@@ -865,8 +952,10 @@ def _render_citation_appendix(
             )
         if media_labels:
             output.append(
-                "\\par Media: "
-                + "; ".join(escape_latex_text(label) for label in media_labels)
+                "\\par " + escape_latex_text(label(model, "media")) + ": "
+                + "; ".join(
+                    escape_latex_text(media_label) for media_label in media_labels
+                )
                 + "\n"
             )
         for reference in entry.media_refs:
@@ -891,12 +980,16 @@ def _render_citation_appendix(
                             caption,
                             model.media_artifacts,
                             emitted_targets,
+                            model_book_language(model, default="en"),
                         )
                     )
                 else:
                     output.append(
                         _render_featured_media_link(
-                            placement, caption, emitted_targets
+                            placement,
+                            caption,
+                            emitted_targets,
+                            model_book_language(model, default="en"),
                         )
                     )
             else:
@@ -920,7 +1013,7 @@ def _render_citation_appendix(
         ]
         if call_labels:
             output.append("\\begin{itemize}\n")
-            for call, label in call_labels:
+            for call, call_label in call_labels:
                 context_profile = profiles.get(call.context_id)
                 context_notice = notices.get(call.context_id)
                 context_target = (
@@ -929,9 +1022,9 @@ def _render_citation_appendix(
                     else context_notice.notice_id if context_notice is not None else ""
                 )
                 linked_label = (
-                    _latex_page_link(context_target, label)
+                    _latex_page_link(context_target, call_label)
                     if context_target and context_target in emitted_targets
-                    else escape_latex_text(label)
+                    else escape_latex_text(call_label)
                 )
                 output.append(
                     f"\\item {_latex_anchor(call.call_id, emitted_targets)}"
@@ -1027,7 +1120,7 @@ def _citation_call_label(
     context_name = (
         person.name
         if person is not None
-        else _family_title(family, notice.family_handle) if notice is not None else ""
+        else _family_title(family, notice.family_handle, model) if notice is not None else ""
     )
     if call.owner_type == "event":
         event = model.events.get(call.owner_handle)
@@ -1043,17 +1136,18 @@ def _citation_call_label(
         )
     elif call.owner_type == "note":
         note = model.notes.get(call.owner_handle)
-        owner_name = (note.gramps_id or "Note") if note is not None else ""
+        owner_name = (note.gramps_id or label(model, "owner_note")) if note is not None else ""
     elif call.owner_type == "family":
         owner_name = _family_title(
-            model.families.get(call.owner_handle), call.owner_handle
+            model.families.get(call.owner_handle), call.owner_handle, model
         )
     else:
         owner_name = person.name if call.owner_type == "person" and person else ""
     owner_name = owner_name or call.owner_handle
+    owner_type = owner_label(model, call.owner_type)
     if context_name:
-        return f"{context_name} — {call.owner_type}: {owner_name}"
-    return f"{call.owner_type}: {owner_name}"
+        return f"{context_name} — {owner_type}: {owner_name}"
+    return f"{owner_type}: {owner_name}"
 
 
 def _unique_urls(urls: list[Url]) -> tuple[Url, ...]:
@@ -1103,14 +1197,20 @@ def _render_featured_media_link(
     placement: EditorialMediaPlacement,
     caption: str,
     emitted_targets: set[str],
+    language: str,
 ) -> str:
     if placement.placement_id not in emitted_targets:
-        label = escape_latex_text(caption or "Featured image")
-        return f"\\par {label} (reproduction unavailable).\\par\n"
-    label = caption or "Featured image"
+        display_label = escape_latex_text(
+            caption or label_for_language(language, "featured_image")
+        )
+        unavailable = label_for_language(language, "reproduction_unavailable")
+        return f"\\par {display_label} ({unavailable}).\\par\n"
+    display_label = caption or label_for_language(language, "featured_image")
     return (
-        "\\par Full-page reproduction: "
-        + _latex_page_link(placement.placement_id, label)
+        "\\par "
+        + escape_latex_text(label_for_language(language, "full_page_reproduction"))
+        + " "
+        + _latex_page_link(placement.placement_id, display_label)
         + ".\\par\n"
     )
 
@@ -1121,9 +1221,10 @@ def _render_featured_media(
     caption: str,
     artifacts: list[EditorialMediaArtifact],
     emitted_targets: set[str],
+    language: str,
 ) -> str:
     if placement.placement_id in emitted_targets:
-        return _render_featured_media_link(placement, caption, emitted_targets)
+        return _render_featured_media_link(placement, caption, emitted_targets, language)
 
     artifact = next(
         (
@@ -1141,8 +1242,11 @@ def _render_featured_media(
         else None
     )
     if path is None:
-        label = escape_latex_text(caption or "Featured image")
-        return f"\\par {label} (reproduction unavailable).\\par\n"
+        display_label = escape_latex_text(
+            caption or label_for_language(language, "featured_image")
+        )
+        unavailable = label_for_language(language, "reproduction_unavailable")
+        return f"\\par {display_label} ({unavailable}).\\par\n"
 
     anchor = _latex_anchor(placement.placement_id, emitted_targets)
     output = [
@@ -1233,8 +1337,10 @@ def _running_context_label(
     generation: int,
     branch_handles: tuple[str, ...],
     people_by_handle: dict[str, Person],
+    model: BookModel,
 ) -> str:
-    label = f"Generation {generation}"
+    language = model_book_language(model, default="en")
+    label = f"{label_for_language(language, 'generation')} {generation}"
     branches = []
     for handle in branch_handles:
         person = people_by_handle.get(handle)
@@ -1242,7 +1348,7 @@ def _running_context_label(
         if name not in branches:
             branches.append(name)
     if branches:
-        label += " / Branch: " + " + ".join(branches)
+        label += " / " + label_for_language(language, "branch") + ": " + " + ".join(branches)
     return label
 
 
