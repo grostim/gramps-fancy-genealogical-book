@@ -239,6 +239,7 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
   | Windows Server 2025, Python 3.13.15 | 35 tests, Ruff et archive ; `msgfmt` GNU gettext 1.0 disponible | Les autres versions Python, Gramps Desktop/Web et LuaLaTeX ne sont pas qualifiés sous Windows |
   | Ubuntu 24.04, Gramps 6.0.8 | Construction de l’archive et vérification d’intégration avec les dépendances déclarées | Pas de qualification Gramps Web ni d’interface Desktop Linux |
   | Ubuntu 24.04, LuaLaTeX | Trois documents compilés dans l’image TeX Live épinglée par digest | Le digest est reproductible ; d’autres systèmes et versions de TeX Live restent à étudier |
+  | macOS 27.0 arm64, CPython 3.14.0 | 35 tests, Ruff 0.16.9 et archive construite ; pytest 9.1.1, Mistune 3.3.4, Pillow 12.3.0 et pypdfium2 5.13.0 | Qualification de la suite et du paquet seulement ; Gramps n’utilise pas cet interpréteur hôte |
   | macOS, Gramps Desktop 6.0.8-1, Python embarqué 3.13.2 | Export PDF et HTML depuis le profil isolé ; LuaHBTeX 1.24.0 (TeX Live 2026) | Essai interactif de l’interface, ouverture HTML hors ligne et répétition sur une installation propre en cours |
 
   Cette matrice n’est pas encore la matrice complète exigée par T-09 et la spécification. Elle ne qualifie pas Gramps Web, et ne constitue pas une recette fonctionnelle de bout en bout sur chaque OS.
@@ -253,7 +254,7 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 ### Prochaines actions
 
 1. Terminer dans l’interface Gramps Desktop isolée en français : vérifier la présence du rapport, ses options traduites et la confirmation de confidentialité, puis ouvrir le ZIP HTML hors ligne. Le PDF et le ZIP ont déjà été produits par le parcours Gramps en ligne de commande.
-2. Compléter la matrice T-09 : répéter la suite Python sur macOS, préciser les versions et configurations Gramps Desktop à prendre en charge, puis qualifier Gramps Web et les environnements de rendu retenus. La CI actuelle couvre Python 3.10–3.13 sur Ubuntu et Python 3.13 sur Windows ; Gramps 6.0.8 et LuaLaTeX sont vérifiés sous Ubuntu, avec un essai local macOS encore partiel.
+2. Compléter la matrice T-09 : la suite Python et la construction du paquet passent maintenant sur macOS 27/CPython 3.14, en plus des matrices CI Python 3.10–3.13 sur Ubuntu et Python 3.13 sur Windows. Il reste à qualifier l’interface Gramps Desktop sur macOS et les versions retenues, puis Gramps Web et les environnements de rendu; Gramps 6.0.8 et LuaLaTeX sont actuellement vérifiés sous Ubuntu.
 3. Générer un vrai HTML ZIP dans Gramps, l’extraire et vérifier navigation hors ligne, notes, médias recadrés, citations et liens vers un document partagé.
 4. Vérifier le rendu HTML aux tailles prévues, au clavier et avec un lecteur d’écran ; consigner AC-10, AC-12, AC-15, AC-20 et AC-23.
 5. Terminer la comparaison visuelle des PDF synthétiques avec les principes de la v1.1 et les maquettes privées, puis qualifier les liens, la lisibilité et les limites graphiques.
