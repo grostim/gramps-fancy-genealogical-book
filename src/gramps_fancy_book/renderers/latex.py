@@ -489,7 +489,7 @@ def _render_family_sections(
             for target_id in section.child_occurrence_ids
         ]
         partner_label = label(model, "and").join(item for item in partners if item)
-        section_part = label(model, section.part)
+        section_part = label(model, section.part).lower()
         if section_part == section.part:
             section_part = section.part
         title = (
