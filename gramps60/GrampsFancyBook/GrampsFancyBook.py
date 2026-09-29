@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gettext
 import os
 import sys
 import tempfile
@@ -15,6 +16,42 @@ try:
 except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
+
+
+def _gramps_type_labels(language: str) -> dict[tuple[str, str], str]:
+    """Translate standard Gramps event, parentage, and role labels."""
+    from gramps.gen.lib.childreftype import ChildRefType
+    from gramps.gen.lib.eventroletype import EventRoleType
+    from gramps.gen.lib.eventtype import EventType
+
+    translator = gettext.translation(
+        "gramps",
+        localedir=glocale.localedir,
+        languages=[language],
+        fallback=True,
+    )
+    type_classes = {
+        "event": EventType,
+        "child_relationship": ChildRefType,
+        "event_role": EventRoleType,
+    }
+    contexts = {
+        "child_relationship": {
+            "Birth": "relationship",
+            "Adopted": "relationship",
+        },
+        "event_role": {"Primary": "Role", "Family": "Role"},
+    }
+    labels = {}
+    for category, type_class in type_classes.items():
+        for value in type_class().get_standard_xml():
+            context = contexts.get(category, {}).get(value)
+            labels[(category, value)] = (
+                translator.pgettext(context, value)
+                if context
+                else translator.gettext(value)
+            )
+    return labels
 
 _ADDON_DIR = os.path.dirname(os.path.abspath(__file__))
 if _ADDON_DIR not in sys.path:
@@ -53,6 +90,7 @@ class GrampsFancyBookReport(Report):
             max_ancestor_depth = self.options_class.get_max_ancestor_depth()
             max_descendant_depth = self.options_class.get_max_descendant_depth()
             book_language = self.options_class.get_book_language()
+            gramps_type_labels = _gramps_type_labels(book_language)
             destination = self.options_class.get_destination()
             overwrite = self.options_class.get_overwrite()
             if not self.options_class.get_privacy_acknowledged():
@@ -97,6 +135,7 @@ class GrampsFancyBookReport(Report):
                         model,
                         html_destination,
                         media_asset_directory=asset_staging,
+                        gramps_type_labels=gramps_type_labels,
                         overwrite=overwrite,
                     )
             elif output_format == "pdf":
@@ -117,6 +156,7 @@ class GrampsFancyBookReport(Report):
                         model,
                         pdf_destination,
                         media_asset_directory=asset_staging,
+                        gramps_type_labels=gramps_type_labels,
                         overwrite=overwrite,
                     )
             elif output_format == "json_snapshot":

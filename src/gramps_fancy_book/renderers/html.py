@@ -9,10 +9,15 @@ from pathlib import PurePosixPath
 from ..book_language import model_book_language
 from ..domain import BookModel
 from .html_notes import render_html_inline_note, render_html_note, safe_html_url
-from .labels import label, owner_label
+from .labels import gramps_type_label, label, owner_label
 
 
-def render_html(model: BookModel, *, include_media: bool = False) -> str:
+def render_html(
+    model: BookModel,
+    *,
+    include_media: bool = False,
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
+) -> str:
     """Render the editorial parts with stable, local navigation anchors."""
     family = model.reference_family
     people = {person.handle: person for person in model.people}
@@ -113,6 +118,7 @@ def render_html(model: BookModel, *, include_media: bool = False) -> str:
                     calls_by_id,
                     notices,
                     media_context,
+                    gramps_type_labels,
                 )
             )
     output.append("</main>\n</body></html>\n")
@@ -159,6 +165,7 @@ def _render_part(
     calls_by_id,
     notices,
     media_context,
+    gramps_type_labels=None,
 ) -> str:
     part_label = _part_label(model, part.kind)
     output = [
@@ -181,6 +188,7 @@ def _render_part(
                     sections,
                     calls_by_id,
                     media_context,
+                    gramps_type_labels,
                 )
             )
         for notice_id in part.family_notice_ids:
@@ -196,6 +204,7 @@ def _render_part(
                         sections,
                         calls_by_id,
                         media_context,
+                        gramps_type_labels,
                     )
                 )
     elif part.kind == "documentary_appendix":
@@ -279,6 +288,7 @@ def _render_genealogy(
     sections,
     calls_by_id,
     media_context,
+    gramps_type_labels=None,
 ) -> str:
     output = []
     generations = genealogy_part.generations
@@ -336,7 +346,9 @@ def _render_genealogy(
                 or occurrence.is_primary_profile
             ):
                 output.append(
-                    _render_profile(profile, model, calls_by_id, media_context)
+                    _render_profile(
+                        profile, model, calls_by_id, media_context, gramps_type_labels
+                    )
                 )
             else:
                 target = (
@@ -368,7 +380,9 @@ def _render_genealogy(
     return "".join(output)
 
 
-def _render_profile(profile, model, calls_by_id, media_context) -> str:
+def _render_profile(
+    profile, model, calls_by_id, media_context, gramps_type_labels=None
+) -> str:
     output = [f'<section class="person-profile" id="{_attr(profile.profile_id)}">']
     output.append(f"<h4>{_text(label(model, 'individual_profile'))}</h4>\n")
     if (
@@ -422,7 +436,11 @@ def _render_profile(profile, model, calls_by_id, media_context) -> str:
                 context_id=profile.profile_id,
             )
         )
-    output.append(_render_events(profile.event_refs, profile.event_target_ids, model))
+    output.append(
+        _render_events(
+            profile.event_refs, profile.event_target_ids, model, gramps_type_labels
+        )
+    )
     for handle, target in zip(profile.note_handles, profile.note_target_ids):
         note = model.notes.get(handle)
         if note is not None:
@@ -456,6 +474,7 @@ def _render_family_notice(
     sections,
     calls_by_id,
     media_context,
+    gramps_type_labels=None,
 ) -> str:
     family = families.get(notice.family_handle)
     family_label = (
@@ -506,9 +525,14 @@ def _render_family_notice(
                     if parent is None:
                         continue
                     parent_person = people.get(parent.person_handle)
+                    relationship_type = gramps_type_label(
+                        "child_relationship",
+                        link.relationship_type,
+                        gramps_type_labels,
+                    )
                     relation = (
                         f"{_person_name(parent_person, parent.person_handle)} : "
-                        f"{link.relationship_type}"
+                        f"{relationship_type}"
                     )
                     if relation not in relation_labels:
                         relation_labels.append(relation)
@@ -532,7 +556,11 @@ def _render_family_notice(
                 context_id=notice.notice_id,
             )
         )
-    output.append(_render_events(notice.event_refs, notice.event_target_ids, model))
+    output.append(
+        _render_events(
+            notice.event_refs, notice.event_target_ids, model, gramps_type_labels
+        )
+    )
     for handle, target in zip(notice.note_handles, notice.note_target_ids):
         note = model.notes.get(handle)
         if note is not None:
@@ -557,7 +585,7 @@ def _render_family_notice(
     return "".join(output)
 
 
-def _render_events(references, target_ids, model) -> str:
+def _render_events(references, target_ids, model, gramps_type_labels=None) -> str:
     if not references:
         return ""
     output = ["<ul>\n"]
@@ -565,7 +593,10 @@ def _render_events(references, target_ids, model) -> str:
         event = model.events.get(reference.event_handle)
         details = []
         if reference.role:
-            details.append(f"{label(model, 'role')} : {reference.role}")
+            details.append(
+                f"{label(model, 'role')} : "
+                f"{gramps_type_label('event_role', reference.role, gramps_type_labels)}"
+            )
         if event is not None:
             if event.date is not None and event.date.display:
                 details.append(event.date.display)
@@ -580,7 +611,11 @@ def _render_events(references, target_ids, model) -> str:
                 )
                 if place_name:
                     details.append(place_name)
-        event_label = event.type if event is not None else reference.event_handle
+        event_label = (
+            gramps_type_label("event", event.type, gramps_type_labels)
+            if event is not None
+            else reference.event_handle
+        )
         target = target_ids[index] if index < len(target_ids) else ""
         id_attr = f' id="{_attr(target)}"' if target else ""
         summary = " — ".join(details)

@@ -7,6 +7,8 @@ from gramps_fancy_book.domain import (
     EditorialMediaArtifact,
     EditorialMediaPlacement,
     EditorialMediaUse,
+    Event,
+    EventReference,
     Family,
     Media,
     MediaReference,
@@ -16,8 +18,43 @@ from gramps_fancy_book.domain import (
     Source,
     Url,
 )
-from gramps_fancy_book.renderers.html import render_html
+from gramps_fancy_book.renderers.html import _render_events, render_html
 from gramps_fancy_book.renderers.html_archive import write_html_archive
+
+
+def test_standard_event_type_uses_book_label_and_custom_type_stays_as_entered():
+    event = Event(
+        handle="event-1",
+        type="Birth",
+        description="Récit saisi en anglais",
+    )
+    model = SimpleNamespace(events={event.handle: event}, places={})
+    reference = EventReference(event_handle=event.handle, role="Primary")
+
+    rendered = _render_events(
+        (reference,),
+        ("event:1",),
+        model,
+        {
+            ("event", "Birth"): "Naissance",
+            ("event_role", "Primary"): "Principal",
+        },
+    )
+    custom_rendered = _render_events(
+        (EventReference(event_handle="custom"),),
+        ("event:1",),
+        SimpleNamespace(
+            events={"custom": Event(handle="custom", type="Type personnel")},
+            places={},
+        ),
+        {("event", "Birth"): "Naissance"},
+    )
+
+    assert "<strong>Naissance</strong>" in rendered
+    assert "Récit saisi en anglais" in rendered
+    assert "Rôle : Principal" in rendered
+    assert "<strong>Birth</strong>" not in rendered
+    assert "<strong>Type personnel</strong>" in custom_rendered
 
 
 def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
@@ -237,7 +274,10 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         },
     )
 
-    rendered = render_html(model)
+    rendered = render_html(
+        model,
+        gramps_type_labels={("child_relationship", "Adopted"): "Adopté(e)"},
+    )
 
     assert '<html lang="fr">' in rendered
     assert '<a href="#ancestry">Ascendance</a>' in rendered
@@ -259,7 +299,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     assert 'href="#person:p0"' in rendered
     assert "Branche :" in rendered
     assert (
-        "filiation : Ada &amp; &lt;img src=x onerror=alert(1)&gt; : Adopted"
+        "filiation : Ada &amp; &lt;img src=x onerror=alert(1)&gt; : Adopté(e)"
         in rendered
     )
     assert "Ada &amp; &lt;img src=x onerror=alert(1)&gt;" in rendered

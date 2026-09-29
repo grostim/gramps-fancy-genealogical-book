@@ -31,6 +31,9 @@ from ..domain import (
     Url,
 )
 from .labels import (
+    gramps_type_label as _shared_gramps_type_label,
+)
+from .labels import (
     label as _shared_label,
 )
 from .labels import (
@@ -242,7 +245,11 @@ def _render_cover_portrait(
     )
 
 
-def render_latex(model: BookModel) -> str:
+def render_latex(
+    model: BookModel,
+    *,
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
+) -> str:
     language = model_book_language(model, default="en")
     babel_language = "french" if language == "fr" else "english"
     document = [
@@ -284,7 +291,12 @@ def render_latex(model: BookModel) -> str:
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
-                _render_genealogy_part(part, people_by_handle, emitted_targets, model)
+                _render_genealogy_part(
+                    part,
+                    people_by_handle,
+                    emitted_targets,
+                    model,
+                )
             )
         if model.genealogy.family_sections:
             occurrences_by_id = {
@@ -299,6 +311,7 @@ def render_latex(model: BookModel) -> str:
                     model,
                     occurrences_by_id,
                     emitted_targets,
+                    gramps_type_labels,
                 )
             )
 
@@ -307,7 +320,12 @@ def render_latex(model: BookModel) -> str:
         for notice in model.editorial_book.family_notices:
             document.append(
                 _render_family_notice(
-                    notice, model, emitted_targets, citation_by_call, citation_numbers
+                    notice,
+                    model,
+                    emitted_targets,
+                    citation_by_call,
+                    citation_numbers,
+                    gramps_type_labels,
                 )
             )
 
@@ -322,13 +340,18 @@ def render_latex(model: BookModel) -> str:
                     emitted_targets,
                     citation_by_call,
                     citation_numbers,
+                    gramps_type_labels,
                 )
             )
 
     if model.editorial_book is not None and model.editorial_book.citation_entries:
         document.append(
             _render_citation_appendix(
-                model.editorial_book.citation_entries, model, emitted_targets, citation_numbers
+                model.editorial_book.citation_entries,
+                model,
+                emitted_targets,
+                citation_numbers,
+                gramps_type_labels,
             )
         )
 
@@ -447,6 +470,7 @@ def _render_family_sections(
     model: BookModel,
     occurrences_by_id: dict[str, PersonOccurrence],
     emitted_targets: set[str],
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     people_by_handle = {person.handle: person for person in model.people}
     notices_by_family = {
@@ -535,7 +559,11 @@ def _render_family_sections(
                     people_by_handle,
                     emitted_targets,
                 )
-                relationship = _relationship_label(link.relationship_type)
+                relationship = _shared_gramps_type_label(
+                    "child_relationship",
+                    _relationship_label(link.relationship_type),
+                    gramps_type_labels,
+                )
                 suffix = f" ({escape_latex_text(relationship)})" if relationship else ""
                 output.append(f"\\item {parent} $\\to$ {child}{suffix}\n")
             output.append("\\end{itemize}\n")
@@ -576,6 +604,7 @@ def _render_profile(
     emitted_targets: set[str],
     citation_by_call: dict[str, EditorialCitationEntry],
     citation_numbers: dict[str, int],
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     person = people_by_handle.get(profile.person_handle)
     name = person.name if person is not None else ""
@@ -649,14 +678,25 @@ def _render_profile(
             event = model.events.get(reference.event_handle)
             event_name = (
                 event.description if event is not None else ""
-            ) or (event.type if event is not None else "") or reference.event_handle
+            ) or (
+                _shared_gramps_type_label("event", event.type, gramps_type_labels)
+                if event is not None
+                else ""
+            ) or reference.event_handle
             details = []
             if (
                 event is not None
                 and event.type
-                and event.type.casefold() != event_name.casefold()
+                and event.description
+                and event.type.casefold() != event.description.casefold()
             ):
-                details.append(escape_latex_text(event.type))
+                details.append(
+                    escape_latex_text(
+                        _shared_gramps_type_label(
+                            "event", event.type, gramps_type_labels
+                        )
+                    )
+                )
             if event is not None and event.date is not None and event.date.display:
                 details.append(escape_latex_text(event.date.display))
             if event is not None and event.place_handle:
@@ -667,7 +707,13 @@ def _render_profile(
                 if place_name:
                     details.append(escape_latex_text(place_name))
             if reference.role:
-                details.append(escape_latex_text(reference.role))
+                details.append(
+                    escape_latex_text(
+                        _shared_gramps_type_label(
+                            "event_role", reference.role, gramps_type_labels
+                        )
+                    )
+                )
             suffix = f" ({'; '.join(details)})" if details else ""
             output.append(
                 f"\\item {anchor}{escape_latex_text(event_name)}{suffix}\n"
@@ -716,6 +762,7 @@ def _render_family_notice(
     emitted_targets: set[str],
     citation_by_call: dict[str, EditorialCitationEntry],
     citation_numbers: dict[str, int],
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     family = model.families.get(notice.family_handle)
     title = _family_title(family, notice.family_handle, model)
@@ -747,14 +794,25 @@ def _render_family_notice(
             event = model.events.get(reference.event_handle)
             event_name = (
                 event.description if event is not None else ""
-            ) or (event.type if event is not None else "") or reference.event_handle
+            ) or (
+                _shared_gramps_type_label("event", event.type, gramps_type_labels)
+                if event is not None
+                else ""
+            ) or reference.event_handle
             details = []
             if (
                 event is not None
                 and event.type
-                and event.type.casefold() != event_name.casefold()
+                and event.description
+                and event.type.casefold() != event.description.casefold()
             ):
-                details.append(escape_latex_text(event.type))
+                details.append(
+                    escape_latex_text(
+                        _shared_gramps_type_label(
+                            "event", event.type, gramps_type_labels
+                        )
+                    )
+                )
             if event is not None and event.date is not None and event.date.display:
                 details.append(escape_latex_text(event.date.display))
             if event is not None and event.place_handle:
@@ -765,7 +823,13 @@ def _render_family_notice(
                 if place_name:
                     details.append(escape_latex_text(place_name))
             if reference.role:
-                details.append(escape_latex_text(reference.role))
+                details.append(
+                    escape_latex_text(
+                        _shared_gramps_type_label(
+                            "event_role", reference.role, gramps_type_labels
+                        )
+                    )
+                )
             suffix = f" ({'; '.join(details)})" if details else ""
             output.append(
                 f"\\item {anchor}{escape_latex_text(event_name)}{suffix}\n"
@@ -868,6 +932,7 @@ def _render_citation_appendix(
     model: BookModel,
     emitted_targets: set[str],
     citation_numbers: dict[str, int],
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     output = [
         _section_heading(label(model, "documentary_appendix")),
@@ -1006,7 +1071,12 @@ def _render_citation_appendix(
             (
                 call,
                 _citation_call_label(
-                    call, profiles, notices, people_by_handle, model
+                    call,
+                    profiles,
+                    notices,
+                    people_by_handle,
+                    model,
+                    gramps_type_labels,
                 ),
             )
             for call in entry.calls
@@ -1112,6 +1182,7 @@ def _citation_call_label(
     notices: dict[str, EditorialFamilyNotice],
     people_by_handle: dict[str, Person],
     model: BookModel,
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     profile = profiles.get(call.context_id)
     person = people_by_handle.get(profile.person_handle) if profile is not None else None
@@ -1125,7 +1196,13 @@ def _citation_call_label(
     if call.owner_type == "event":
         event = model.events.get(call.owner_handle)
         owner_name = (
-            (event.description or event.type or event.gramps_id)
+            (
+                event.description
+                or _shared_gramps_type_label(
+                    "event", event.type, gramps_type_labels
+                )
+                or event.gramps_id
+            )
             if event is not None
             else ""
         )
