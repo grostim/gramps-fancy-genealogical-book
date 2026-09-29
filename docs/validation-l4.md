@@ -25,3 +25,7 @@ Updated on 28 September 2026. L4 remains in progress; scenarios AC-01 and AC-03 
 - The six central-family editorial notes and their Gramps 6 conventions still need separate validation.
 
 See the [action plan](action-plan.fr.md#l4--parcours-généalogiques-et-sélection) and [requirements](requirements.fr.md) for the full tasks and exit criteria.
+
+## PDF CLI smoke check — 29 September 2026
+
+Gramps 6.0.8 on macOS generated a 9-page A4 PDF from the synthetic native database using LuaHBTeX 1.24.0. The fixture included a portrait derivative, which appears on the cover and in the person's profile. This confirms the Gramps-to-PDF integration on a small synthetic book; it does not qualify long-book pagination, all media/URL cases, accessibility, or final visual acceptance, which remain open for L6.

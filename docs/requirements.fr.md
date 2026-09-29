@@ -77,8 +77,8 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-13 | Priorité BOOK_EXCLUDE | L3.3, L5.5 | BOOK_EXCLUDE appliqué au traitement et à la publication des médias ; scénario natif de priorité restant à vérifier |
 | AC-14 | Citations réutilisées et multiples | L3.4, L5.3–L5.4, L6.4 | Citations réutilisables, appels contextuels, numérotation, renvois et annexe implémentés ; scénario complet restant |
 | AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Placements dédupliqués par handle média et appels documentaires reliés ; cas partagé à vérifier dans les deux rendus |
-| AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Règles URL/PDF et rasterisation monopage implémentées ; les quatre cas restent à valider avec médias Gramps |
-| AC-17 | Pagination finale cohérente | L6.4–L6.5 | Sortie PDF depuis Gramps avec passes de résolution et refus des renvois instables ; pagination, débordements et renvois à revoir visuellement |
+| AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Un portrait fictif recadré est intégré au PDF depuis Gramps ; les quatre cas restent à valider avec médias Gramps |
+| AC-17 | Pagination finale cohérente | L6.4–L6.5 | PDF A4 de 9 pages compilé depuis Gramps avec renvois stabilisés sur une fixture synthétique ; livres longs, débordements et composition finale restent à revoir visuellement |
 | AC-18 | Fait sans citation et source sans dépôt | L3.4, L5.4 | Modèle de citations tolère appels et dépôts absents ; cas documentaires à vérifier dans la sortie finale |
 | AC-19 | Contradictions et rapport séparé | L3.7, L5.7 | Rapport séparé BOOK_FACT_ID implémenté : dates disjointes en conflit, lieux différents à examiner ; recette de données restante |
 | AC-20 | Équivalence PDF/HTML et usage hors ligne | L6, L7, L8.1 | Sorties PDF et HTML ZIP autonomes disponibles ; équivalence de contenu et navigation hors ligne restent à vérifier |

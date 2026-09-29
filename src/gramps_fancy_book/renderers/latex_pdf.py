@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path, PurePosixPath
 
 from ..domain import BookModel
-from .html_archive import _media_assets
+from .html_archive import _media_asset_paths
 from .latex import render_latex
 
 _MAX_PASSES = 5
@@ -73,18 +73,18 @@ def write_latex_pdf(
             "LuaLaTeX (lualatex) is not installed or is not available on PATH."
         )
 
-    assets = _media_assets(model, media_asset_directory)
+    assets = _media_asset_paths(model, media_asset_directory)
     source = render_latex(model)
     with tempfile.TemporaryDirectory(
         prefix=".book-pdf-", dir=output.parent
     ) as temporary:
         work_directory = Path(temporary)
         (work_directory / "book.tex").write_text(source, encoding="utf-8")
-        for name, payload in sorted(assets.items()):
+        for name, asset_source in sorted(assets.items()):
             relative = PurePosixPath(name)
             asset = work_directory.joinpath(*relative.parts)
             asset.parent.mkdir(parents=True, exist_ok=True)
-            asset.write_bytes(payload)
+            shutil.copyfile(asset_source, asset)
 
         _compile_latex(compiler, work_directory)
         compiled_pdf = work_directory / "book.pdf"
