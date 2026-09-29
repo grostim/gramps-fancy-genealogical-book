@@ -1,6 +1,6 @@
 # Validation média / Pillow et PDFium
 
-Statut au 28 septembre 2026.
+Statut au 29 septembre 2026.
 
 ## Périmètre vérifié
 
@@ -10,7 +10,9 @@ L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers o
 
 ## Vérification de publication restante
 
-Dans Gramps, appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif, puis générer un livre HTML ZIP. Le contrôle d’acceptation ne réussit que si le média exclu est absent de toutes les références `<img>` de `index.html` et de toutes les entrées `media/` du ZIP. Le fichier ne doit pas non plus être ouvert ni converti pendant la génération. Ce scénario manuel n’a pas encore été exécuté.
+Le test `test_excluded_featured_media_is_absent_from_generated_books` construit un instantané Gramps fictif dont un média porte les deux étiquettes. Il vérifie que ses références éditoriales et les citations qui leur sont attachées ne créent ni notice ni dérivé média, que le ZIP contient uniquement `index.html`, et que la description ou une balise `<img>` n’apparaît ni dans le HTML ni dans le LaTeX. Le chemin source fictif n’existe pas : toute tentative de lecture ferait échouer le test.
+
+La recette native reste à faire dans Gramps : appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif puis générer un livre HTML ZIP. Elle doit confirmer le même résultat depuis l’interface et la base Gramps réelle.
 
 ## Installation
 

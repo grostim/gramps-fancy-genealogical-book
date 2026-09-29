@@ -214,7 +214,9 @@ def build_editorial_book(
                 family_section_ids=tuple(section.section_id for section in family_sections),
                 note_handles=note_handles,
                 event_refs=event_refs,
-                media_refs=family.links.media,
+                media_refs=_non_excluded_media_refs(
+                    family.links.media, media_by_handle
+                ),
                 note_target_ids=tuple(
                     _contextual_target_id("note", notice_id, handle, index)
                     for index, handle in enumerate(note_handles)
@@ -289,7 +291,11 @@ def build_editorial_book(
                     else None
                 ),
                 event_refs=event_refs,
-                media_refs=person.links.media if person is not None else (),
+                media_refs=(
+                    _non_excluded_media_refs(person.links.media, media_by_handle)
+                    if person is not None
+                    else ()
+                ),
                 note_target_ids=tuple(
                     _contextual_target_id("note", profile_id, handle, index)
                     for index, handle in enumerate(note_handles)
@@ -638,6 +644,19 @@ def _published_note_handles(
     )
 
 
+def _non_excluded_media_refs(
+    references: tuple[MediaReference, ...], media_by_handle: dict[str, Media]
+) -> tuple[MediaReference, ...]:
+    return tuple(
+        reference
+        for reference in references
+        if (
+            media := media_by_handle.get(reference.media_handle)
+        ) is None
+        or not media.is_excluded
+    )
+
+
 def _primary_portrait(
     person: Person, media_by_handle: dict[str, Media]
 ) -> EditorialPortrait | None:
@@ -704,7 +723,9 @@ def _build_citation_entries(
         path: str,
         record: object,
     ) -> None:
-        for field_path, citation_handle in _citation_paths(record, path):
+        for field_path, citation_handle in _citation_paths(
+            record, path, media_by_handle
+        ):
             call_id = f"citation-call:{context_id}:{field_path}"
             call = EditorialCitationCall(
                 call_id=call_id,
@@ -910,7 +931,13 @@ def _build_media_placements(
     )
 
 
-def _citation_paths(value: object, path: str) -> Iterator[tuple[str, str]]:
+def _citation_paths(
+    value: object, path: str, media_by_handle: dict[str, Media]
+) -> Iterator[tuple[str, str]]:
+    if isinstance(value, MediaReference):
+        media = media_by_handle.get(value.media_handle)
+        if media is not None and media.is_excluded:
+            return
     if is_dataclass(value) and not isinstance(value, type):
         for item in fields(value):
             if isinstance(value, Family) and item.name in {"father", "mother", "children"}:
@@ -922,15 +949,21 @@ def _citation_paths(value: object, path: str) -> Iterator[tuple[str, str]]:
                     yield f"{child_path}[{index}]", citation_handle
             elif isinstance(child, dict):
                 for key in sorted(child, key=str):
-                    yield from _citation_paths(child[key], f"{child_path}[{key}]")
+                    yield from _citation_paths(
+                        child[key], f"{child_path}[{key}]", media_by_handle
+                    )
             elif isinstance(child, (tuple, list)):
                 for index, item_value in enumerate(child):
-                    yield from _citation_paths(item_value, f"{child_path}[{index}]")
+                    yield from _citation_paths(
+                        item_value, f"{child_path}[{index}]", media_by_handle
+                    )
             else:
-                yield from _citation_paths(child, child_path)
+                yield from _citation_paths(child, child_path, media_by_handle)
     elif isinstance(value, dict):
         for key in sorted(value, key=str):
-            yield from _citation_paths(value[key], f"{path}[{key}]")
+            yield from _citation_paths(value[key], f"{path}[{key}]", media_by_handle)
     elif isinstance(value, (tuple, list)):
         for index, item_value in enumerate(value):
-            yield from _citation_paths(item_value, f"{path}[{index}]")
+            yield from _citation_paths(
+                item_value, f"{path}[{index}]", media_by_handle
+            )

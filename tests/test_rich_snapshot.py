@@ -1,8 +1,12 @@
 import json
+import zipfile
 from types import SimpleNamespace
 
 from gramps_fancy_book.gramps_adapter import GrampsDatabaseAdapter
+from gramps_fancy_book.media import prepare_editorial_media
 from gramps_fancy_book.normalization import build_book_model
+from gramps_fancy_book.renderers.html_archive import write_html_archive
+from gramps_fancy_book.renderers.latex import render_latex
 
 
 def obj(**methods):
@@ -25,12 +29,12 @@ def event_ref(handle, role=""):
     )
 
 
-def media_ref(handle, rectangle=None):
+def media_ref(handle, rectangle=None, citations=()):
     return SimpleNamespace(
         ref=handle,
         get_rectangle=lambda: rectangle,
         get_privacy=lambda: False,
-        get_citation_list=lambda: [],
+        get_citation_list=lambda: list(citations),
         get_note_list=lambda: [],
         get_attribute_list=lambda: [],
     )
@@ -316,6 +320,70 @@ def test_snapshot_preserves_relationships_events_sources_media_and_privacy():
     assert db.reads[("citation", "citation-1")] == 1
     assert db.reads[("event", "event-life")] == 1
     assert json.loads(json.dumps(payload, ensure_ascii=False))["sources"]["source-1"]["title"] == "Registre paroissial"
+
+
+def test_excluded_featured_media_is_absent_from_generated_books(tmp_path):
+    db = rich_database()
+    missing_media_path = tmp_path / "excluded-featured.png"
+    db.records["media"]["media-featured"].get_path = lambda: str(missing_media_path)
+    db.records["person"]["person-0"].get_media_list = lambda: [
+        media_ref(
+            "media-featured",
+            (10, 20, 80, 90),
+            citations=("citation-only-on-excluded-person-media",),
+        )
+    ]
+    db.records["family"]["family-main"].get_media_list = lambda: [
+        media_ref(
+            "media-featured",
+            citations=("citation-only-on-excluded-family-media",),
+        )
+    ]
+    model = build_book_model(GrampsDatabaseAdapter(db).read_snapshot("family-main"))
+    excluded_media = model.media["media-featured"]
+    assert excluded_media.is_excluded is True
+    assert excluded_media.is_featured is True
+    assert not missing_media_path.exists()
+    assert model.editorial_book.media_placements == ()
+    assert all(
+        reference.media_handle != "media-featured"
+        for profile in model.editorial_book.profiles
+        for reference in profile.media_refs
+    )
+    assert all(
+        reference.media_handle != "media-featured"
+        for notice in model.editorial_book.family_notices
+        for reference in notice.media_refs
+    )
+    assert all(
+        reference.media_handle != "media-featured"
+        for entry in model.editorial_book.citation_entries
+        for reference in entry.media_refs
+    )
+    assert not {
+        "citation-only-on-excluded-person-media",
+        "citation-only-on-excluded-family-media",
+    } & {
+        entry.citation_handle for entry in model.editorial_book.citation_entries
+    }
+
+    staging_directory = tmp_path / "staged-media"
+    staging_directory.mkdir()
+    prepare_editorial_media(db, model, "media", staging_directory)
+    assert model.media_artifacts == []
+
+    archive_path = write_html_archive(
+        model,
+        tmp_path / "book.zip",
+        media_asset_directory=staging_directory,
+    )
+    with zipfile.ZipFile(archive_path) as archive:
+        assert archive.namelist() == ["index.html"]
+        html = archive.read("index.html").decode("utf-8")
+
+    assert "Portrait" not in html
+    assert "<img" not in html
+    assert "Portrait" not in render_latex(model)
 
 
 def test_missing_optional_references_become_structured_diagnostics():

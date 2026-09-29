@@ -1,6 +1,6 @@
 # Media validation / Pillow and PDFium
 
-Status as of 2026-09-28.
+Status as of 2026-09-29.
 
 ## Verified scope
 
@@ -10,7 +10,9 @@ The integration uses no real family data. Source files are unchanged; the portra
 
 ## Remaining publication check
 
-In Gramps, tag one fictional media object with both `BOOK_EXCLUDE` and `BOOK_FEATURED`, then create an HTML ZIP book. This acceptance check passes only if the excluded object is absent from every rendered `<img>` reference in `index.html` and absent from every `media/` entry in the ZIP. The same object must not be opened or converted during generation. This manual scenario has not yet been run.
+The `test_excluded_featured_media_is_absent_from_generated_books` test builds a synthetic Gramps snapshot with one media record carrying both tags. It checks that its editorial references and attached citations create no placement or derivative, the ZIP contains only `index.html`, and neither the description nor an `<img>` appears in HTML or LaTeX. The fictional source path does not exist, so an attempted read would fail the test.
+
+The native Gramps recipe remains outstanding: apply both `BOOK_EXCLUDE` and `BOOK_FEATURED` to a fictional media object, then generate an HTML ZIP. Confirm the same result through the Gramps UI and database.
 
 ## Installation
 
