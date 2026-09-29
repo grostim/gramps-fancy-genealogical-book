@@ -51,8 +51,16 @@ _GETTERS = {
 class GrampsDatabaseAdapter:
     """Extract Gramps objects without changing the database or filtering private data."""
 
-    def __init__(self, database: object) -> None:
+    def __init__(self, database: object, *, date_language: str | None = None) -> None:
         self.database = database
+        self._date_displayer = None
+        if date_language:
+            try:
+                from gramps.gen.utils.grampslocale import GrampsLocale
+            except ImportError:
+                pass
+            else:
+                self._date_displayer = GrampsLocale(lang=date_language).date_displayer
         self._cache: dict[str, dict[str, Any]] = defaultdict(dict)
         self._diagnostics: list[Diagnostic] = []
         self._diagnostic_keys: set[tuple[str, str, str]] = set()
@@ -494,12 +502,17 @@ class GrampsDatabaseAdapter:
         stop_ymd = _call(raw_date, "get_stop_ymd")
         sort_value = _call(raw_date, "get_sort_value")
         text = _string(_call(raw_date, "get_text", ""))
-        try:
-            from gramps.gen.datehandler import displayer
-        except ImportError:
-            display = text
-        else:
-            display = _string(displayer.display(raw_date)) or text
+        date_displayer = self._date_displayer
+        if date_displayer is None:
+            try:
+                from gramps.gen.datehandler import displayer as date_displayer
+            except ImportError:
+                date_displayer = None
+        display = (
+            _string(date_displayer.display(raw_date)) or text
+            if date_displayer is not None
+            else text
+        )
         return DateValue(
             display=display,
             sort_value=int(sort_value) if sort_value not in (None, 0) else None,

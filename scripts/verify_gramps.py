@@ -8,9 +8,11 @@ from __future__ import annotations
 import argparse
 import copy
 import gzip
+import importlib.util
 import json
 import os
 import re
+import shutil
 import subprocess
 import tarfile
 import tempfile
@@ -200,6 +202,20 @@ def _create_media_fixture(work: Path) -> None:
     Image.new("RGB", (10, 10), color=(90, 130, 170)).save(media_path, format="JPEG")
 
 
+def _install_mistune_dependency(plugins: Path) -> None:
+    """Install the runner's Mistune copy into this isolated Gramps profile."""
+    spec = importlib.util.find_spec("mistune")
+    if spec is None or not spec.submodule_search_locations:
+        raise AssertionError("Install the project dependencies before Gramps integration.")
+    source = Path(next(iter(spec.submodule_search_locations)))
+    target = plugins / "lib" / "mistune"
+    shutil.copytree(
+        source,
+        target,
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+    )
+
+
 def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     """Round-trip GEDCOM through Gramps, then add native Gramps XML fields."""
     gedcom = work / "reference-family.ged"
@@ -359,12 +375,13 @@ def verify(executable: str) -> None:
         work = Path(directory)
         env = os.environ.copy()
         env.update(GRAMPSHOME=str(work), XDG_CACHE_HOME=str(work / "cache"), LANGUAGE="en")
-        # Import only the installed add-on, never a development PYTHONPATH.
+        # Install the add-on and declared dependency in this profile, never from a source PYTHONPATH.
         env.pop("PYTHONPATH", None)
         plugins = work / "gramps" / "gramps60" / "plugins"
         plugins.mkdir(parents=True)
         with tarfile.open(ROOT / "gramps60/download/GrampsFancyBook.addon.tgz") as archive:
             archive.extractall(plugins, filter="data")
+        _install_mistune_dependency(plugins)
 
         _create_media_fixture(work)
         native_fixture = _native_fixture(executable, env, work)
@@ -374,6 +391,7 @@ def verify(executable: str) -> None:
             output: Path | None,
             *,
             output_format: str = "json_snapshot",
+            book_language: str | None = None,
             overwrite=False,
         ) -> str:
             options = (
@@ -382,6 +400,8 @@ def verify(executable: str) -> None:
             )
             if output is not None:
                 options += f",destination={output}"
+            if book_language is not None:
+                options += f",book_language={book_language}"
             if overwrite:
                 options += ",overwrite=True"
             result = subprocess.run(
@@ -411,6 +431,39 @@ def verify(executable: str) -> None:
         if not output.exists():
             raise AssertionError(log)
         model = json.loads(output.read_text(encoding="utf-8"))
+
+        localized_models = {}
+        for language in ("en", "fr"):
+            localized_output = work / f"family-{language}.json"
+            log = report("F0001", localized_output, book_language=language)
+            if not localized_output.exists():
+                raise AssertionError(log)
+            localized_models[language] = json.loads(
+                localized_output.read_text(encoding="utf-8")
+            )
+        localized_birth_dates = {}
+        for language, localized_model in localized_models.items():
+            birth = next(
+                event
+                for event in localized_model["events"].values()
+                if event["type"] == "Birth"
+            )
+            localized_birth_dates[language] = birth["date"]
+            assert localized_model["metadata"]["BOOK_LANGUAGE"] == language
+        english_date = localized_birth_dates["en"]
+        french_date = localized_birth_dates["fr"]
+        assert "1900" in english_date["display"]
+        assert "1900" in french_date["display"]
+        assert english_date["display"] != french_date["display"], {
+            "english": english_date["display"],
+            "french": french_date["display"],
+        }
+        assert english_date["raw"] == french_date["raw"]
+        assert english_date["ymd"] == french_date["ymd"]
+        print(
+            "PASS: Gramps dates follow the selected book language without changing date data"
+        )
+
         consistency_path = output.with_name("family_consistency.json")
         if not consistency_path.is_file():
             raise AssertionError("The export is missing its consistency companion JSON.")

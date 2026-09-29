@@ -35,9 +35,13 @@ Une recette complémentaire utilise une base Gramps native fictive avec les év�
 
 La description d’événement saisie dans la fixture reste intacte. Le PDF français comprend 10 pages A4. La couverture, le sommaire, les parcours familiaux, les notices, les fiches, l’annexe et l’index ont été examinés par échantillon ; la page 3 et l’accessibilité n’ont pas été qualifiées. Le PDF n’est pas balisé (`Tagged: no`). Son SHA-256 est `f01792f5b5b85cd6fcb3f5502ec26b1419dce452d4885402ad2fe5c3a946bcfa`.
 
+## Affichage des dates selon la langue du livre — 30 septembre 2026
+
+La vérification d’intégration native Gramps 6.0.8 compare le même événement `Birth` exporté avec le livre en anglais puis en français, alors que la locale du profil Gramps reste anglaise. Le texte affiché contient l’année 1900 dans les deux cas et diffère selon la langue sélectionnée. Les valeurs brutes et normalisées de la date restent identiques. Cette vérification porte sur une date structurée ; elle ne couvre pas encore les dates saisies en texte libre ni le choix graphique de l’option.
+
 ## Limites
 
 - Ces essais invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés. Ils ne vérifient pas encore l’affichage graphique de l’option ni son choix dans la boîte de dialogue du rapport.
 - La recette ne compare pas toutes les chaînes de notes et d’événements ; elle confirme la conservation du nom saisi. Les données de la fixture sont fictives.
-- Le texte de date formaté par Gramps n’est pas reformaté par le renderer ; son apparence sous une dérogation de langue reste à décider et à vérifier.
+- Les dates structurées sont maintenant formatées par Gramps dans la langue du livre ; la vérification native CLI ne couvre pas encore les dates en texte libre ni la sélection graphique de la langue.
 - Le PDF de démonstration utilise un petit arbre et des portraits synthétiques ; sa mise en page finale, l’accessibilité PDF et la comparaison avec les maquettes privées ne sont pas qualifiées par cette recette.
