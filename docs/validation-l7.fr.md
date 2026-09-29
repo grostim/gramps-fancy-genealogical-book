@@ -40,6 +40,14 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 - Le test unitaire du rendu vérifie également qu’une URL `javascript:` de citation n’est pas produite comme lien.
 - L’analyse de l’archive ne démontre toujours pas son affichage dans un navigateur hors ligne, la navigation au clavier ni la lecture par un lecteur d’écran.
 
+## Renvois de citation numérotés — PR #103 — 29 septembre 2026
+
+- La PR #103, fusionnée dans `main` au commit `82d97d3`, réutilise la numérotation éditoriale commune au PDF et au HTML. Les appels HTML affichent des numéros cliquables et l’annexe trie les entrées selon ces numéros.
+- Après reconstruction du module, Gramps Desktop 6.0.8 a produit `book.zip` en ligne de commande avec la fixture Gramps fictive `Arbre familial 1-2026-09-29-12-24-33.gramps`, dans un nouveau profil temporaire. L’archive contient `index.html` et un PNG.
+- Le livre a été ouvert dans le navigateur intégré via un serveur local sur `127.0.0.1`, sans ressource externe. La couverture, le portrait, les renvois `[1]` à `[3]` et les titres d’annexe numérotés ont été affichés ; l’ancre de la première entrée conduit à `[1] Registre fictif`. Les contrôles CI Linux (Python 3.10–3.13, intégration Gramps et LuaLaTeX) et Windows sont tous passés sur la PR.
+- L’ordre visible dans le corps HTML commence par `[2]`, `[3]`, puis `[1]`, car les fiches apparaissent dans le parcours généalogique avant les notices familiales, alors que la numérotation reste alignée sur l’ordre éditorial du PDF. Les liens des notices vers des événements affichent aussi leurs identifiants Gramps. Ces deux choix méritent un contrôle éditorial supplémentaire.
+- Cette revue ponctuelle ne qualifie ni les petits écrans, ni le clavier, ni le lecteur d’écran ; le ZIP exporté depuis l’interface graphique reste à examiner séparément.
+
 ## Recette Gramps Desktop interactive — 29 septembre 2026
 
 - Gramps Desktop 6.0.8 a été lancé avec la fixture GEDCOM du dépôt dans un profil temporaire isolé, sans ouvrir l’arbre Gramps personnel. Le rapport apparaît sous **Rapports → Pages web** et les libellés, options et onglet **Vie privée** sont en français. La famille fictive F0001 est sélectionnée.
