@@ -59,6 +59,7 @@ def write_latex_pdf(
     destination: str | Path,
     *,
     media_asset_directory: str | Path | None = None,
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
     overwrite: bool = False,
 ) -> Path:
     """Compile the shared LaTeX renderer and atomically install its PDF.
@@ -74,7 +75,7 @@ def write_latex_pdf(
         )
 
     assets = _media_asset_paths(model, media_asset_directory)
-    source = render_latex(model)
+    source = render_latex(model, gramps_type_labels=gramps_type_labels)
     with tempfile.TemporaryDirectory(
         prefix=".book-pdf-", dir=output.parent
     ) as temporary:

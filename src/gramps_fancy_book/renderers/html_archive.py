@@ -40,6 +40,7 @@ def write_html_archive(
     destination: str | Path,
     *,
     media_asset_directory: str | Path | None = None,
+    gramps_type_labels: dict[tuple[str, str], str] | None = None,
     overwrite: bool = False,
 ) -> Path:
     """Write ``index.html`` and its approved PNG derivatives to a ZIP archive.
@@ -50,7 +51,9 @@ def write_html_archive(
     """
     output = validate_html_archive_destination(destination, overwrite=overwrite)
     assets = _media_asset_paths(model, media_asset_directory)
-    html = render_html(model, include_media=True)
+    html = render_html(
+        model, include_media=True, gramps_type_labels=gramps_type_labels
+    )
     temporary = None
     try:
         with tempfile.NamedTemporaryFile(

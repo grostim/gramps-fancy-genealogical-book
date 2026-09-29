@@ -111,12 +111,16 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
         ),
     )
 
-    rendered = render_latex(model)
+    rendered = render_latex(
+        model, gramps_type_labels={("event", "Birth"): "Naissance"}
+    )
 
     assert r"\textbackslash{}input\{owned\}" in rendered
     assert r"\input{owned}" not in rendered
     assert r"50\% value\_a \&" in rendered
     assert r"Place\_\&\_One" in rendered
+    assert "Naissance" in rendered
+    assert "Birth" not in rendered
     assert r"Source \textbackslash{}input\{owned\} \#1\_50\%" in rendered
     assert r"Repository\_\&" in rendered
     assert r"R\_1\&" in rendered

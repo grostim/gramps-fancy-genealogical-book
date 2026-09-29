@@ -24,9 +24,20 @@ Chaque ligne a été produite en PDF et en HTML ZIP avec le rapport Gramps réel
 
 Les libellés « Ascendance » et « Table des matières » apparaissent dans les sorties françaises ; « Ancestry » et « Contents » apparaissent dans les sorties anglaises. Chaque page HTML contient l’attribut `lang` correspondant. Le nom fictif « Exemple, Émile » reste identique dans les dix sorties malgré le changement de langue des libellés.
 
+## Libellés standard Gramps — 29 septembre 2026
+
+Une recette complémentaire utilise une base Gramps native fictive avec les événements standard `Birth` et `Marriage`, un type personnalisé `Profession`, une filiation et un rôle `Primary`.
+
+| Langue du livre | Locale Gramps | Sorties inspectées | Résultat |
+| --- | --- | --- | --- |
+| Français | Anglais | PDF et HTML ZIP | `Naissance`, `Mariage`, `Principal` et la filiation `Naissance` sont traduits ; `Profession` reste tel que saisi |
+| Anglais | Français | HTML ZIP | `Birth`, `Marriage`, `Primary` et la filiation `Birth` restent en anglais ; `Profession` reste tel que saisi |
+
+La description d’événement saisie dans la fixture reste intacte. Le PDF français comprend 10 pages A4. La couverture, le sommaire, les parcours familiaux, les notices, les fiches, l’annexe et l’index ont été examinés par échantillon ; la page 3 et l’accessibilité n’ont pas été qualifiées. Le PDF n’est pas balisé (`Tagged: no`). Son SHA-256 est `f01792f5b5b85cd6fcb3f5502ec26b1419dce452d4885402ad2fe5c3a946bcfa`.
+
 ## Limites
 
 - Ces essais invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés. Ils ne vérifient pas encore l’affichage graphique de l’option ni son choix dans la boîte de dialogue du rapport.
 - La recette ne compare pas toutes les chaînes de notes et d’événements ; elle confirme la conservation du nom saisi. Les données de la fixture sont fictives.
 - Le texte de date formaté par Gramps n’est pas reformaté par le renderer ; son apparence sous une dérogation de langue reste à décider et à vérifier.
-- L’accessibilité PDF et la comparaison avec les maquettes privées ne sont pas qualifiées par cette recette.
+- Le PDF de démonstration utilise un petit arbre et des portraits synthétiques ; sa mise en page finale, l’accessibilité PDF et la comparaison avec les maquettes privées ne sont pas qualifiées par cette recette.

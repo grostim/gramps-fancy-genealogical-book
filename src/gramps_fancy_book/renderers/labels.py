@@ -155,3 +155,14 @@ def owner_label(model, owner_type: str, *, default: str = "fr") -> str:
 def label_for_language(language: str, key: str) -> str:
     """Return a translated renderer label when only a language code is available."""
     return _LABELS.get(language, _LABELS["en"]).get(key, key)
+
+
+def gramps_type_label(
+    category: str,
+    value: str,
+    translations: dict[tuple[str, str], str] | None = None,
+) -> str:
+    """Return a localized standard Gramps enum value, preserving custom values."""
+    if not value:
+        return ""
+    return (translations or {}).get((category, value), value)
