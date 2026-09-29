@@ -9,6 +9,7 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 - Sélecteur de famille Gramps, archive HTML ZIP par défaut et export JSON de diagnostic.
 - Modèle JSON v0.8 avec occurrences généalogiques, liens typés et cibles de renvoi, accompagné d’une structure éditoriale ordonnée. Un index alphabétique renvoie à chaque fiche ou à sa première occurrence. Les fiches de personnes éligibles et une notice par famille du périmètre référencent les notes publiables, portraits et légendes, événements, médias et sections familiales.
 - Extraction des ascendants et descendants en profondeur illimitée par défaut, ou limitée séparément avec un entier ≥ 0.
+- Les titres et libellés générés suivent la langue configurée dans Gramps, avec choix manuel français/anglais et repli en anglais pour les langues non prises en charge. Les noms, notes, dates et textes des sources ne sont pas traduits.
 - Dates structurées affichées selon le formateur de Gramps, avec sérialisation brute ; chaque lien parent-enfant expose le type de filiation enregistré.
 - Conservation des handles, identifiants Gramps, ordre d’origine, régions de recadrage et indicateurs de confidentialité.
 - Les notes publiables sont rendues en HTML et en LaTeX depuis l’AST Mistune ; le HTML brut reste du texte littéral, et les styles sémantiques Gramps priment sur la syntaxe Markdown d’une même note. Voir la [règle de normalisation documentée](docs/decisions/003-note-markup.md).
@@ -47,11 +48,15 @@ Les convertisseurs d’images et de PDF restent facultatifs afin que l’export 
 
 Les libellés du rapport Gramps ont un catalogue français dans `gramps60/GrampsFancyBook/po/fr-local.po` ; la construction le compile et l’inclut dans l’archive. Les nouvelles chaînes du plugin doivent aussi être ajoutées au catalogue.
 
+## Langue du livre
+
+La langue du livre suit par défaut celle configurée dans Gramps. Choisissez le français ou l’anglais dans les options du rapport pour la remplacer ; les autres langues Gramps utilisent l’anglais. Cela concerne les titres, la navigation et les libellés d’accessibilité générés dans le PDF et le HTML. Les noms, notes, descriptions d’événements et textes des sources ne sont pas traduits. Les dates conservent le texte d’affichage déjà formaté par Gramps lors de l’extraction.
+
 ## Exemple en ligne de commande
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,output_format=json_snapshot,privacy_acknowledged=True,destination=/chemin/absolu/famille.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,book_language=auto,output_format=json_snapshot,privacy_acknowledged=True,destination=/chemin/absolu/famille.json"
 ```
 
 L’option `privacy_acknowledged=True` est requise pour chaque export en ligne de commande. Dans Desktop et Web, confirmer l’option de confidentialité à chaque export. Le rapport ne filtre ni n’anonymise les données accessibles. Ajouter `overwrite=True` aux options pour autoriser le remplacement. Le GEDCOM fourni ne contient que des personnes fictives. Le script ci-dessous automatise le test dans un profil Gramps temporaire et installe uniquement l’archive construite. Sur macOS, l’exécutable est `/Applications/Gramps.app/Contents/MacOS/Gramps`.

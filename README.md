@@ -9,6 +9,7 @@ An experimental Gramps 6 add-on for a family genealogical book. The Gramps repor
 - Native Gramps family selector, HTML ZIP output by default, and JSON snapshot output for diagnostics.
 - JSON v0.8 model with genealogy occurrences, typed relationship links and an ordered editorial structure. Stable navigation targets and an alphabetical person index point to each profile or its primary occurrence. Eligible person profiles and one family notice per in-scope family link to published notes, portraits and their captions, events, media and family sections.
 - Ancestry and descendant extraction defaults to unlimited depth; each direction can also be limited independently with a non-negative integer.
+- Book headings and renderer-owned labels follow the language configured in Gramps, with French/English manual overrides and English fallback for unsupported locales. Names, notes, dates and source text are not translated.
 - Structured dates use Gramps' date displayer while preserving the raw serialized date; each parent-child link exposes its recorded parentage type.
 - Preservation of handles, Gramps IDs, original order, crop regions and privacy flags.
 - Published notes are rendered in HTML and LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
@@ -45,11 +46,15 @@ The HTML and LaTeX note renderers require Mistune 3.x. Install it in the Python 
 
 Image and PDF converters remain optional so JSON export works without them. For development, install the project and its dependencies with `python -m pip install -e '.[dev,media]'`. In a Gramps Desktop environment that supports pip, install `Pillow` and `pypdfium2` with the same Python interpreter that launches Gramps, then restart Gramps: `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. A missing dependency produces a diagnostic and the affected derivatives are omitted. PDF output additionally requires LuaLaTeX (provided by TeX Live) on the `PATH` used to launch Gramps. The PDF mode is experimental pending Gramps Desktop and visual validation. CI currently qualifies Ubuntu 24.04, Python 3.12 and Gramps 6.0.8; see the [media validation record](docs/validation-media.md). Gramps Web execution remains unqualified: the packages would need to be installed in the server environment, and no test instance has been validated.
 
+## Book language
+
+Book language defaults to the language configured in Gramps. Select French or English in the report options to override it; unsupported Gramps locales use English. This changes renderer-owned headings, navigation and accessibility labels in both PDF and HTML output. Names, notes, event descriptions and source text are not translated. Dates retain the display string already formatted by Gramps during extraction.
+
 ## CLI example
 
 ```sh
 gramps -i tests/fixtures/reference-family.ged -a report \
-  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,output_format=json_snapshot,privacy_acknowledged=True,destination=/absolute/path/family.json"
+  -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,book_language=auto,output_format=json_snapshot,privacy_acknowledged=True,destination=/absolute/path/family.json"
 ```
 
 The `privacy_acknowledged=True` option is required for every CLI export. In Desktop and Web, confirm the privacy option for each export. The report does not filter or anonymize readable data. Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.

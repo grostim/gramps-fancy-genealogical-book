@@ -1,5 +1,6 @@
 """Normalization and model construction."""
 
+from .book_language import resolve_book_language
 from .conventions import BOOK_SCHEMA_VERSION
 from .domain import BookModel, Family, Snapshot
 from .editorial import build_editorial_book, select_f0_editorial_notes
@@ -25,7 +26,11 @@ def build_book_model(
     family: Family | Snapshot,
     max_ancestor_depth: int | str | None = None,
     max_descendant_depth: int | str | None = None,
+    book_language: str | None = None,
 ) -> BookModel:
+    resolved_language = (
+        resolve_book_language(book_language) if book_language is not None else None
+    )
     if isinstance(family, Snapshot):
         genealogy = build_genealogy(family, max_ancestor_depth, max_descendant_depth)
         people = list(family.people.values())
@@ -38,6 +43,11 @@ def build_book_model(
             metadata={
                 "BOOK_SCHEMA_VERSION": BOOK_SCHEMA_VERSION,
                 "BOOK_REFERENCE_FAMILY": family.reference_family.handle,
+                **(
+                    {"BOOK_LANGUAGE": resolved_language}
+                    if resolved_language is not None
+                    else {}
+                ),
             },
             families=family.families,
             events=family.events,
@@ -76,6 +86,14 @@ def build_book_model(
     return BookModel(
         reference_family=family,
         people=list(people_by_handle.values()),
-        metadata={"BOOK_SCHEMA_VERSION": BOOK_SCHEMA_VERSION, "BOOK_REFERENCE_FAMILY": family.handle},
+        metadata={
+            "BOOK_SCHEMA_VERSION": BOOK_SCHEMA_VERSION,
+            "BOOK_REFERENCE_FAMILY": family.handle,
+            **(
+                {"BOOK_LANGUAGE": resolved_language}
+                if resolved_language is not None
+                else {}
+            ),
+        },
         families={family.handle: family},
     )

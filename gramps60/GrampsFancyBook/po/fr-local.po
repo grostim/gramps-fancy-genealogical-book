@@ -166,3 +166,23 @@ msgstr "L’avertissement de confidentialité n’a pas été confirmé"
 #: gramps60/GrampsFancyBook/GrampsFancyBook.py
 msgid "Confirm that you are authorized to export and share data about living people and records marked private."
 msgstr "Confirmez que vous êtes autorisé à exporter et partager des données sur des personnes vivantes et des enregistrements marqués privés."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Book language"
+msgstr "Langue du livre"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Use Gramps language"
+msgstr "Utiliser la langue de Gramps"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "French"
+msgstr "Français"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "English"
+msgstr "Anglais"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Automatic mode follows the language configured in Gramps. If that language is not supported, the book uses English."
+msgstr "Le mode automatique suit la langue configurée dans Gramps. Si cette langue n’est pas prise en charge, le livre utilise l’anglais."

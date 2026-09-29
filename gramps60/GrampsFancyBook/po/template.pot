@@ -85,3 +85,23 @@ msgstr ""
 #: gramps60/GrampsFancyBook/GrampsFancyBook.py:95
 msgid "Book generation failed"
 msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Book language"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Use Gramps language"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "French"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "English"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Automatic mode follows the language configured in Gramps. If that language is not supported, the book uses English."
+msgstr ""
