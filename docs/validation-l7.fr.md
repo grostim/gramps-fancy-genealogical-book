@@ -26,6 +26,12 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 - `unzip -t` confirme l’intégrité des deux entrées. L’analyse de `index.html` trouve 29 identifiants uniques et 32 références locales ; aucune cible de fragment ni aucun fichier local ne manque, et aucune référence HTTP(S) externe n’est présente.
 - Ce contrôle structurel ne démontre pas le rendu visuel, l’interaction hors ligne, le comportement du clavier ou la compatibilité avec un lecteur d’écran. L’ouverture réelle de `index.html` reste à faire.
 
+## Média partagé par deux citations — contrôle Gramps, 29 septembre 2026
+
+- Un nouveau ZIP a été produit par Gramps 6.0.8 depuis une base GEDCOM fictive dans un profil temporaire. Le même objet PNG est associé à deux citations distinctes.
+- L’archive contient `index.html` et une seule entrée PNG. Les deux notices de citation renvoient vers la même reproduction. Les 209 liens HTML sont des ancres locales résolues ; les 170 identifiants sont uniques et il n’y a pas de lien externe.
+- La vérification reste statique : l’ouverture visuelle hors ligne, la navigation au clavier et le lecteur d’écran ne sont pas validés. Le navigateur intégré a refusé l’URL `file://`; aucun autre chemin d’ouverture n’a été utilisé.
+
 ## Export riche depuis Gramps — 29 septembre 2026
 
 - L’archive du module a été construite depuis la branche de correction des liens bibliographiques et installée uniquement dans un nouveau profil temporaire. L’essai utilise Gramps 6.0.8 sur macOS 27.0 arm64, la fixture GEDCOM du dépôt, une image de 10 × 10 pixels générée pour le test et un fichier natif Gramps complété avec une note, une référence de dépôt et une URL fictives.
