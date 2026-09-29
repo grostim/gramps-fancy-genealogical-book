@@ -78,7 +78,7 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-14 | Citations réutilisées et multiples | L3.4, L5.3–L5.4, L6.4 | Citations réutilisables, appels contextuels, numérotation, renvois et annexe implémentés ; scénario complet restant |
 | AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Placements dédupliqués par handle média et appels documentaires reliés ; cas partagé à vérifier dans les deux rendus |
 | AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Un portrait fictif recadré est intégré au PDF depuis Gramps ; les quatre cas restent à valider avec médias Gramps |
-| AC-17 | Pagination finale cohérente | L6.4–L6.5 | PDF Gramps fictif de 9 pages compilé avec renvois stabilisés ; livres synthétiques de 18 et 4 pages examinés, sommaire et légende du portrait corrigés ; comparaison aux maquettes et export Gramps complet à vérifier |
+| AC-17 | Pagination finale cohérente | L6.4–L6.5 | PDF A4 de 9 pages produit depuis Gramps macOS 6.0.8 et livres synthétiques de 18 et 4 pages examinés ; sommaire et légende du portrait corrigés ; parcours interactif Desktop et comparaison aux maquettes restent à vérifier |
 | AC-18 | Fait sans citation et source sans dépôt | L3.4, L5.4 | Modèle de citations tolère appels et dépôts absents ; cas documentaires à vérifier dans la sortie finale |
 | AC-19 | Contradictions et rapport séparé | L3.7, L5.7 | Rapport séparé BOOK_FACT_ID implémenté : dates disjointes en conflit, lieux différents à examiner ; recette de données restante |
 | AC-20 | Équivalence PDF/HTML et usage hors ligne | L6, L7, L8.1 | Sorties PDF et HTML ZIP autonomes disponibles ; équivalence de contenu et navigation hors ligne restent à vérifier |
@@ -87,5 +87,5 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-23 | Échappement et absence d’injection | L2.6, L6.2, L7.3 | Échappement HTML, liens restreints et chemins ZIP relatifs implémentés ; recette de sécurité dédiée restante |
 | AC-24 | Stabilité du contenu et des ancres | L4.6, L5.6, L8.1 | Identifiants et ancres stables produits par le modèle et les rendus ; stabilité entre générations à vérifier |
 | AC-25 | Métadonnées indépendantes de la langue | L3.3, L8.4 | Noms techniques et métadonnées BOOK_* en anglais ; test de comportement avec différentes langues Gramps restant |
-| AC-26 | Documentation FR/EN et contrôle CI | L1.8, L8.4 | README et guides complets FR/EN présents, catalogue du rapport compilé à la construction ; parcours Gramps et CI reproductible à valider |
+| AC-26 | Documentation FR/EN et contrôle CI | L1.8, L8.4 | README et guides complets FR/EN présents, catalogue français compilé à la construction ; CI réussie sur Python 3.10–3.13, intégration Gramps 6.0.8 et LuaLaTeX ; parcours Desktop/Web complet à qualifier |
 | AC-27 | Transmission des maquettes | L0.1, L6.1 | Originaux locaux récupérés et PDFs consultés ; transmission privée requise pour un nouveau clone |
