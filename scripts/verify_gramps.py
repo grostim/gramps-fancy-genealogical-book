@@ -511,7 +511,7 @@ def verify(executable: str) -> None:
         original = output.read_bytes()
         for family in ("F9999", "", "F0002"):
             log = report(family, output, overwrite=True)
-            assert "Book model export failed" in log, log
+            assert "Book generation failed" in log, log
             assert output.read_bytes() == original
         log = report("F0001", output)
         assert "Output file or media folder already exists" in log, log
@@ -531,7 +531,7 @@ def verify(executable: str) -> None:
 
         for destination in (None, work / "missing" / "file.json", work / "not-json.pdf"):
             log = report("F0001", destination)
-            assert "Book model export failed" in log, log
+            assert "Book generation failed" in log, log
             if destination is not None:
                 assert not destination.exists()
         assert not list(work.glob(".book-model-*"))

@@ -198,7 +198,10 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     assert 'href="#descent:0:f0:p0"' in rendered
     assert 'href="#person:p0"' in rendered
     assert "Branche :" in rendered
-    assert "filiation : Adopted" in rendered
+    assert (
+        "filiation : Ada &amp; &lt;img src=x onerror=alert(1)&gt; : Adopted"
+        in rendered
+    )
     assert "Ada &amp; &lt;img src=x onerror=alert(1)&gt;" in rendered
     assert "<img src=x" not in rendered
 
