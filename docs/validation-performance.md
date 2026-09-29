@@ -1,6 +1,6 @@
 # Performance measurement — L8.3
 
-Initial repeated measurement on 2026-09-29 with macOS 27.0 arm64 and CPython 3.14.0, LuaHBTeX 1.24.0 (TeX Live 2026), Pillow 12.3.0 and Mistune 3.3.4.
+Repeated measurements on 2026-09-29 with macOS 27.0 arm64 and CPython 3.14.0, Gramps 6.0.8 and its embedded Python 3.13.2, LuaHBTeX 1.24.0 (TeX Live 2026), Pillow 12.3.0 and Mistune 3.3.4.
 
 ## Method and synthetic data sets
 
@@ -8,14 +8,18 @@ Run from the repository root in a Python environment with the project and its me
 
     PYTHONPATH=src python scripts/benchmark_book.py --shape both --descendant-couples 10 100 1000 --with-media --compile-pdf-for 100 --repeat 3
 
-Each size runs three times; the reported durations and memory peaks are medians. JSON, HTML and LaTeX output sizes are stable across the repetitions.
+    PYTHONPATH=src python scripts/benchmark_gramps_extraction.py --gramps /Applications/Gramps.app/Contents/MacOS/Gramps --descendant-couples 10 100 1000 --repeat 3 --output docs/validation-gramps-extraction-20260929.json
+
+In the first benchmark, each size runs three times; the reported durations and memory peaks are medians. JSON, HTML and LaTeX sizes are stable across those repetitions. Gramps imports are measured separately, and regenerated internal handles cause small changes in JSON size.
 
 Two structures are compared:
 
 - Wide data set: one central couple with N children and their partners. Every person gets a profile; there are no events or media. This preserves the original reference case, but does not represent a deep tree.
 - Branching data set: N descendant unions distributed across branches, with at most two children per family. Each person has a birth event and each family has a union event. Every event has a citation; sources are shared across 25 citations; one repository and multiple places are included. Publishable notes appear about once per 12 people and once per 10 families. A synthetic PNG portrait with a crop region appears about once per 10 people.
 
-The script measures model construction, derivative preparation, JSON serialization, both renderers and the HTML ZIP archive. It also compiles a PDF for the small branching case. Media consists of deterministic pseudo-random images, not real portraits.
+The first script measures model construction, derivative preparation, JSON serialization, both renderers and the HTML ZIP archive. It also compiles a PDF for the small branching case. Media consists of deterministic pseudo-random images, not real portraits.
+
+The second script invokes the Gramps CLI report on balanced synthetic GEDCOM trees, each imported into a fresh `GRAMPSHOME` profile for every repetition. It installs the archive built from the repository and copies Mistune into the temporary profile because the macOS app does not provide that dependency. The raw measurements are saved in [validation-gramps-extraction-20260929.json](validation-gramps-extraction-20260929.json). Timing added only to the temporary report copy separates `GrampsDatabaseAdapter.read_snapshot_by_gramps_id` from model construction. End-to-end time and peak RSS also include Gramps startup, GEDCOM import and JSON writing. No normal Gramps tree is opened or changed.
 
 ## Duration and memory results
 
@@ -61,10 +65,22 @@ The medium case was compiled three times with the main command. The three large 
 
 All six PDFs compiled without layout warnings.
 
+### Extraction through Gramps
+
+Each size was imported into a new Gramps database three times. Times and the memory peak are medians; memory is the Gramps process's maximum RSS measured with macOS `/usr/bin/time -l`, in decimal MB.
+
+| Descendant couples N | People | Families | Events / citations | Notes | Places | Adapter (s) | Model (s) | Complete JSON report (s) | Peak RSS (MB) | Median JSON (bytes) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10 | 22 | 11 | 33 | 2 | 22 | 0.0041 | 0.0027 | 0.755 | 188.78 | 326,342 |
+| 100 | 202 | 101 | 303 | 26 | 25 | 0.0333 | 0.0220 | 1.035 | 206.68 | 2,870,536 |
+| 1,000 | 2,002 | 1,001 | 3,003 | 266 | 25 | 0.3515 | 0.2240 | 3.815 | 305.04 | 28,585,990 |
+
+Every event has one citation. The dataset shares one source and repository; notes are attached to selected people and families. Expected object counts were checked after every import. Profiles are not reused across repetitions, so Gramps regenerates its internal handles and JSON size varies slightly (326,199–326,410, 2,869,817–2,870,998, and 28,583,790–28,588,036 bytes by size). The data volume is consistent, but byte-for-byte identity is not expected across freshly imported databases.
+
 ## Interpretation and limitations
 
 The branching case adds substantial work absent from the wide data set: at 2,002 people, it processes 3,003 events and citations, 267 notes and 200 media derivatives. Under tracemalloc, JSON serialization takes 3.217 s on the largest data set and the additional peak reaches 68.41 MB. These instrumented durations do not directly predict production response times.
 
-This improves the initial reference but does not set acceptance thresholds yet. The graph is still fabricated: it does not measure Gramps database extraction, ancestry, multiple unions, pedigree collapse, or real documents. Pseudo-random images do not reproduce the compression distribution of real photos. Tracemalloc excludes native Pillow allocations and memory used by the LuaLaTeX subprocess.
+The Gramps measurements show that the adapter reads 2,002 people, 1,001 families and 3,003 events/citations in 0.351 s; the complete CLI report takes 3.815 s and reaches 305.04 MB peak RSS. RSS includes the Gramps application and cannot be compared directly with the additional Python heap tracked by tracemalloc in the other benchmark.
 
-The next L8.3 step is to measure Gramps extraction with fuller synthetic fixtures, including ancestry, multiple unions and pedigree collapse, then set thresholds that fit the intended production environments.
+This does not set acceptance thresholds yet. The imported graph covers branching descendants only; ancestry, multiple unions, pedigree collapse and media still need measurements through Gramps. The pseudo-random images in the direct benchmark do not reproduce the compression of real photos. Tracemalloc excludes native Pillow allocations and the LuaLaTeX subprocess's memory. Set thresholds after these scenarios and target production environments have been measured.
