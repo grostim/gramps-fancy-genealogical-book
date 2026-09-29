@@ -3,7 +3,12 @@ from types import SimpleNamespace
 
 from gramps_fancy_book.domain import (
     Citation,
+    EditorialMediaArtifact,
+    EditorialMediaPlacement,
+    EditorialMediaUse,
     Family,
+    Media,
+    MediaReference,
     Person,
     Repository,
     RepositoryReference,
@@ -285,3 +290,102 @@ def test_renders_a_minimal_model_without_editorial_book():
     assert "F0001" in rendered
     assert "Ada Exemple et Benoît Exemple" in rendered
     assert "2 personnes dans le modèle intermédiaire." in rendered
+
+
+def test_renders_a_shared_citation_media_once_and_links_later_citations():
+    cache_key = "a" * 64
+    first_entry_id = "citation-entry:c1"
+    second_entry_id = "citation-entry:c2"
+    first_reference = MediaReference(media_handle="m1")
+    second_reference = MediaReference(media_handle="m1")
+    first_entry = SimpleNamespace(
+        entry_id=first_entry_id,
+        citation_handle="c1",
+        source_handle=None,
+        repository_refs=(),
+        media_refs=(first_reference,),
+        calls=(),
+    )
+    second_entry = SimpleNamespace(
+        entry_id=second_entry_id,
+        citation_handle="c2",
+        source_handle=None,
+        repository_refs=(),
+        media_refs=(second_reference,),
+        calls=(),
+    )
+    placement = EditorialMediaPlacement(
+        placement_id="media:m1",
+        media_handle="m1",
+        uses=(
+            EditorialMediaUse("citation", first_entry_id, first_reference),
+            EditorialMediaUse("citation", second_entry_id, second_reference),
+        ),
+    )
+    parts = (
+        SimpleNamespace(part_id="cover", kind="cover"),
+        SimpleNamespace(
+            part_id="contents",
+            kind="table_of_contents",
+            part_ids=("appendix",),
+        ),
+        SimpleNamespace(
+            part_id="appendix",
+            kind="documentary_appendix",
+            citation_entry_ids=(first_entry_id, second_entry_id),
+        ),
+    )
+    model = SimpleNamespace(
+        reference_family=Family(
+            handle="f0",
+            gramps_id="F0001",
+            father=None,
+            mother=None,
+            children=(),
+        ),
+        people=[],
+        families={},
+        genealogy=None,
+        editorial_book=SimpleNamespace(
+            parts=parts,
+            profiles=(),
+            family_notices=(),
+            front_matter_notes=(),
+            citation_entries=(first_entry, second_entry),
+            media_placements=(placement,),
+            cover_portraits=(),
+            person_index=(),
+        ),
+        notes={},
+        events={},
+        places={},
+        citations={},
+        sources={},
+        repositories={},
+        media={"m1": Media("m1", description="Document partagé")},
+        media_artifacts=[
+            EditorialMediaArtifact(
+                media_handle="m1",
+                rectangle=None,
+                action="reproduce",
+                cache_key=cache_key,
+                asset_path=f"media/{cache_key}.png",
+                width=10,
+                height=10,
+            )
+        ],
+    )
+
+    rendered = render_html(model, include_media=True)
+
+    assert rendered.count(f'<img src="media/{cache_key}.png"') == 1
+    assert rendered.count(f'id="media-{cache_key}"') == 1
+    assert rendered.count(f'href="#media-{cache_key}"') == 1
+    first_article = rendered.split(f'id="{first_entry_id}"', 1)[1].split(
+        "</article>", 1
+    )[0]
+    second_article = rendered.split(f'id="{second_entry_id}"', 1)[1].split(
+        "</article>", 1
+    )[0]
+    assert f'id="media-{cache_key}"' in first_article
+    assert f'href="#media-{cache_key}"' in second_article

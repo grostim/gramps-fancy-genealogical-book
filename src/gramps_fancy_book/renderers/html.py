@@ -693,6 +693,7 @@ def _media_context(model, enabled: bool) -> dict:
         "enabled": enabled,
         "placements": {placement.media_handle: placement for placement in placements},
         "emitted_featured": set(),
+        "emitted_shared_assets": set(),
     }
 
 
@@ -757,7 +758,7 @@ def _render_media_reference(
             and primary_use.media_ref == reference
         )
         if not is_primary or placement.placement_id in media_context["emitted_featured"]:
-            return _featured_media_link(placement.placement_id, label)
+            return _media_reference_link(placement.placement_id, label)
         media_context["emitted_featured"].add(placement.placement_id)
         return _render_media_figure(
             reference,
@@ -767,6 +768,28 @@ def _render_media_reference(
             target_id=placement.placement_id,
             alt=alt,
         )
+
+    artifact = _media_artifact(reference, model)
+    asset_href = _html_asset_href(artifact)
+    if placement is not None and asset_href is not None:
+        same_asset_uses = [
+            use
+            for use in placement.uses
+            if use.media_ref.media_handle == reference.media_handle
+            and use.media_ref.rectangle == reference.rectangle
+        ]
+        if len(same_asset_uses) > 1:
+            target_id = f"media-{artifact.cache_key}"
+            if asset_href in media_context["emitted_shared_assets"]:
+                return _media_reference_link(target_id, label)
+            media_context["emitted_shared_assets"].add(asset_href)
+            return _render_media_figure(
+                reference,
+                label,
+                model,
+                target_id=target_id,
+                alt=alt,
+            )
 
     return _render_media_figure(reference, label, model, alt=alt)
 
@@ -782,7 +805,7 @@ def _featured_media_primary_use(placement):
     return placement.uses[0] if placement.uses else None
 
 
-def _featured_media_link(target_id: str, caption: str) -> str:
+def _media_reference_link(target_id: str, caption: str) -> str:
     return (
         f'<p class="media-reference"><a href="#{_attr(target_id)}">'
         f"Voir la reproduction : {_text(caption)}</a></p>\n"
@@ -799,15 +822,7 @@ def _render_media_figure(
     alt: str | None = None,
 ) -> str:
     media = getattr(model, "media", {}).get(reference.media_handle)
-    artifact = next(
-        (
-            item
-            for item in getattr(model, "media_artifacts", ())
-            if item.media_handle == reference.media_handle
-            and item.rectangle == reference.rectangle
-        ),
-        None,
-    )
+    artifact = _media_artifact(reference, model)
     asset_href = _html_asset_href(artifact)
     if asset_href is not None:
         image_alt = alt or caption or (media.description if media is not None else "")
@@ -841,6 +856,18 @@ def _render_media_figure(
         )
     message = "Reproduction indisponible" if featured else "Référence documentaire"
     return f'<p{target} class="media-reference">{fallback} — {message}.</p>\n'
+
+
+def _media_artifact(reference, model):
+    return next(
+        (
+            item
+            for item in getattr(model, "media_artifacts", ())
+            if item.media_handle == reference.media_handle
+            and item.rectangle == reference.rectangle
+        ),
+        None,
+    )
 
 
 def _html_asset_href(artifact) -> str | None:
