@@ -37,11 +37,11 @@ The fixture’s entered event description remains intact. The French PDF has 10 
 
 ## Date display follows the book language — 30 September 2026
 
-The native Gramps 6.0.8 integration check exports the same `Birth` event with the book set to English and French while the Gramps profile locale stays English. Both displayed values include 1900 and differ according to the selected language. The raw and normalized date values remain identical. This check covers a structured date; free-text dates and graphical selection of the option are not yet covered.
+The native Gramps 6.0.8 integration check exports the same events with the book set to English and French while the Gramps profile locale stays English. For `Birth`, both displayed values include 1900 and differ according to the selected language; the raw and normalized values remain identical. The marriage’s entered free-text date, “Entre l’hiver 1924 et le printemps 1925,” remains unchanged in both languages, with the same raw value.
 
 ## Limits
 
 - These checks invoke the Gramps Desktop executable through its CLI with isolated profiles. They do not verify the report option’s graphical display or selection in the report dialog.
 - The check does not compare every note and event string; it confirms retention of the entered name. All fixture data is fictional.
-- Structured dates are now formatted by Gramps in the book language; the native CLI check does not yet cover free-text dates or graphical selection of the language.
+- Structured dates are formatted by Gramps in the book language and the fixture’s free-text date remains intact; graphical selection of the language is not yet covered.
 - The demonstration PDF uses a small tree and synthetic portraits; final layout, PDF accessibility, and comparison with private mockups are outside this check.

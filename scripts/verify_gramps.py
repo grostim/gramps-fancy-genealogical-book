@@ -287,6 +287,32 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
 
     _add_same_fact_birth_version(root, events, person)
 
+    marriage = next(
+        (item for item in _children(events, "event") if item.get("id") == "E0002"),
+        None,
+    )
+    if marriage is None:
+        raise AssertionError("Gramps XML export is missing the fixture marriage event.")
+    marriage_date = next(
+        (
+            item
+            for item in marriage
+            if item.tag.rsplit("}", 1)[-1] in {"daterange", "datespan", "dateval", "datestr"}
+        ),
+        None,
+    )
+    if marriage_date is None:
+        raise AssertionError("Gramps XML export is missing the fixture marriage date.")
+    date_index = list(marriage).index(marriage_date)
+    marriage.remove(marriage_date)
+    marriage.insert(
+        date_index,
+        ET.Element(
+            _qualified_name(root, "datestr"),
+            {"val": "Entre l’hiver 1924 et le printemps 1925"},
+        ),
+    )
+
     media_file = next(
         (item for item in _children(media, "file") if item.get("src")),
         None,
@@ -460,8 +486,23 @@ def verify(executable: str) -> None:
         }
         assert english_date["raw"] == french_date["raw"]
         assert english_date["ymd"] == french_date["ymd"]
+
+        localized_marriage_dates = {}
+        for language, localized_model in localized_models.items():
+            marriage = next(
+                event
+                for event in localized_model["events"].values()
+                if event["type"] == "Marriage"
+            )
+            localized_marriage_dates[language] = marriage["date"]
+        expected_free_text_date = "Entre l’hiver 1924 et le printemps 1925"
+        english_marriage_date = localized_marriage_dates["en"]
+        french_marriage_date = localized_marriage_dates["fr"]
+        assert english_marriage_date["display"] == expected_free_text_date
+        assert french_marriage_date["display"] == expected_free_text_date
+        assert english_marriage_date["raw"] == french_marriage_date["raw"]
         print(
-            "PASS: Gramps dates follow the selected book language without changing date data"
+            "PASS: structured Gramps dates follow the book language and free-text dates stay unchanged"
         )
 
         consistency_path = output.with_name("family_consistency.json")
