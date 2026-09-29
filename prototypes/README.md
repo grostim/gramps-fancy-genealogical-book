@@ -8,7 +8,11 @@ These development files are excluded from the add-on archive. They contain only 
 
 The built-in compiler failed before reading the source on 2026-09-27 because its Tectonic bundle was not cached or downloadable; that attempt provided no evidence about the document. The pinned LuaLaTeX CI now compiles the layout spike and both production-rendered fixtures with stable references and no overfull boxes. This establishes compilation, not page-by-page visual correctness against the original mockups.
 
-The CI harness now compiles the layout spike and both production-rendered books in an isolated directory with shell escape disabled, up to five passes, and log checks for unresolved references and overfull boxes. Inspect the resulting PDFs page by page before declaring visual acceptance; the original mockups remain local because they contain real family examples. The rich fixture is intended to land in the 15–30 page range.
+The CI harness now compiles the layout spike and both production-rendered books in an isolated directory with shell escape disabled, up to five passes, and log checks for unresolved references and overfull boxes. The original mockups remain local because they contain real family examples. The rich fixture is intended to land in the 15–30 page range.
+
+### Synthetic visual review — 2026-09-29
+
+All three PDFs were compiled locally with LuaHBTeX 1.24.0 and inspected page by page. The rich book (80 events, a long note, portrait, full-page photo, citations, and documentary appendix) is 18 A4 pages; the sparse book is 4 A4 pages. References stabilized after two passes, with no unresolved references or overfull boxes reported. The review found and fixed a duplicate “Contents” heading and a portrait caption that flowed beside the image. The long event and note sections continue across pages; the full-page photo, appendix, and index are present. This verifies the synthetic fixtures; detailed visual comparison with the private mockups remains open.
 
 ## Media
 
@@ -30,7 +34,7 @@ Ces fichiers de développement, exclusivement fictifs, sont exclus de l’archiv
 
 Le compilateur intégré a échoué avant lecture du source le 27 septembre 2026, car ses ressources Tectonic n’étaient pas en cache et leur téléchargement était impossible ; cet essai ne fournissait aucune preuve sur le document. La CI LuaLaTeX épinglée compile maintenant le prototype de mise en page et les deux fixtures issues du moteur de rendu, avec renvois stabilisés et sans débordement. Cela confirme la compilation, pas encore la qualité visuelle page par page face aux maquettes originales.
 
-La CI compile maintenant le prototype et les deux livres produits par le moteur dans un répertoire isolé, sans shell escape, avec cinq passes maximum et vérification des journaux de renvois et débordements. Examiner les PDF page par page avant de déclarer la recette visuelle terminée ; les maquettes originales restent locales puisqu’elles contiennent des exemples familiaux réels. La fixture riche vise 15–30 pages.
+La CI compile maintenant le prototype et les deux livres produits par le moteur dans un répertoire isolé, sans shell escape, avec cinq passes maximum et vérification des journaux de renvois et débordements. Les maquettes originales restent locales puisqu’elles contiennent des exemples familiaux réels. La fixture riche vise 15–30 pages.
 
 ### Médias
 
@@ -81,3 +85,7 @@ docker run --rm \
 ```
 
 La tâche CI `latex-prototype` conserve les PDF, sources et journaux des trois documents dans un artefact pendant 14 jours. La réussite de compilation ne remplace pas la revue visuelle à venir face aux maquettes de référence, qui restent stockées localement. L’image TeX Live est épinglée par son digest multiarchitecture publié en amont ; toute mise à jour doit être suivie d’une compilation réussie.
+
+### Revue visuelle synthétique — 29 septembre 2026
+
+Les trois PDF ont été compilés localement avec LuaHBTeX 1.24.0 et inspectés page par page. Le livre riche (80 événements, note longue, portrait, photo pleine page, citations et annexe documentaire) compte 18 pages A4 ; le livre peu documenté compte 4 pages A4. Les références sont stabilisées après deux passes, sans référence non résolue ni dépassement de marge signalé. La revue a révélé puis corrigé un titre « Contents » en double dans le sommaire et une légende de portrait qui se plaçait à côté de l’image. Les pages de chronologie et de note se poursuivent sur plusieurs pages, et la photo pleine page, l’annexe et l’index sont présents. Cette recette vérifie les fixtures synthétiques ; l’alignement visuel détaillé avec les maquettes privées reste à faire.
