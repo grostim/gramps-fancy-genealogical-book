@@ -34,3 +34,10 @@ No clipping, overlap, or missing page number was visible in the inspected pages.
 - 18 physical A4 pages, 56,659 bytes; LuaTeX 1.24.0. The compact synthetic model covers the cover, contents, ancestry, descent, family connections and notices, person profiles, documentary appendix, and person index.
 - The 18-page version was compiled with `fr` selected. Physical pages 2, 9, 10, and 18 were rechecked after the final compile: the contents and index are readable, and a long profile continues onto the next page without visible overlap. The other sections were reviewed on the same prototype in the previous inspection.
 - Names, dates, descriptions, and records are fictional. This output confirms French generated labels in a prototype, not yet full integration through the Gramps UI with a real genealogy database. `pdfinfo` reports `Tagged: no`; accessibility and comparison with private mockups remain open.
+
+## Shared preview after PR #106 — 29 September 2026
+
+- Local, untracked file: `output/pdf/gramps-fancy-book-step-preview-fr.pdf`, generated from `main` commit `5fb7bc7` with the repository renderers. SHA-256: `b3d16126c94ebba0c4dcd0c7424017a15153c976241ff430f2588e90880e6b66`.
+- The fictional model has 22 people, 11 families, 33 events, 3 notes, 33 citations, and two cropped PNG derivatives; the associated HTML ZIP was generated from this same model. The PDF has 22 A4 pages (109,106 bytes), compiled by LuaHBTeX 1.24.0.
+- All 22 pages were rendered at 90 dpi. A contact sheet and physical pages 7, 16, 19, and 22 were inspected separately; no overlap or clipped text was visible in those views. The appendix contains long URLs, and the portraits are synthetic pixels.
+- `pdfinfo` reports `Tagged: no`. Accessibility, comparison with the private mockups, and a full high-resolution review remain open.
