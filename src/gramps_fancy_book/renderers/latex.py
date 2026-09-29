@@ -30,6 +30,7 @@ from ..domain import (
     RepositoryReference,
     Url,
 )
+from .citation_numbers import citation_number_map
 from .labels import (
     gramps_type_label as _shared_gramps_type_label,
 )
@@ -287,7 +288,7 @@ def render_latex(
         )
         for call in entry.calls
     }
-    citation_numbers = _citation_number_map(model)
+    citation_numbers = citation_number_map(model.editorial_book)
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
@@ -1103,36 +1104,6 @@ def _render_citation_appendix(
             output.append("\\end{itemize}\n")
     output.append("\\end{itemize}\n")
     return "".join(output)
-
-
-def _citation_number_map(model: BookModel) -> dict[str, int]:
-    """Assign citation numbers in the order they first appear in the book."""
-    editorial_book = model.editorial_book
-    if editorial_book is None:
-        return {}
-
-    entries = editorial_book.citation_entries
-    entries_by_call = {
-        call.call_id: entry
-        for entry in entries
-        for call in entry.calls
-    }
-    ordered_entry_ids = []
-    seen_entry_ids = set()
-    for context in (*editorial_book.family_notices, *editorial_book.profiles):
-        for call_id in context.citation_call_ids:
-            entry = entries_by_call.get(call_id)
-            if entry is not None and entry.entry_id not in seen_entry_ids:
-                ordered_entry_ids.append(entry.entry_id)
-                seen_entry_ids.add(entry.entry_id)
-    for entry in entries:
-        if entry.entry_id not in seen_entry_ids:
-            ordered_entry_ids.append(entry.entry_id)
-            seen_entry_ids.add(entry.entry_id)
-    return {
-        entry_id: number
-        for number, entry_id in enumerate(ordered_entry_ids, start=1)
-    }
 
 
 def _citation_reference(

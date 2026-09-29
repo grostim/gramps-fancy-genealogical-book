@@ -8,6 +8,7 @@ from pathlib import PurePosixPath
 
 from ..book_language import model_book_language
 from ..domain import BookModel
+from .citation_numbers import citation_number_map
 from .html_notes import render_html_inline_note, render_html_note, safe_html_url
 from .labels import gramps_type_label, label, owner_label
 
@@ -55,6 +56,7 @@ def render_html(
         ".occurrences,.family-children,.family-partners{padding-left:1.5rem}\n",
         ".person-profile,.family-notice,.citation-entry{margin:1rem 0;padding:1rem;border-left:3px solid #9aa0a6}\n",
         ".cover-portraits{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}.media-item{margin:1rem auto;text-align:center}.media-item img{display:block;max-width:100%;height:auto;margin:auto}.featured-media img{max-height:80vh;object-fit:contain}.media-reference{padding:.5rem 0}\n",
+        ".citation-number{font-variant-numeric:tabular-nums;white-space:nowrap}.citation-references a{white-space:nowrap}\n",
         ".muted{color:#5f6368}.note-text{white-space:normal}.note-text p:first-child{margin-top:0}.note-text p:last-child{margin-bottom:0}.note-text pre{white-space:pre-wrap;overflow-wrap:anywhere}.family-links,.branch-links{font-size:.95rem}\n",
         "@media(max-width:40rem){.cover{padding:2.5rem .5rem 1.5rem}.generation{margin:1rem 0}.occurrences,.family-children,.family-partners{padding-left:1rem}.person-profile,.family-notice,.citation-entry{padding:.75rem}}\n",
         "@media print{body{max-width:none;margin:0;padding:0}.book-part{break-before:page}a{color:inherit;text-decoration:none}}\n",
@@ -101,6 +103,7 @@ def render_html(
             for entry in editorial.citation_entries
             for call in entry.calls
         }
+        citation_numbers = citation_number_map(editorial)
         notices = {notice.notice_id: notice for notice in editorial.family_notices}
 
         for part in editorial.parts:
@@ -116,6 +119,7 @@ def render_html(
                     sections,
                     profiles,
                     calls_by_id,
+                    citation_numbers,
                     notices,
                     media_context,
                     gramps_type_labels,
@@ -163,6 +167,7 @@ def _render_part(
     sections,
     profiles,
     calls_by_id,
+    citation_numbers,
     notices,
     media_context,
     gramps_type_labels=None,
@@ -187,6 +192,7 @@ def _render_part(
                     profiles,
                     sections,
                     calls_by_id,
+                    citation_numbers,
                     media_context,
                     gramps_type_labels,
                 )
@@ -203,6 +209,7 @@ def _render_part(
                         occurrences,
                         sections,
                         calls_by_id,
+                        citation_numbers,
                         media_context,
                         gramps_type_labels,
                     )
@@ -210,10 +217,18 @@ def _render_part(
     elif part.kind == "documentary_appendix":
         entries = {entry.entry_id: entry for entry in model.editorial_book.citation_entries}
         entry_ids = part.citation_entry_ids or tuple(entries)
+        entry_ids = sorted(
+            entry_ids,
+            key=lambda entry_id: citation_numbers.get(entry_id, float("inf")),
+        )
         for entry_id in entry_ids:
             entry = entries.get(entry_id)
             if entry is not None:
-                output.append(_render_citation_entry(entry, model, media_context))
+                output.append(
+                    _render_citation_entry(
+                        entry, model, media_context, citation_numbers
+                    )
+                )
     elif part.kind == "person_index":
         entries = {entry.entry_id: entry for entry in model.editorial_book.person_index}
         entry_ids = part.person_index_entry_ids or tuple(entries)
@@ -287,6 +302,7 @@ def _render_genealogy(
     profiles,
     sections,
     calls_by_id,
+    citation_numbers,
     media_context,
     gramps_type_labels=None,
 ) -> str:
@@ -347,7 +363,12 @@ def _render_genealogy(
             ):
                 output.append(
                     _render_profile(
-                        profile, model, calls_by_id, media_context, gramps_type_labels
+                        profile,
+                        model,
+                        calls_by_id,
+                        citation_numbers,
+                        media_context,
+                        gramps_type_labels,
                     )
                 )
             else:
@@ -381,7 +402,12 @@ def _render_genealogy(
 
 
 def _render_profile(
-    profile, model, calls_by_id, media_context, gramps_type_labels=None
+    profile,
+    model,
+    calls_by_id,
+    citation_numbers,
+    media_context,
+    gramps_type_labels=None,
 ) -> str:
     output = [f'<section class="person-profile" id="{_attr(profile.profile_id)}">']
     output.append(f"<h4>{_text(label(model, 'individual_profile'))}</h4>\n")
@@ -447,20 +473,11 @@ def _render_profile(
             output.append(
                 f'<div id="{_attr(target)}" class="note-text">{render_html_note(note)}</div>\n'
             )
-    citations = [
-        calls_by_id[call_id]
-        for call_id in profile.citation_call_ids
-        if call_id in calls_by_id
-    ]
-    if citations:
-        output.append(f"<p>{_text(label(model, 'references'))} : ")
-        output.append(
-            ", ".join(
-                f'<a href="#{_attr(entry_id)}">{_text(entry_id)}</a>'
-                for entry_id in dict.fromkeys(citations)
-            )
+    output.append(
+        _render_citation_references(
+            profile.citation_call_ids, calls_by_id, citation_numbers, model
         )
-        output.append("</p>\n")
+    )
     output.append("</section>\n")
     return "".join(output)
 
@@ -473,6 +490,7 @@ def _render_family_notice(
     occurrences,
     sections,
     calls_by_id,
+    citation_numbers,
     media_context,
     gramps_type_labels=None,
 ) -> str:
@@ -567,20 +585,11 @@ def _render_family_notice(
             output.append(
                 f'<div id="{_attr(target)}" class="note-text">{render_html_note(note)}</div>\n'
             )
-    citations = [
-        calls_by_id[call_id]
-        for call_id in notice.citation_call_ids
-        if call_id in calls_by_id
-    ]
-    if citations:
-        output.append(f"<p>{_text(label(model, 'references'))} : ")
-        output.append(
-            ", ".join(
-                f'<a href="#{_attr(entry_id)}">{_text(entry_id)}</a>'
-                for entry_id in dict.fromkeys(citations)
-            )
+    output.append(
+        _render_citation_references(
+            notice.citation_call_ids, calls_by_id, citation_numbers, model
         )
-        output.append("</p>\n")
+    )
     output.append("</article>\n")
     return "".join(output)
 
@@ -627,13 +636,41 @@ def _render_events(references, target_ids, model, gramps_type_labels=None) -> st
     return "".join(output)
 
 
-def _render_citation_entry(entry, model, media_context) -> str:
+def _render_citation_references(call_ids, calls_by_id, citation_numbers, model) -> str:
+    entry_ids = tuple(
+        dict.fromkeys(
+            calls_by_id[call_id] for call_id in call_ids if call_id in calls_by_id
+        )
+    )
+    if not entry_ids:
+        return ""
+    links = []
+    for entry_id in entry_ids:
+        number = citation_numbers.get(entry_id)
+        if number is not None:
+            links.append(
+                f'<a href="#{_attr(entry_id)}">'
+                f'<span class="citation-number">[{number}]</span></a>'
+            )
+    if not links:
+        return ""
+    return (
+        f'<p class="citation-references">{_text(label(model, "references"))} : '
+        + ", ".join(links)
+        + "</p>\n"
+    )
+
+
+def _render_citation_entry(entry, model, media_context, citation_numbers) -> str:
     citation = model.citations.get(entry.citation_handle)
     source = model.sources.get(entry.source_handle) if entry.source_handle else None
     title = source.title if source is not None and source.title else entry.citation_handle
+    number = citation_numbers.get(entry.entry_id)
+    number_label = f"[{number}] " if number is not None else ""
     output = [
         f'<article class="citation-entry" id="{_attr(entry.entry_id)}">\n',
-        f"<h3>{_text(title)}</h3>\n",
+        f'<h3><span class="citation-number">{_text(number_label)}</span>'
+        f"{_text(title)}</h3>\n",
     ]
     identifiers = []
     if citation is not None and citation.gramps_id:
