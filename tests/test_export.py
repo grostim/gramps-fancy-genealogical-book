@@ -15,14 +15,14 @@ def model():
 def test_unicode_export_and_explicit_replacement(tmp_path, model):
     output = tmp_path / "model.json"
     write_model_json(model, output)
-    assert json.loads(output.read_text())["people"][0]["name"] == "Émile"
-    assert "Émile" in output.read_text()
-    output.write_text("existing output")
+    assert json.loads(output.read_text(encoding="utf-8"))["people"][0]["name"] == "Émile"
+    assert "Émile" in output.read_text(encoding="utf-8")
+    output.write_text("existing output", encoding="utf-8")
     with pytest.raises(FileExistsError):
         write_model_json(model, output)
-    assert output.read_text() == "existing output"
+    assert output.read_text(encoding="utf-8") == "existing output"
     write_model_json(model, output, overwrite=True)
-    assert json.loads(output.read_text()) == model.to_dict()
+    assert json.loads(output.read_text(encoding="utf-8")) == model.to_dict()
     assert not list(tmp_path.glob(".book-model-*"))
 
 
@@ -36,14 +36,14 @@ def test_consistency_companion_is_protected_and_replaced_with_model(tmp_path, mo
     }
 
     write_model_json(model, output, consistency_report=original_report)
-    original_model = output.read_text()
-    original_companion = companion.read_text()
+    original_model = output.read_text(encoding="utf-8")
+    original_companion = companion.read_text(encoding="utf-8")
     assert json.loads(original_companion) == original_report
 
     with pytest.raises(FileExistsError):
         write_model_json(model, output, consistency_report=replacement_report)
-    assert output.read_text() == original_model
-    assert companion.read_text() == original_companion
+    assert output.read_text(encoding="utf-8") == original_model
+    assert companion.read_text(encoding="utf-8") == original_companion
 
     write_model_json(
         model,
@@ -51,11 +51,11 @@ def test_consistency_companion_is_protected_and_replaced_with_model(tmp_path, mo
         overwrite=True,
         consistency_report=replacement_report,
     )
-    assert json.loads(output.read_text()) == model.to_dict()
-    assert json.loads(companion.read_text()) == replacement_report
+    assert json.loads(output.read_text(encoding="utf-8")) == model.to_dict()
+    assert json.loads(companion.read_text(encoding="utf-8")) == replacement_report
 
     orphan_companion = tmp_path / "orphan_consistency.json"
-    orphan_companion.write_text("previous companion")
+    orphan_companion.write_text("previous companion", encoding="utf-8")
     with pytest.raises(FileExistsError):
         write_model_json(
             model,
@@ -63,15 +63,15 @@ def test_consistency_companion_is_protected_and_replaced_with_model(tmp_path, mo
             consistency_report=original_report,
         )
     assert not (tmp_path / "orphan.json").exists()
-    assert orphan_companion.read_text() == "previous companion"
+    assert orphan_companion.read_text(encoding="utf-8") == "previous companion"
 
 
 def test_invalid_destination_leaves_existing_files_intact(tmp_path, model):
     invalid = tmp_path / "book.pdf"
-    invalid.write_text("original")
+    invalid.write_text("original", encoding="utf-8")
     with pytest.raises(ValueError):
         write_model_json(model, invalid, overwrite=True)
-    assert invalid.read_text() == "original"
+    assert invalid.read_text(encoding="utf-8") == "original"
     with pytest.raises(ValueError):
         write_model_json(model, "")
     with pytest.raises(OSError):
