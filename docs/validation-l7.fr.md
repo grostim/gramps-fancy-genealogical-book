@@ -17,6 +17,12 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 - Les commentaires pertinents de la PR #55 sur les extensions de fichier ont été corrigés. La PR #56 préserve la compatibilité JSON ; la PR #57 apporte les améliorations clavier et petit écran.
 - Les exécutions Actions récentes des PR #55–#57 ont été bloquées avant le lancement des jobs par un message GitHub relatif aux paiements ou au plafond de dépenses. Elles ne constituent donc pas une validation CI de ces têtes ; relancer après rétablissement du compte.
 
+## Vérification statique du ZIP Gramps — 29 septembre 2026
+
+- Un export HTML ZIP a été produit par Gramps Desktop 6.0.8 en ligne de commande à partir d’une fixture GEDCOM synthétique ; le ZIP contient `index.html` et le portrait PNG fictif.
+- `unzip -t` confirme l’intégrité des deux entrées. L’analyse de `index.html` trouve 29 identifiants uniques et 32 références locales ; aucune cible de fragment ni aucun fichier local ne manque, et aucune référence HTTP(S) externe n’est présente.
+- Ce contrôle structurel ne démontre pas le rendu visuel, l’interaction hors ligne, le comportement du clavier ou la compatibilité avec un lecteur d’écran. L’ouverture réelle de `index.html` reste à faire.
+
 ## Recette manuelle à terminer
 
 1. Installer l’archive du module dans une version Desktop de Gramps prise en charge, ouvrir le rapport **Pages Web → Gramps Fancy Genealogical Book** et choisir une famille. Vérifier que la confirmation de confidentialité est décochée à chaque lancement ; sans la cocher, vérifier que le rapport refuse de générer un fichier ; la cocher pour produire le `.zip`.
