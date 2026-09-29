@@ -101,7 +101,10 @@ class GrampsFancyBookReport(Report):
                     ),
                 )
 
-            adapter = GrampsDatabaseAdapter(self.database)
+            adapter = GrampsDatabaseAdapter(
+                self.database,
+                date_language=book_language,
+            )
             snapshot = adapter.read_snapshot_by_gramps_id(
                 gramps_id,
                 max_ancestor_depth=max_ancestor_depth,
