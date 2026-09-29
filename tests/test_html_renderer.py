@@ -175,7 +175,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     call = SimpleNamespace(
         call_id="call-1",
         context_id=profile.profile_id,
-        owner_type="profile",
+        owner_type="person",
         owner_handle="p0",
     )
     family_call = SimpleNamespace(
@@ -187,8 +187,14 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     second_profile_call = SimpleNamespace(
         call_id="call-3",
         context_id=profile.profile_id,
-        owner_type="profile",
+        owner_type="person",
         owner_handle="p0",
+    )
+    event_call = SimpleNamespace(
+        call_id="call-4",
+        context_id=profile.profile_id,
+        owner_type="event",
+        owner_handle="e1",
     )
     repository_reference = RepositoryReference(
         repository_handle="r1",
@@ -206,7 +212,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         citation_handle="c2",
         source_handle="s2",
         repository_refs=(),
-        calls=(second_profile_call,),
+        calls=(second_profile_call, event_call),
     )
     person_index_entry = SimpleNamespace(
         entry_id="person-index:p0",
@@ -253,8 +259,7 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
         genealogy=genealogy,
         editorial_book=editorial_book,
         notes={},
-        events={},
-        places={},
+        media={},
         citations={
             "c1": Citation(
                 handle="c1",
@@ -267,6 +272,19 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
                 gramps_id="C0002",
                 source_handle="s2",
             ),
+        },
+        events={
+            "e1": Event(
+                handle="e1",
+                gramps_id="E0001",
+                type="Birth",
+                description="Naissance de Camille",
+                date=SimpleNamespace(display="1820"),
+                place_handle="place-1",
+            )
+        },
+        places={
+            "place-1": SimpleNamespace(handle="place-1", title="Lyon", name="")
         },
         sources={
             "s1": Source(
@@ -306,7 +324,10 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
 
     rendered = render_html(
         model,
-        gramps_type_labels={("child_relationship", "Adopted"): "Adopté(e)"},
+        gramps_type_labels={
+            ("child_relationship", "Adopted"): "Adopté(e)",
+            ("event", "Birth"): "Naissance",
+        },
     )
 
     assert '<html lang="fr">' in rendered
@@ -329,6 +350,13 @@ def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     assert '<h3><span class="citation-number">[2] </span>Registre familial</h3>' in rendered
     assert ">citation-entry:c1</a>" not in rendered
     assert ">citation-entry:c2</a>" not in rendered
+    assert "événement : Naissance — 1820 — Naissance de Camille — Lyon" in rendered
+    assert ">e1</a>" not in rendered
+    assert ">E0001</a>" not in rendered
+    assert "personne : Ada &amp; &lt;img src=x onerror=alert(1)&gt;" in rendered
+    assert ">p0</a>" not in rendered
+    assert "famille : Ada &amp; &lt;img src=x onerror=alert(1)&gt;" in rendered
+    assert ">f0</a>" not in rendered
     assert "C0001" in rendered
     assert "S0001" in rendered
     assert 'href="https://example.invalid/source?record=one&amp;image=two"' in rendered

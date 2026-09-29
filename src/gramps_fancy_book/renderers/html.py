@@ -226,7 +226,11 @@ def _render_part(
             if entry is not None:
                 output.append(
                     _render_citation_entry(
-                        entry, model, media_context, citation_numbers
+                        entry,
+                        model,
+                        media_context,
+                        citation_numbers,
+                        gramps_type_labels,
                     )
                 )
     elif part.kind == "person_index":
@@ -661,7 +665,9 @@ def _render_citation_references(call_ids, calls_by_id, citation_numbers, model) 
     )
 
 
-def _render_citation_entry(entry, model, media_context, citation_numbers) -> str:
+def _render_citation_entry(
+    entry, model, media_context, citation_numbers, gramps_type_labels=None
+) -> str:
     citation = model.citations.get(entry.citation_handle)
     source = model.sources.get(entry.source_handle) if entry.source_handle else None
     title = source.title if source is not None and source.title else entry.citation_handle
@@ -729,14 +735,61 @@ def _render_citation_entry(entry, model, media_context, citation_numbers) -> str
     if entry.calls:
         output.append("<ul>\n")
         for call in entry.calls:
+            call_label = _citation_call_label(call, model, gramps_type_labels)
             output.append(
                 f'<li><a href="#{_attr(call.context_id)}">'
-                f'{_text(owner_label(model, call.owner_type))} '
-                f"{_text(call.owner_handle)}</a></li>\n"
+                f"{_text(call_label)}</a></li>\n"
             )
         output.append("</ul>\n")
     output.append("</article>\n")
     return "".join(output)
+
+
+def _citation_call_label(call, model, gramps_type_labels=None) -> str:
+    owner = owner_label(model, call.owner_type)
+    detail = ""
+    if call.owner_type == "event":
+        event = model.events.get(call.owner_handle)
+        if event is not None:
+            parts = [
+                gramps_type_label("event", event.type, gramps_type_labels),
+                event.date.display if event.date is not None else "",
+                event.description,
+            ]
+            if event.place_handle:
+                place = model.places.get(event.place_handle)
+                if place is not None:
+                    parts.append(place.title or place.name)
+            detail = " — ".join(value for value in parts if value)
+    elif call.owner_type == "person":
+        person = next(
+            (
+                person
+                for person in model.people
+                if person.handle == call.owner_handle
+            ),
+            None,
+        )
+        if person is not None:
+            detail = person.name
+    elif call.owner_type == "family":
+        family = model.families.get(call.owner_handle)
+        if family is not None:
+            names = [
+                person.name or person.gramps_id
+                for person in (family.father, family.mother)
+                if person is not None and (person.name or person.gramps_id)
+            ]
+            detail = f" {label(model, 'and')} ".join(names)
+    elif call.owner_type == "place":
+        place = model.places.get(call.owner_handle)
+        if place is not None:
+            detail = place.title or place.name
+    elif call.owner_type == "media":
+        media = model.media.get(call.owner_handle)
+        if media is not None:
+            detail = media.description
+    return f"{owner} : {detail}" if detail else owner
 
 
 def _citation_urls(entry, model) -> list[tuple[str, str]]:
