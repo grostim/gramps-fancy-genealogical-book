@@ -1,4 +1,5 @@
 import re
+import zipfile
 from types import SimpleNamespace
 
 from gramps_fancy_book.domain import (
@@ -16,6 +17,7 @@ from gramps_fancy_book.domain import (
     Url,
 )
 from gramps_fancy_book.renderers.html import render_html
+from gramps_fancy_book.renderers.html_archive import write_html_archive
 
 
 def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
@@ -292,7 +294,7 @@ def test_renders_a_minimal_model_without_editorial_book():
     assert "2 personnes dans le modèle intermédiaire." in rendered
 
 
-def test_renders_a_shared_citation_media_once_and_links_later_citations():
+def test_renders_shared_citation_media_once_in_the_html_archive(tmp_path):
     cache_key = "a" * 64
     first_entry_id = "citation-entry:c1"
     second_entry_id = "citation-entry:c2"
@@ -389,3 +391,19 @@ def test_renders_a_shared_citation_media_once_and_links_later_citations():
     )[0]
     assert f'id="media-{cache_key}"' in first_article
     assert f'href="#media-{cache_key}"' in second_article
+
+    staged_media = tmp_path / "staged-media"
+    staged_media.mkdir()
+    (staged_media / f"{cache_key}.png").write_bytes(b"test image payload")
+    archive_path = write_html_archive(
+        model,
+        tmp_path / "book.zip",
+        media_asset_directory=staged_media,
+    )
+
+    with zipfile.ZipFile(archive_path) as archive:
+        assert archive.testzip() is None
+        assert archive.namelist() == ["index.html", f"media/{cache_key}.png"]
+        archived_html = archive.read("index.html").decode("utf-8")
+    assert archived_html.count(f'<img src="media/{cache_key}.png"') == 1
+    assert archived_html.count(f'href="#media-{cache_key}"') == 1

@@ -76,7 +76,7 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-12 | Portraits et photo pleine page | L5.5, L6.1, L7.4 | Portraits et reproductions médias présents dans les rendus ; sélection, recadrage, ZIP et rendu visuel à vérifier |
 | AC-13 | Priorité BOOK_EXCLUDE | L3.3, L5.5 | BOOK_EXCLUDE appliqué au traitement et à la publication des médias ; scénario natif de priorité restant à vérifier |
 | AC-14 | Citations réutilisées et multiples | L3.4, L5.3–L5.4, L6.4 | Citations réutilisables, appels contextuels, numérotation, renvois et annexe implémentés ; scénario complet restant |
-| AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Placements dédupliqués par handle média et appels documentaires reliés ; cas partagé à vérifier dans les deux rendus |
+| AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Le test HTML/ZIP confirme une seule reproduction pour deux citations partageant un média et un renvoi valide depuis la seconde ; export Gramps réel, contrôle visuel et cas PDF restent à vérifier |
 | AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Un portrait fictif recadré est intégré au PDF depuis Gramps ; les quatre cas restent à valider avec médias Gramps |
 | AC-17 | Pagination finale cohérente | L6.4–L6.5 | PDF A4 de 9 pages produit depuis Gramps macOS 6.0.8 et livres synthétiques de 18 et 4 pages examinés ; sommaire et légende du portrait corrigés ; parcours interactif Desktop et comparaison aux maquettes restent à vérifier |
 | AC-18 | Fait sans citation et source sans dépôt | L3.4, L5.4 | Modèle de citations tolère appels et dépôts absents ; cas documentaires à vérifier dans la sortie finale |
