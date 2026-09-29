@@ -103,7 +103,9 @@ def render_html(
             for entry in editorial.citation_entries
             for call in entry.calls
         }
-        citation_numbers = citation_number_map(editorial)
+        citation_numbers = citation_number_map(
+            editorial, context_order=_citation_context_order(model, editorial)
+        )
         notices = {notice.notice_id: notice for notice in editorial.family_notices}
 
         for part in editorial.parts:
@@ -127,6 +129,36 @@ def render_html(
             )
     output.append("</main>\n</body></html>\n")
     return "".join(output)
+
+
+def _citation_context_order(model, editorial) -> tuple[str, ...]:
+    """Return profile and family-notice IDs in the HTML book's display order."""
+    profiles = {profile.person_handle: profile for profile in editorial.profiles}
+    notices = {notice.notice_id for notice in editorial.family_notices}
+    genealogy = getattr(model, "genealogy", None)
+    context_ids = []
+    seen = set()
+    for part in editorial.parts:
+        if part.kind not in {"ancestry", "descent"}:
+            continue
+        genealogy_part = getattr(genealogy, part.kind, None)
+        if genealogy_part is not None:
+            for generation in genealogy_part.generations:
+                for occurrence in generation.occurrences:
+                    profile = profiles.get(occurrence.person_handle)
+                    if profile is None or not (
+                        occurrence.occurrence_id == profile.primary_occurrence_id
+                        or getattr(occurrence, "is_primary_profile", False)
+                    ):
+                        continue
+                    if profile.profile_id not in seen:
+                        context_ids.append(profile.profile_id)
+                        seen.add(profile.profile_id)
+        for notice_id in part.family_notice_ids:
+            if notice_id in notices and notice_id not in seen:
+                context_ids.append(notice_id)
+                seen.add(notice_id)
+    return tuple(context_ids)
 
 
 def _render_table_of_contents(parts, model) -> str:
