@@ -74,7 +74,7 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-10 | Note Markdown partagée | L3.3, L5.2, L6.2, L7.3 | Markdown et styles natifs rendus en HTML/LaTeX ; partage entre contextes à vérifier avec Gramps |
 | AC-11 | Exclusion des notes non étiquetées | L3.3, L5.2 | Notes non marquées BOOK_PUBLICATION exclues des références éditoriales ; recette native complète restante |
 | AC-12 | Portraits et photo pleine page | L5.5, L6.1, L7.4 | Portraits et reproductions médias présents dans les rendus ; sélection, recadrage, ZIP et rendu visuel à vérifier |
-| AC-13 | Priorité BOOK_EXCLUDE | L3.3, L5.5 | BOOK_EXCLUDE appliqué au traitement et à la publication des médias ; scénario natif de priorité restant à vérifier |
+| AC-13 | Priorité BOOK_EXCLUDE | L3.3, L5.5 | Test de régression : un média `BOOK_EXCLUDE` et `BOOK_FEATURED` n’expose ni ses références ni les citations qui leur sont attachées, ne crée ni placement ni dérivé et n’apparaît pas dans les sorties HTML/LaTeX ; scénario natif Gramps restant à vérifier |
 | AC-14 | Citations réutilisées et multiples | L3.4, L5.3–L5.4, L6.4 | Citations réutilisables, appels contextuels, numérotation, renvois et annexe implémentés ; scénario complet restant |
 | AC-15 | Document partagé et reproduction unique | L5.4–L5.5 | Le test HTML/ZIP confirme une seule reproduction pour deux citations partageant un média et un renvoi valide depuis la seconde ; export Gramps réel, contrôle visuel et cas PDF restent à vérifier |
 | AC-16 | Quatre cas PDF/URL | L2.4, L5.5 | Un portrait fictif recadré est intégré au PDF depuis Gramps ; les quatre cas restent à valider avec médias Gramps |
