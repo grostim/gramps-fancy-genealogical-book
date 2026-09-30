@@ -5,6 +5,7 @@ from gramps_fancy_book.domain import (
     EditorialBook,
     EditorialCitationCall,
     EditorialCitationEntry,
+    EditorialFrontMatterNote,
     EditorialMediaArtifact,
     EditorialMediaPlacement,
     EditorialMediaUse,
@@ -326,6 +327,9 @@ def test_running_headers_include_section_generation_branch_and_page_number():
     assert r"\thepage" in rendered
     assert r"\setlength{\headheight}{30pt}" in rendered
     assert rendered.index(r"\markboth{Contents}{}") < rendered.index(r"\tableofcontents")
+    for part_id in ("ancestry", "descent"):
+        target = "target-" + part_id.encode().hex()
+        assert f"\\hypertarget{{{target}}}" in rendered
     assert r"\markboth{Ancestry}{Generation 0 / Branch: Alex Exemple}" in rendered
     assert r"\markright{Generation 0 / Branch: Camille Exemple}" in rendered
     assert r"\markright{Generation 1 / Branch: Alex Exemple}" in rendered
@@ -333,3 +337,24 @@ def test_running_headers_include_section_generation_branch_and_page_number():
         r"\markboth{Family connections}{Generation 1 / Branch: Alex Exemple}"
         in rendered
     )
+
+
+def test_front_matter_heading_uses_shared_stable_target():
+    note = Note(handle="dedication", text="Pour nos familles.")
+    model = BookModel(
+        reference_family=Family(handle="family"),
+        metadata={"BOOK_LANGUAGE": "fr"},
+        notes={note.handle: note},
+        editorial_book=EditorialBook(
+            front_matter_notes=(
+                EditorialFrontMatterNote("BOOK_DEDICATION", note.handle),
+            )
+        ),
+    )
+
+    rendered = render_latex(model)
+    target = "target-" + "front-matter".encode().hex()
+
+    assert f"\\hypertarget{{{target}}}" in rendered
+    assert r"\section*{Avant-propos}" in rendered
+    assert "Pour nos familles." in rendered

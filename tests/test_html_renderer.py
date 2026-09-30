@@ -4,21 +4,29 @@ from types import SimpleNamespace
 
 from gramps_fancy_book.domain import (
     Citation,
+    EditorialFrontMatterNote,
     EditorialMediaArtifact,
     EditorialMediaPlacement,
     EditorialMediaUse,
+    EditorialPart,
     Event,
     EventReference,
     Family,
     Media,
     MediaReference,
+    Note,
     Person,
     Repository,
     RepositoryReference,
     Source,
     Url,
 )
-from gramps_fancy_book.renderers.html import _render_events, render_html
+from gramps_fancy_book.renderers.html import (
+    _render_events,
+    _render_part,
+    _render_table_of_contents,
+    render_html,
+)
 from gramps_fancy_book.renderers.html_archive import write_html_archive
 
 
@@ -55,6 +63,68 @@ def test_standard_event_type_uses_book_label_and_custom_type_stays_as_entered():
     assert "Rôle : Principal" in rendered
     assert "<strong>Birth</strong>" not in rendered
     assert "<strong>Type personnel</strong>" in custom_rendered
+
+
+def test_empty_front_matter_is_omitted_from_contents_and_book():
+    contents = EditorialPart(
+        "contents", "table_of_contents", part_ids=("front-matter", "ancestry")
+    )
+    front_matter = EditorialPart("front-matter", "front_matter")
+    ancestry = EditorialPart("ancestry", "ancestry")
+    parts = (contents, front_matter, ancestry)
+    model = SimpleNamespace(
+        metadata={"BOOK_LANGUAGE": "fr"},
+        editorial_book=SimpleNamespace(parts=parts, front_matter_notes=()),
+        notes={},
+    )
+
+    rendered_contents = _render_table_of_contents(parts, model)
+    rendered_front_matter = _render_part(
+        front_matter,
+        model,
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+    )
+
+    assert 'href="#front-matter"' not in rendered_contents
+    assert 'href="#ancestry"' in rendered_contents
+    assert rendered_front_matter == ""
+
+    filled_model = SimpleNamespace(
+        metadata={"BOOK_LANGUAGE": "fr"},
+        editorial_book=SimpleNamespace(
+            parts=parts,
+            front_matter_notes=(
+                EditorialFrontMatterNote("BOOK_DEDICATION", "dedication"),
+            ),
+        ),
+        notes={"dedication": Note(handle="dedication", text="Pour nos familles.")},
+    )
+    filled_contents = _render_table_of_contents(parts, filled_model)
+    filled_front_matter = _render_part(
+        front_matter,
+        filled_model,
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+    )
+
+    assert 'href="#front-matter"' in filled_contents
+    assert 'id="front-matter"' in filled_front_matter
+    assert "Pour nos familles." in filled_front_matter
 
 
 def test_renders_shared_parts_with_stable_navigation_and_escaped_text():

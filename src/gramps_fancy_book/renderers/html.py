@@ -16,6 +16,13 @@ from .html_notes import (
 )
 from .labels import gramps_type_label, label, owner_label
 
+_FRONT_MATTER_COVER_ROLES = {
+    "BOOK_TITLE",
+    "BOOK_SUBTITLE",
+    "BOOK_AUTHOR",
+    "BOOK_PUBLICATION_DATE",
+}
+
 
 def render_html(
     model: BookModel,
@@ -180,6 +187,8 @@ def _render_table_of_contents(parts, model) -> str:
         part = part_by_id.get(part_id)
         if part is None:
             continue
+        if part.kind == "front_matter" and not _has_front_matter_content(model):
+            continue
         part_label = _part_label(model, part.kind)
         links.append(
             f'<li><a href="#{_attr(part.part_id)}">{_text(part_label)}</a></li>\n'
@@ -208,6 +217,8 @@ def _render_part(
     media_context,
     gramps_type_labels=None,
 ) -> str:
+    if part.kind == "front_matter" and not _has_front_matter_content(model):
+        return ""
     part_label = _part_label(model, part.kind)
     output = [
         f'<section class="book-part" id="{_attr(part.part_id)}">\n',
@@ -312,14 +323,12 @@ def _render_front_matter(model) -> str:
         item.role: model.notes.get(item.note_handle)
         for item in model.editorial_book.front_matter_notes
     }
-    cover_roles = {
-        "BOOK_TITLE",
-        "BOOK_SUBTITLE",
-        "BOOK_AUTHOR",
-        "BOOK_PUBLICATION_DATE",
-    }
     for role, note in notes.items():
-        if note is None or role in cover_roles or not (note.text or "").strip():
+        if (
+            note is None
+            or role in _FRONT_MATTER_COVER_ROLES
+            or not (note.text or "").strip()
+        ):
             continue
         heading = {
             "BOOK_DEDICATION": label(model, "dedication"),
@@ -332,6 +341,20 @@ def _render_front_matter(model) -> str:
             f'<div class="note-text">{render_html_note(note)}</div></section>\n'
         )
     return "".join(output)
+
+
+def _has_front_matter_content(model) -> bool:
+    editorial = getattr(model, "editorial_book", None)
+    if editorial is None:
+        return False
+    notes = getattr(editorial, "front_matter_notes", ())
+    model_notes = getattr(model, "notes", {}) or {}
+    return any(
+        item.role not in _FRONT_MATTER_COVER_ROLES
+        and (note := model_notes.get(item.note_handle)) is not None
+        and bool((note.text or "").strip())
+        for item in notes
+    )
 
 
 def _render_genealogy(
