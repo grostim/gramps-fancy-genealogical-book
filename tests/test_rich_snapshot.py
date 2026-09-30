@@ -346,6 +346,30 @@ def test_book_content_and_anchors_are_stable_across_generations(tmp_path):
     assert first_archive.read_bytes() == second_archive.read_bytes()
 
 
+def test_book_language_does_not_change_technical_metadata_or_content():
+    french_snapshot = GrampsDatabaseAdapter(rich_database()).read_snapshot("family-main")
+    english_snapshot = GrampsDatabaseAdapter(rich_database()).read_snapshot("family-main")
+    french_model = build_book_model(french_snapshot, book_language="fr")
+    english_model = build_book_model(english_snapshot, book_language="en")
+
+    french_payload = french_model.to_dict()
+    english_payload = english_model.to_dict()
+    assert french_payload["metadata"] == {
+        "BOOK_SCHEMA_VERSION": "0.8",
+        "BOOK_REFERENCE_FAMILY": "family-main",
+        "BOOK_LANGUAGE": "fr",
+    }
+    assert english_payload["metadata"] == {
+        "BOOK_SCHEMA_VERSION": "0.8",
+        "BOOK_REFERENCE_FAMILY": "family-main",
+        "BOOK_LANGUAGE": "en",
+    }
+
+    french_payload["metadata"].pop("BOOK_LANGUAGE")
+    english_payload["metadata"].pop("BOOK_LANGUAGE")
+    assert french_payload == english_payload
+
+
 def test_excluded_featured_media_is_absent_from_generated_books(tmp_path):
     db = rich_database()
     missing_media_path = tmp_path / "excluded-featured.png"
