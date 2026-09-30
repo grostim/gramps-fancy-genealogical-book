@@ -469,6 +469,7 @@ def _render_genealogy_part(
     if part_name == part.name.casefold():
         part_name = part.name.title()
     output = [_section_heading(part_name, first_context)]
+    output.append(_render_generation_navigation(part, model))
     for generation in part.generations:
         previous_branches = None
         if generation.occurrences:
@@ -496,6 +497,11 @@ def _render_genealogy_part(
                 )
                 + "}\n"
             )
+        output.append(
+            _latex_anchor(
+                _generation_target_id(part.name, generation.number), emitted_targets
+            )
+        )
         output.append(
             f"\\subsection*{{{escape_latex_text(label(model, 'generation'))} {generation.number}}}\n"
             "\\begin{itemize}\n"
@@ -525,6 +531,29 @@ def _render_genealogy_part(
             output.append(f"{escape_latex_text(name)}\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
+
+
+def _render_generation_navigation(part: GenealogyPart, model: BookModel) -> str:
+    if not part.generations:
+        return ""
+    items = []
+    for generation in part.generations:
+        target = _latex_target(_generation_target_id(part.name, generation.number))
+        title = escape_latex_text(
+            f"{label(model, 'generation')} {generation.number}"
+        )
+        items.append(f"\\item \\hyperlink{{{target}}}{{{title}}}\n")
+    return (
+        "\\par\\noindent\\textbf{"
+        + escape_latex_text(label(model, "browse_generations"))
+        + "}\\par\n\\begin{itemize}\n"
+        + "".join(items)
+        + "\\end{itemize}\n"
+    )
+
+
+def _generation_target_id(part_name: str, generation_number: int) -> str:
+    return f"generation:{part_name.casefold()}:{generation_number}"
 
 
 def _render_family_sections(

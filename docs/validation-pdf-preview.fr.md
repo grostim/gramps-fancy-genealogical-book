@@ -34,12 +34,19 @@ Aucun texte coupé, chevauchement ni folio manquant n’est visible sur les page
 - Le PDF (470 833 octets, 118 pages A4, LuaTeX 1.24.0) a été généré depuis l’état antérieur au commit `ac7a706`. Il précède la numérotation éditoriale actuelle des citations et la sortie française AC-20 ci-dessous ; sa revue visuelle ne vaut pas pour l’export actuel.
 - À titre d’historique, ses 118 pages avaient été parcourues sur 12 planches de contact à 75 ppp et huit pages à 150 ppp. `pdfinfo` indiquait `Tagged: no` ; l’accessibilité et la comparaison aux maquettes privées restent à faire.
 
-## Aperçu français AC-20 courant — revue du 30 septembre 2026
+## Aperçu français AC-20 précédent — revue du 30 septembre 2026
 
 - Fichiers locaux non suivis, produits depuis `main` au commit `ac7a706` : `output/pdf/gramps-fancy-book-ac20-current-preview.pdf` (SHA-256 `ede8c2c5ed3aa88cadcd09ce397d73971f7fc7f3b2b43fd62bb21ea93aded38a`) et `output/gramps-fancy-book-ac20-current-preview.zip` (SHA-256 `3f474d1a067f169d819438e0fd5664cd62063514f0664a5b041fbaa21f974bf1`).
 - Même jeu ramifié synthétique pour les deux formats : 122 personnes, 61 familles, 183 événements, 17 notes, 183 citations et 12 médias dérivés. Le PDF fait 459 319 octets et 97 pages A4 ; LuaHBTeX 1.24.0 l’a produit. Les données et les portraits en pixels sont fictifs.
 - Les 97 pages ont été parcourues sur dix planches de contact à 75 ppp. Les pages physiques 2, 13, 28, 48, 63, 80, 94 et 97 ont aussi été inspectées à 150 ppp. Aucun chevauchement ni texte tronqué n’a été observé ; les URL longues restent lisibles dans les pages examinées.
 - `pdfinfo` indique `Tagged: no` : l’accessibilité PDF reste à qualifier. La comparaison aux maquettes privées et aux principes de conception de la v1.1 reste à faire.
+
+## Aperçu AC-20 avec navigation PDF par génération — 30 septembre 2026
+
+- Fichiers locaux non suivis, compilés avec les changements de cette branche : output/pdf/gramps-fancy-book-ac20-generation-navigation-preview-20260930.pdf (SHA-256 acd9dc0d1d84c6026775fa38c861405d52befa94e5e9abbfb20992f8f1057ea2) et output/gramps-fancy-book-ac20-generation-navigation-preview-20260930.zip (SHA-256 3f474d1a067f169d819438e0fd5664cd62063514f0664a5b041fbaa21f974bf1). Le ZIP est identique octet par octet à l’archive de l’aperçu précédent.
+- Le modèle contient 122 personnes, 61 familles, 183 événements, 17 notes, 183 citations et 12 médias dérivés. Le PDF fait 1 186 027 octets et 118 pages A4 ; LuaHBTeX 1.24.0 l’a compilé. pdfinfo indique Tagged: yes.
+- Les pages physiques 3 et 4, qui présentent la navigation d’ascendance et de descendance, ont été rendues à 110 ppp et inspectées ; aucun chevauchement ni texte tronqué n’y a été observé. Les 2 421 liens internes PDF pointent tous vers une destination existante. Les sept cibles de navigation par génération correspondent aux ancres de génération de l’HTML.
+- Cette vérification ciblée ne remplace pas une revue visuelle complète, le test dans l’interface Gramps, la qualification d’accessibilité PDF ni la comparaison aux maquettes privées. Six destinations HTML de premier niveau ne portent pas d’identifiant PDF stable identique ; les parcours correspondants restent à contrôler.
 
 ## Aperçu français du paramètre de langue — 29 septembre 2026
 
