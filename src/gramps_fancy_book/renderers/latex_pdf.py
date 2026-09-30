@@ -7,6 +7,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path, PurePosixPath
 
@@ -68,10 +69,11 @@ def write_latex_pdf(
     directory. Source Gramps media paths are never read or copied here.
     """
     output = validate_latex_pdf_destination(destination, overwrite=overwrite)
-    compiler = shutil.which("lualatex")
+    compiler = _find_lualatex()
     if compiler is None:
         raise LatexCompilerUnavailable(
-            "LuaLaTeX (lualatex) is not installed or is not available on PATH."
+            "LuaLaTeX (lualatex) was not found on PATH or in the standard "
+            "macOS TeX location."
         )
 
     assets = _media_asset_paths(model, media_asset_directory)
@@ -98,6 +100,18 @@ def write_latex_pdf(
             # This link is atomic and fails if another process created the target.
             os.link(compiled_pdf, output)
     return output
+
+
+def _find_lualatex() -> str | None:
+    """Find LuaLaTeX on PATH or through the standard macOS TeX symlink."""
+    compiler = shutil.which("lualatex")
+    if compiler is not None:
+        return compiler
+    if sys.platform == "darwin":
+        macos_compiler = Path("/Library/TeX/texbin/lualatex")
+        if macos_compiler.is_file() and os.access(macos_compiler, os.X_OK):
+            return str(macos_compiler)
+    return None
 
 
 def _compile_latex(compiler: str, work_directory: Path) -> None:
