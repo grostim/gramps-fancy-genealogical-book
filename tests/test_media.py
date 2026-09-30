@@ -7,8 +7,18 @@ from io import BytesIO
 import pytest
 from PIL import Image
 
+from gramps_fancy_book.domain import (
+    BookModel,
+    Citation,
+    Family,
+    Repository,
+    RepositoryReference,
+    Source,
+    Url,
+)
 from gramps_fancy_book.media import (
     MAX_PDF_RASTER_PIXELS,
+    _citation_has_url,
     pdf_reproduction_action,
     pixel_region,
     prepare_pdf_derivative,
@@ -94,6 +104,27 @@ def test_multipage_pdf_remains_a_reference_and_external_url_takes_precedence():
     assert result.page_count == 2
     assert result.derivative is None
     assert pdf_reproduction_action(None, external_url_available=True) == "external-link"
+
+
+def test_citation_uses_url_from_its_source_repository():
+    model = BookModel(reference_family=Family(handle="F1"))
+    model.citations["C1"] = Citation(handle="C1", source_handle="S1")
+    model.sources["S1"] = Source(
+        handle="S1",
+        repository_refs=(RepositoryReference(repository_handle="R1"),),
+    )
+    model.repositories["R1"] = Repository(
+        handle="R1",
+        urls=(Url(path="https://example.org/record"),),
+    )
+
+    assert _citation_has_url(model, "C1")
+
+    model.repositories["R1"] = Repository(
+        handle="R1",
+        urls=(Url(path="ftp://example.org/record"),),
+    )
+    assert not _citation_has_url(model, "C1")
 
 
 def test_pdf_larger_than_pixel_limit_is_rejected_at_required_resolution():

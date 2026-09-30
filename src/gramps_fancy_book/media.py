@@ -518,7 +518,16 @@ def _citation_has_url(model: BookModel, citation_handle: str) -> bool:
     if any(_is_external_url(url.path) for url in citation.urls):
         return True
     source = model.sources.get(citation.source_handle or "")
-    return bool(source and any(_is_external_url(url.path) for url in source.urls))
+    if source is None:
+        return False
+    if any(_is_external_url(url.path) for url in source.urls):
+        return True
+    return any(
+        _is_external_url(url.path)
+        for reference in source.repository_refs
+        if (repository := model.repositories.get(reference.repository_handle))
+        for url in repository.urls
+    )
 
 
 def _is_external_url(value: str) -> bool:
