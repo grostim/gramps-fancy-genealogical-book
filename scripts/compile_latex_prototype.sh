@@ -12,7 +12,7 @@ lualatex --version
 LAYOUT_SPIKE_OUTPUT="$work_dir/layout-spike.tex" \
   python3 "$repo_root/prototypes/build_layout.py"
 
-for document in rendered-book.tex rendered-sparse-book.tex; do
+for document in rendered-book.tex rendered-french-book.tex rendered-sparse-book.tex; do
   if [[ ! -f "$work_dir/$document" ]]; then
     echo "The production-rendered book fixture is missing: $work_dir/$document" >&2
     exit 1
@@ -66,4 +66,5 @@ compile_document() {
 
 compile_document "layout-spike"
 compile_document "rendered-book"
+compile_document "rendered-french-book"
 compile_document "rendered-sparse-book"
