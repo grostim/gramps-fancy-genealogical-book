@@ -28,6 +28,8 @@ PLUGIN_ID = "gramps_fancy_genealogical_book"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
+AC14_SHARED_PAGE = "AC14SHAREDREFERENCE"
+AC14_SECOND_PAGE = "AC14SECONDCITATION"
 
 
 def _qualified_name(root: ET.Element, name: str) -> str:
@@ -43,6 +45,43 @@ def _text_content(element: ET.Element | None) -> str:
     if element is None:
         return ""
     return " ".join(part.strip() for part in element.itertext() if part.strip())
+
+
+def _html_citation_numbers(html: str) -> dict[str, int]:
+    numbers: dict[str, int] = {}
+    for entry_id, body in re.findall(
+        r'<article class="citation-entry" id="([^"]+)">(.*?)</article>',
+        html,
+        flags=re.DOTALL,
+    ):
+        match = re.search(r'class="citation-number">\[(\d+)\]', body)
+        if match is not None:
+            numbers[entry_id] = int(match.group(1))
+    return numbers
+
+
+def _pdf_text(path: Path) -> str:
+    import pypdfium2 as pdfium
+
+    document = pdfium.PdfDocument(str(path))
+    pages = []
+    for page in document:
+        text_page = page.get_textpage()
+        pages.append(text_page.get_text_range())
+        text_page.close()
+        page.close()
+    document.close()
+    return "\n".join(pages)
+
+
+def _pdf_citation_number(text: str, detail_marker: str) -> int:
+    marker_position = text.index(detail_marker)
+    headings = list(
+        re.finditer(r"(?m)^\s*— \[(\d+)\] ", text[:marker_position])
+    )
+    if not headings:
+        raise AssertionError(f"No citation heading precedes {detail_marker} in the PDF.")
+    return int(headings[-1].group(1))
 
 
 def _insert_event_attribute(root: ET.Element, event: ET.Element, name: str, value: str) -> None:
@@ -154,6 +193,54 @@ def _add_same_fact_birth_version(
     second_ref.set("hlink", second_handle)
     person.insert(list(person).index(birth_ref) + 1, second_ref)
     return birth_handle, second_handle
+
+
+def _apply_ac14_shared_citation(root: ET.Element, events: ET.Element) -> None:
+    """Make Birth cite twice and Profession reuse its first citation."""
+    event_items = _children(events, "event")
+
+    def event_type(event: ET.Element) -> str:
+        return _text_content(next(iter(_children(event, "type")), None))
+
+    birth = next((item for item in event_items if event_type(item) == "Birth"), None)
+    profession = next(
+        (item for item in event_items if event_type(item) == "Profession"),
+        None,
+    )
+    if birth is None or profession is None:
+        raise AssertionError("Native AC-14 fixture needs Birth and Profession events.")
+
+    birth_refs = _children(birth, "citationref")
+    profession_refs = _children(profession, "citationref")
+    if len(birth_refs) != 1 or len(profession_refs) != 1:
+        raise AssertionError(
+            "Native AC-14 Birth and Profession events must each start with one citation."
+        )
+    shared_handle = birth_refs[0].get("hlink")
+    additional_handle = profession_refs[0].get("hlink")
+    if not shared_handle or not additional_handle or shared_handle == additional_handle:
+        raise AssertionError("Native AC-14 fixture needs two distinct source citations.")
+
+    profession_refs[0].set("hlink", shared_handle)
+    birth.append(
+        ET.Element(
+            _qualified_name(root, "citationref"),
+            {"hlink": additional_handle},
+        )
+    )
+    citations = _section(root, "citations")
+    pages_by_handle = {
+        shared_handle: AC14_SHARED_PAGE,
+        additional_handle: AC14_SECOND_PAGE,
+    }
+    for citation in _children(citations, "citation"):
+        handle = citation.get("handle")
+        if handle not in pages_by_handle:
+            continue
+        page = next(iter(_children(citation, "page")), None)
+        if page is None:
+            raise AssertionError(f"Native AC-14 citation {handle} has no page field.")
+        page.text = pages_by_handle[handle]
 
 
 def _section(root: ET.Element, name: str) -> ET.Element:
@@ -457,6 +544,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         )
 
     _add_same_fact_birth_version(root, events, person)
+    _apply_ac14_shared_citation(root, events)
 
     marriage = next(
         (item for item in _children(events, "event") if item.get("id") == "E0002"),
@@ -868,6 +956,51 @@ def verify(
         assert len(source["repository_refs"]) == 1
         assert len(model["repositories"]) == 2
         assert len(model["media"]) == 6
+        ac14_citations_by_page = {
+            citation["page"]: citation
+            for citation in model["citations"].values()
+        }
+        shared_citation = ac14_citations_by_page[AC14_SHARED_PAGE]
+        second_citation = ac14_citations_by_page[AC14_SECOND_PAGE]
+        assert shared_citation["handle"] != second_citation["handle"]
+        birth_events = [
+            event for event in model["events"].values() if event["type"] == "Birth"
+        ]
+        birth_with_multiple_citations = next(
+            event
+            for event in birth_events
+            if {
+                shared_citation["handle"],
+                second_citation["handle"],
+            }
+            <= set(event["links"]["citations"])
+        )
+        profession_event = next(
+            event
+            for event in model["events"].values()
+            if event["type"] == "Profession"
+        )
+        assert shared_citation["handle"] in profession_event["links"]["citations"]
+        assert second_citation["handle"] not in profession_event["links"]["citations"]
+        assert len(birth_with_multiple_citations["links"]["citations"]) == 2
+        editorial_book = model["editorial_book"]
+        citation_entries = editorial_book["citation_entries"]
+        entries_by_citation = {
+            entry["citation_handle"]: entry for entry in citation_entries
+        }
+        assert len(entries_by_citation) == len(citation_entries)
+        shared_entry = entries_by_citation[shared_citation["handle"]]
+        second_entry = entries_by_citation[second_citation["handle"]]
+        shared_owner_event_types = {
+            model["events"][call["owner_handle"]]["type"]
+            for call in shared_entry["calls"]
+            if call["owner_type"] == "event"
+        }
+        assert {"Birth", "Profession"} <= shared_owner_event_types
+        print(
+            "PASS: AC-14 native Gramps citations: Birth has two citations and "
+            "Profession reuses the same citation as Birth"
+        )
         media = next(
             item
             for item in model["media"].values()
@@ -1003,6 +1136,36 @@ def verify(
         assert "https://example.org/ac16-citation" in html
         assert AC13_MEDIA_DESCRIPTION not in html
         assert AC13_CITATION_PAGE not in html
+        html_citation_numbers = _html_citation_numbers(html)
+        assert len(html_citation_numbers) == len(citation_entries)
+        shared_entry_id = shared_entry["entry_id"]
+        second_entry_id = second_entry["entry_id"]
+        assert shared_entry_id in html_citation_numbers
+        assert second_entry_id in html_citation_numbers
+        assert html_citation_numbers[shared_entry_id] != html_citation_numbers[second_entry_id]
+        shared_html_links = re.findall(
+            rf'<a href="#{re.escape(shared_entry_id)}">'
+            r'<span class="citation-number">\[(\d+)\]</span></a>',
+            html,
+        )
+        assert shared_html_links == [str(html_citation_numbers[shared_entry_id])]
+        first_profile = next(
+            profile
+            for profile in editorial_book["profiles"]
+            if profile["person_handle"] == model["people"][0]["handle"]
+        )
+        profile_match = re.search(
+            rf'<section class="person-profile" id="{re.escape(first_profile["profile_id"])}">'
+            r"(.*?)</section>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert profile_match is not None
+        profile_html = profile_match.group(1)
+        assert f'href="#{shared_entry_id}"' in profile_html
+        assert f'href="#{second_entry_id}"' in profile_html
+        assert html.count(AC14_SHARED_PAGE) == 1
+        assert html.count(AC14_SECOND_PAGE) == 1
         assert len(
             [name for name in archive_names if name.startswith("media/")]
         ) == 2, archive_names
@@ -1019,6 +1182,10 @@ def verify(
         assert len({target for target, _ in rendered_note_nodes}) == 2, rendered_note_nodes
         assert all("<strong>gras</strong>" in body for _, body in rendered_note_nodes)
         assert all("<em>italique</em>" in body for _, body in rendered_note_nodes)
+        print(
+            "PASS: AC-14 native HTML uses one appendix entry per Citation, "
+            "reuses its number, and keeps both references on the two-citation fact"
+        )
         print(
             "PASS: AC-10 native BOOK_PUBLICATION note shared by person and family, "
             "with distinct HTML targets and native bold/italic styles"
@@ -1086,7 +1253,38 @@ def verify(
             log = report("F0001", destination, output_format="pdf", book_language="fr")
             if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
                 raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
-            print(f"PASS: native Gramps AC-16 PDF written to {destination}")
+            rendered_pdf_text = _pdf_text(destination)
+            assert rendered_pdf_text.count(AC14_SHARED_PAGE) == 1
+            assert rendered_pdf_text.count(AC14_SECOND_PAGE) == 1
+            shared_pdf_number = _pdf_citation_number(
+                rendered_pdf_text, AC14_SHARED_PAGE
+            )
+            second_pdf_number = _pdf_citation_number(
+                rendered_pdf_text, AC14_SECOND_PAGE
+            )
+            assert shared_pdf_number != second_pdf_number
+            profile_sources_sections = list(re.finditer(
+                r"(?m)^Sources\s*\n((?:[ \t]*— \[\d+\].*\n)+)",
+                rendered_pdf_text,
+            ))
+            assert profile_sources_sections
+            profile_sources = profile_sources_sections[-1]
+            profile_source_numbers = {
+                int(number)
+                for number in re.findall(r"— \[(\d+)\]", profile_sources.group(1))
+            }
+            assert {shared_pdf_number, second_pdf_number} <= profile_source_numbers
+            shared_position = rendered_pdf_text.index(AC14_SHARED_PAGE)
+            second_position = rendered_pdf_text.index(AC14_SECOND_PAGE)
+            assert shared_position < second_position
+            shared_pdf_entry = rendered_pdf_text[shared_position:second_position]
+            assert re.search(r"événement\s*:\s*Naissance", shared_pdf_entry)
+            assert re.search(r"événement\s*:\s*Profession", shared_pdf_entry)
+            print(f"PASS: native Gramps PDF written to {destination}")
+            print(
+                "PASS: AC-14 PDF maps both citations to distinct numbers, "
+                "shows both on the two-citation profile, and reuses the shared entry"
+            )
 
 
 if __name__ == "__main__":
