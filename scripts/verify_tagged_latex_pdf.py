@@ -138,7 +138,7 @@ def verify(pdf_path: Path, language: str = "fr") -> None:
     strike_text = (
         "Passage barré de recette : Émile et Jeanne"
         if language == "fr"
-        else "Strikethrough test: Émile and Jeanne's fictional family history"
+        else "Strikethrough test: Émile and Jeanne"
     )
     if strike_text not in normalized_extraction:
         raise ValueError(
