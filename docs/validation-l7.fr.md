@@ -58,7 +58,14 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 
 - La numérotation HTML suit maintenant l’ordre réellement lu : appels des fiches rendues dans le parcours, puis appels des notices familiales pour chaque partie. La numérotation LaTeX garde l’ordre déjà rendu par le PDF : notices familiales, puis fiches. Un même objet Citation conserve un seul numéro dans chaque sortie ; ses numéros peuvent différer d’un format à l’autre puisque leur ordre de lecture diffère.
 - Un nouvel export Gramps 6.0.8 depuis la fixture native fictive donne `[1]` pour la naissance, `[2]` pour la profession et `[3]` pour le mariage dans le corps HTML et dans l’annexe. Les deux citations de la fiche individuelle précèdent celle de la notice familiale ; l’ouverture navigateur aux deux ancres confirme `[1]`, `[2]`, puis `[3]`.
-- Le ZIP passe `unzip -t`. Les tests de numérotation (1), de rendu HTML (4) et de rendu LaTeX (2), Ruff et `git diff --check` passent. La recette AC-14 comparative complète, notamment la vérification des numéros PDF correspondants, reste à réaliser.
+- Le ZIP passe `unzip -t`. Les tests de numérotation (1), de rendu HTML (4) et de rendu LaTeX (2), Ruff et `git diff --check` passent. La vérification AC-14 du PDF natif est complétée ci-dessous.
+
+## Citations partagées et multiples (AC-14) — 30 septembre 2026
+
+- La fixture native Gramps relie deux citations à la naissance d’Émile et réutilise la première pour son événement Profession. Les deux citations ont des détails distincts (`AC14SHAREDREFERENCE` et `AC14SECONDCITATION`) afin de vérifier le contenu intégral de l’annexe. La fixture garde également le mariage, ses sources, médias et tags synthétiques précédents.
+- Le ZIP HTML exporté par Gramps 6.0.8 contient une entrée d’annexe par objet Citation. La citation partagée a un seul numéro/entrée et les appels Birth et Profession pointent vers elle ; les deux numéros de citation de la naissance sont présents dans la fiche. Chaque détail de page apparaît exactement une fois.
+- Le même modèle produit un PDF français A4 de neuf pages avec LuaHBTeX 1.24.0. L’extraction confirme deux numéros distincts dans la fiche, les deux appels Birth/Profession sous l’entrée partagée et une occurrence complète de chaque détail en annexe. Les pages physiques 7–8, rendues à 110 ppp, ont été examinées : pas de coupure ni de chevauchement visible. `pdfinfo` indique toujours `Tagged: no`; l’accessibilité PDF reste à traiter.
+- PDF conservé localement : `output/pdf/gramps-fancy-book-ac14-citation-review.pdf`. La recette est automatisée dans `scripts/verify_gramps.py` via `--pdf-output` et `--lualatex`; les données sont entièrement fictives. L’export depuis l’interface Gramps reste à vérifier séparément.
 
 ## Aperçu synthétique HTML/PDF commun — 29 septembre 2026
 
