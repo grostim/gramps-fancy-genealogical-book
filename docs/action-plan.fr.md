@@ -172,11 +172,11 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 2. L7.2 — Adapter le repère généalogique au navigateur et proposer une navigation cohérente entre générations, branches, fiches et annexes.
 3. L7.3 — Échapper le contenu inséré dans HTML et traiter les liens et notes selon un contrat de mise en forme explicite.
 4. L7.4 — Inclure les médias et styles dans un ZIP à chemins relatifs, consultable localement ; vérifier les noms de fichiers accentués et les liens entre pages.
-5. L7.5 — Vérifier lisibilité sur plusieurs tailles d’écran, navigation clavier et textes alternatifs des images.
+5. L7.5 — Vérifier reflow, parcours clavier et textes alternatifs sur les archives HTML de recette ; le ZIP synthétique AC-20 a été contrôlé sur cinq largeurs et ses 1 687 liens au clavier. Répéter sur les exports GUI Gramps et contrôler les annonces au lecteur d’écran.
 
 **Critères de sortie :** après extraction du ZIP, les pages, styles et images fonctionnent localement ; tous les liens internes attendus sont valides. Les données et citations publiées correspondent au PDF, avec les adaptations de navigation propres au support.
 
-**État au 30 septembre 2026 :** l’archive ZIP et le PDF ont été générés depuis le paquet courant dans Gramps Desktop 6.0.8 sur macOS 27.0 arm64, avec le profil fictif isolé. Le PDF de neuf pages a été rendu et relu visuellement ; l’extraction du ZIP GUI et celle du ZIP AC-20 ont été ouvertes directement dans Chrome via `file://`, et les principaux liens internes testés aboutissent. Il reste à vérifier l’accessibilité clavier/lecteur d’écran, couvrir les cas AC-10/13/15 depuis l’interface et comparer les rendus aux maquettes.
+**État au 30 septembre 2026 :** l’archive ZIP et le PDF ont été générés depuis le paquet courant dans Gramps Desktop 6.0.8 sur macOS 27.0 arm64, avec le profil fictif isolé. Le PDF de neuf pages a été rendu et relu visuellement ; l’extraction du ZIP GUI et celle du ZIP AC-20 ont été ouvertes directement dans Chrome via `file://`, et les principaux liens internes testés aboutissent. Le reflow et le parcours Tab complet de l’aperçu AC-20 synthétique sont qualifiés ; il reste à contrôler le clavier sur les ZIP exportés par l’interface et à tester les annonces avec lecteur d’écran. Les cas AC-10/13/15 depuis l’interface et la comparaison des rendus aux maquettes restent à compléter.
 
 ### L8 — Recette, documentation et distribution
 
