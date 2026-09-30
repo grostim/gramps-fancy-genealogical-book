@@ -31,12 +31,17 @@ compile_document() {
   local files
 
   for pass in 1 2 3 4 5; do
-    lualatex \
+    local pass_log="lualatex-${document_name}-pass-${pass}.stdout.log"
+    if ! lualatex \
       -no-shell-escape \
       -interaction=nonstopmode \
       -halt-on-error \
       -file-line-error \
-      "$document_name.tex" >"lualatex-${document_name}-pass-${pass}.stdout.log" 2>&1
+      "$document_name.tex" >"$pass_log" 2>&1; then
+      echo "LuaLaTeX pass $pass failed for $document_name.tex; last output lines:" >&2
+      tail -n 80 "$pass_log" >&2
+      return 1
+    fi
 
     files=("$document_name.aux")
     for extension in toc out; do
