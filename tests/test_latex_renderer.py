@@ -28,6 +28,7 @@ from gramps_fancy_book.domain import (
     Url,
 )
 from gramps_fancy_book.renderers.latex import render_latex
+from gramps_fancy_book.renderers.latex_notes import render_latex_note
 
 
 def test_renderer_escapes_model_text_and_keeps_urls_usable():
@@ -134,11 +135,25 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
         in rendered
     )
     assert (
+        r"\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}"
+        in rendered
+    )
+    assert r"\tagstructbegin{tag=Span,attribute-class={gfb-strikethrough}}" in rendered
+    assert (
         r"\bookurl{https://example.org/archive\%2Fdocument?folio=1&format=full\#record}"
         r"{https://example.org}{/archive\%2Fdocument?folio=1&format=full\#record}"
         in rendered
     )
     assert r"(record\_\&)" in rendered
+
+
+def test_latex_strikethrough_notes_keep_text_and_visual_command():
+    note = Note(handle="note-strike", text="Avant ~~texte barré~~ après.")
+
+    rendered = render_latex_note(note)
+
+    assert r"Avant \sout{texte barré} après." in rendered
+    assert rendered.endswith(r"\par" + "\n")
 
 
 def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
