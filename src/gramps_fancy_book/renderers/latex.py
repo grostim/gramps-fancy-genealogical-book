@@ -276,6 +276,7 @@ def render_latex(
     language = model_book_language(model, default="en")
     babel_language = "french" if language == "fr" else "english"
     pdf_language = "fr-FR" if language == "fr" else "en-US"
+    # ulem draws \sout but omits its PDF TextDecorationType layout attribute.
     document = [
         f"\\DocumentMetadata{{lang={pdf_language},tagging=on}}\n"
         "\\documentclass[a4paper]{article}\n"
@@ -283,6 +284,18 @@ def render_latex(
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
+        "\\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}\n"
+        "\\NewCommandCopy{\\gfbOriginalSout}{\\sout}\n"
+        "\\RenewDocumentCommand{\\sout}{m}{%\n"
+        "  \\leavevmode\n"
+        "  \\tagmcend\n"
+        "  \\tagstructbegin{tag=Span,attribute-class={gfb-strikethrough}}%\n"
+        "  \\tagmcbegin{}%\n"
+        "  \\gfbOriginalSout{#1}%\n"
+        "  \\tagmcend\n"
+        "  \\tagstructend\n"
+        "  \\tagmcbegin{}%\n"
+        "}\n"
         "\\usepackage{tikz}\n\\usepackage{fancyhdr}\n"
         "\\renewcommand{\\familydefault}{\\sfdefault}\n"
         "\\pagestyle{fancy}\n"
