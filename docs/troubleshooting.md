@@ -30,7 +30,7 @@ Gramps may return exit code zero even when a report fails. Check that the reques
 
 ## PDF generation fails
 
-PDF output requires LuaLaTeX. Install TeX Live and ensure the Gramps process can find `lualatex` on `PATH`; the application may have a different `PATH` from an interactive shell. If compilation fails, the report will indicate whether LuaLaTeX was unavailable, references failed to stabilize, or the log reported unresolved references or overfull boxes. Use HTML ZIP output when LuaLaTeX is unavailable.
+PDF output requires LuaLaTeX. Install TeX Live and ensure Gramps can find `lualatex` on `PATH`; on macOS the report also checks `/Library/TeX/texbin/lualatex`, the standard BasicTeX/MacTeX link. The application may have a different `PATH` from an interactive shell. If compilation fails, the report will indicate whether LuaLaTeX was unavailable, references failed to stabilize, or the log reported unresolved references or overfull boxes. Use HTML ZIP output when LuaLaTeX is unavailable.
 
 ## Gramps Web
 

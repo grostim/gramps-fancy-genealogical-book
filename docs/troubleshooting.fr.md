@@ -30,7 +30,7 @@ Gramps peut renvoyer le code de sortie zéro même si un rapport échoue. Vérif
 
 ## Échec de génération PDF
 
-La sortie PDF nécessite LuaLaTeX. Installez TeX Live et vérifiez que le processus Gramps trouve `lualatex` dans son `PATH` ; celui de l’application peut différer de celui d’un terminal interactif. En cas d’échec, le rapport indique si LuaLaTeX manque, si les renvois n’ont pas convergé ou si le journal signale des renvois non résolus ou des dépassements de marge. Utilisez la sortie HTML ZIP si LuaLaTeX n’est pas disponible.
+La sortie PDF nécessite LuaLaTeX. Installez TeX Live et vérifiez que Gramps trouve `lualatex` dans son `PATH` ; sur macOS, le rapport cherche aussi `/Library/TeX/texbin/lualatex`, le lien standard de BasicTeX/MacTeX. Le `PATH` de l’application peut différer de celui d’un terminal interactif. En cas d’échec, le rapport indique si LuaLaTeX manque, si les renvois n’ont pas convergé ou si le journal signale des renvois non résolus ou des dépassements de marge. Utilisez la sortie HTML ZIP si LuaLaTeX n’est pas disponible.
 
 ## Gramps Web
 
