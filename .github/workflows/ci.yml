@@ -150,8 +150,10 @@ jobs:
       - name: Verify French tagged list structure and labels
         run: python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-french-book.pdf
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: lualatex-book-fixtures
+          if-no-files-found: ignore
           path: |
             .work/latex-spike/layout-spike.pdf
             .work/latex-spike/layout-spike.tex
