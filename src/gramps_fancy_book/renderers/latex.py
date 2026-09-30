@@ -305,6 +305,7 @@ def render_latex(
         "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
         "\\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}\n"
+        "\\tagpdfsetup{role/new-tag={paragraph/H3}}\n"
         "\\NewCommandCopy{\\gfbOriginalSout}{\\sout}\n"
         "\\RenewDocumentCommand{\\sout}{m}{%\n"
         "  \\leavevmode\n"
