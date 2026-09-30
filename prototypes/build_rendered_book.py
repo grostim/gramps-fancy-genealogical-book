@@ -131,7 +131,7 @@ SYNTHETIC_MEDIA_PATHS = {
 }
 
 
-def build_model() -> BookModel:
+def build_model(language: str = "en") -> BookModel:
     father = Person(handle="person-father", name="Émile Exemple", gramps_id="I0001")
     mother = Person(handle="person-mother", name="Jeanne Fictive", gramps_id="I0002")
     child = Person(handle="person-child", name="Camille Exemple", gramps_id="I0003")
@@ -286,6 +286,7 @@ def build_model() -> BookModel:
         families={family.handle: family}, events=events, places={place.handle: place},
         notes={note.handle: note}, citations={citation.handle: citation},
         sources={source.handle: source}, repositories={repository.handle: repository},
+        metadata={"BOOK_LANGUAGE": language},
         media={
             "media-portrait": Media(
                 handle="media-portrait",
@@ -539,18 +540,24 @@ def main() -> None:
         / "rendered-book.tex"
     )
     sparse_default = default_output.with_name("rendered-sparse-book.tex")
+    french_default = default_output.with_name("rendered-french-book.tex")
     output = Path(os.environ.get("LATEX_RENDERED_BOOK_OUTPUT", default_output))
     sparse_output = Path(os.environ.get("LATEX_SPARSE_BOOK_OUTPUT", sparse_default))
-    output.parent.mkdir(parents=True, exist_ok=True)
-    sparse_output.parent.mkdir(parents=True, exist_ok=True)
+    french_output = Path(os.environ.get("LATEX_FRENCH_BOOK_OUTPUT", french_default))
+    for target in (output, sparse_output, french_output):
+        target.parent.mkdir(parents=True, exist_ok=True)
     media_directory = output.parent / "media"
     media_directory.mkdir(parents=True, exist_ok=True)
     for name, image in SYNTHETIC_MEDIA_IMAGES.items():
         media_asset = media_directory / (SYNTHETIC_MEDIA_KEYS[name] + ".png")
         media_asset.write_bytes(image)
     output.write_text(render_latex(build_model()), encoding="utf-8")
+    french_output.write_text(
+        render_latex(build_model(language="fr")), encoding="utf-8"
+    )
     sparse_output.write_text(render_latex(build_sparse_model()), encoding="utf-8")
     print(output)
+    print(french_output)
     print(sparse_output)
 
 

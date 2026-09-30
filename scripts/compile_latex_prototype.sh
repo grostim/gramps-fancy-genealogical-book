@@ -12,7 +12,7 @@ lualatex --version
 LAYOUT_SPIKE_OUTPUT="$work_dir/layout-spike.tex" \
   python3 "$repo_root/prototypes/build_layout.py"
 
-for document in rendered-book.tex rendered-sparse-book.tex; do
+for document in rendered-book.tex rendered-french-book.tex rendered-sparse-book.tex; do
   if [[ ! -f "$work_dir/$document" ]]; then
     echo "The production-rendered book fixture is missing: $work_dir/$document" >&2
     exit 1
@@ -31,12 +31,17 @@ compile_document() {
   local files
 
   for pass in 1 2 3 4 5; do
-    lualatex \
+    local pass_log="lualatex-${document_name}-pass-${pass}.stdout.log"
+    if ! lualatex \
       -no-shell-escape \
       -interaction=nonstopmode \
       -halt-on-error \
       -file-line-error \
-      "$document_name.tex" >"lualatex-${document_name}-pass-${pass}.stdout.log" 2>&1
+      "$document_name.tex" >"$pass_log" 2>&1; then
+      echo "LuaLaTeX pass $pass failed for $document_name.tex; last output lines:" >&2
+      tail -n 80 "$pass_log" >&2
+      return 1
+    fi
 
     files=("$document_name.aux")
     for extension in toc out; do
@@ -66,4 +71,5 @@ compile_document() {
 
 compile_document "layout-spike"
 compile_document "rendered-book"
+compile_document "rendered-french-book"
 compile_document "rendered-sparse-book"
