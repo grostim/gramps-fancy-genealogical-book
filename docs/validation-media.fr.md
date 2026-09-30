@@ -1,18 +1,22 @@
 # Validation média / Pillow et PDFium
 
-Statut au 29 septembre 2026.
+Statut au 30 septembre 2026.
 
 ## Périmètre vérifié
 
-La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécute les conversions sur des images synthétiques ainsi que sur des PDF mono- et multipages. Le test Gramps Desktop utilise Ubuntu 24.04, Python 3.12 et Gramps 6.0.8. Il fabrique un portrait fictif dans le répertoire média temporaire, l’importe dans une base isolée, puis vérifie le recadrage PNG, l’écriture du manifeste et le remplacement coordonné du JSON et du dossier média.
+La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécute les conversions sur des images synthétiques ainsi que sur des PDF mono- et multipages. Le test Gramps utilise Ubuntu 24.04, Python 3.12 et Gramps 6.0.8. L’intégration locale de cette recette utilise Gramps Desktop 6.0.8 sur macOS avec une base isolée.
 
-L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers originaux ne sont pas modifiés ; le portrait existe uniquement dans le répertoire temporaire du test.
+La recette CLI Gramps crée quatre justificatifs PDF fictifs, les attache à des citations natives puis génère un ZIP HTML. Elle confirme les quatre règles AC-16 : un PDF monopage sans URL produit un PNG à 300 ppp ; un PDF multipage sans URL reste une référence ; les deux PDF avec URL restent des liens, qu’ils soient mono- ou multipages. Le ZIP contient le dérivé du premier document, les quatre notices et l’URL du dépôt associé aux deux citations liées. L’intégrité du ZIP est vérifiée. Le portrait fictif recadré et le remplacement coordonné du JSON et du dossier média restent également couverts.
 
-## Vérification de publication restante
+Pour que Gramps CLI utilise les mêmes dépendances optionnelles que l’environnement de recette, `scripts/verify_gramps.py` copie Pillow et PDFium dans le profil Gramps temporaire. Cette manipulation est isolée au test ; elle ne configure pas l’installation Gramps Desktop de l’utilisateur.
+
+L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers originaux ne sont pas modifiés ; le portrait et les quatre PDF existent uniquement dans le répertoire temporaire du test.
+
+## Vérifications restantes
 
 Le test `test_excluded_featured_media_is_absent_from_generated_books` construit un instantané Gramps fictif dont un média porte les deux étiquettes. Il vérifie que ses références éditoriales et les citations qui leur sont attachées ne créent ni notice ni dérivé média, que le ZIP contient uniquement `index.html`, et que la description ou une balise `<img>` n’apparaît ni dans le HTML ni dans le LaTeX. Le chemin source fictif n’existe pas : toute tentative de lecture ferait échouer le test.
 
-La recette native reste à faire dans Gramps : appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif puis générer un livre HTML ZIP. Elle doit confirmer le même résultat depuis l’interface et la base Gramps réelle.
+La recette native d’AC-13 reste à faire : appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif puis générer un livre HTML ZIP depuis l’interface Gramps. AC-16 est vérifié au niveau du modèle et du ZIP HTML ; un PDF final qui contient ces quatre variantes et une revue graphique dans l’application restent à produire.
 
 ## Installation
 
@@ -28,7 +32,7 @@ Les convertisseurs restent facultatifs. Le rapport garde l’export JSON et sign
 
 ## Limites
 
-La CI qualifie l’installation de paquets et le traitement média dans Gramps 6.0.8 sous Ubuntu 24.04. Les installateurs macOS et Windows, ainsi que les distributions isolées telles que Flatpak, Snap ou l’application macOS, restent à vérifier sur leurs propres environnements Python.
+La CI qualifie l’installation de paquets et le traitement média dans Gramps 6.0.8 sous Ubuntu 24.04. La recette AC-16 passe aussi avec l’exécutable Gramps 6.0.8 de l’application macOS quand les dépendances sont ajoutées au profil temporaire. Les installateurs macOS et Windows, ainsi que les distributions isolées telles que Flatpak et Snap, restent à vérifier avec leurs propres environnements Python.
 
 Gramps Web exécute les rapports côté serveur. L’installation des dépendances doit donc se faire dans l’environnement Python ou l’image serveur, et aucun serveur de test n’a été vérifié ici. Cette validation ne revendique pas la compatibilité Gramps Web. Ajouter une preuve Web exigera une instance jetable avec des données fictives.
 

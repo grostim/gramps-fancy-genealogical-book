@@ -200,6 +200,46 @@ def _create_media_fixture(work: Path) -> None:
     media_path = work / "media" / "portrait.jpg"
     media_path.parent.mkdir(parents=True, exist_ok=True)
     Image.new("RGB", (10, 10), color=(90, 130, 170)).save(media_path, format="JPEG")
+    for filename, page_count in (
+        ("ac16-single-unlinked.pdf", 1),
+        ("ac16-multipage-unlinked.pdf", 2),
+        ("ac16-single-linked.pdf", 1),
+        ("ac16-multipage-linked.pdf", 2),
+    ):
+        (media_path.parent / filename).write_bytes(_blank_pdf(page_count))
+
+
+def _blank_pdf(page_count: int) -> bytes:
+    """Create a minimal, deterministic PDF without adding a test dependency."""
+    page_objects = list(range(3, 3 + page_count))
+    kids = " ".join(f"{number} 0 R" for number in page_objects)
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        f"<< /Type /Pages /Kids [{kids}] /Count {page_count} >>".encode(),
+    ]
+    objects.extend(
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 72 72] /Resources << >> >>"
+        for _ in page_objects
+    )
+
+    document = bytearray(b"%PDF-1.4\n")
+    offsets = [0]
+    for number, content in enumerate(objects, start=1):
+        offsets.append(len(document))
+        document.extend(f"{number} 0 obj\n".encode())
+        document.extend(content)
+        document.extend(b"\nendobj\n")
+
+    xref_offset = len(document)
+    document.extend(f"xref\n0 {len(offsets)}\n".encode())
+    document.extend(b"0000000000 65535 f \n")
+    for offset in offsets[1:]:
+        document.extend(f"{offset:010d} 00000 n \n".encode())
+    document.extend(
+        f"trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\n"
+        f"startxref\n{xref_offset}\n%%EOF\n".encode()
+    )
+    return bytes(document)
 
 
 def _install_mistune_dependency(plugins: Path) -> None:
@@ -214,6 +254,22 @@ def _install_mistune_dependency(plugins: Path) -> None:
         target,
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
     )
+
+
+def _install_optional_media_dependencies(plugins: Path) -> None:
+    """Expose the runner's Pillow/PDFium packages to the isolated Gramps profile."""
+    for package in ("PIL", "pypdfium2", "pypdfium2_cfg", "pypdfium2_raw"):
+        spec = importlib.util.find_spec(package)
+        if spec is None or not spec.submodule_search_locations:
+            raise AssertionError(
+                f"Install the project media extra before Gramps integration ({package})."
+            )
+        source = Path(next(iter(spec.submodule_search_locations)))
+        shutil.copytree(
+            source,
+            plugins / "lib" / package,
+            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+        )
 
 
 def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
@@ -345,6 +401,96 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     }
     ET.SubElement(media_ref, _qualified_name(root, "region"), rectangle)
 
+    citations = _section(root, "citations")
+    citation_by_id = {
+        item.get("id"): item for item in _children(citations, "citation")
+    }
+    if not {"C0000", "C0001"} <= citation_by_id.keys():
+        raise AssertionError("Gramps XML export is missing citations C0000 or C0001.")
+    sources = _section(root, "sources")
+    source = next(
+        (item for item in _children(sources, "source") if item.get("id") == "S0001"),
+        None,
+    )
+    if source is None:
+        raise AssertionError("Gramps XML export is missing source S0001.")
+    linked_source = copy.deepcopy(source)
+    linked_source_handle = f"_{uuid.uuid4().hex}"
+    linked_source.set("handle", linked_source_handle)
+    linked_source.set("id", "S0002")
+    source_ref = next(
+        (
+            child
+            for child in citation_by_id["C0001"]
+            if child.tag.rsplit("}", 1)[-1] == "sourceref"
+        ),
+        None,
+    )
+    if source_ref is None:
+        raise AssertionError("Citation C0001 is missing its native source reference.")
+    source_ref.set("hlink", linked_source_handle)
+    repository_ref = next(
+        (
+            child
+            for child in linked_source
+            if child.tag.rsplit("}", 1)[-1] == "reporef"
+        ),
+        None,
+    )
+    if repository_ref is None:
+        raise AssertionError("Source S0001 is missing its native repository reference.")
+    repositories = _section(root, "repositories")
+    repository = next(
+        (
+            item
+            for item in _children(repositories, "repository")
+            if item.get("handle") == repository_ref.get("hlink")
+        ),
+        None,
+    )
+    if repository is None:
+        raise AssertionError("Source S0001 references a missing repository.")
+    linked_repository = copy.deepcopy(repository)
+    linked_repository_handle = f"_{uuid.uuid4().hex}"
+    linked_repository.set("handle", linked_repository_handle)
+    linked_repository.set("id", "R0002")
+    repository_ref.set("hlink", linked_repository_handle)
+    ET.SubElement(
+        linked_repository,
+        _qualified_name(root, "url"),
+        {"href": "https://example.org/ac16-citation", "type": "Web Home"},
+    )
+    repositories.append(linked_repository)
+    sources.append(linked_source)
+    pdf_cases = (
+        ("M0002", "C0000", "ac16-single-unlinked.pdf"),
+        ("M0003", "C0000", "ac16-multipage-unlinked.pdf"),
+        ("M0004", "C0001", "ac16-single-linked.pdf"),
+        ("M0005", "C0001", "ac16-multipage-linked.pdf"),
+    )
+    for media_id, citation_id, filename in pdf_cases:
+        pdf_handle = f"_{uuid.uuid4().hex}"
+        pdf_media = ET.SubElement(
+            objects,
+            _qualified_name(root, "object"),
+            {"handle": pdf_handle, "change": "0", "id": media_id},
+        )
+        ET.SubElement(
+            pdf_media,
+            _qualified_name(root, "file"),
+            {
+                "src": str((work / "media" / filename).resolve()),
+                "mime": "application/pdf",
+                "description": filename.removesuffix(".pdf"),
+            },
+        )
+        citation = citation_by_id[citation_id]
+        ET.SubElement(
+            citation,
+            _qualified_name(root, "objref"),
+            {"hlink": pdf_handle},
+        )
+
     tag_handle = f"_{uuid.uuid4().hex}"
     ET.SubElement(
         tags,
@@ -408,6 +554,7 @@ def verify(executable: str) -> None:
         with tarfile.open(ROOT / "gramps60/download/GrampsFancyBook.addon.tgz") as archive:
             archive.extractall(plugins, filter="data")
         _install_mistune_dependency(plugins)
+        _install_optional_media_dependencies(plugins)
 
         _create_media_fixture(work)
         native_fixture = _native_fixture(executable, env, work)
@@ -582,12 +729,16 @@ def verify(executable: str) -> None:
         assert marriage_ref["role"] == "Family"
         assert model["events"][marriage_ref["event_handle"]]["type"] == "Marriage"
         assert len(model["citations"]) == 3
-        assert len(model["sources"]) == 1
+        assert len(model["sources"]) == 2
         source = next(iter(model["sources"].values()))
         assert len(source["repository_refs"]) == 1
-        assert len(model["repositories"]) == 1
-        assert len(model["media"]) == 1
-        media = next(iter(model["media"].values()))
+        assert len(model["repositories"]) == 2
+        assert len(model["media"]) == 5
+        media = next(
+            item
+            for item in model["media"].values()
+            if item["path"] == str((work / "media" / "portrait.jpg").resolve())
+        )
         assert media["path"] == str((work / "media" / "portrait.jpg").resolve())
         assert "portrait" in media["description"].lower()
         assert model["people"][0]["links"]["media"][0]["media_handle"] == media["handle"]
@@ -610,6 +761,46 @@ def verify(executable: str) -> None:
         assert note_handle in model["people"][0]["links"]["notes"]
         assert note_handle in model["reference_family"]["links"]["notes"]
 
+        media_by_name = {
+            Path(item["path"]).name: item for item in model["media"].values()
+        }
+        expected_pdf_actions = {
+            "ac16-single-unlinked.pdf": ("reproduce", 1, True),
+            "ac16-multipage-unlinked.pdf": ("reference-only", 2, False),
+            "ac16-single-linked.pdf": ("external-link", None, False),
+            "ac16-multipage-linked.pdf": ("external-link", None, False),
+        }
+        artifacts_by_handle = {
+            artifact["media_handle"]: artifact for artifact in model["media_artifacts"]
+        }
+        assert len(artifacts_by_handle) == 5, model["media_artifacts"]
+        for filename, (expected_action, expected_pages, has_derivative) in (
+            expected_pdf_actions.items()
+        ):
+            pdf_media = media_by_name[filename]
+            artifact = artifacts_by_handle[pdf_media["handle"]]
+            assert artifact["action"] == expected_action, (
+                filename,
+                artifact,
+                model["diagnostics"],
+            )
+            assert artifact["page_count"] == expected_pages, artifact
+            assert bool(artifact.get("asset_path")) is has_derivative, artifact
+            if expected_action == "reproduce":
+                assert artifact["dpi"] == 300, artifact
+            if expected_action == "external-link":
+                assert artifact["citation_handles"]
+                linked_citation = model["citations"][artifact["citation_handles"][0]]
+                linked_source = model["sources"][linked_citation["source_handle"]]
+                assert any(
+                    url["path"] == "https://example.org/ac16-citation"
+                    for reference in linked_source["repository_refs"]
+                    for url in model["repositories"][reference["repository_handle"]]["urls"]
+                ), artifact
+        print(
+            "PASS: AC-16 native Gramps citation media: single/multipage PDFs with and without URLs"
+        )
+
         html_output = work / "family-shared-note.zip"
         log = report("F0001", html_output, output_format="html_zip")
         if not html_output.is_file():
@@ -618,6 +809,21 @@ def verify(executable: str) -> None:
             if archive.testzip() is not None:
                 raise AssertionError("Gramps produced an invalid shared-note HTML archive.")
             html = archive.read("index.html").decode("utf-8")
+            archive_names = set(archive.namelist())
+        single_pdf_artifact = artifacts_by_handle[
+            media_by_name["ac16-single-unlinked.pdf"]["handle"]
+        ]
+        assert f"media/{single_pdf_artifact['cache_key']}.png" in archive_names
+        assert any(
+            filename in html
+            for filename in (
+                "ac16-single-unlinked",
+                "ac16-multipage-unlinked",
+                "ac16-single-linked",
+                "ac16-multipage-linked",
+            )
+        ), "The HTML archive does not contain the native citation PDF references."
+        assert "https://example.org/ac16-citation" in html
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -679,7 +885,7 @@ def verify(executable: str) -> None:
         assert json.loads(output.read_text())["reference_family"]["gramps_id"] == "F0001", log
         assert media_output.is_dir()
         assert not stale_asset.exists()
-        assert len(list(media_output.glob("*.png"))) == 1
+        assert len(list(media_output.glob("*.png"))) == 2
         print("PASS: explicit replacement of JSON and media assets")
 
         for destination in (None, work / "missing" / "file.json", work / "not-json.pdf"):
