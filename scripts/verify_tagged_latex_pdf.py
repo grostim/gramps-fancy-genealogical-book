@@ -121,6 +121,30 @@ def verify(pdf_path: Path, language: str = "fr") -> None:
         text=True,
         encoding="utf-8",
     ).stdout
+    structure_dump = subprocess.run(
+        ["pdfinfo", "-struct", str(pdf_path)],
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout
+    if re.search(
+        r"\bSpan\b[^\n]*\n\s*/TextDecorationType /LineThrough",
+        structure_dump,
+    ) is None:
+        raise ValueError(
+            "The PDF structure must expose a Span with LineThrough decoration."
+        )
+    normalized_extraction = " ".join(extraction.split())
+    strike_text = (
+        "Passage barré de recette : Émile et Jeanne"
+        if language == "fr"
+        else "Strikethrough test: Émile and Jeanne's fictional family history"
+    )
+    if strike_text not in normalized_extraction:
+        raise ValueError(
+            f"The {language} tagged PDF does not preserve its strikethrough text."
+        )
     index_label = "Index des personnes" if language == "fr" else "Person index"
     index_start = extraction.rfind(index_label)
     if index_start < 0:

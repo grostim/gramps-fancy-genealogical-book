@@ -192,6 +192,23 @@ def build_model(language: str = "en") -> BookModel:
         handle="note-long", gramps_id="N0001", text=note_text, type=24,
         is_publishable=True,
     )
+    strike_phrase = (
+        "Passage barré de recette : Émile et Jeanne, au cœur de la généalogie "
+        "fictive, confirment qu’une phrase volontairement longue reste lisible "
+        "et conserve ses caractères accentués lorsqu’elle se poursuit sur la "
+        "ligne suivante dans le document balisé."
+        if language == "fr"
+        else "Strikethrough test: Émile and Jeanne's fictional family history "
+        "keeps accents readable when this intentionally long phrase wraps onto "
+        "the next line in the tagged document."
+    )
+    strike_note = Note(
+        handle="note-strikethrough",
+        gramps_id="N0002",
+        text=f"~~{strike_phrase}~~",
+        type=0,
+        is_publishable=True,
+    )
 
     repository = Repository(
         handle="repository-1", gramps_id="R0001",
@@ -232,11 +249,12 @@ def build_model(language: str = "en") -> BookModel:
     profile = EditorialProfile(
         profile_id=profile_id, person_handle=father.handle,
         primary_occurrence_id="occurrence-father",
-        note_handles=(note.handle,),
+        note_handles=(note.handle, strike_note.handle),
         event_refs=tuple(event_refs),
         media_refs=(featured_reference,),
         portrait=portrait,
-        citation_call_ids=(call.call_id,), note_target_ids=("note-long-target",),
+        citation_call_ids=(call.call_id,),
+        note_target_ids=("note-long-target", "note-strike-target"),
         event_target_ids=tuple(event_target_ids),
     )
     notice = EditorialFamilyNotice(
@@ -284,7 +302,8 @@ def build_model(language: str = "en") -> BookModel:
     return BookModel(
         reference_family=family, people=[father, mother, child],
         families={family.handle: family}, events=events, places={place.handle: place},
-        notes={note.handle: note}, citations={citation.handle: citation},
+        notes={note.handle: note, strike_note.handle: strike_note},
+        citations={citation.handle: citation},
         sources={source.handle: source}, repositories={repository.handle: repository},
         metadata={"BOOK_LANGUAGE": language},
         media={
