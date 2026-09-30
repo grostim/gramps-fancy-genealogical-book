@@ -172,7 +172,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 2. L7.2 — Adapter le repère généalogique au navigateur et proposer une navigation cohérente entre générations, branches, fiches et annexes.
 3. L7.3 — Échapper le contenu inséré dans HTML et traiter les liens et notes selon un contrat de mise en forme explicite.
 4. L7.4 — Inclure les médias et styles dans un ZIP à chemins relatifs, consultable localement ; vérifier les noms de fichiers accentués et les liens entre pages.
-5. L7.5 — Vérifier lisibilité sur plusieurs tailles d’écran, navigation clavier et textes alternatifs des images.
+5. L7.5 — Vérifier reflow, parcours clavier et textes alternatifs sur les archives HTML de recette ; le ZIP synthétique AC-20 a été contrôlé sur cinq largeurs et ses 1 687 liens au clavier. Répéter sur les exports GUI Gramps et contrôler les annonces au lecteur d’écran.
 
 **Critères de sortie :** après extraction du ZIP, les pages, styles et images fonctionnent localement ; tous les liens internes attendus sont valides. Les données et citations publiées correspondent au PDF, avec les adaptations de navigation propres au support.
 
