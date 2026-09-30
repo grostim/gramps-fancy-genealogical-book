@@ -4,7 +4,7 @@ Statut au 30 septembre 2026.
 
 ## Périmètre vérifié
 
-La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécute les conversions sur des images synthétiques ainsi que sur des PDF mono- et multipages. Le test Gramps utilise Ubuntu 24.04, Python 3.12 et Gramps 6.0.8. L’intégration locale de cette recette utilise Gramps Desktop 6.0.8 sur macOS avec une base isolée.
+La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécute les conversions sur des images synthétiques ainsi que sur des PDF mono- et multipages. La matrice d’intégration Gramps utilise Ubuntu 24.04, Python 3.12 et Gramps 6.0.7 et 6.0.8. L’intégration locale de cette recette utilise Gramps Desktop 6.0.8 sur macOS avec une base isolée.
 
 La recette native Gramps CLI couvre maintenant AC-13 : une image fictive présente sur disque porte à la fois `BOOK_EXCLUDE` et `BOOK_FEATURED`, et sa référence porte une citation dédiée qui n’est utilisée nulle part ailleurs. L’export du modèle confirme que l’objet conserve ses deux étiquettes dans la source, mais qu’il n’a ni placement, ni référence éditoriale, ni dérivé ; sa citation exclusive ne rejoint pas l’annexe. Le ZIP n’inclut que les deux images attendues pour les autres médias, et ne contient ni description ni détail de citation AC-13. Cela qualifie l’import XML natif et l’export CLI ; voir aussi la recette Desktop ci-dessous. La saisie des tags dans les éditeurs graphiques reste à vérifier.
 
@@ -44,7 +44,7 @@ Les convertisseurs restent facultatifs. Le rapport garde l’export JSON et sign
 
 ## Limites
 
-La CI qualifie l’installation de paquets et le traitement média dans Gramps 6.0.8 sous Ubuntu 24.04. La recette AC-16 passe aussi avec l’exécutable Gramps 6.0.8 de l’application macOS quand les dépendances sont ajoutées au profil temporaire. Les installateurs macOS et Windows, ainsi que les distributions isolées telles que Flatpak et Snap, restent à vérifier avec leurs propres environnements Python.
+La CI qualifie l’installation de paquets et le traitement média dans Gramps 6.0.7 et 6.0.8 sous Ubuntu 24.04. La recette AC-16 passe aussi avec l’exécutable Gramps 6.0.8 de l’application macOS quand les dépendances sont ajoutées au profil temporaire. Les installateurs macOS et Windows, ainsi que les distributions isolées telles que Flatpak et Snap, restent à vérifier avec leurs propres environnements Python.
 
 Gramps Web exécute les rapports côté serveur. L’installation des dépendances doit donc se faire dans l’environnement Python ou l’image serveur, et aucun serveur de test n’a été vérifié ici. Cette validation ne revendique pas la compatibilité Gramps Web. Ajouter une preuve Web exigera une instance jetable avec des données fictives.
 

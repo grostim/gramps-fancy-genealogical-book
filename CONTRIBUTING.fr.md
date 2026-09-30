@@ -33,7 +33,7 @@ Pour le script d’intégration avec Gramps réel, utiliser Python 3.12 ou ulté
 .venv/bin/python scripts/verify_gramps.py --gramps /chemin/vers/gramps
 ```
 
-Le script installe l’archive construite dans un profil Gramps temporaire et importe le GEDCOM fictif de référence. Il ne nécessite pas de base personnelle. La CI couvre Python 3.10 à 3.13 et utilise Gramps 6.0.8 pour l’intégration ; un lancement local avec une autre version corrective de Gramps fournit une indication, mais ne remplace pas cette cible CI.
+Le script installe l’archive construite dans un profil Gramps temporaire et importe le GEDCOM fictif de référence. Il ne nécessite pas de base personnelle. La CI couvre Python 3.10 à 3.13 et utilise Gramps 6.0.7 et 6.0.8 pour l’intégration ; un lancement local avec une autre version corrective de Gramps fournit une indication, mais ne remplace aucune de ces cibles CI.
 
 ## Traduction et fichiers générés
 

@@ -33,7 +33,7 @@ For the real Gramps integration runner, use Python 3.12 or later with Gramps 6.0
 .venv/bin/python scripts/verify_gramps.py --gramps /path/to/gramps
 ```
 
-The runner installs the built add-on into a temporary Gramps profile and imports the fictional reference GEDCOM. It does not require a personal database. CI covers Python 3.10–3.13 and uses Gramps 6.0.8 for integration; a local run on another Gramps patch version is useful evidence but does not replace that CI target.
+The runner installs the built add-on into a temporary Gramps profile and imports the fictional reference GEDCOM. It does not require a personal database. CI covers Python 3.10–3.13 and uses Gramps 6.0.7 and 6.0.8 for integration; a local run on another Gramps patch version is useful evidence but does not replace either CI target.
 
 ## Translation and generated files
 
