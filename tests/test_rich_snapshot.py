@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from gramps_fancy_book.gramps_adapter import GrampsDatabaseAdapter
 from gramps_fancy_book.media import prepare_editorial_media
 from gramps_fancy_book.normalization import build_book_model
+from gramps_fancy_book.renderers.html import render_html
 from gramps_fancy_book.renderers.html_archive import write_html_archive
 from gramps_fancy_book.renderers.latex import render_latex
 
@@ -320,6 +321,29 @@ def test_snapshot_preserves_relationships_events_sources_media_and_privacy():
     assert db.reads[("citation", "citation-1")] == 1
     assert db.reads[("event", "event-life")] == 1
     assert json.loads(json.dumps(payload, ensure_ascii=False))["sources"]["source-1"]["title"] == "Registre paroissial"
+
+
+def test_book_content_and_anchors_are_stable_across_generations(tmp_path):
+    first_snapshot = GrampsDatabaseAdapter(rich_database()).read_snapshot("family-main")
+    second_snapshot = GrampsDatabaseAdapter(rich_database()).read_snapshot("family-main")
+    first_model = build_book_model(first_snapshot)
+    second_model = build_book_model(second_snapshot)
+
+    assert first_model.to_dict() == second_model.to_dict()
+
+    first_html = render_html(first_model, include_media=True)
+    second_html = render_html(second_model, include_media=True)
+    assert first_html == second_html
+    assert '<a href="#' in first_html
+
+    first_latex = render_latex(first_model)
+    second_latex = render_latex(second_model)
+    assert first_latex == second_latex
+    assert r"\hypertarget{target-" in first_latex
+
+    first_archive = write_html_archive(first_model, tmp_path / "first.zip")
+    second_archive = write_html_archive(second_model, tmp_path / "second.zip")
+    assert first_archive.read_bytes() == second_archive.read_bytes()
 
 
 def test_excluded_featured_media_is_absent_from_generated_books(tmp_path):
