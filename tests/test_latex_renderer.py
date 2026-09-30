@@ -157,7 +157,7 @@ def test_latex_strikethrough_notes_keep_text_and_visual_command():
     assert rendered.endswith(r"\par" + "\n")
 
 
-def test_tagged_french_lists_keep_the_french_dash_label():
+def test_tagged_french_lists_use_compatible_french_dash_labels():
     entries = (
         EditorialPersonIndexEntry("index-1", "person-1", "Jeanne Exemple", "target-1"),
         EditorialPersonIndexEntry("index-2", "person-2", "Louis Exemple", "target-2"),
@@ -175,8 +175,10 @@ def test_tagged_french_lists_keep_the_french_dash_label():
     french_output = render_latex(french_model)
     english_output = render_latex(english_model)
 
-    assert r"\begin{itemize}[item-label=\textemdash]" in french_output
-    assert r"\begin{itemize}[item-label=\textemdash]" not in english_output
+    assert r"\renewcommand{\labelitemi}{\textemdash}" in french_output
+    assert r"\renewcommand{\labelitemiv}{\textemdash}" in french_output
+    assert r"\renewcommand{\labelitemi}{\textemdash}" not in english_output
+    assert r"\begin{itemize}[item-label=\textemdash]" not in french_output
     assert r"\begin{itemize}" in english_output
 
 

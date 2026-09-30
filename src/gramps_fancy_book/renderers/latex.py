@@ -276,6 +276,15 @@ def render_latex(
     language = model_book_language(model, default="en")
     babel_language = "french" if language == "fr" else "english"
     pdf_language = "fr-FR" if language == "fr" else "en-US"
+    french_list_labels = ""
+    if language == "fr":
+        # The pinned TeX Live lacks itemize's newer item-label key.
+        french_list_labels = (
+            "\\renewcommand{\\labelitemi}{\\textemdash}\n"
+            "\\renewcommand{\\labelitemii}{\\textemdash}\n"
+            "\\renewcommand{\\labelitemiii}{\\textemdash}\n"
+            "\\renewcommand{\\labelitemiv}{\\textemdash}\n"
+        )
     # ulem draws \sout but omits its PDF TextDecorationType layout attribute.
     document = [
         f"\\DocumentMetadata{{lang={pdf_language},tagging=on}}\n"
@@ -308,7 +317,8 @@ def render_latex(
         "\\setlength{\\headheight}{30pt}\n"
         "\\setlength{\\headsep}{18pt}\n"
         "\\setlength{\\emergencystretch}{2em}\n"
-        "\\begin{document}\n",
+        + french_list_labels
+        + "\\begin{document}\n",
         _render_cover(model),
     ]
     document.append(_render_front_matter(model))
@@ -419,13 +429,7 @@ def render_latex(
         document.append("\\end{itemize}\n")
 
     document.append("\\end{document}\n")
-    source = "".join(document)
-    if language == "fr":
-        source = source.replace(
-            "\\begin{itemize}\n",
-            "\\begin{itemize}[item-label=\\textemdash]\n",
-        )
-    return source
+    return "".join(document)
 
 
 def _render_genealogy_part(
