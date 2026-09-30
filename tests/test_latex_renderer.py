@@ -8,6 +8,7 @@ from gramps_fancy_book.domain import (
     EditorialMediaArtifact,
     EditorialMediaPlacement,
     EditorialMediaUse,
+    EditorialPersonIndexEntry,
     EditorialProfile,
     Event,
     EventReference,
@@ -154,6 +155,29 @@ def test_latex_strikethrough_notes_keep_text_and_visual_command():
 
     assert r"Avant \sout{texte barré} après." in rendered
     assert rendered.endswith(r"\par" + "\n")
+
+
+def test_tagged_french_lists_keep_the_french_dash_label():
+    entries = (
+        EditorialPersonIndexEntry("index-1", "person-1", "Jeanne Exemple", "target-1"),
+        EditorialPersonIndexEntry("index-2", "person-2", "Louis Exemple", "target-2"),
+    )
+    french_model = BookModel(
+        reference_family=Family(handle="family-1"),
+        metadata={"BOOK_LANGUAGE": "fr"},
+        editorial_book=EditorialBook(person_index=entries),
+    )
+    english_model = BookModel(
+        reference_family=Family(handle="family-1"),
+        editorial_book=EditorialBook(person_index=entries),
+    )
+
+    french_output = render_latex(french_model)
+    english_output = render_latex(english_model)
+
+    assert r"\begin{itemize}[item-label=\textemdash]" in french_output
+    assert r"\begin{itemize}[item-label=\textemdash]" not in english_output
+    assert r"\begin{itemize}" in english_output
 
 
 def test_pdf_renders_shared_citation_media_once_and_links_later_uses():

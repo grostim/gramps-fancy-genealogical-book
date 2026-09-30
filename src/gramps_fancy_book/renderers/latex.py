@@ -419,7 +419,13 @@ def render_latex(
         document.append("\\end{itemize}\n")
 
     document.append("\\end{document}\n")
-    return "".join(document)
+    source = "".join(document)
+    if language == "fr":
+        source = source.replace(
+            "\\begin{itemize}\n",
+            "\\begin{itemize}[item-label=\\textemdash]\n",
+        )
+    return source
 
 
 def _render_genealogy_part(
