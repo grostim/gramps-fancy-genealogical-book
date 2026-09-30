@@ -187,23 +187,36 @@ def _render_cover(model: BookModel) -> str:
     return "".join(output)
 
 
-def _render_front_matter(model: BookModel) -> str:
+def _render_front_matter(
+    model: BookModel, emitted_targets: set[str]
+) -> str:
     role_notes = _front_matter_notes_by_role(model)
-    output = []
-    for role, heading in (
-        (BOOK_DEDICATION, label(model, "dedication")),
-        (BOOK_INTRODUCTION, label(model, "introduction")),
-    ):
-        note = role_notes.get(role)
-        if note is None:
-            continue
+    notes = [
+        (heading, role_notes.get(role))
+        for role, heading in (
+            (BOOK_DEDICATION, label(model, "dedication")),
+            (BOOK_INTRODUCTION, label(model, "introduction")),
+        )
+        if role_notes.get(role) is not None
+        and (role_notes[role].text or "").strip()
+    ]
+    if not notes:
+        return ""
+    output = [
+        _section_heading(
+            label(model, "front_matter"),
+            target_id="front-matter",
+            emitted_targets=emitted_targets,
+        )
+    ]
+    for index, (heading, note) in enumerate(notes):
+        if index:
+            output.append("\\clearpage\n")
         output.extend(
             (
-                "\\clearpage\n",
-                f"\\section*{{{heading}}}\n",
+                f"\\subsection*{{{heading}}}\n",
                 f"\\markboth{{{heading}}}{{}}\n",
                 render_latex_note(note),
-                "\\clearpage\n",
             )
         )
     return "".join(output)
@@ -333,14 +346,14 @@ def render_latex(
         + "\\begin{document}\n",
         _render_cover(model),
     ]
-    document.append(_render_front_matter(model))
+    emitted_targets: set[str] = set()
+    document.append(_render_front_matter(model, emitted_targets))
     document.append(
         "\\markboth{"
         + escape_latex_text(label(model, "contents"))
         + "}{}\n\\tableofcontents\n\\clearpage\n"
     )
 
-    emitted_targets: set[str] = set()
     people_by_handle = {person.handle: person for person in model.people}
     citation_by_call = {
         call.call_id: entry
@@ -422,7 +435,13 @@ def render_latex(
             target.target_id: target
             for target in model.editorial_book.navigation_targets
         }
-        document.append(_section_heading(label(model, "person_index")))
+        document.append(
+            _section_heading(
+                label(model, "person_index"),
+                target_id="person-index",
+                emitted_targets=emitted_targets,
+            )
+        )
         document.append("\\begin{itemize}\n")
         for entry in model.editorial_book.person_index:
             display_name = entry.display_name or entry.person_handle
@@ -468,7 +487,14 @@ def _render_genealogy_part(
     part_name = label(model, part.name.casefold())
     if part_name == part.name.casefold():
         part_name = part.name.title()
-    output = [_section_heading(part_name, first_context)]
+    output = [
+        _section_heading(
+            part_name,
+            first_context,
+            target_id=part.name.casefold(),
+            emitted_targets=emitted_targets,
+        )
+    ]
     output.append(_render_generation_navigation(part, model))
     for generation in part.generations:
         previous_branches = None
@@ -1035,7 +1061,11 @@ def _render_citation_appendix(
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     output = [
-        _section_heading(label(model, "documentary_appendix")),
+        _section_heading(
+            label(model, "documentary_appendix"),
+            target_id="documentary-appendix",
+            emitted_targets=emitted_targets,
+        ),
         "\\begin{itemize}\n",
     ]
     profiles = {
@@ -1611,12 +1641,24 @@ def _running_context_label(
     return label
 
 
-def _section_heading(title: str, context: str = "") -> str:
+def _section_heading(
+    title: str,
+    context: str = "",
+    *,
+    target_id: str | None = None,
+    emitted_targets: set[str] | None = None,
+) -> str:
     escaped = escape_latex_text(title)
     escaped_context = escape_latex_text(context)
+    anchor = (
+        _latex_anchor(target_id, emitted_targets)
+        if target_id is not None and emitted_targets is not None
+        else ""
+    )
     return (
         "\\clearpage\n"
-        f"\\section*{{{escaped}}}\n"
+        + anchor
+        + f"\\section*{{{escaped}}}\n"
         f"\\markboth{{{escaped}}}{{{escaped_context}}}\n"
         f"\\addcontentsline{{toc}}{{section}}{{{escaped}}}\n"
     )
