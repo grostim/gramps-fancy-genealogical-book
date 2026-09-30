@@ -508,7 +508,7 @@ def benchmark(
         else:
             raise ValueError(f"Unknown synthetic shape: {shape}")
         fixture_seconds = time.perf_counter() - start
-        fixture_heap, _ = tracemalloc.get_traced_memory()
+        fixture_heap, fixture_peak_heap = tracemalloc.get_traced_memory()
         tracemalloc.reset_peak()
 
         start = time.perf_counter()
@@ -623,8 +623,9 @@ def benchmark(
             "latex_bytes": latex_bytes,
             "html_zip_bytes": archive_bytes,
             "fixture_heap_bytes": fixture_heap,
+            "fixture_peak_heap_bytes": fixture_peak_heap,
             "peak_additional_heap_bytes": max(0, peak_heap - fixture_heap),
-            "peak_total_heap_bytes": peak_heap,
+            "peak_total_heap_bytes": max(fixture_peak_heap, peak_heap),
         }
         if pdf_result is not None:
             result["pdf"] = pdf_result
