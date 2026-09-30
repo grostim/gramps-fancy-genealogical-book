@@ -44,7 +44,7 @@ In Gramps, the report is registered under **Reports → Web Pages**. This catego
 
 The HTML and LaTeX note renderers require Mistune 3.x. Install it in the Python environment used by Gramps Desktop or the Gramps Web service with `python -m pip install 'mistune>=3,<4'`. The add-on declares `mistune` as a required module; installing the Python package from this repository also installs it through `pyproject.toml`.
 
-Image and PDF converters remain optional so JSON export works without them. For development, install the project and its dependencies with `python -m pip install -e '.[dev,media]'`. In a Gramps Desktop environment that supports pip, install `Pillow` and `pypdfium2` with the same Python interpreter that launches Gramps, then restart Gramps: `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. A missing dependency produces a diagnostic and the affected derivatives are omitted. PDF output additionally requires LuaLaTeX (provided by TeX Live) on the `PATH` used to launch Gramps or at `/Library/TeX/texbin/lualatex` on macOS. The PDF mode is experimental pending Gramps Desktop and visual validation. CI currently qualifies Ubuntu 24.04, Python 3.12 and Gramps 6.0.8; see the [media validation record](docs/validation-media.md). Gramps Web execution remains unqualified: the packages would need to be installed in the server environment, and no test instance has been validated.
+Image and PDF converters remain optional so JSON export works without them. For development, install the project and its dependencies with `python -m pip install -e '.[dev,media]'`. In a Gramps Desktop environment that supports pip, install `Pillow` and `pypdfium2` with the same Python interpreter that launches Gramps, then restart Gramps: `python -m pip install 'Pillow>=10' 'pypdfium2>=4'`. A missing dependency produces a diagnostic and the affected derivatives are omitted. PDF output additionally requires LuaLaTeX (provided by TeX Live) on the `PATH` used to launch Gramps or at `/Library/TeX/texbin/lualatex` on macOS. The PDF mode is experimental pending Gramps Desktop and visual validation. CI qualifies Ubuntu 24.04, Python 3.12 and Gramps 6.0.7–6.0.8; see the [media validation record](docs/validation-media.md). Gramps Web execution remains unqualified: the packages would need to be installed in the server environment, and no test instance has been validated.
 
 ## Book language
 
@@ -70,7 +70,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/verify_gramps.py --gramps /path/to/gramps
 ```
 
-Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.8 for integration.
+Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.7 and 6.0.8 for integration.
 
 See the [L1 validation record](docs/validation-l1.md), the [L3 validation record](docs/validation-l3.md), and the [media validation record](docs/validation-media.md) for executed checks and remaining limitations.
 
