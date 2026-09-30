@@ -20,13 +20,18 @@ def _resolved_role(tag: object, role_map: dict[str, str]) -> str:
     return role
 
 
-def _count_roles(node: object, role_map: dict[str, str], counts: dict[str, int]) -> None:
+def _count_roles(
+    node: object,
+    role_map: dict[str, str],
+    counts: dict[str, int],
+    figures_without_alt: list[str],
+) -> None:
     if hasattr(node, "get_object"):
         node = node.get_object()
 
     if isinstance(node, (list, tuple)):
         for child in node:
-            _count_roles(child, role_map, counts)
+            _count_roles(child, role_map, counts, figures_without_alt)
         return
 
     if not isinstance(node, dict):
@@ -36,10 +41,14 @@ def _count_roles(node: object, role_map: dict[str, str], counts: dict[str, int])
     if tag is not None:
         role = _resolved_role(tag, role_map)
         counts[role] = counts.get(role, 0) + 1
+        if role == "/Figure":
+            alt = node.get("/Alt")
+            if alt is None or not str(alt).strip():
+                figures_without_alt.append(str(node))
 
     children = node.get("/K")
     if children is not None:
-        _count_roles(children, role_map, counts)
+        _count_roles(children, role_map, counts, figures_without_alt)
 
 
 def verify(pdf_path: Path) -> None:
@@ -82,7 +91,8 @@ def verify(pdf_path: Path) -> None:
         for source, target in (structure.get("/RoleMap") or {}).items()
     }
     role_counts: dict[str, int] = {}
-    _count_roles(structure.get("/K"), role_map, role_counts)
+    figures_without_alt: list[str] = []
+    _count_roles(structure.get("/K"), role_map, role_counts, figures_without_alt)
     if role_counts.get("/L", 0) < 1 or role_counts.get("/LI", 0) < 2:
         raise ValueError(
             "The structure tree must contain an L list with at least two LI items; "
@@ -92,6 +102,12 @@ def verify(pdf_path: Path) -> None:
         raise ValueError(
             "Paragraph subheadings must map to H3 without skipping to H4; "
             f"found {role_counts.get('/H3', 0)} H3 and {role_counts.get('/H4', 0)} H4."
+        )
+    if role_counts.get("/Figure", 0) < 1 or figures_without_alt:
+        raise ValueError(
+            "Every tagged figure must have non-empty alternative text; "
+            f"found {role_counts.get('/Figure', 0)} figure(s), "
+            f"{len(figures_without_alt)} without alternative text."
         )
 
     extraction = subprocess.run(
@@ -113,6 +129,7 @@ def verify(pdf_path: Path) -> None:
         "French tagged PDF check passed: fr-FR and title metadata, PDF 2.0, "
         f"{role_counts['/L']} L list(s), {role_counts['/LI']} LI item(s), "
         f"{role_counts['/H3']} H3 heading(s), "
+        f"{role_counts['/Figure']} figure(s) with alternative text, "
         "em dash markers in the person index, and DisplayDocTitle."
     )
 
