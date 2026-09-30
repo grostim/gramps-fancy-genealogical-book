@@ -32,3 +32,19 @@ Sur une version épinglée de Gramps Web API et une base fictive :
 ## Décision à obtenir
 
 Ce brouillon doit être discuté avec les mainteneurs de Gramps Web avant toute implémentation. S’ils préfèrent un adaptateur maintenu ou un contrat de sortie plus restreint, la proposition devra suivre leur voie prise en charge. Ne pas revendiquer la compatibilité Gramps Web avant la réussite des vérifications runtime.
+
+## Brouillon de demande aux mainteneurs (anglais, non envoyé)
+
+Le guide de contribution de l’API demande de discuter les changements non triviaux dans une issue avant de les implémenter ([CONTRIBUTING.md](https://github.com/gramps-project/gramps-web-api/blob/master/CONTRIBUTING.md)). Le texte ci-dessous est prêt à adapter et soumettre ; il ne constitue pas une issue publiée.
+
+**Title:** Supported custom-output report contract for third-party Gramps reports
+
+> We maintain a third-party Gramps report that creates its own PDF or HTML ZIP instead of using the standard document output. We would like to make it usable from Gramps Web without adding a server-specific fork or writing outside the server-managed report directory.
+>
+> In the current released API (v3.22.3), `get_reports()` filters reports by `REPORT_DEFAULTS`, which does not include `CATEGORY_WEB`; `MIME_TYPES` does not include `.zip`; and `run_report()` supplies its own output path through the standard `of` option. Our report currently declares `CATEGORY_WEB`, accepts PDF/ZIP, and has a separate `destination` option, so the existing endpoint cannot discover or return these outputs.
+>
+> Is there a supported extension point, or would the maintainers consider one, for a report to declare its output formats and receive a server-controlled destination under `REPORT_DIR`? We need the API to discover only reports that opt into this contract, validate their normal report options (including an explicit privacy confirmation), return PDF and ZIP with the declared file name and MIME type, and preserve the usual task lifecycle. We do not want to enable every `CATEGORY_WEB` plugin by default.
+>
+> What contract would fit the API best, and what security, cleanup, option-validation, and task-status requirements should a plugin meet? We can adapt the report and add integration coverage once the supported interface is agreed.
+
+Les constats de version ci-dessus ont été revérifiés le 30 septembre 2026 sur les sources épinglées de [v3.22.3 : constantes MIME et catégories](https://github.com/gramps-project/gramps-web-api/blob/v3.22.3/gramps_webapi/const.py) et [implémentation de l’API des rapports](https://github.com/gramps-project/gramps-web-api/blob/v3.22.3/gramps_webapi/api/report.py). GitHub indique toujours `v3.22.3` comme dernière release publiée à cette date.
