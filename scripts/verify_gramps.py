@@ -542,11 +542,21 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     return fixture
 
 
-def verify(executable: str) -> None:
+def verify(
+    executable: str,
+    *,
+    pdf_output: str | Path | None = None,
+    lualatex: str | Path | None = None,
+) -> None:
     with tempfile.TemporaryDirectory(prefix="fancy-book-integration-") as directory:
         work = Path(directory)
         env = os.environ.copy()
         env.update(GRAMPSHOME=str(work), XDG_CACHE_HOME=str(work / "cache"), LANGUAGE="en")
+        if lualatex is not None:
+            compiler = Path(lualatex).expanduser()
+            if not compiler.is_file():
+                raise FileNotFoundError(f"LuaLaTeX executable was not found: {compiler}")
+            env["PATH"] = f"{compiler.absolute().parent}{os.pathsep}{env.get('PATH', '')}"
         # Install the add-on and declared dependency in this profile, never from a source PYTHONPATH.
         env.pop("PYTHONPATH", None)
         plugins = work / "gramps" / "gramps60" / "plugins"
@@ -897,8 +907,28 @@ def verify(executable: str) -> None:
         assert not list(work.glob(".book-media-stage-*"))
         print("PASS: missing, unavailable and invalid destinations; temporary-file cleanup")
 
+        if pdf_output is not None:
+            destination = Path(pdf_output).expanduser()
+            if not destination.is_absolute():
+                destination = Path.cwd() / destination
+            log = report("F0001", destination, output_format="pdf", book_language="fr")
+            if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
+                raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
+            print(f"PASS: native Gramps AC-16 PDF written to {destination}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--gramps", default="gramps", help="Gramps 6 executable")
-    verify(parser.parse_args().gramps)
+    parser.add_argument(
+        "--pdf-output",
+        type=Path,
+        help="Also compile the native fixture as a PDF at this destination.",
+    )
+    parser.add_argument(
+        "--lualatex",
+        type=Path,
+        help="Optional LuaLaTeX executable; its directory is prepended to PATH.",
+    )
+    arguments = parser.parse_args()
+    verify(arguments.gramps, pdf_output=arguments.pdf_output, lualatex=arguments.lualatex)
