@@ -69,6 +69,30 @@ jobs:
       - run: ruff check .
       - run: python build_addon.py
 
+  macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GNU gettext for addon catalogs
+        run: |
+          brew install gettext
+          echo "$(brew --prefix gettext)/bin" >> "$GITHUB_PATH"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e '.[dev,media]'
+      - name: Record macOS test environment
+        run: |
+          sw_vers
+          uname -m
+          python -VV
+          python -m pip freeze
+          msgfmt --version
+      - run: pytest
+      - run: ruff check .
+      - run: python build_addon.py
+
   gramps-integration:
     runs-on: ubuntu-24.04
     steps:
