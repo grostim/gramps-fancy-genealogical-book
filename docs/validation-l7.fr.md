@@ -67,6 +67,13 @@ Compte rendu du 29 septembre 2026. Les PR #51–#57 ont livré le rendu HTML, sa
 - Le même modèle produit un PDF français A4 de neuf pages avec LuaHBTeX 1.24.0. L’extraction confirme deux numéros distincts dans la fiche, les deux appels Birth/Profession sous l’entrée partagée et une occurrence complète de chaque détail en annexe. Les pages physiques 7–8, rendues à 110 ppp, ont été examinées : pas de coupure ni de chevauchement visible. `pdfinfo` indique toujours `Tagged: no`; l’accessibilité PDF reste à traiter.
 - PDF conservé localement : `output/pdf/gramps-fancy-book-ac14-citation-review.pdf`. La recette est automatisée dans `scripts/verify_gramps.py` via `--pdf-output` et `--lualatex`; les données sont entièrement fictives. L’export depuis l’interface Gramps reste à vérifier séparément.
 
+## Fait sans citation et source sans dépôt (AC-18) — 30 septembre 2026
+
+- La fixture Gramps native conserve le mariage de la famille comme fait publié, lui ajoute une description repérable et retire ses appels de citation. Le modèle confirme que l’événement et sa référence familiale ont une liste de citations vide ; le HTML l’affiche dans la notice sans lien de citation.
+- Une citation rattachée à Profession pointe vers une source distincte avec titre, auteur et renseignements de publication, mais sans reporef ni URL de dépôt. Le modèle confirme une liste repository_refs vide ; l’entrée HTML et l’annexe PDF contiennent les champs disponibles et n’inventent ni dépôt, identifiant, cote ou type de support.
+- L’export Gramps 6.0.8 produit le ZIP HTML et un PDF français A4 de neuf pages avec LuaHBTeX 1.24.0. Le vérificateur contrôle les deux sorties. Les pages physiques 6 (fait non cité) et 8 (annexe) ont été rendues à 110 ppp puis examinées : pas de coupure ni de chevauchement visible. pdfinfo indique Tagged: no ; l’accessibilité reste à qualifier.
+- PDF conservé localement : output/pdf/gramps-fancy-book-ac18-no-repository.pdf. La vérification refuse maintenant une destination PDF préexistante afin d’éviter de valider par erreur un ancien fichier. Les données sont fictives ; l’export depuis l’interface Gramps reste à vérifier séparément.
+
 ## Aperçu synthétique HTML/PDF commun — 29 septembre 2026
 
 - Depuis `main` au commit `5fb7bc7`, le générateur `scripts/benchmark_book.py` a produit un modèle fictif ramifié de 10 unions descendantes : 22 personnes, 11 familles, 33 événements, 3 notes, 33 citations et deux dérivés de portraits synthétiques. Le même modèle a servi aux deux rendus.
