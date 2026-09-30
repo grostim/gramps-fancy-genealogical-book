@@ -63,9 +63,10 @@ docker run --rm \
   texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
   bash scripts/compile_latex_prototype.sh
 python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-french-book.pdf
+python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-book.pdf --language en
 ```
 
-The French PDF check also requires `pdftotext` from Poppler. It verifies PDF 2.0 and `fr-FR` metadata, the `L`/`LI` structure and `ListNumbering /Unordered`, then confirms that the person index extracts with French em dash markers. The `latex-prototype` CI job keeps the PDFs, sources, and LuaLaTeX logs for all four documents as a 14-day artifact. This regression check does not establish PDF/UA conformance or replace visual comparison with the local-only reference mockups. The TeX Live image is pinned by its upstream multi-platform digest; refresh it only alongside a successful compilation.
+Both tagged-PDF checks require `pdftotext` from Poppler. They verify PDF 2.0, language/title metadata, the `L`/`LI` structure, heading levels, and non-empty alternative text for every tagged figure. The French check also confirms `ListNumbering /Unordered` and em dash markers in the person index; the English check confirms the English index entries. The `latex-prototype` CI job keeps PDFs, sources, and LuaLaTeX logs for all four documents as a 14-day artifact. These regression checks do not establish PDF/UA conformance or replace visual comparison with the local-only reference mockups. The rich English fixture includes French sample descriptions, so its metadata and structure check does not qualify full English translation or general Babel compatibility. The TeX Live image is pinned by its upstream multi-platform digest; refresh it only alongside a successful compilation.
 
 ## Compilation LuaLaTeX reproductible
 
@@ -84,9 +85,10 @@ docker run --rm \
   texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
   bash scripts/compile_latex_prototype.sh
 python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-french-book.pdf
+python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-book.pdf --language en
 ```
 
-Le contrôle du PDF français requiert aussi `pdftotext` de Poppler. Il vérifie la version PDF 2.0, la langue `fr-FR`, les éléments `L`/`LI`, l’attribut `ListNumbering /Unordered` et les tirets cadratins extraits dans l’index. La tâche CI `latex-prototype` conserve les PDF, sources et journaux des quatre documents dans un artefact pendant 14 jours. Ce contrôle ne démontre pas la conformité PDF/UA et ne remplace pas la comparaison visuelle avec les maquettes de référence, qui restent stockées localement. L’image TeX Live est épinglée par son digest multiarchitecture publié en amont ; toute mise à jour doit être suivie d’une compilation réussie.
+Les deux contrôles PDF balisés requièrent `pdftotext` de Poppler. Ils vérifient PDF 2.0, les métadonnées de langue et de titre, les éléments `L`/`LI`, les niveaux de titre et la présence d’un texte alternatif non vide pour chaque figure balisée. Le contrôle français vérifie également `ListNumbering /Unordered` et les tirets cadratins de l’index ; le contrôle anglais vérifie ses entrées d’index. La tâche CI `latex-prototype` conserve les PDF, sources et journaux des quatre documents dans un artefact pendant 14 jours. Ces contrôles ne démontrent pas la conformité PDF/UA et ne remplacent pas la comparaison visuelle avec les maquettes de référence, qui restent stockées localement. La fixture anglaise riche contient des descriptions d’exemple en français ; sa vérification des métadonnées et de la structure ne qualifie ni la traduction complète ni la compatibilité générale de Babel. L’image TeX Live est épinglée par son digest multiarchitecture publié en amont ; toute mise à jour doit être suivie d’une compilation réussie.
 
 ### Revue visuelle synthétique — 29 septembre 2026
 

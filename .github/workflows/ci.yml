@@ -117,6 +117,8 @@ jobs:
             --workdir /work \
             texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
             bash scripts/compile_latex_prototype.sh
+      - name: Verify English tagged document structure and metadata
+        run: python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-book.pdf --language en
       - name: Verify French tagged list structure and labels
         run: python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-french-book.pdf
       - uses: actions/upload-artifact@v4
