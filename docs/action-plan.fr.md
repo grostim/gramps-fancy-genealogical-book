@@ -176,7 +176,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 
 **Critères de sortie :** après extraction du ZIP, les pages, styles et images fonctionnent localement ; tous les liens internes attendus sont valides. Les données et citations publiées correspondent au PDF, avec les adaptations de navigation propres au support.
 
-**État au 30 septembre 2026 :** l’archive ZIP et le PDF ont été générés depuis le paquet courant dans Gramps Desktop 6.0.8 sur macOS 27.0 arm64, avec le profil fictif isolé. Le PDF de neuf pages a été rendu et relu visuellement ; l’extraction du ZIP GUI et celle du ZIP AC-20 ont été ouvertes directement dans Chrome via `file://`, et les principaux liens internes testés aboutissent. Il reste à vérifier l’accessibilité clavier/lecteur d’écran, couvrir les cas AC-10/13/15 depuis l’interface et comparer les rendus aux maquettes.
+**État au 30 septembre 2026 :** l’archive ZIP et le PDF ont été générés depuis le paquet courant dans Gramps Desktop 6.0.8 sur macOS 27.0 arm64, avec le profil fictif isolé. Le PDF de neuf pages a été rendu et relu visuellement ; l’extraction du ZIP GUI et celle du ZIP AC-20 ont été ouvertes directement dans Chrome via `file://`, et les principaux liens internes testés aboutissent. Le reflow et le parcours Tab complet de l’aperçu AC-20 synthétique sont qualifiés ; il reste à contrôler le clavier sur les ZIP exportés par l’interface et à tester les annonces avec lecteur d’écran. Les cas AC-10/13/15 depuis l’interface et la comparaison des rendus aux maquettes restent à compléter.
 
 ### L8 — Recette, documentation et distribution
 
