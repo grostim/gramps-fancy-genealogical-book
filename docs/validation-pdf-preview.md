@@ -1,9 +1,16 @@
 # Synthetic PDF preview review
 
-## Artifact
+## Current preview — 1 October 2026
 
-- File: `output/pdf/gramps-fancy-book-preview.pdf` (local, generated artifact; not tracked in Git)
-- SHA-256: `a06793d3e69460380cd8304c5b586bc4c132f4def5b351ed0bbcbcf5efdc4d72`
+- Local, untracked file: `output/pdf/gramps-fancy-book-preview.pdf`; SHA-256 `1196e8e97c80033c20a97ae34ef36a515b2f244d5fc8a1331a723c93f27bc2c2`.
+- The PDF is 647,443 bytes and 55 A4 pages. LuaHBTeX 1.24.0 compiled it; `pdfinfo` reports a tagged PDF 2.0 (`Tagged: yes`). The synthetic dataset contains 202 people and 101 families.
+- All 55 pages were rendered at 100 dpi and reviewed on three contact sheets. Physical pages 11, 12, 18, 25, 33, and 49 were also inspected at that resolution. No overlap, clipped text, or missing page number was visible, including in the family connections and person index.
+- To support this volume of nested family links, the renderer closes and reopens the nested list every 20 parent-child links. This avoids the unbalanced `tagpdf` hook error encountered during compilation while preserving list structure. The final compilation completed without layout warnings.
+- Records and visuals are synthetic. The tagged PDF has not been qualified with a screen reader, and no PDF/UA claim is made. Comparison with the private mockups and review with representative photographs remain open.
+
+## Earlier 193-page preview — historical record
+
+- Earlier local artifact, since replaced at the same path by the current preview above; its previous SHA-256 was `a06793d3e69460380cd8304c5b586bc4c132f4def5b351ed0bbcbcf5efdc4d72`.
 - Size: 739,729 bytes; 193 A4 pages; LuaTeX 1.24.0
 - Synthetic dataset: 202 people and 101 families
 - PDF outlines: seven sections — ancestry, descent, family connections, family notices, person profiles, documentary appendix, and person index
@@ -12,13 +19,13 @@
 
 Rendered at 110 dpi and visually inspected PDF pages 1–4, 10, 27, 55, 100, 121, 130, 187, and 193. The sample covers the cover, contents, genealogy sections, family notices, profiles, a portrait, the appendix, and the person index.
 
-No clipping, overlap, or missing page number was visible in the inspected pages. Section headings, contents entries, cross-reference text, source details, and the index fit within the page margins. In this original 193-page sample, long URLs wrap across lines and some breaks occur inside a hostname; that sample has not had a separate readability review. The newer AC-20 review below covers URL readability in the current 118-page preview. The sample inspection does not establish that every page is free of layout defects.
+No clipping, overlap, or missing page number was visible on the pages reviewed at the time. Section headings, contents entries, cross-reference text, source details, and the index fit within the page margins. Long URLs wrapped across lines and some breaks occurred inside a hostname. This earlier review did not establish that every page was free of layout defects; the file has since been replaced by the current preview.
 
 ## Limits and remaining work
 
 - Portraits in this benchmark are seeded random pixels from `scripts/benchmark_book.py`, not representative photographs. The image page is useful only to exercise image placement and cropping.
 - The cover and sparse genealogy pages reflect the synthetic dataset; they do not establish the final visual design.
-- `pdfinfo` reports `Tagged: no`; PDF accessibility has not been qualified.
+- `pdfinfo` reported `Tagged: no` at the time; accessibility of this earlier PDF was not qualified.
 - For this original sample, the inspected pages have not been compared with the private reference mockups, and long-link readability was not separately reviewed. The newer AC-20 preview below has a complete page-by-page visual pass and a targeted long-link review; screen-reader/accessibility checks and comparison against v1.1 design principles remain open.
 
 ## AC-20 preview — reviewed 29 September 2026
