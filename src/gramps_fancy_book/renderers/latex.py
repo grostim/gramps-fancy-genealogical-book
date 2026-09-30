@@ -23,6 +23,7 @@ from ..domain import (
     EditorialProfile,
     FamilySection,
     GenealogyPart,
+    Media,
     MediaReference,
     Note,
     Person,
