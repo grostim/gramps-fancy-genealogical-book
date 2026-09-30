@@ -28,12 +28,18 @@ Aucun texte coupé, chevauchement ni folio manquant n’est visible sur les page
 - Les pages 3 (ascendance), 49 (média `BOOK_FEATURED`) et 75 (annexe documentaire) ont été rendues à 110 ppp. L’en-tête de génération/branche est lisible en ascendance ; la page pleine conserve son en-tête de section et son folio ; les URLs de l’annexe se coupent aux séparateurs visibles sans fragmenter un mot du nom d’hôte. Aucun chevauchement ou contenu tronqué n’a été observé sur ces pages.
 - Les images du jeu sont des pixels synthétiques, pas des photographies. Cette inspection ciblée ne qualifie ni l’ensemble des pages, ni l’accessibilité (`pdfinfo` indique toujours `Tagged: no`), ni la comparaison avec les maquettes privées.
 
-## Aperçu AC-20 — revue du 29 septembre 2026
+## Aperçu AC-20 historique — génération du 29 septembre 2026
 
 - Fichiers locaux non suivis : `output/pdf/gramps-fancy-book-ac20-parity-preview.pdf` et `output/gramps-fancy-book-ac20-parity-preview.zip` ; le PDF conserve le SHA-256 `f0482918f12faaca707d9d421906e0f79c8e7405369a83859b322b66a76047c1`.
-- Taille : 470 833 octets ; 118 pages A4 ; LuaTeX 1.24.0 ; jeu synthétique de 122 personnes.
-- Le 30 septembre, les 118 pages ont été parcourues sur 12 planches de contact rendues à 75 ppp. Les pages physiques 1, 2, 49, 75, 90, 100, 115 et 118 ont ensuite été examinées à 150 ppp. Aucun chevauchement ni texte visiblement tronqué n’a été observé ; couverture, sommaire, portraits, annexe et index tiennent dans les marges. Les URL se replient aux séparateurs, parfois après un point du nom d’hôte. La page 49 utilise un portrait synthétique uniquement destiné à la mise en page.
-- Ce PDF précède le paramètre de langue du livre et affiche donc les titres en anglais. `pdfinfo` indique `Tagged: no` ; l’accessibilité et la comparaison aux maquettes privées restent à faire.
+- Le PDF (470 833 octets, 118 pages A4, LuaTeX 1.24.0) a été généré depuis l’état antérieur au commit `ac7a706`. Il précède la numérotation éditoriale actuelle des citations et la sortie française AC-20 ci-dessous ; sa revue visuelle ne vaut pas pour l’export actuel.
+- À titre d’historique, ses 118 pages avaient été parcourues sur 12 planches de contact à 75 ppp et huit pages à 150 ppp. `pdfinfo` indiquait `Tagged: no` ; l’accessibilité et la comparaison aux maquettes privées restent à faire.
+
+## Aperçu français AC-20 courant — revue du 30 septembre 2026
+
+- Fichiers locaux non suivis, produits depuis `main` au commit `ac7a706` : `output/pdf/gramps-fancy-book-ac20-current-preview.pdf` (SHA-256 `ede8c2c5ed3aa88cadcd09ce397d73971f7fc7f3b2b43fd62bb21ea93aded38a`) et `output/gramps-fancy-book-ac20-current-preview.zip` (SHA-256 `3f474d1a067f169d819438e0fd5664cd62063514f0664a5b041fbaa21f974bf1`).
+- Même jeu ramifié synthétique pour les deux formats : 122 personnes, 61 familles, 183 événements, 17 notes, 183 citations et 12 médias dérivés. Le PDF fait 459 319 octets et 97 pages A4 ; LuaHBTeX 1.24.0 l’a produit. Les données et les portraits en pixels sont fictifs.
+- Les 97 pages ont été parcourues sur dix planches de contact à 75 ppp. Les pages physiques 2, 13, 28, 48, 63, 80, 94 et 97 ont aussi été inspectées à 150 ppp. Aucun chevauchement ni texte tronqué n’a été observé ; les URL longues restent lisibles dans les pages examinées.
+- `pdfinfo` indique `Tagged: no` : l’accessibilité PDF reste à qualifier. La comparaison aux maquettes privées et aux principes de conception de la v1.1 reste à faire.
 
 ## Aperçu français du paramètre de langue — 29 septembre 2026
 
