@@ -30,10 +30,10 @@ Aucun texte coupé, chevauchement ni folio manquant n’est visible sur les page
 
 ## Aperçu AC-20 — revue du 29 septembre 2026
 
-- Fichier local non suivi : `gramps-fancy-book-ac20-parity-preview.pdf`, dans le worktree de validation `l85-build-validation` ; SHA-256 `f0482918f12faaca707d9d421906e0f79c8e7405369a83859b322b66a76047c1`.
+- Fichiers locaux non suivis : `output/pdf/gramps-fancy-book-ac20-parity-preview.pdf` et `output/gramps-fancy-book-ac20-parity-preview.zip` ; le PDF conserve le SHA-256 `f0482918f12faaca707d9d421906e0f79c8e7405369a83859b322b66a76047c1`.
 - Taille : 470 833 octets ; 118 pages A4 ; LuaTeX 1.24.0 ; jeu synthétique de 122 personnes.
-- Les pages physiques 1, 2, 4, 19, 40, 49, 75, 90, 115 et 118 ont été examinées à 110 ppp. Aucun chevauchement ni texte tronqué n’a été observé dans cet échantillon ; titres, sommaire, fiches, avis familiaux, annexe et index restent lisibles. La page 49 utilise un portrait synthétique uniquement destiné à la mise en page.
-- Ce PDF précède le paramètre de langue du livre et affiche donc les titres en anglais. `pdfinfo` indique `Tagged: no` ; revue complète, accessibilité et comparaison aux maquettes privées restent à faire.
+- Le 30 septembre, les 118 pages ont été parcourues sur 12 planches de contact rendues à 75 ppp. Les pages physiques 1, 2, 49, 75, 90, 100, 115 et 118 ont ensuite été examinées à 150 ppp. Aucun chevauchement ni texte visiblement tronqué n’a été observé ; couverture, sommaire, portraits, annexe et index tiennent dans les marges. Les URL se replient aux séparateurs, parfois après un point du nom d’hôte. La page 49 utilise un portrait synthétique uniquement destiné à la mise en page.
+- Ce PDF précède le paramètre de langue du livre et affiche donc les titres en anglais. `pdfinfo` indique `Tagged: no` ; l’accessibilité et la comparaison aux maquettes privées restent à faire.
 
 ## Aperçu français du paramètre de langue — 29 septembre 2026
 
