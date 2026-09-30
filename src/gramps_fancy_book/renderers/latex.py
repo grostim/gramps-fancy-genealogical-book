@@ -284,7 +284,7 @@ def render_latex(
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     language = model_book_language(model, default="en")
-    babel_language = "french" if language == "fr" else "english"
+    babel_language = "french" if language == "fr" else "american"
     pdf_language = "fr-FR" if language == "fr" else "en-US"
     french_list_labels = ""
     if language == "fr":
