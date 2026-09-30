@@ -121,13 +121,12 @@ def verify(pdf_path: Path, language: str = "fr") -> None:
         text=True,
         encoding="utf-8",
     ).stdout
-    structure_dump = subprocess.run(
+    structure_bytes = subprocess.run(
         ["pdfinfo", "-struct", str(pdf_path)],
         check=True,
         capture_output=True,
-        text=True,
-        encoding="utf-8",
     ).stdout
+    structure_dump = structure_bytes.decode("utf-8", errors="replace")
     if re.search(
         r"\bSpan\b[^\n]*\n\s*/TextDecorationType /LineThrough",
         structure_dump,
