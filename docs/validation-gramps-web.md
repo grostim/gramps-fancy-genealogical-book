@@ -15,6 +15,10 @@ An additional check of the public, unversioned `master` branch was performed on 
 
 These gaps prevent the current integration from satisfying T-01 and AC-22 on API 3.22.3. Reusing the Desktop report engine does not by itself provide compatibility: the server API filters the categories and file types it exposes.
 
+## Privacy behavior already implemented by the add-on
+
+The add-on declares `privacy_acknowledged` as an unchecked-by-default `BooleanOption` and resets it to false when loading prior option values. The report refuses to proceed without confirmation, before reading the database snapshot or creating an output. The registered report description and the option help text provide the warning. This establishes the add-on-side Desktop/CLI behavior; it does not prove that a Web UI can display, translate, or pass the checkbox correctly. The current API filters out the report before that step. See [`GrampsFancyBookOptions.py`](../gramps60/GrampsFancyBook/GrampsFancyBookOptions.py), [`GrampsFancyBook.py`](../gramps60/GrampsFancyBook/GrampsFancyBook.py), and [`GrampsFancyBook.gpr.py`](../gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py).
+
 ## Environment and scope
 
 This is an audit of versioned official source, not a running Gramps Web validation. The Mac has the Docker client but no Docker daemon, Docker Compose, Docker Desktop, Colima, or Podman; no Web instance was started.

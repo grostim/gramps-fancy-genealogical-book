@@ -15,6 +15,10 @@ Un contrôle complémentaire de la branche publique non versionnée `master` a �
 
 Ces écarts empêchent l’intégration actuelle de satisfaire T-01 et AC-22 dans l’API 3.22.3. Le fait que Gramps Web réutilise le moteur de rapports Desktop ne suffit pas : son API serveur filtre les catégories et les types de fichiers qu’elle expose.
 
+## Comportement de confidentialité déjà présent dans le plugin
+
+Le plugin déclare `privacy_acknowledged` comme `BooleanOption` décochée par défaut ; il remet aussi cette option à faux lors du chargement des options précédentes. Le rapport refuse de poursuivre si la confirmation manque, avant de lire l’instantané de la base ou de créer un résultat. La description enregistrée du rapport et l’aide de la case présentent l’avertissement. Ces éléments établissent le comportement côté extension Desktop/CLI ; ils ne prouvent pas que l’interface Web puisse afficher, traduire ou transmettre correctement la case. L’API actuelle filtre le rapport avant cette étape. Voir [`GrampsFancyBookOptions.py`](../gramps60/GrampsFancyBook/GrampsFancyBookOptions.py), [`GrampsFancyBook.py`](../gramps60/GrampsFancyBook/GrampsFancyBook.py) et [`GrampsFancyBook.gpr.py`](../gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py).
+
 ## Environnement et portée
 
 Il s’agit d’un audit des sources officielles versionnées, pas d’une recette Gramps Web en exécution. Le Mac dispose du client Docker, mais pas de démon Docker, Docker Compose, Docker Desktop, Colima ou Podman ; aucune instance Web n’a été lancée.
