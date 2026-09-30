@@ -355,6 +355,24 @@ def render_latex(
     )
 
     people_by_handle = {person.handle: person for person in model.people}
+    occurrences_by_id = (
+        {
+            occurrence.occurrence_id: occurrence
+            for part in (model.genealogy.ancestry, model.genealogy.descent)
+            for generation in part.generations
+            for occurrence in generation.occurrences
+        }
+        if model.genealogy is not None
+        else {}
+    )
+    family_sections_by_id = (
+        {
+            section.section_id: section
+            for section in model.genealogy.family_sections
+        }
+        if model.genealogy is not None
+        else {}
+    )
     citation_by_call = {
         call.call_id: entry
         for entry in (
@@ -374,12 +392,6 @@ def render_latex(
                 )
             )
         if model.genealogy.family_sections:
-            occurrences_by_id = {
-                occurrence.occurrence_id: occurrence
-                for part in (model.genealogy.ancestry, model.genealogy.descent)
-                for generation in part.generations
-                for occurrence in generation.occurrences
-            }
             document.append(
                 _render_family_sections(
                     model.genealogy.family_sections,
@@ -391,8 +403,20 @@ def render_latex(
             )
 
     if model.editorial_book is not None and model.editorial_book.family_notices:
-        document.append(_section_heading(label(model, "family_notices")))
+        first_notice = model.editorial_book.family_notices[0]
+        first_notice_context = _family_notice_context_label(
+            first_notice, family_sections_by_id, people_by_handle, model
+        )
+        document.append(
+            _section_heading(label(model, "family_notices"), first_notice_context)
+        )
         for notice in model.editorial_book.family_notices:
+            notice_context = _family_notice_context_label(
+                notice, family_sections_by_id, people_by_handle, model
+            )
+            document.append(
+                "\\markright{" + escape_latex_text(notice_context) + "}\n"
+            )
             document.append(
                 _render_family_notice(
                     notice,
@@ -405,8 +429,20 @@ def render_latex(
             )
 
     if model.editorial_book is not None and model.editorial_book.profiles:
-        document.append(_section_heading(label(model, "person_profiles")))
+        first_profile = model.editorial_book.profiles[0]
+        first_profile_context = _profile_context_label(
+            first_profile, occurrences_by_id, people_by_handle, model
+        )
+        document.append(
+            _section_heading(label(model, "person_profiles"), first_profile_context)
+        )
         for profile in model.editorial_book.profiles:
+            profile_context = _profile_context_label(
+                profile, occurrences_by_id, people_by_handle, model
+            )
+            document.append(
+                "\\markright{" + escape_latex_text(profile_context) + "}\n"
+            )
             document.append(
                 _render_profile(
                     profile,
@@ -1639,6 +1675,37 @@ def _running_context_label(
     if branches:
         label += " / " + label_for_language(language, "branch") + ": " + " + ".join(branches)
     return label
+
+
+def _family_notice_context_label(
+    notice: EditorialFamilyNotice,
+    family_sections_by_id: dict[str, FamilySection],
+    people_by_handle: dict[str, Person],
+    model: BookModel,
+) -> str:
+    section = family_sections_by_id.get(notice.primary_section_id)
+    if section is None:
+        return ""
+    return _running_context_label(
+        section.generation, section.branch_handles, people_by_handle, model
+    )
+
+
+def _profile_context_label(
+    profile: EditorialProfile,
+    occurrences_by_id: dict[str, PersonOccurrence],
+    people_by_handle: dict[str, Person],
+    model: BookModel,
+) -> str:
+    occurrence = occurrences_by_id.get(profile.primary_occurrence_id or "")
+    if occurrence is None:
+        return ""
+    return _running_context_label(
+        occurrence.generation,
+        occurrence.branch_handles,
+        people_by_handle,
+        model,
+    )
 
 
 def _section_heading(
