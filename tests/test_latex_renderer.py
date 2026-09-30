@@ -196,13 +196,13 @@ def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
     rendered = render_latex(model)
     target = "target-" + f"media-{cache_key}".encode().hex()
 
-    assert rendered.count(r"\includegraphics[width=0.6\linewidth]") == 1
+    assert rendered.startswith(r"\DocumentMetadata{lang=fr-FR,tagging=on}")
+    image_command = r"\includegraphics[width=0.6\linewidth,alt={Document partagé}]"
+    assert rendered.count(image_command) == 1
     assert rendered.count(f"\\hypertarget{{{target}}}") == 1
     assert rendered.count(f"\\hyperlink{{{target}}}") == 2
     assert "Voir la reproduction :" in rendered
-    assert rendered.index(r"\includegraphics[width=0.6\linewidth]") < rendered.index(
-        "Voir la reproduction :"
-    )
+    assert rendered.index(image_command) < rendered.index("Voir la reproduction :")
 
 
 def test_running_headers_include_section_generation_branch_and_page_number():

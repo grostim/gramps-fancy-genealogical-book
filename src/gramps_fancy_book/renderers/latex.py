@@ -23,6 +23,7 @@ from ..domain import (
     EditorialProfile,
     FamilySection,
     GenealogyPart,
+    Media,
     MediaReference,
     Note,
     Person,
@@ -134,10 +135,16 @@ def _render_cover(model: BookModel) -> str:
     )
     rendered_portraits = []
     for portrait in portraits[:2]:
-        graphic = _render_cover_portrait(portrait, model.media_artifacts)
+        person = people_by_handle.get(portrait.person_handle)
+        portrait_label = (person.name if person is not None else "") or portrait.person_handle
+        graphic = _render_cover_portrait(
+            portrait,
+            model.media_artifacts,
+            model.media,
+            model_book_language(model, default="en"),
+            portrait_label,
+        )
         if graphic:
-            person = people_by_handle.get(portrait.person_handle)
-            portrait_label = (person.name if person is not None else "") or portrait.person_handle
             rendered_portraits.append((graphic, portrait_label))
 
     if rendered_portraits:
@@ -194,6 +201,9 @@ def _render_front_matter(model: BookModel) -> str:
 def _render_cover_portrait(
     portrait: EditorialPortrait,
     artifacts: list[EditorialMediaArtifact],
+    media_by_handle: dict[str, Media],
+    language: str,
+    person_name: str,
 ) -> str:
     """Return a centered, circularly clipped image for one safe cover artifact."""
     media_ref = portrait.media_ref
@@ -228,15 +238,27 @@ def _render_cover_portrait(
         if dimensions_known and width > height
         else "width=3.2cm"
     )
+    alt = _media_alt_text(
+        media_ref,
+        portrait.caption,
+        media_by_handle,
+        language,
+        contextual_alt=(
+            f"{label_for_language(language, 'portrait_of')} {person_name}"
+            if person_name
+            else ""
+        ),
+    )
     graphic = (
         "\\includegraphics["
+        + "artifact,"
         + fit_dimension
         + "]{\\detokenize{"
         + path
         + "}}"
     )
     return (
-        "\\begin{tikzpicture}\n"
+        f"\\begin{{tikzpicture}}[alt={{{alt}}}]\n"
         "\\begin{scope}\n"
         "\\clip (0,0) circle (1.6cm);\n"
         f"\\node[inner sep=0pt] at (0,0) {{{graphic}}};\n"
@@ -253,7 +275,9 @@ def render_latex(
 ) -> str:
     language = model_book_language(model, default="en")
     babel_language = "french" if language == "fr" else "english"
+    pdf_language = "fr-FR" if language == "fr" else "en-US"
     document = [
+        f"\\DocumentMetadata{{lang={pdf_language},tagging=on}}\n"
         "\\documentclass[a4paper]{article}\n"
         f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
@@ -612,6 +636,7 @@ def _render_profile(
     person = people_by_handle.get(profile.person_handle)
     name = person.name if person is not None else ""
     name = name or profile.person_handle
+    language = model_book_language(model, default="en")
     output = []
     output.append(_latex_anchor(profile.profile_id, emitted_targets))
     output.append(f"\\subsection*{{{escape_latex_text(name)}}}\n")
@@ -621,6 +646,9 @@ def _render_profile(
                 profile.portrait,
                 profile.portrait.caption,
                 model.media_artifacts,
+                media_by_handle=model.media,
+                language=language,
+                contextual_alt=f"{label_for_language(language, 'portrait_of')} {name}",
                 width="0.75\\linewidth",
             )
         )
@@ -641,7 +669,8 @@ def _render_profile(
                     placement.caption,
                     model.media_artifacts,
                     emitted_targets,
-                    model_book_language(model, default="en"),
+                    language,
+                    model.media,
                 )
             )
         else:
@@ -767,6 +796,7 @@ def _render_family_notice(
     citation_numbers: dict[str, int],
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
+    language = model_book_language(model, default="en")
     family = model.families.get(notice.family_handle)
     title = _family_title(family, notice.family_handle, model)
     output = [
@@ -861,7 +891,8 @@ def _render_family_notice(
                         caption,
                         model.media_artifacts,
                         emitted_targets,
-                        model_book_language(model, default="en"),
+                        language,
+                        model.media,
                     )
                 )
             else:
@@ -879,6 +910,8 @@ def _render_family_notice(
                     reference,
                     caption,
                     model.media_artifacts,
+                    media_by_handle=model.media,
+                    language=language,
                     width="0.7\\linewidth",
                 )
             )
@@ -1049,6 +1082,7 @@ def _render_citation_appendix(
                             model.media_artifacts,
                             emitted_targets,
                             model_book_language(model, default="en"),
+                            model.media,
                         )
                     )
                 else:
@@ -1069,6 +1103,7 @@ def _render_citation_appendix(
                         model.media_artifacts,
                         emitted_targets,
                         model_book_language(model, default="en"),
+                        media_by_handle=model.media,
                         width="0.6\\linewidth",
                     )
                 )
@@ -1275,6 +1310,7 @@ def _render_featured_media(
     artifacts: list[EditorialMediaArtifact],
     emitted_targets: set[str],
     language: str,
+    media_by_handle: dict[str, Media],
 ) -> str:
     if placement.placement_id in emitted_targets:
         return _render_featured_media_link(placement, caption, emitted_targets, language)
@@ -1308,7 +1344,8 @@ def _render_featured_media(
         f"{anchor}\n"
         "\\begin{center}\n"
         f"\\includegraphics[width=0.92\\textwidth,height=0.80\\textheight,"
-        f"keepaspectratio]{{\\detokenize{{{path}}}}}\n"
+        f"alt={{{_media_alt_text(reference, caption, media_by_handle, language)}}},"
+        f"keepaspectratio]{{\\detokenize{{{path}}}}}\\par\n"
     ]
     if caption:
         output.append(f"{{\\small {escape_latex_text(caption)}}}\\par\n")
@@ -1322,6 +1359,9 @@ def _render_media_image(
     artifacts: list[EditorialMediaArtifact],
     *,
     width: str,
+    media_by_handle: dict[str, Media],
+    language: str,
+    contextual_alt: str = "",
 ) -> str:
     media_ref = reference.media_ref if isinstance(reference, EditorialPortrait) else reference
     artifact = _reproduced_media_artifact(media_ref, artifacts)
@@ -1330,9 +1370,17 @@ def _render_media_image(
     path = _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
     if path is None:
         return ""
+    alt = _media_alt_text(
+        media_ref,
+        caption,
+        media_by_handle,
+        language,
+        contextual_alt=contextual_alt,
+    )
     output = [
         "\\begin{center}\n"
-        f"\\includegraphics[width={width}]{{\\detokenize{{{path}}}}}\n"
+        f"\\includegraphics[width={width},alt={{{alt}}}]"
+        f"{{\\detokenize{{{path}}}}}\n"
         "\\par\n"
     ]
     if caption:
@@ -1348,6 +1396,7 @@ def _render_shared_media_reference(
     artifacts: list[EditorialMediaArtifact],
     emitted_targets: set[str],
     language: str,
+    media_by_handle: dict[str, Media],
     *,
     width: str,
 ) -> str:
@@ -1363,11 +1412,25 @@ def _render_shared_media_reference(
     )
     artifact = _reproduced_media_artifact(reference, artifacts)
     if len(same_asset_uses) < 2 or artifact is None or artifact.asset_path is None:
-        return _render_media_image(reference, caption, artifacts, width=width)
+        return _render_media_image(
+            reference,
+            caption,
+            artifacts,
+            width=width,
+            media_by_handle=media_by_handle,
+            language=language,
+        )
 
     path = _safe_latex_media_path(artifact.asset_path, artifact.cache_key)
     if path is None or artifact.cache_key is None:
-        return _render_media_image(reference, caption, artifacts, width=width)
+        return _render_media_image(
+            reference,
+            caption,
+            artifacts,
+            width=width,
+            media_by_handle=media_by_handle,
+            language=language,
+        )
 
     target_id = f"media-{artifact.cache_key}"
     if target_id in emitted_targets:
@@ -1383,7 +1446,33 @@ def _render_shared_media_reference(
         )
 
     anchor = _latex_anchor(target_id, emitted_targets)
-    return anchor + _render_media_image(reference, caption, artifacts, width=width)
+    return anchor + _render_media_image(
+        reference,
+        caption,
+        artifacts,
+        width=width,
+        media_by_handle=media_by_handle,
+        language=language,
+    )
+
+
+def _media_alt_text(
+    reference: EditorialPortrait | MediaReference,
+    caption: str,
+    media_by_handle: dict[str, Media],
+    language: str,
+    *,
+    contextual_alt: str = "",
+) -> str:
+    media_ref = reference.media_ref if isinstance(reference, EditorialPortrait) else reference
+    media = media_by_handle.get(media_ref.media_handle)
+    text = (
+        caption.strip()
+        or contextual_alt.strip()
+        or (media.description.strip() if media is not None else "")
+        or label_for_language(language, "document_image_no_description")
+    )
+    return escape_latex_text(text)
 
 
 def _reproduced_media_artifact(
