@@ -12,14 +12,14 @@
 
 Rendered at 110 dpi and visually inspected PDF pages 1–4, 10, 27, 55, 100, 121, 130, 187, and 193. The sample covers the cover, contents, genealogy sections, family notices, profiles, a portrait, the appendix, and the person index.
 
-No clipping, overlap, or missing page number was visible in the inspected pages. Section headings, contents entries, cross-reference text, source details, and the index fit within the page margins. Long URLs wrap across lines; some breaks occur inside a hostname, so their readability still needs review. The sample inspection does not establish that every page is free of layout defects.
+No clipping, overlap, or missing page number was visible in the inspected pages. Section headings, contents entries, cross-reference text, source details, and the index fit within the page margins. In this original 193-page sample, long URLs wrap across lines and some breaks occur inside a hostname; that sample has not had a separate readability review. The newer AC-20 review below covers URL readability in the current 118-page preview. The sample inspection does not establish that every page is free of layout defects.
 
 ## Limits and remaining work
 
 - Portraits in this benchmark are seeded random pixels from `scripts/benchmark_book.py`, not representative photographs. The image page is useful only to exercise image placement and cropping.
 - The cover and sparse genealogy pages reflect the synthetic dataset; they do not establish the final visual design.
 - `pdfinfo` reports `Tagged: no`; PDF accessibility has not been qualified.
-- The inspected pages have not been compared with the private reference mockups. Full-document review, long-link readability, screen-reader/accessibility checks, and comparison against v1.1 design principles remain open.
+- For this original sample, the inspected pages have not been compared with the private reference mockups, and long-link readability was not separately reviewed. The newer AC-20 preview below has a complete page-by-page visual pass and a targeted long-link review; screen-reader/accessibility checks and comparison against v1.1 design principles remain open.
 
 ## AC-20 preview — reviewed 29 September 2026
 
@@ -32,8 +32,16 @@ No clipping, overlap, or missing page number was visible in the inspected pages.
 
 - Local, untracked files built from the generation-navigation change: output/pdf/gramps-fancy-book-ac20-generation-navigation-preview-20260930.pdf (SHA-256 acd9dc0d1d84c6026775fa38c861405d52befa94e5e9abbfb20992f8f1057ea2) and output/gramps-fancy-book-ac20-generation-navigation-preview-20260930.zip (SHA-256 3f474d1a067f169d819438e0fd5664cd62063514f0664a5b041fbaa21f974bf1). The ZIP is byte-identical to the earlier archive.
 - The synthetic model has 122 people, 61 families, 183 events, 17 notes, 183 citations, and 12 derived media files. The PDF is 1,186,027 bytes and 118 A4 pages, compiled with LuaHBTeX 1.24.0. PDFinfo reports Tagged: yes.
-- All 118 pages were reviewed on ten contact sheets at 60 dpi. Physical pages 3 and 4, which show ancestry and descent generation navigation, were rendered at 110 dpi; pages 75 (documentary appendix) and 118 (person index) were then inspected at 150 dpi. No overlap or clipped text was visible in these views. Some long URLs break inside a hostname and still need a readability review. All 2,421 internal PDF links resolve, and the seven generation targets match the HTML anchors.
-- This targeted review does not replace a full visual review, a Gramps UI export, PDF accessibility qualification, or comparison with the private mockups. Six top-level HTML destinations do not have an identical stable PDF destination name; those paths still need review.
+- All 118 pages were reviewed on ten contact sheets at 60 dpi. Physical pages 3 and 4, which show ancestry and descent generation navigation, were rendered at 110 dpi; pages 75 (documentary appendix) and 118 (person index) were then inspected at 150 dpi. No overlap or clipped text was visible in these views. Some long URLs break inside a hostname; their readability and the section-anchor mapping were reviewed in the current preview documented below. All 2,421 internal PDF links resolve, and the seven generation targets match the HTML anchors.
+- This targeted review does not replace a Gramps UI export, PDF accessibility qualification, or comparison with the private mockups. When this preview was generated, six top-level HTML fragments lacked matching stable PDF destinations. PR #147 aligned the five content-section anchors; `main-content` remains an HTML-only skip link. The current fragment check is documented below.
+
+## Current AC-20 preview — shared HTML/PDF anchors and URL review — 30 September 2026
+
+- Local, untracked file: [`output/pdf/gramps-fancy-book-ac20-shared-section-anchor-preview-20260930.pdf`](../output/pdf/gramps-fancy-book-ac20-shared-section-anchor-preview-20260930.pdf); SHA-256 `237b92ac2b10f6c99ba5d5cabd3b04068da343e0d9b96a0de1f97bcc542beda2`.
+- The PDF is 1,187,795 bytes and 118 A4 pages, compiled with LuaHBTeX 1.24.0. `pdfinfo` reports a tagged PDF 2.0 with language `fr-FR`. The fictional branched dataset contains 122 people, 61 families, 183 events, 17 notes, 183 citations, and 12 derived media files.
+- All 118 pages were reviewed on ten contact sheets at 50 dpi; physical pages 3, 4, 75, and 118 were inspected at 140 dpi. No overlap or clipped text was observed. On page 75, some archive URLs wrap after a period in the hostname; review at 140 dpi confirmed they remain readable. The PDF link annotation retains the complete URI, including `https://archives.example.test/item/3`; document inspection found 732 external URI links.
+- The preview exposes 2,978 named PDF destinations. Of the 565 internal HTML fragments, all but `main-content` have a stable PDF destination; `main-content` is the HTML-only skip link. The five top-level content-section anchors now match between HTML and PDF, and all seven generation targets remain aligned.
+- Portraits are synthetic pixels. This visual review does not replace comparison with the private mockups, screen-reader reading-order checks, or PDF/UA qualification.
 
 ## French book-language preview — 29 September 2026
 
