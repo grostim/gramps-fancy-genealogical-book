@@ -43,6 +43,14 @@ No clipping, overlap, or missing page number was visible in the inspected pages.
 - The preview exposes 2,978 named PDF destinations. Of the 565 internal HTML fragments, all but `main-content` have a stable PDF destination; `main-content` is the HTML-only skip link. The five top-level content-section anchors now match between HTML and PDF, and all seven generation targets remain aligned.
 - Portraits are synthetic pixels. This visual review does not replace comparison with the private mockups, screen-reader reading-order checks, or PDF/UA qualification.
 
+## Targeted design review against v1.1 — 30 September 2026
+
+- The tagged AC-20 preview above was compared with the visual rules in specification v1.1 (§ 6.3, 7.1, 8, 9.3–9.4) and the criteria recorded in the [mockup review](reference/mockup-review.md). Private reference files were not copied into the versioned repository or this fixture.
+- On physical pages 1, 3, 4, 49, 75, and 118, A4 sizing and sans-serif text follow v1.1; `pdffonts` confirms Latin Modern Sans fonts. Running headers show the section and folio, with generation and branch added in genealogy sections. Page 4 places multiple generations together rather than forcing a page break for each. Physical pages 3, 4, 49, 75, and 118 remain readable when rendered in grayscale.
+- The synthetic `BOOK_FEATURED` photograph has a dedicated page (physical page 49), with its running header, folio, and caption. It preserves its landscape aspect ratio and leaves a large white area below the image; visual balance should be checked with representative portrait and landscape photographs. This fixture's cover is text-only because the reference couple has no portraits.
+- Physical page 75 groups several numbered documentary entries and their links; page 118 contains the person index and page references. No overlap or clipped text was visible in these views. The mockups' serif headings differ from this PDF, as expected because v1.1 requires sans-serif typography.
+- This review covers six representative pages, not every page at high resolution. It relies on the recorded mockup-review criteria rather than a side-by-side inspection of the private files. Screen-reader checks, PDF accessibility, and representative photographs remain to be qualified; no PDF/UA claim is made.
+
 ## French book-language preview — 29 September 2026
 
 - Local, untracked file: `output/pdf/gramps-fancy-book-language-preview-fr.pdf`; SHA-256 `cdcaafe8c417a06e989fa264e4dc14342fbaa38d135cd462b5e43f26cb70756d`.

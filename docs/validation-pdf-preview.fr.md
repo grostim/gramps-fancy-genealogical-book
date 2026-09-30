@@ -56,6 +56,14 @@ Aucun texte coupé, chevauchement ni folio manquant n’est visible sur les page
 - L’aperçu expose 2 978 destinations PDF nommées. Les 565 fragments HTML internes pointent vers une cible PDF stable, sauf `main-content`, le lien d’évitement propre à l’HTML. Les cinq ancres de sections de premier niveau correspondent maintenant entre HTML et PDF ; les sept cibles de génération restent alignées.
 - Les pixels des portraits restent synthétiques. Cette revue visuelle ne remplace pas la comparaison aux maquettes privées, le contrôle de l’ordre de lecture avec un lecteur d’écran ni la qualification PDF/UA.
 
+## Revue graphique ciblée selon la v1.1 — 30 septembre 2026
+
+- L’aperçu AC-20 balisé ci-dessus a été comparé aux règles graphiques de la spécification v1.1 (§ 6.3, 7.1, 8, 9.3–9.4) et aux critères consignés dans la [revue des maquettes](reference/mockup-review.md). Les maquettes privées restent non suivies par Git et ne sont pas intégrées à cette fixture.
+- Sur les pages physiques 1, 3, 4, 49, 75 et 118, le format A4 et le texte sans empattements sont conformes à la v1.1 ; `pdffonts` confirme les fontes Latin Modern Sans. Les en-têtes courants donnent la section et le folio, et ajoutent génération/branche dans les sections généalogiques. La page 4 laisse cohabiter plusieurs générations, sans saut systématique par génération. Les pages physiques 3, 4, 49, 75 et 118 restent lisibles après rendu en niveaux de gris.
+- La photographie synthétique `BOOK_FEATURED` dispose d’une page dédiée (page physique 49), avec son en-tête, son folio et sa légende. Son format paysage conserve ses proportions et laisse une grande zone blanche sous l’image ; l’équilibre visuel devra être confirmé avec des photographies réalistes de formats portrait et paysage. La couverture de cette fixture est uniquement typographique, car le couple de référence n’a pas de portraits.
+- La page 75 regroupe plusieurs entrées numérotées de l’annexe documentaire avec leurs liens ; la page 118 contient l’index des personnes et leurs renvois de page. Aucun chevauchement ni texte coupé n’a été observé dans ces vues. Le contraste avec les titres à empattements des maquettes suit la règle v1.1, qui impose une typographie sans empattements.
+- Cette revue porte sur six pages représentatives, pas sur toutes les pages en haute résolution. Elle s’appuie sur les décisions de la revue des maquettes plutôt que sur une comparaison côte à côte des fichiers privés. La vérification avec un lecteur d’écran, l’accessibilité PDF et l’essai avec des photographies représentatives restent à faire ; aucune conformité PDF/UA n’est revendiquée.
+
 ## Aperçu français du paramètre de langue — 29 septembre 2026
 
 - Fichier local non suivi : `output/pdf/gramps-fancy-book-language-preview-fr.pdf` ; SHA-256 `cdcaafe8c417a06e989fa264e4dc14342fbaa38d135cd462b5e43f26cb70756d`.
