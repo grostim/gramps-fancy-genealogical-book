@@ -4,7 +4,7 @@ Status as of 2026-09-30.
 
 ## Verified scope
 
-CI installs the `media` extra across the Python 3.10–3.13 matrix and exercises conversions with synthetic images and single- and multipage PDFs. The Gramps integration job targets Ubuntu 24.04, Python 3.12 and Gramps 6.0.8. The local run of this recipe uses Gramps Desktop 6.0.8 on macOS with an isolated database.
+CI installs the `media` extra across the Python 3.10–3.13 matrix and exercises conversions with synthetic images and single- and multipage PDFs. The Gramps integration matrix runs on Ubuntu 24.04 with Python 3.12 and Gramps 6.0.7 and 6.0.8. The local run of this recipe uses Gramps Desktop 6.0.8 on macOS with an isolated database.
 
 The native Gramps CLI recipe covers AC-13: a fictional image present on disk carries both `BOOK_EXCLUDE` and `BOOK_FEATURED`, and its reference carries a dedicated citation used nowhere else. The model export confirms that the source object retains both tags but receives no placement, editorial reference or derivative; its exclusive citation is omitted from the appendix. The ZIP includes only the two expected images for other media, with no AC-13 description or citation detail. This qualifies native XML import and CLI export; see the Desktop recipe below. Entering the tags through the GUI remains unverified.
 
@@ -44,7 +44,7 @@ The converters remain optional. The report still exports JSON and records a diag
 
 ## Limits
 
-CI qualifies dependency installation and media processing with Gramps 6.0.8 on Ubuntu 24.04. The AC-16 recipe also passes with the Gramps 6.0.8 macOS app executable when dependencies are added to the temporary profile. macOS and Windows installers, as well as isolated distributions such as Flatpak and Snap, still need validation against their own Python environments.
+CI qualifies dependency installation and media processing with Gramps 6.0.7 and 6.0.8 on Ubuntu 24.04. The AC-16 recipe also passes with the Gramps 6.0.8 macOS app executable when dependencies are added to the temporary profile. macOS and Windows installers, as well as isolated distributions such as Flatpak and Snap, still need validation against their own Python environments.
 
 Gramps Web runs reports on the server. Its dependencies must be installed in the server's Python environment or image, and no test server has been exercised here. This validation does not claim Gramps Web compatibility. A Web proof needs a disposable server instance with synthetic data.
 
