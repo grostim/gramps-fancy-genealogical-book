@@ -177,7 +177,9 @@ def test_tagged_french_lists_use_compatible_french_dash_labels():
 
     assert r"\renewcommand{\labelitemi}{\textemdash}" in french_output
     assert r"\renewcommand{\labelitemiv}{\textemdash}" in french_output
+    assert r"\usepackage[french]{babel}" in french_output
     assert r"\renewcommand{\labelitemi}{\textemdash}" not in english_output
+    assert r"\usepackage[american]{babel}" in english_output
     assert r"\begin{itemize}[item-label=\textemdash]" not in french_output
     assert r"\begin{itemize}" in english_output
 
