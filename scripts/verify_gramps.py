@@ -30,6 +30,11 @@ AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
 AC14_SHARED_PAGE = "AC14SHAREDREFERENCE"
 AC14_SECOND_PAGE = "AC14SECONDCITATION"
+AC18_UNCITED_EVENT = "AC18UNCITEDFACT"
+AC18_SOURCE_TITLE = "AC18SOURCEWITHOUTREPOSITORY"
+AC18_SOURCE_AUTHOR = "AC18AUTHORDETAIL"
+AC18_SOURCE_PUBLICATION = "AC18PUBLICATIONDETAIL"
+AC18_CITATION_PAGE = "AC18PAGE"
 
 
 def _qualified_name(root: ET.Element, name: str) -> str:
@@ -75,13 +80,28 @@ def _pdf_text(path: Path) -> str:
 
 
 def _pdf_citation_number(text: str, detail_marker: str) -> int:
+    entry = _pdf_citation_entry(text, detail_marker)
+    match = re.search(r"(?m)^\s*— \[(\d+)\] ", entry)
+    if match is None:
+        raise AssertionError(f"No citation heading precedes {detail_marker} in the PDF.")
+    return int(match.group(1))
+
+
+def _pdf_citation_entry(text: str, detail_marker: str) -> str:
     marker_position = text.index(detail_marker)
     headings = list(
-        re.finditer(r"(?m)^\s*— \[(\d+)\] ", text[:marker_position])
+        re.finditer(r"(?m)^\s*— \[(\d+)\] ", text)
     )
-    if not headings:
+    preceding = [heading for heading in headings if heading.start() < marker_position]
+    if not preceding:
         raise AssertionError(f"No citation heading precedes {detail_marker} in the PDF.")
-    return int(headings[-1].group(1))
+    current = preceding[-1]
+    following = next(
+        (heading for heading in headings if heading.start() > marker_position),
+        None,
+    )
+    end = following.start() if following is not None else len(text)
+    return text[current.start() : end]
 
 
 def _insert_event_attribute(root: ET.Element, event: ET.Element, name: str, value: str) -> None:
@@ -241,6 +261,97 @@ def _apply_ac14_shared_citation(root: ET.Element, events: ET.Element) -> None:
         if page is None:
             raise AssertionError(f"Native AC-14 citation {handle} has no page field.")
         page.text = pages_by_handle[handle]
+
+
+def _apply_ac18_missing_references(root: ET.Element, events: ET.Element) -> None:
+    """Keep an uncited marriage and add a detailed citation with no repository."""
+    event_items = _children(events, "event")
+
+    def event_type(event: ET.Element) -> str:
+        return _text_content(next(iter(_children(event, "type")), None))
+
+    marriage = next((item for item in event_items if event_type(item) == "Marriage"), None)
+    profession = next(
+        (item for item in event_items if event_type(item) == "Profession"),
+        None,
+    )
+    if marriage is None or profession is None:
+        raise AssertionError("Native AC-18 fixture needs Marriage and Profession events.")
+
+    marriage_citations = _children(marriage, "citationref")
+    if not marriage_citations:
+        raise AssertionError("Native AC-18 fixture needs an initially cited Marriage event.")
+    for reference in marriage_citations:
+        marriage.remove(reference)
+
+    description = next(iter(_children(marriage, "description")), None)
+    if description is None:
+        event_type_element = next(iter(_children(marriage, "type")), None)
+        description = ET.Element(_qualified_name(root, "description"))
+        insert_at = (
+            list(marriage).index(event_type_element) + 1
+            if event_type_element is not None
+            else 0
+        )
+        marriage.insert(insert_at, description)
+    description.text = AC18_UNCITED_EVENT
+
+    sources = _section(root, "sources")
+    source_items = _children(sources, "source")
+    original_source = next(
+        (item for item in source_items if item.get("id") == "S0001"),
+        None,
+    )
+    if original_source is None:
+        raise AssertionError("Native AC-18 fixture needs source S0001 to copy its details.")
+
+    source = copy.deepcopy(original_source)
+    source_handle = f"_{uuid.uuid4().hex}"
+    source_ids = {item.get("id") for item in source_items}
+    source_number = 1
+    while f"S{source_number:04d}" in source_ids:
+        source_number += 1
+    source.set("handle", source_handle)
+    source.set("id", f"S{source_number:04d}")
+    for child in list(source):
+        if child.tag.rsplit("}", 1)[-1] in {"reporef", "url"}:
+            source.remove(child)
+    source_fields = {
+        "stitle": AC18_SOURCE_TITLE,
+        "sauthor": AC18_SOURCE_AUTHOR,
+        "spubinfo": AC18_SOURCE_PUBLICATION,
+        "sabbrev": "",
+    }
+    for name, value in source_fields.items():
+        element = next((item for item in _children(source, name)), None)
+        if element is None:
+            element = ET.SubElement(source, _qualified_name(root, name))
+        element.text = value
+    sources.append(source)
+
+    citations = _section(root, "citations")
+    citation_items = _children(citations, "citation")
+    citation_ids = {item.get("id") for item in citation_items}
+    citation_number = 0
+    while f"C{citation_number:04d}" in citation_ids:
+        citation_number += 1
+    citation_handle = f"_{uuid.uuid4().hex}"
+    citation = ET.SubElement(
+        citations,
+        _qualified_name(root, "citation"),
+        {"handle": citation_handle, "change": "0", "id": f"C{citation_number:04d}"},
+    )
+    ET.SubElement(
+        citation,
+        _qualified_name(root, "sourceref"),
+        {"hlink": source_handle},
+    )
+    ET.SubElement(citation, _qualified_name(root, "page")).text = AC18_CITATION_PAGE
+    ET.SubElement(
+        profession,
+        _qualified_name(root, "citationref"),
+        {"hlink": citation_handle},
+    )
 
 
 def _section(root: ET.Element, name: str) -> ET.Element:
@@ -702,6 +813,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         tags,
         work,
     )
+    _apply_ac18_missing_references(root, events)
 
     tag_handle = f"_{uuid.uuid4().hex}"
     ET.SubElement(
@@ -951,7 +1063,7 @@ def verify(
         assert marriage_ref["role"] == "Family"
         assert model["events"][marriage_ref["event_handle"]]["type"] == "Marriage"
         assert len(model["citations"]) == 4
-        assert len(model["sources"]) == 2
+        assert len(model["sources"]) == 3
         source = next(iter(model["sources"].values()))
         assert len(source["repository_refs"]) == 1
         assert len(model["repositories"]) == 2
@@ -997,6 +1109,48 @@ def verify(
             if call["owner_type"] == "event"
         }
         assert {"Birth", "Profession"} <= shared_owner_event_types
+        ac18_citation = next(
+            citation
+            for citation in model["citations"].values()
+            if citation["page"] == AC18_CITATION_PAGE
+        )
+        ac18_source = model["sources"][ac18_citation["source_handle"]]
+        assert ac18_source["title"] == AC18_SOURCE_TITLE
+        assert ac18_source["author"] == AC18_SOURCE_AUTHOR
+        assert ac18_source["publication_info"] == AC18_SOURCE_PUBLICATION
+        assert ac18_source["repository_refs"] == []
+        ac18_entry = entries_by_citation[ac18_citation["handle"]]
+        assert ac18_entry["source_handle"] == ac18_source["handle"]
+        assert ac18_entry["repository_refs"] == []
+        assert any(
+            model["events"][call["owner_handle"]]["type"] == "Profession"
+            for call in ac18_entry["calls"]
+            if call["owner_type"] == "event"
+        )
+        uncited_marriage = next(
+            event
+            for event in model["events"].values()
+            if event["gramps_id"] == "E0002"
+        )
+        assert uncited_marriage["type"] == "Marriage"
+        assert uncited_marriage["description"] == AC18_UNCITED_EVENT
+        assert uncited_marriage["links"]["citations"] == []
+        family_notice = next(
+            notice
+            for notice in editorial_book["family_notices"]
+            if notice["family_handle"] == model["reference_family"]["handle"]
+        )
+        uncited_marriage_reference = next(
+            reference
+            for reference in family_notice["event_refs"]
+            if reference["event_handle"] == uncited_marriage["handle"]
+        )
+        assert uncited_marriage_reference["citations"] == []
+        assert family_notice["citation_call_ids"] == []
+        print(
+            "PASS: AC-18 native model publishes a Marriage without citations and "
+            "keeps a detailed citation whose source has no repository"
+        )
         print(
             "PASS: AC-14 native Gramps citations: Birth has two citations and "
             "Profession reuses the same citation as Birth"
@@ -1166,6 +1320,37 @@ def verify(
         assert f'href="#{second_entry_id}"' in profile_html
         assert html.count(AC14_SHARED_PAGE) == 1
         assert html.count(AC14_SECOND_PAGE) == 1
+        ac18_entry_match = re.search(
+            rf'<article class="citation-entry" id="{re.escape(ac18_entry["entry_id"])}">'
+            r"(.*?)</article>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert ac18_entry_match is not None
+        ac18_entry_html = ac18_entry_match.group(1)
+        for marker in (
+            AC18_SOURCE_TITLE,
+            AC18_SOURCE_AUTHOR,
+            AC18_SOURCE_PUBLICATION,
+            AC18_CITATION_PAGE,
+        ):
+            assert html.count(marker) == 1
+            assert marker in ac18_entry_html
+        assert all(
+            marker not in ac18_entry_html
+            for marker in ("Dépôt municipal fictif", "R0001", "3 E 12")
+        )
+        family_notice_match = re.search(
+            rf'<article class="family-notice" id="{re.escape(family_notice["notice_id"])}">'
+            r"(.*?)</article>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert family_notice_match is not None
+        family_notice_html = family_notice_match.group(1)
+        assert family_notice_html.count(AC18_UNCITED_EVENT) == 1
+        assert f'href="#{ac18_entry["entry_id"]}"' not in family_notice_html
+        assert 'class="citation-number"' not in family_notice_html
         assert len(
             [name for name in archive_names if name.startswith("media/")]
         ) == 2, archive_names
@@ -1185,6 +1370,10 @@ def verify(
         print(
             "PASS: AC-14 native HTML uses one appendix entry per Citation, "
             "reuses its number, and keeps both references on the two-citation fact"
+        )
+        print(
+            "PASS: AC-18 native HTML keeps the uncited Marriage visible and renders "
+            "source details without inventing a repository"
         )
         print(
             "PASS: AC-10 native BOOK_PUBLICATION note shared by person and family, "
@@ -1250,10 +1439,34 @@ def verify(
             destination = Path(pdf_output).expanduser()
             if not destination.is_absolute():
                 destination = Path.cwd() / destination
+            if destination.exists():
+                raise FileExistsError(
+                    f"Refusing to validate a pre-existing PDF as fresh output: {destination}"
+                )
+            destination.parent.mkdir(parents=True, exist_ok=True)
             log = report("F0001", destination, output_format="pdf", book_language="fr")
             if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
                 raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
             rendered_pdf_text = _pdf_text(destination)
+            assert rendered_pdf_text.count(AC18_UNCITED_EVENT) == 1
+            assert rendered_pdf_text.count(AC18_SOURCE_TITLE) == 1
+            assert rendered_pdf_text.count(AC18_SOURCE_AUTHOR) == 1
+            assert rendered_pdf_text.count(AC18_SOURCE_PUBLICATION) == 1
+            assert rendered_pdf_text.count(AC18_CITATION_PAGE) == 1
+            ac18_pdf_entry = _pdf_citation_entry(
+                rendered_pdf_text, AC18_CITATION_PAGE
+            )
+            for marker in (
+                AC18_SOURCE_TITLE,
+                AC18_SOURCE_AUTHOR,
+                AC18_SOURCE_PUBLICATION,
+                AC18_CITATION_PAGE,
+            ):
+                assert marker in ac18_pdf_entry
+            assert all(
+                marker not in ac18_pdf_entry
+                for marker in ("Dépôt municipal fictif", "R0001", "3 E 12")
+            )
             assert rendered_pdf_text.count(AC14_SHARED_PAGE) == 1
             assert rendered_pdf_text.count(AC14_SECOND_PAGE) == 1
             shared_pdf_number = _pdf_citation_number(
@@ -1284,6 +1497,10 @@ def verify(
             print(
                 "PASS: AC-14 PDF maps both citations to distinct numbers, "
                 "shows both on the two-citation profile, and reuses the shared entry"
+            )
+            print(
+                "PASS: AC-18 PDF keeps the uncited Marriage visible and renders "
+                "source details without inventing a repository"
             )
 
 
