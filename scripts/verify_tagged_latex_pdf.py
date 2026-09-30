@@ -88,6 +88,11 @@ def verify(pdf_path: Path) -> None:
             "The structure tree must contain an L list with at least two LI items; "
             f"found {role_counts}."
         )
+    if role_counts.get("/H3", 0) < 1 or role_counts.get("/H4", 0) > 0:
+        raise ValueError(
+            "Paragraph subheadings must map to H3 without skipping to H4; "
+            f"found {role_counts.get('/H3', 0)} H3 and {role_counts.get('/H4', 0)} H4."
+        )
 
     extraction = subprocess.run(
         ["pdftotext", "-layout", str(pdf_path), "-"],
@@ -107,6 +112,7 @@ def verify(pdf_path: Path) -> None:
     print(
         "French tagged PDF check passed: fr-FR and title metadata, PDF 2.0, "
         f"{role_counts['/L']} L list(s), {role_counts['/LI']} LI item(s), "
+        f"{role_counts['/H3']} H3 heading(s), "
         "em dash markers in the person index, and DisplayDocTitle."
     )
 
