@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 from html import escape
-from html.parser import HTMLParser
 from pathlib import PurePosixPath
 
 from ..book_language import model_book_language
 from ..domain import BookModel
 from .citation_numbers import citation_number_map
-from .html_notes import render_html_inline_note, render_html_note, safe_html_url
+from .html_notes import (
+    render_html_inline_note,
+    render_html_inline_text,
+    render_html_note,
+    safe_html_url,
+)
 from .labels import gramps_type_label, label, owner_label
 
 
@@ -1099,9 +1103,7 @@ def _book_title(model, editorial) -> str:
     fallback = label(model, "book_title_fallback")
     if note is None:
         return fallback
-    parser = _HTMLTextParser()
-    parser.feed(render_html_inline_note(note))
-    return "".join(parser.parts).strip() or fallback
+    return render_html_inline_text(note) or fallback
 
 
 def _render_cover_note(model, editorial, role) -> str:
@@ -1116,15 +1118,6 @@ def _book_note(model, editorial, role):
         if item.role == role:
             return model.notes.get(item.note_handle)
     return None
-
-
-class _HTMLTextParser(HTMLParser):
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.parts: list[str] = []
-
-    def handle_data(self, data: str) -> None:
-        self.parts.append(data)
 
 
 def _occurrences_by_id(genealogy):
