@@ -1472,6 +1472,7 @@ def _render_featured_media(
         "\\clearpage\n"
         "\\thispagestyle{fancy}\n"
         f"{anchor}\n"
+        "\\vspace*{\\fill}\n"
         "\\begin{center}\n"
         f"\\includegraphics[width=0.92\\textwidth,height=0.80\\textheight,"
         f"alt={{{_media_alt_text(reference, caption, media_by_handle, language)}}},"
@@ -1479,7 +1480,9 @@ def _render_featured_media(
     ]
     if caption:
         output.append(f"{{\\small {escape_latex_text(caption)}}}\\par\n")
-    output.extend(("\\end{center}\n", "\\clearpage\n"))
+    output.extend(
+        ("\\end{center}\n", "\\vspace*{\\fill}\n", "\\clearpage\n")
+    )
     return "".join(output)
 
 
