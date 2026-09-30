@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Check the French tagged-list contract in a renderer-produced PDF."""
+"""Check language and structure contracts in renderer-produced tagged PDFs."""
 
 from __future__ import annotations
 
+import argparse
 import re
 import subprocess
 import sys
@@ -51,13 +52,16 @@ def _count_roles(
         _count_roles(children, role_map, counts, figures_without_alt)
 
 
-def verify(pdf_path: Path) -> None:
+def verify(pdf_path: Path, language: str = "fr") -> None:
+    pdf_language = {"fr": "fr-FR", "en": "en-US"}[language]
     reader = PdfReader(pdf_path)
     catalog = reader.root_object
     if reader.pdf_header != "%PDF-2.0":
         raise ValueError(f"Expected a PDF 2.0 header; got {reader.pdf_header}.")
-    if str(catalog.get("/Lang")) != "fr-FR":
-        raise ValueError(f"Expected PDF language fr-FR; got {catalog.get('/Lang')}.")
+    if str(catalog.get("/Lang")) != pdf_language:
+        raise ValueError(
+            f"Expected PDF language {pdf_language}; got {catalog.get('/Lang')}."
+        )
 
     if reader.metadata is None or not reader.metadata.title:
         raise ValueError("The PDF document title is missing from its metadata.")
@@ -84,7 +88,7 @@ def verify(pdf_path: Path) -> None:
     if str(itemize_attributes.get("/O")) != "/List":
         raise ValueError("The itemize attribute class is not owned by List.")
     if str(itemize_attributes.get("/ListNumbering")) != "/Unordered":
-        raise ValueError("The French itemize class is not marked Unordered.")
+        raise ValueError("The itemize class is not marked Unordered.")
 
     role_map = {
         str(source): str(target)
@@ -117,31 +121,48 @@ def verify(pdf_path: Path) -> None:
         text=True,
         encoding="utf-8",
     ).stdout
-    index_start = extraction.rfind("Index des personnes")
+    index_label = "Index des personnes" if language == "fr" else "Person index"
+    index_start = extraction.rfind(index_label)
     if index_start < 0:
-        raise ValueError("The French person index is missing from extracted text.")
+        raise ValueError(f"The {language} person index is missing from extracted text.")
     person_index = extraction[index_start:]
     for name in ("Émile Exemple", "Jeanne Fictive"):
-        if re.search(rf"—\s+{re.escape(name)}", person_index) is None:
-            raise ValueError(f"The French em dash marker is missing before {name}.")
+        marker_pattern = (
+            rf"—\s+{re.escape(name)}" if language == "fr" else re.escape(name)
+        )
+        if re.search(marker_pattern, person_index) is None:
+            marker_description = (
+                "em dash marker" if language == "fr" else "index entry"
+            )
+            raise ValueError(
+                f"The {language} person index is missing the {marker_description} "
+                f"for {name}."
+            )
 
+    index_description = (
+        "em dash markers in the person index"
+        if language == "fr"
+        else "person index entries"
+    )
     print(
-        "French tagged PDF check passed: fr-FR and title metadata, PDF 2.0, "
+        f"{language} tagged PDF check passed: {pdf_language} and title metadata, "
+        "PDF 2.0, "
         f"{role_counts['/L']} L list(s), {role_counts['/LI']} LI item(s), "
         f"{role_counts['/H3']} H3 heading(s), "
         f"{role_counts['/Figure']} figure(s) with alternative text, "
-        "em dash markers in the person index, and DisplayDocTitle."
+        f"{index_description}, and DisplayDocTitle."
     )
 
 
 def main() -> int:
-    if len(sys.argv) != 2:
-        print(f"Usage: {Path(sys.argv[0]).name} PDF", file=sys.stderr)
-        return 2
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("pdf", type=Path)
+    parser.add_argument("--language", choices=("en", "fr"), default="fr")
+    args = parser.parse_args()
     try:
-        verify(Path(sys.argv[1]))
+        verify(args.pdf, args.language)
     except (OSError, ValueError, subprocess.SubprocessError) as error:
-        print(f"French tagged PDF check failed: {error}", file=sys.stderr)
+        print(f"Tagged PDF check failed: {error}", file=sys.stderr)
         return 1
     return 0
 
