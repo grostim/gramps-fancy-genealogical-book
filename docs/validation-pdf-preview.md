@@ -28,6 +28,13 @@ No clipping, overlap, or missing page number was visible in the inspected pages.
 - PDF pages 1, 2, 4, 19, 40, 49, 75, 90, 115, and 118 were rendered at 110 dpi and reviewed. No overlap or clipped text was visible in this sample; the cover, contents, profiles, family notices, appendix, and index remain readable. Page 49 uses a synthetic portrait for layout only.
 - This PDF predates the book-language parameter and therefore shows English headings. `pdfinfo` reports `Tagged: no`; full review, accessibility, and comparison with private mockups remain open.
 
+## AC-20 PDF generation navigation preview — 30 September 2026
+
+- Local, untracked files built from the generation-navigation change: output/pdf/gramps-fancy-book-ac20-generation-navigation-preview-20260930.pdf (SHA-256 acd9dc0d1d84c6026775fa38c861405d52befa94e5e9abbfb20992f8f1057ea2) and output/gramps-fancy-book-ac20-generation-navigation-preview-20260930.zip (SHA-256 3f474d1a067f169d819438e0fd5664cd62063514f0664a5b041fbaa21f974bf1). The ZIP is byte-identical to the earlier archive.
+- The synthetic model has 122 people, 61 families, 183 events, 17 notes, 183 citations, and 12 derived media files. The PDF is 1,186,027 bytes and 118 A4 pages, compiled with LuaHBTeX 1.24.0. PDFinfo reports Tagged: yes.
+- Physical pages 3 and 4, which show ancestry and descent generation navigation, were rendered at 110 dpi and inspected; no overlap or clipped text was visible. All 2,421 internal PDF links resolve to an existing destination. The seven generation-navigation targets match the HTML generation anchors.
+- This targeted review does not replace a full visual review, a Gramps UI export, PDF accessibility qualification, or comparison with the private mockups. Six top-level HTML destinations do not have an identical stable PDF destination name; those paths still need review.
+
 ## French book-language preview — 29 September 2026
 
 - Local, untracked file: `output/pdf/gramps-fancy-book-language-preview-fr.pdf`; SHA-256 `cdcaafe8c417a06e989fa264e4dc14342fbaa38d135cd462b5e43f26cb70756d`.
