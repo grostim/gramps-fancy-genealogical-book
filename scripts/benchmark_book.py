@@ -44,6 +44,9 @@ from gramps_fancy_book.renderers.html_archive import write_html_archive
 from gramps_fancy_book.renderers.latex import render_latex
 
 _MEDIA_INTERVAL = 10
+_DEFAULT_PORTRAIT_SIZE = (96, 72)
+_MAX_SYNTHETIC_PORTRAIT_PIXELS = 24_000_000
+_MAX_SYNTHETIC_MEDIA_SOURCE_BYTES = 256 * 1024 * 1024
 
 
 def synthetic_wide_snapshot(descendant_couples: int) -> Snapshot:
@@ -119,13 +122,15 @@ def synthetic_branching_snapshot(
     descendant_couples: int,
     *,
     include_media: bool = False,
+    portrait_size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE,
 ) -> tuple[Snapshot, dict[str, bytes]]:
     """Create a bounded binary descendant tree with editorial records.
 
     Each couple has up to two children, each child has a partner and a family
     record, and records include dated events, citations, repositories, places
     and publishable notes. When requested, every tenth person has a synthetic
-    portrait with a crop region.
+    portrait with a crop region. Portrait dimensions are configurable so the
+    media pipeline can also be measured with larger source images.
     """
     if descendant_couples < 0:
         raise ValueError("The number of descendant couples cannot be negative.")
@@ -255,7 +260,7 @@ def synthetic_branching_snapshot(
                 rectangle=(5 + index % 16, 5 + index % 12, 94, 94),
                 order=0,
             )
-            photo = _synthetic_photo(index)
+            photo = _synthetic_photo(index, portrait_size)
             media[media_handle] = Media(
                 handle=media_handle,
                 gramps_id=f"M{index:07d}",
@@ -413,7 +418,9 @@ def synthetic_branching_snapshot(
     )
 
 
-def _synthetic_photo(seed: int) -> bytes:
+def _synthetic_photo(
+    seed: int, size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE
+) -> bytes:
     try:
         from io import BytesIO
 
@@ -421,7 +428,7 @@ def _synthetic_photo(seed: int) -> bytes:
     except ImportError as error:
         raise RuntimeError("Portrait benchmarking requires the optional Pillow package.") from error
 
-    width, height = 96, 72
+    width, height = size
     pixels = random.Random(seed).randbytes(width * height * 3)
     with BytesIO() as stream:
         Image.frombytes("RGB", (width, height), pixels).save(stream, format="PNG")
@@ -482,6 +489,7 @@ def benchmark(
     *,
     shape: str,
     include_media: bool = False,
+    portrait_size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE,
     compile_pdf: bool = False,
 ) -> dict[str, object]:
     gc.collect()
@@ -495,6 +503,7 @@ def benchmark(
             snapshot, media_sources = synthetic_branching_snapshot(
                 descendant_couples,
                 include_media=include_media,
+                portrait_size=portrait_size,
             )
         else:
             raise ValueError(f"Unknown synthetic shape: {shape}")
@@ -594,6 +603,10 @@ def benchmark(
             "citations": len(model.citations),
             "sources": len(model.sources),
             "media": len(model.media),
+            "portrait_size": (
+                f"{portrait_size[0]}x{portrait_size[1]}" if include_media else None
+            ),
+            "media_source_bytes": sum(map(len, media_sources.values())),
             "family_notices": len(model.editorial_book.family_notices),
             "family_sections": len(model.genealogy.family_sections),
             "profiles": len(model.editorial_book.profiles),
@@ -618,6 +631,24 @@ def benchmark(
         return result
     finally:
         tracemalloc.stop()
+
+
+def _parse_portrait_size(value: str) -> tuple[int, int]:
+    try:
+        width, height = (int(part) for part in value.lower().split("x"))
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "portrait size must use WIDTHxHEIGHT with positive integers"
+        ) from error
+    if width <= 0 or height <= 0:
+        raise argparse.ArgumentTypeError(
+            "portrait dimensions must both be greater than zero"
+        )
+    if width * height > _MAX_SYNTHETIC_PORTRAIT_PIXELS:
+        raise argparse.ArgumentTypeError(
+            "a synthetic portrait cannot exceed 24 million pixels"
+        )
+    return width, height
 
 
 def main() -> None:
@@ -648,12 +679,23 @@ def main() -> None:
         help="prepare synthetic portrait crops (requires the optional Pillow package)",
     )
     parser.add_argument(
+        "--portrait-size",
+        type=_parse_portrait_size,
+        default=None,
+        metavar="WIDTHxHEIGHT",
+        help=(
+            "synthetic portrait dimensions in pixels (default: 96x72; "
+            "requires --with-media)"
+        ),
+    )
+    parser.add_argument(
         "--compile-pdf-for",
         type=int,
         metavar="N",
         help="also compile the branching case with N descendant couples through LuaLaTeX",
     )
     arguments = parser.parse_args()
+    portrait_size = arguments.portrait_size or _DEFAULT_PORTRAIT_SIZE
     if any(count < 0 for count in arguments.descendant_couples):
         parser.error("all descendant-couple counts must be non-negative")
     if arguments.repeat < 1:
@@ -665,6 +707,19 @@ def main() -> None:
         parser.error("--compile-pdf-for must be one of the requested descendant-couple counts")
     if arguments.with_media and arguments.shape == "wide":
         parser.error("--with-media requires --shape branching or --shape both")
+    if arguments.portrait_size is not None and not arguments.with_media:
+        parser.error("--portrait-size requires --with-media")
+    if arguments.with_media:
+        width, height = portrait_size
+        largest_source_set = max(
+            ((2 * count + 2) // _MEDIA_INTERVAL) * width * height * 3
+            for count in arguments.descendant_couples
+        )
+        if largest_source_set > _MAX_SYNTHETIC_MEDIA_SOURCE_BYTES:
+            parser.error(
+                "the requested portraits exceed the 256 MiB synthetic source-media "
+                "budget; reduce --descendant-couples or --portrait-size"
+            )
     if arguments.compile_pdf_for is not None and arguments.shape == "wide":
         parser.error("--compile-pdf-for requires --shape branching or --shape both")
 
@@ -681,6 +736,7 @@ def main() -> None:
                     count,
                     shape=shape,
                     include_media=arguments.with_media and shape == "branching",
+                    portrait_size=portrait_size,
                     compile_pdf=(
                         arguments.compile_pdf_for == count and shape == "branching"
                     ),
@@ -694,6 +750,11 @@ def main() -> None:
             "tracemalloc Python heap; excludes native allocations and subprocesses"
         ),
         "media_enabled": arguments.with_media,
+        "portrait_size": (
+            f"{portrait_size[0]}x{portrait_size[1]}"
+            if arguments.with_media
+            else None
+        ),
         "repetitions": arguments.repeat,
         "pdf_compile_case": (
             {
