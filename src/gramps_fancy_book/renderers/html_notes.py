@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from html import escape
+from html.parser import HTMLParser
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -76,6 +77,22 @@ def render_html_inline_note(note: Note) -> str:
         return _render_styled_text(text, ranges, formatted, inline=True)
 
     return _render_inline_blocks(_MARKDOWN(text), formatted=formatted)
+
+
+def render_html_inline_text(note: Note) -> str:
+    """Return the readable text of an inline note without its HTML markup."""
+    parser = _HTMLTextParser()
+    parser.feed(render_html_inline_note(note))
+    return "".join(parser.parts).strip()
+
+
+class _HTMLTextParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+
+    def handle_data(self, data: str) -> None:
+        self.parts.append(data)
 
 
 def _render_inline_blocks(tokens: Any, *, formatted: bool) -> str:

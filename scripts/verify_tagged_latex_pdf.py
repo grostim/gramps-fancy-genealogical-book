@@ -50,6 +50,16 @@ def verify(pdf_path: Path) -> None:
     if str(catalog.get("/Lang")) != "fr-FR":
         raise ValueError(f"Expected PDF language fr-FR; got {catalog.get('/Lang')}.")
 
+    if reader.metadata is None or not reader.metadata.title:
+        raise ValueError("The PDF document title is missing from its metadata.")
+    xmp_metadata = reader.xmp_metadata
+    if xmp_metadata is None or not xmp_metadata.dc_title:
+        raise ValueError("The PDF XMP metadata does not contain dc:title.")
+
+    viewer_preferences = catalog.get("/ViewerPreferences") or {}
+    if viewer_preferences.get("/DisplayDocTitle") != True:  # noqa: E712
+        raise ValueError("The PDF viewer preferences do not enable DisplayDocTitle.")
+
     mark_info = catalog.get("/MarkInfo")
     if mark_info is None or mark_info.get("/Marked") != True:  # noqa: E712
         raise ValueError("The PDF catalog does not declare marked content.")
@@ -95,9 +105,9 @@ def verify(pdf_path: Path) -> None:
             raise ValueError(f"The French em dash marker is missing before {name}.")
 
     print(
-        "French tagged PDF check passed: fr-FR metadata, PDF 2.0, "
+        "French tagged PDF check passed: fr-FR and title metadata, PDF 2.0, "
         f"{role_counts['/L']} L list(s), {role_counts['/LI']} LI item(s), "
-        "and em dash markers in the person index."
+        "em dash markers in the person index, and DisplayDocTitle."
     )
 
 

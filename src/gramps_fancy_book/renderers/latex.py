@@ -32,6 +32,7 @@ from ..domain import (
     Url,
 )
 from .citation_numbers import citation_number_map
+from .html_notes import render_html_inline_text
 from .labels import (
     gramps_type_label as _shared_gramps_type_label,
 )
@@ -67,6 +68,15 @@ def _front_matter_notes_by_role(model: BookModel) -> dict[str, Note]:
         for item in editorial_book.front_matter_notes
         if (note := model.notes.get(item.note_handle)) is not None
     }
+
+
+def _pdf_title(model: BookModel) -> str:
+    title_note = _front_matter_notes_by_role(model).get(BOOK_TITLE)
+    if title_note is not None:
+        title = render_html_inline_text(title_note)
+        if title:
+            return title
+    return label(model, "family_history")
 
 
 def _render_cover(model: BookModel) -> str:
@@ -291,6 +301,7 @@ def render_latex(
         "\\documentclass[a4paper]{article}\n"
         f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
+        f"\\hypersetup{{pdftitle={{{escape_latex_text(_pdf_title(model))}}},pdfdisplaydoctitle=true}}\n"
         "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
         "\\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}\n"
