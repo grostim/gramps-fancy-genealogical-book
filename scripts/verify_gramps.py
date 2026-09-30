@@ -25,6 +25,9 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
+AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
+AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
+AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
 
 
 def _qualified_name(root: ET.Element, name: str) -> str:
@@ -200,6 +203,9 @@ def _create_media_fixture(work: Path) -> None:
     media_path = work / "media" / "portrait.jpg"
     media_path.parent.mkdir(parents=True, exist_ok=True)
     Image.new("RGB", (10, 10), color=(90, 130, 170)).save(media_path, format="JPEG")
+    Image.new("RGB", (16, 12), color=(210, 40, 90)).save(
+        media_path.parent / AC13_MEDIA_FILENAME, format="PNG"
+    )
     for filename, page_count in (
         ("ac16-single-unlinked.pdf", 1),
         ("ac16-multipage-unlinked.pdf", 2),
@@ -240,6 +246,115 @@ def _blank_pdf(page_count: int) -> bytes:
         f"startxref\n{xref_offset}\n%%EOF\n".encode()
     )
     return bytes(document)
+
+
+def _add_ac13_excluded_featured_media(
+    root: ET.Element,
+    person: ET.Element,
+    objects: ET.Element,
+    citations: ET.Element,
+    tags: ET.Element,
+    work: Path,
+) -> None:
+    """Attach a synthetic, cited media object carrying both AC-13 tags."""
+    tag_handles: dict[str, str] = {}
+    for name in ("BOOK_EXCLUDE", "BOOK_FEATURED"):
+        tag = next(
+            (item for item in _children(tags, "tag") if item.get("name") == name),
+            None,
+        )
+        if tag is None:
+            handle = f"_{uuid.uuid4().hex}"
+            tag = ET.SubElement(
+                tags,
+                _qualified_name(root, "tag"),
+                {
+                    "handle": handle,
+                    "change": "0",
+                    "name": name,
+                    "color": "#000000000000",
+                    "priority": "0",
+                },
+            )
+        else:
+            handle = tag.get("handle", "")
+        if not handle:
+            raise AssertionError(f"Native Gramps tag {name} has no handle.")
+        tag_handles[name] = handle
+
+    citation_ids = {
+        item.get("id") for item in _children(citations, "citation")
+    }
+    citation_number = 1
+    while f"C{citation_number:04d}" in citation_ids:
+        citation_number += 1
+    source_reference = next(
+        (
+            child
+            for item in _children(citations, "citation")
+            for child in _children(item, "sourceref")
+        ),
+        None,
+    )
+    source_handle = source_reference.get("hlink") if source_reference is not None else None
+    if not source_handle:
+        raise AssertionError("Native Gramps fixture has no source for its AC-13 citation.")
+    citation_handle = f"_{uuid.uuid4().hex}"
+    citation = ET.SubElement(
+        citations,
+        _qualified_name(root, "citation"),
+        {
+            "handle": citation_handle,
+            "change": "0",
+            "id": f"C{citation_number:04d}",
+        },
+    )
+    ET.SubElement(
+        citation,
+        _qualified_name(root, "sourceref"),
+        {"hlink": source_handle},
+    )
+    ET.SubElement(citation, _qualified_name(root, "page")).text = AC13_CITATION_PAGE
+
+    media_ids = {item.get("id") for item in _children(objects, "object")}
+    media_number = 1
+    while f"M{media_number:04d}" in media_ids:
+        media_number += 1
+    media_handle = f"_{uuid.uuid4().hex}"
+    media = ET.SubElement(
+        objects,
+        _qualified_name(root, "object"),
+        {
+            "handle": media_handle,
+            "change": "0",
+            "id": f"M{media_number:04d}",
+        },
+    )
+    ET.SubElement(
+        media,
+        _qualified_name(root, "file"),
+        {
+            "src": str((work / "media" / AC13_MEDIA_FILENAME).resolve()),
+            "mime": "image/png",
+            "description": AC13_MEDIA_DESCRIPTION,
+        },
+    )
+    for name in ("BOOK_EXCLUDE", "BOOK_FEATURED"):
+        ET.SubElement(
+            media,
+            _qualified_name(root, "tagref"),
+            {"hlink": tag_handles[name]},
+        )
+    media_reference = ET.SubElement(
+        person,
+        _qualified_name(root, "objref"),
+        {"hlink": media_handle},
+    )
+    ET.SubElement(
+        media_reference,
+        _qualified_name(root, "citationref"),
+        {"hlink": citation_handle},
+    )
 
 
 def _install_mistune_dependency(plugins: Path) -> None:
@@ -491,6 +606,15 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
             {"hlink": pdf_handle},
         )
 
+    _add_ac13_excluded_featured_media(
+        root,
+        person,
+        objects,
+        citations,
+        tags,
+        work,
+    )
+
     tag_handle = f"_{uuid.uuid4().hex}"
     ET.SubElement(
         tags,
@@ -738,12 +862,12 @@ def verify(
         marriage_ref = model["reference_family"]["links"]["events"][0]
         assert marriage_ref["role"] == "Family"
         assert model["events"][marriage_ref["event_handle"]]["type"] == "Marriage"
-        assert len(model["citations"]) == 3
+        assert len(model["citations"]) == 4
         assert len(model["sources"]) == 2
         source = next(iter(model["sources"].values()))
         assert len(source["repository_refs"]) == 1
         assert len(model["repositories"]) == 2
-        assert len(model["media"]) == 5
+        assert len(model["media"]) == 6
         media = next(
             item
             for item in model["media"].values()
@@ -784,6 +908,49 @@ def verify(
             artifact["media_handle"]: artifact for artifact in model["media_artifacts"]
         }
         assert len(artifacts_by_handle) == 5, model["media_artifacts"]
+        ac13_media = media_by_name[AC13_MEDIA_FILENAME]
+        assert ac13_media["is_excluded"] is True
+        assert ac13_media["is_featured"] is True
+        ac13_media_handle = ac13_media["handle"]
+        assert ac13_media_handle not in artifacts_by_handle
+        ac13_citations = [
+            citation
+            for citation in model["citations"].values()
+            if citation["page"] == AC13_CITATION_PAGE
+        ]
+        assert len(ac13_citations) == 1, ac13_citations
+        ac13_citation_handle = ac13_citations[0]["handle"]
+        editorial_book = model["editorial_book"]
+        assert all(
+            placement["media_handle"] != ac13_media_handle
+            for placement in editorial_book["media_placements"]
+        )
+        editorial_media_refs = [
+            reference
+            for profile in editorial_book["profiles"]
+            for reference in profile["media_refs"]
+        ]
+        editorial_media_refs.extend(
+            reference
+            for notice in editorial_book["family_notices"]
+            for reference in notice["media_refs"]
+        )
+        editorial_media_refs.extend(
+            reference
+            for entry in editorial_book["citation_entries"]
+            for reference in entry["media_refs"]
+        )
+        assert all(
+            reference["media_handle"] != ac13_media_handle
+            for reference in editorial_media_refs
+        )
+        assert ac13_citation_handle not in {
+            entry["citation_handle"] for entry in editorial_book["citation_entries"]
+        }
+        print(
+            "PASS: AC-13 native Gramps media with BOOK_EXCLUDE + BOOK_FEATURED "
+            "and its exclusive citation are omitted from the editorial book"
+        )
         for filename, (expected_action, expected_pages, has_derivative) in (
             expected_pdf_actions.items()
         ):
@@ -834,6 +1001,11 @@ def verify(
             )
         ), "The HTML archive does not contain the native citation PDF references."
         assert "https://example.org/ac16-citation" in html
+        assert AC13_MEDIA_DESCRIPTION not in html
+        assert AC13_CITATION_PAGE not in html
+        assert len(
+            [name for name in archive_names if name.startswith("media/")]
+        ) == 2, archive_names
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(

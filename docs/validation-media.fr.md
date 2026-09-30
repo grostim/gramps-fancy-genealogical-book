@@ -6,6 +6,8 @@ Statut au 30 septembre 2026.
 
 La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécute les conversions sur des images synthétiques ainsi que sur des PDF mono- et multipages. Le test Gramps utilise Ubuntu 24.04, Python 3.12 et Gramps 6.0.8. L’intégration locale de cette recette utilise Gramps Desktop 6.0.8 sur macOS avec une base isolée.
 
+La recette native Gramps CLI couvre maintenant AC-13 : une image fictive présente sur disque porte à la fois `BOOK_EXCLUDE` et `BOOK_FEATURED`, et sa référence porte une citation dédiée qui n’est utilisée nulle part ailleurs. L’export du modèle confirme que l’objet conserve ses deux étiquettes dans la source, mais qu’il n’a ni placement, ni référence éditoriale, ni dérivé ; sa citation exclusive ne rejoint pas l’annexe. Le ZIP n’inclut que les deux images attendues pour les autres médias, et ne contient ni description ni détail de citation AC-13. Cela qualifie l’import XML natif et l’export CLI, pas encore la saisie ou l’export depuis l’interface graphique.
+
 La recette CLI Gramps crée quatre justificatifs PDF fictifs, les attache à des citations natives puis génère un ZIP HTML. Elle confirme les quatre règles AC-16 : un PDF monopage sans URL produit un PNG à 300 ppp ; un PDF multipage sans URL reste une référence ; les deux PDF avec URL restent des liens, qu’ils soient mono- ou multipages. Le ZIP contient le dérivé du premier document, les quatre notices et l’URL du dépôt associé aux deux citations liées. L’intégrité du ZIP est vérifiée. Le portrait fictif recadré et le remplacement coordonné du JSON et du dossier média restent également couverts.
 
 Le même scénario produit aussi un livre PDF avec `scripts/verify_gramps.py --pdf-output <fichier.pdf> --lualatex /Library/TeX/texbin/lualatex`. Gramps macOS 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF français A4 de neuf pages, conservé localement dans `output/pdf/gramps-fancy-book-ac16-pdf-cases.pdf` (sortie non versionnée). Les neuf pages ont été examinées à 110 ppp : aucune coupure ni superposition visible ; l’annexe garde le monopage sans URL comme image, les multipages comme références et l’URL du dépôt des deux citations liées. Les documents justificatifs sont des pages PDF synthétiques vides et les portraits sont fictifs ; cette revue ne qualifie pas encore la maquette finale ni l’accessibilité.
@@ -18,7 +20,7 @@ L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers o
 
 Le test `test_excluded_featured_media_is_absent_from_generated_books` construit un instantané Gramps fictif dont un média porte les deux étiquettes. Il vérifie que ses références éditoriales et les citations qui leur sont attachées ne créent ni notice ni dérivé média, que le ZIP contient uniquement `index.html`, et que la description ou une balise `<img>` n’apparaît ni dans le HTML ni dans le LaTeX. Le chemin source fictif n’existe pas : toute tentative de lecture ferait échouer le test.
 
-La recette native d’AC-13 reste à faire : appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif puis générer un livre HTML ZIP depuis l’interface Gramps. Pour AC-16, la boîte d’options GUI, des justificatifs réalistes et une comparaison aux maquettes restent à vérifier.
+Pour AC-13, l’export depuis l’interface Gramps reste à confirmer sur une base native fictive avec les deux étiquettes. Pour AC-16, la boîte d’options GUI, des justificatifs réalistes et une comparaison aux maquettes restent à vérifier.
 
 ## Installation
 
