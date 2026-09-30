@@ -8,6 +8,8 @@ La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécu
 
 La recette CLI Gramps crée quatre justificatifs PDF fictifs, les attache à des citations natives puis génère un ZIP HTML. Elle confirme les quatre règles AC-16 : un PDF monopage sans URL produit un PNG à 300 ppp ; un PDF multipage sans URL reste une référence ; les deux PDF avec URL restent des liens, qu’ils soient mono- ou multipages. Le ZIP contient le dérivé du premier document, les quatre notices et l’URL du dépôt associé aux deux citations liées. L’intégrité du ZIP est vérifiée. Le portrait fictif recadré et le remplacement coordonné du JSON et du dossier média restent également couverts.
 
+Le même scénario produit aussi un livre PDF avec `scripts/verify_gramps.py --pdf-output <fichier.pdf> --lualatex /Library/TeX/texbin/lualatex`. Gramps macOS 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF français A4 de neuf pages, conservé localement dans `output/pdf/gramps-fancy-book-ac16-pdf-cases.pdf` (sortie non versionnée). Les neuf pages ont été examinées à 110 ppp : aucune coupure ni superposition visible ; l’annexe garde le monopage sans URL comme image, les multipages comme références et l’URL du dépôt des deux citations liées. Les documents justificatifs sont des pages PDF synthétiques vides et les portraits sont fictifs ; cette revue ne qualifie pas encore la maquette finale ni l’accessibilité.
+
 Pour que Gramps CLI utilise les mêmes dépendances optionnelles que l’environnement de recette, `scripts/verify_gramps.py` copie Pillow et PDFium dans le profil Gramps temporaire. Cette manipulation est isolée au test ; elle ne configure pas l’installation Gramps Desktop de l’utilisateur.
 
 L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers originaux ne sont pas modifiés ; le portrait et les quatre PDF existent uniquement dans le répertoire temporaire du test.
@@ -16,7 +18,7 @@ L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers o
 
 Le test `test_excluded_featured_media_is_absent_from_generated_books` construit un instantané Gramps fictif dont un média porte les deux étiquettes. Il vérifie que ses références éditoriales et les citations qui leur sont attachées ne créent ni notice ni dérivé média, que le ZIP contient uniquement `index.html`, et que la description ou une balise `<img>` n’apparaît ni dans le HTML ni dans le LaTeX. Le chemin source fictif n’existe pas : toute tentative de lecture ferait échouer le test.
 
-La recette native d’AC-13 reste à faire : appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif puis générer un livre HTML ZIP depuis l’interface Gramps. AC-16 est vérifié au niveau du modèle et du ZIP HTML ; un PDF final qui contient ces quatre variantes et une revue graphique dans l’application restent à produire.
+La recette native d’AC-13 reste à faire : appliquer simultanément `BOOK_EXCLUDE` et `BOOK_FEATURED` à un média fictif puis générer un livre HTML ZIP depuis l’interface Gramps. Pour AC-16, la boîte d’options GUI, des justificatifs réalistes et une comparaison aux maquettes restent à vérifier.
 
 ## Installation
 

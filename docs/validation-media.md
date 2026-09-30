@@ -8,6 +8,8 @@ CI installs the `media` extra across the Python 3.10–3.13 matrix and exercises
 
 The Gramps CLI recipe creates four fictional PDF documents, attaches them to native citations, then generates an HTML ZIP. It confirms all four AC-16 rules: an unlinked single-page PDF produces a 300-DPI PNG; an unlinked multipage PDF remains a reference; both PDFs with a URL remain links, regardless of page count. The ZIP contains the first document's derivative, all four references and the repository URL associated with the two linked citations. ZIP integrity is checked. The cropped synthetic portrait and coordinated replacement of the JSON file and media directory are also covered.
 
+The same scenario can also produce a PDF book with `scripts/verify_gramps.py --pdf-output <file.pdf> --lualatex /Library/TeX/texbin/lualatex`. Gramps 6.0.8 on macOS and LuaHBTeX 1.24.0 produced a nine-page French A4 PDF, kept locally at `output/pdf/gramps-fancy-book-ac16-pdf-cases.pdf` (an unversioned output). All nine pages were reviewed at 110 DPI: no visible clipping or overlap; the appendix renders the unlinked single-page document as an image, retains multipage documents as references, and includes the repository URL for the two linked citations. The source PDFs are blank synthetic pages and the portraits are fictional; this review does not qualify the final design or accessibility.
+
 To make the optional dependencies available to Gramps CLI during the recipe, `scripts/verify_gramps.py` copies Pillow and PDFium into its temporary Gramps profile. This is test-only setup; it does not configure a user's Gramps Desktop installation.
 
 The integration uses no real family data. Source files are unchanged; the portrait and four PDFs exist only in the test's temporary directory.
@@ -16,7 +18,7 @@ The integration uses no real family data. Source files are unchanged; the portra
 
 The `test_excluded_featured_media_is_absent_from_generated_books` test builds a synthetic Gramps snapshot with one media record carrying both tags. It checks that its editorial references and attached citations create no placement or derivative, the ZIP contains only `index.html`, and neither the description nor an `<img>` appears in HTML or LaTeX. The fictional source path does not exist, so an attempted read would fail the test.
 
-The native AC-13 recipe remains outstanding: apply both `BOOK_EXCLUDE` and `BOOK_FEATURED` to a fictional media object, then generate an HTML ZIP through the Gramps UI. AC-16 is verified at the model and HTML ZIP levels; a final PDF containing all four variants and an in-app visual review remain to be produced.
+The native AC-13 recipe remains outstanding: apply both `BOOK_EXCLUDE` and `BOOK_FEATURED` to a fictional media object, then generate an HTML ZIP through the Gramps UI. For AC-16, the GUI options, realistic source documents and comparison with the design mockups remain to be checked.
 
 ## Installation
 
