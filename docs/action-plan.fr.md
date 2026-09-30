@@ -56,7 +56,7 @@ La compilation Python et la construction de l’archive ont été réalisées pr
 
 Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 peuvent avancer conjointement. Les deux rendus peuvent être développés indépendamment une fois le modèle éditorial stabilisé. La documentation et les contrôles accompagnent chaque lot.
 
-**État au 29 septembre 2026 :** le socle L0–L3 et le parcours L4 sont livrés ; la recette fonctionnelle L4 reste partielle. Les scénarios AC-01, AC-03 à AC-09 et l’intégration complète du modèle dans les rendus doivent encore être qualifiés. Les livraisons L5–L7 et la progression L8 sont détaillées au § 8.
+**État au 30 septembre 2026 :** le socle L0–L3 et le parcours L4 sont livrés ; la recette fonctionnelle L4 reste partielle. Les scénarios AC-01, AC-03 à AC-09 et l’intégration complète du modèle dans les rendus doivent encore être qualifiés. L’export GUI du paquet courant en ZIP HTML et en PDF vient d’être validé sur macOS avec une fixture fictive ; la consultation hors ligne, l’accessibilité et les essais sur d’autres versions restent à faire. Les livraisons L5–L7 et la progression L8 sont détaillées au § 8.
 
 ## 4. Lots détaillés
 
@@ -175,6 +175,8 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 5. L7.5 — Vérifier lisibilité sur plusieurs tailles d’écran, navigation clavier et textes alternatifs des images.
 
 **Critères de sortie :** après extraction du ZIP, les pages, styles et images fonctionnent localement ; tous les liens internes attendus sont valides. Les données et citations publiées correspondent au PDF, avec les adaptations de navigation propres au support.
+
+**État au 30 septembre 2026 :** l’archive ZIP et le PDF ont été générés depuis le paquet courant dans Gramps Desktop 6.0.8 sur macOS 27.0 arm64, avec le profil fictif isolé. Le PDF de neuf pages a été rendu et relu visuellement ; les liens du ZIP sont résolus à l’analyse statique. Il reste à ouvrir l’extraction hors ligne, vérifier l’accessibilité clavier/lecteur d’écran, couvrir les cas AC-10/13/15 depuis l’interface et comparer les rendus aux maquettes.
 
 ### L8 — Recette, documentation et distribution
 
