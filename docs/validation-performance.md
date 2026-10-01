@@ -297,3 +297,9 @@ A temporary variant emitted `\markright` in family connections, notices, and pro
 Both extractions contain 215,988 characters, but running context headers and the pagination of several entries differ, including physical pages 13–16 and 30–31. The temporary preview was removed and the source change was reverted.
 
 Each timing comes from one run, and the runs are not directly comparable: they used CPython 3.14.0 and 3.13.7, respectively. The result establishes no performance gain and does not preserve the current output. See the [raw data](validation-latex-running-header-marks-20261001.json); the latest accepted preview remains the [compact-notice PDF](../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf).
+
+### LaTeX escaping with a translation table — N=1,000 — 1 October 2026
+
+`escape_latex_text` now uses `str.translate` with a precomputed translation table instead of a character-by-character Python generator. On the branching fixture with 1,000 descendant unions, 2,002 people, and 200 synthetic portraits, three source-generation measurements fall from a 2.202271 s median to 2.034793 s (−7.61%, or −0.167478 s). Both variants use CPython 3.14.0 on the same Mac, with three repetitions each.
+
+The generated LaTeX source is byte-identical: 7,735,845 bytes and SHA-256 `26cc3b3a77946413b08f19ee058de3ba451d7e359e40c32eb6167c94c05950e9` before and after. The PDF compile was not repeated: this improves only Python source generation and does not reduce the dominant LuaLaTeX work. The N=1,000 timeout remains unresolved. See the [raw measurements](validation-latex-text-translation-20261001.json).

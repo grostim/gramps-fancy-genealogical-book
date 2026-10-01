@@ -1,0 +1,44 @@
+{
+  "title": "LaTeX text escaping with a precomputed translation table",
+  "measured_at": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.14.0"
+  },
+  "benchmark_command": "scripts/benchmark_book.py --shape branching --descendant-couples 1000 --with-media --repeat 3",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "family_notices": 1001,
+    "person_profiles": 2002,
+    "synthetic_portraits": 200,
+    "portrait_pixels": "96x72"
+  },
+  "change": "Use str.translate with a precomputed translation table in escape_latex_text.",
+  "baseline": {
+    "latex_generation_seconds": [2.215537, 2.186615, 2.202271],
+    "median_seconds": 2.202271,
+    "latex_bytes": 7735845,
+    "source_sha256": "26cc3b3a77946413b08f19ee058de3ba451d7e359e40c32eb6167c94c05950e9"
+  },
+  "candidate": {
+    "latex_generation_seconds": [2.034793, 2.028898, 2.054027],
+    "median_seconds": 2.034793,
+    "latex_bytes": 7735845,
+    "source_sha256": "26cc3b3a77946413b08f19ee058de3ba451d7e359e40c32eb6167c94c05950e9"
+  },
+  "comparison": {
+    "median_seconds_delta": -0.167478,
+    "median_percent_delta": -7.61,
+    "source_byte_identical": true,
+    "pdf_compile_repeated": false,
+    "limitations": [
+      "Three source-generation repetitions per variant.",
+      "This measurement does not cover the LuaLaTeX compile, which remains the dominant cost."
+    ]
+  }
+}
