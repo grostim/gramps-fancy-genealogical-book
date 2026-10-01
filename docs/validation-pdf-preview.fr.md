@@ -1,5 +1,13 @@
 # Revue de l’aperçu PDF synthétique
 
+## Renvoi direct pour une citation — 1er octobre 2026
+
+- Aperçu local : `output/pdf/gramps-fancy-book-single-call-citation-preview-20261001.pdf` ; SHA-256 `3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578`.
+- La fixture ramifiée fictive contient 202 personnes, 101 familles, 303 événements, 20 portraits et 303 citations. LuaHBTeX 1.24.0 a produit un PDF A4 balisé de 193 pages et 1 583 991 octets. Les données et portraits sont fictifs.
+- La page physique 123 a été rendue à 130 ppp et examinée. Les citations utilisées une fois affichent un renvoi localisé « Voir » vers la fiche ou la notice familiale associée ; les citations ayant plusieurs appels gardent une liste à puces. Aucun chevauchement ni texte coupé n’a été observé sur cette page.
+- Les 1 805 cibles nommées du livre sont conservées. L’arbre compte 696 éléments `L`, 1 578 `LI` et 2 669 `Link`, contre respectivement 972, 1 854 et 2 669 dans l’aperçu précédent.
+- Cette revue ciblée ne couvre pas toutes les pages en haute résolution, des données Gramps réelles, un lecteur d’écran, l’export depuis Desktop ou la conformité PDF/UA. Aucune conformité PDF/UA n’est revendiquée.
+
 ## Filiation regroupée — 1er octobre 2026
 
 - Aperçu local non suivi : `output/pdf/gramps-fancy-book-parentage-grouping-preview-20261001.pdf` ; SHA-256 `69da39763be7ff34901663cdddf89fa81db178b0741f467b78050b6e4a0642d2`.

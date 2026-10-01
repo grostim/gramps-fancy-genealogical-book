@@ -234,3 +234,17 @@ La section PDF des liens familiaux affiche maintenant chaque enfant une seule fo
 | Compilation PDF N=1 000 | `timeout` après 122,715 s | `timeout` après 122,718 s | Pas d’amélioration mesurable ; aucun PDF produit |
 
 Le PDF regroupé N=100 est balisé, fait 195 pages et pèse 1 628 695 octets. Poppler compte 2 669 éléments Link dans l’arbre, contre 2 869 auparavant ; les 1 805 cibles nommées propres au livre sont toutes présentes. Les pages 12–13 montrent les filiations regroupées ; le type de relation peut passer seul sur la ligne suivante, où il reste lisible. La source N=1 000 et sa compilation montrent que cette réduction ne résout pas le dépassement de délai des livres longs. L’aperçu local se trouve dans `output/pdf/gramps-fancy-book-parentage-grouping-preview-20261001.pdf` ; les notices et portraits sont fictifs. Il s’agit de mesures ciblées, et non d’une qualification de performance sur trois exécutions.
+
+### Renvoi direct pour les citations à un seul appel — 1er octobre 2026
+
+Dans l’annexe documentaire, une citation ayant un seul appel utilise maintenant un paragraphe « Voir »/« See » localisé et conserve le lien cliquable vers sa fiche ou sa notice familiale. Les citations ayant plusieurs appels gardent une liste. Chaque ancre d’appel est conservée ; le changement supprime la liste imbriquée à un seul élément, fréquente dans le jeu ramifié.
+
+| Cas | Aperçu avec filiations regroupées | Renvoi direct | Écart |
+| --- | ---: | ---: | ---: |
+| Source LaTeX N=100 | 801 556 octets | 794 104 octets | −7 452 octets (−0,93 %) |
+| Compilation PDF complète N=100 | médiane 111,174 s sur deux exécutions | 101,429 s, une exécution | −8,8 % par rapport à la médiane précédente ; mesure ciblée |
+| PDF final N=100 | 1 628 695 octets | 1 583 991 octets | −44 704 octets (−2,74 %) |
+| Pages PDF | 195 | 193 | −2 |
+| Éléments structurels `L` / `LI` / `Link` | 972 / 1 854 / 2 669 | 696 / 1 578 / 2 669 | −276 listes et éléments de liste ; liens inchangés |
+
+Le dernier PDF balisé conserve les 1 805 cibles nommées du livre. La page physique 123 a été rendue à 130 ppp et examinée : les appels uniques sont présentés en paragraphes « Voir », tandis que les appels multiples restent en puces ; aucune coupure ni superposition n’a été observée sur cette page ciblée. La comparaison de durée porte sur une exécution contre la médiane des deux précédentes et ne constitue pas une estimation stable. La source et la compilation PDF complète N=1 000 n’ont pas encore été remesurées après ce changement. L’aperçu PDF local (`../output/pdf/gramps-fancy-book-single-call-citation-preview-20261001.pdf`) contient des notices et portraits fictifs ; SHA-256 `3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578`.

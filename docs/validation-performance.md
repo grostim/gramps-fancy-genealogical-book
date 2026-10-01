@@ -222,3 +222,17 @@ The PDF family-connection section now lists each child once and groups that chil
 | N=1,000 full PDF compile | `timeout` at 122.715 s | `timeout` at 122.718 s | No measurable improvement; neither produced a PDF |
 
 The grouped N=100 PDF is tagged, 195 pages, and 1,628,695 bytes. Poppler reports 2,669 Link structure elements, down from 2,869, and all 1,805 named book targets are present. Pages 12–13 show the grouped parentage; the relationship type can wrap onto its own continuation line but remains readable. The N=1,000 source and compile result show that this reduction alone does not resolve the large-book timeout. The local preview is `output/pdf/gramps-fancy-book-parentage-grouping-preview-20261001.pdf`; its records and synthetic portraits are fictitious. These are targeted measurements, not a three-run performance qualification.
+
+### Inline reference for single-call citations — 1 October 2026
+
+In the documentary appendix, a citation with one call now uses a localized “See”/“Voir” paragraph and keeps the clickable link to its profile or family notice. Citations with multiple calls remain lists. This retains every call anchor and avoids a one-item nested list for the common one-call case.
+
+| Case | Parentage-grouping preview | Single-call reference | Change |
+| --- | ---: | ---: | ---: |
+| N=100 source LaTeX | 801,556 bytes | 794,104 bytes | −7,452 bytes (−0.93%) |
+| N=100 full PDF compile | 111.174 s median from two runs | 101.429 s, one run | −8.8% versus the prior median; targeted only |
+| N=100 final PDF | 1,628,695 bytes | 1,583,991 bytes | −44,704 bytes (−2.74%) |
+| PDF pages | 195 | 193 | −2 |
+| Structure elements `L` / `LI` / `Link` | 972 / 1,854 / 2,669 | 696 / 1,578 / 2,669 | −276 lists and list items; links unchanged |
+
+The latest tagged PDF retains all 1,805 named book targets. Physical page 123 was rendered at 130 dpi and reviewed: single-call references read as “See/Voir” paragraphs, while multiple calls remain bulleted; no clipping or overlap was visible in that targeted page. The compile comparison uses one run against the preceding two-run median and is not a stable timing estimate. The N=1,000 source and full PDF compilation have not yet been repeated for this change. The local preview at `../output/pdf/gramps-fancy-book-single-call-citation-preview-20261001.pdf` contains fictitious records and portraits; SHA-256 `3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578`.
