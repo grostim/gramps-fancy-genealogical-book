@@ -1,5 +1,13 @@
 # Synthetic PDF preview review
 
+## Single-item profile sections — 1 October 2026
+
+- Local preview: `output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf`; SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`.
+- The synthetic branching fixture contains 202 people, 101 families, 303 events, 20 portraits and 303 citations. LuaHBTeX 1.24.0 produced a tagged 177-page A4 PDF of 1,470,734 bytes. Records and portraits are fictional.
+- Physical pages 57–58 were rendered at 130 dpi and reviewed. Single events and source references appear as compact rows beneath their headings. The portrait and its caption remain centered; no clipping or overlap was visible on these pages.
+- The candidate retains the exact 1,805 named book destinations, 3,073 link annotations and 2,669 `Link` structure elements from the previous preview. It has 292 `L` and 1,174 `LI` elements, down by 404 each.
+- The review is targeted and does not cover every page at high resolution, real Gramps data, a screen reader, Desktop export, or PDF/UA conformance. No PDF/UA conformance is claimed.
+
 ## Single-call citation reference — 1 October 2026
 
 - Local preview: `output/pdf/gramps-fancy-book-single-call-citation-preview-20261001.pdf`; SHA-256 `3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578`.

@@ -236,3 +236,16 @@ In the documentary appendix, a citation with one call now uses a localized “Se
 | Structure elements `L` / `LI` / `Link` | 972 / 1,854 / 2,669 | 696 / 1,578 / 2,669 | −276 lists and list items; links unchanged |
 
 The latest tagged PDF retains all 1,805 named book targets. Physical page 123 was rendered at 130 dpi and reviewed: single-call references read as “See/Voir” paragraphs, while multiple calls remain bulleted; no clipping or overlap was visible in that targeted page. The compile comparison uses one run against the preceding two-run median and is not a stable timing estimate. The N=1,000 source and full PDF compilation have not yet been repeated for this change. The local preview at `../output/pdf/gramps-fancy-book-single-call-citation-preview-20261001.pdf` contains fictitious records and portraits; SHA-256 `3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578`.
+
+### Single-item person-profile sections — 1 October 2026
+
+For a profile with exactly one event or one distinct citation entry, the PDF now prints the event or linked source reference as a paragraph beneath its heading. Multiple events and multiple sources remain itemized. On the N=100 branching fixture, all 202 profiles have one event; each has one distinct source reference. The fixture also contains 16 profiles with two citation calls that resolve to the same entry, so the renderer still deduplicates repeated entries.
+
+| Case | Single-call citation preview | Profile paragraphs | Change |
+| --- | ---: | ---: | ---: |
+| N=100 LaTeX source | 794,104 bytes | 786,832 bytes | −7,272 bytes (−0.92%) |
+| N=100 full production compile | 101.429 s, one run | 93.419 s, one run | −8.010 s (−7.90%); indicative only |
+| N=100 tagged PDF | 1,583,991 bytes; 193 pages | 1,470,734 bytes; 177 pages | −113,257 bytes (−7.15%); −16 pages |
+| Structure `L` / `LI` / `Link` | 696 / 1,578 / 2,669 | 292 / 1,174 / 2,669 | −404 lists and list items; links unchanged |
+
+The candidate retains exactly the same 1,805 named book destinations and 3,073 PDF link annotations as the preceding preview. Physical pages 57–58 were rendered at 130 dpi and reviewed; the compact event/source rows remain legible and no clipping or overlap was visible. The old and new timings are single runs, not a stable performance estimate; the N=1,000 case and profiles with multiple distinct events or citations still need measurement. See the [raw measurement](validation-latex-profile-singletons-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf` (SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`).
