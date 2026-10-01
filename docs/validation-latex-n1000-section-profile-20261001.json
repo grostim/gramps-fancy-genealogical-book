@@ -1,0 +1,150 @@
+{
+  "title": "Instrumented LuaLaTeX first-pass section profile for N=1,000",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "benchmark_dependencies": {
+      "mistune": "3.3.4",
+      "Pillow": "12.3.0",
+      "pypdfium2": "5.13.0"
+    }
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "family_notices": 1001,
+    "person_profiles": 2002,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_latex_bytes": 5147816
+  },
+  "method": {
+    "passes": 1,
+    "fresh_temporary_directory": true,
+    "compile_flags": [
+      "-no-shell-escape",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-file-line-error"
+    ],
+    "timeout_seconds": 420,
+    "wall_seconds": 274.902,
+    "return_code": 0,
+    "instrumented_latex_bytes": 5154140,
+    "instrumentation_overhead_bytes": 6324,
+    "timing_clock": "Lua os.clock() CPU seconds at inserted checkpoints.",
+    "instrumentation": "Temporary source copy only. Seven main-section markers and periodic entry markers were inserted: every 100 family section, family notice, or person profile entries; every 250 appendix or index entries. Page-building and shipout work may fall between source-section markers.",
+    "production_source_or_settings_changed": false,
+    "call_target_anchors_removed_in_following_experiment": 3270
+  },
+  "section_start_cpu_seconds": {
+    "ancestry": 1.106974,
+    "descent": 1.133178,
+    "family_connections": 8.631779,
+    "family_notices": 40.641961,
+    "person_profiles": 62.333701,
+    "documentary_appendix": 108.749497,
+    "person_index": 226.923845
+  },
+  "periodic_checkpoint_cpu_seconds": {
+    "family_connections_after_entries": {
+      "100": 12.957368,
+      "200": 17.553911,
+      "300": 22.254226,
+      "400": 27.136128,
+      "500": 32.116508,
+      "600": 33.899136,
+      "700": 35.549345,
+      "800": 37.186432,
+      "900": 38.819073,
+      "1000": 40.584387
+    },
+    "family_notices_after_entries": {
+      "100": 42.734883,
+      "200": 44.846346,
+      "300": 47.056613,
+      "400": 49.168478,
+      "500": 51.254156,
+      "600": 53.495267,
+      "700": 55.660459,
+      "800": 57.830888,
+      "900": 60.12801,
+      "1000": 62.27194
+    },
+    "person_profiles_after_entries": {
+      "100": 64.533278,
+      "200": 66.939257,
+      "300": 69.160243,
+      "400": 71.544593,
+      "500": 73.625469,
+      "600": 76.152063,
+      "700": 78.527504,
+      "800": 80.832686,
+      "900": 83.02029,
+      "1000": 85.216865,
+      "1100": 87.588071,
+      "1200": 90.058314,
+      "1300": 92.693979,
+      "1400": 95.082167,
+      "1500": 97.502095,
+      "1600": 99.748087,
+      "1700": 101.962583,
+      "1800": 104.350675,
+      "1900": 106.528564,
+      "2000": 108.679107
+    },
+    "documentary_appendix_after_entries": {
+      "250": 116.139492,
+      "500": 123.608423,
+      "750": 131.453306,
+      "1000": 139.292712,
+      "1250": 147.558384,
+      "1500": 155.756341,
+      "1750": 163.651462,
+      "2000": 171.772903,
+      "2250": 180.033474,
+      "2500": 189.138156,
+      "2750": 196.990438,
+      "3000": 205.09258,
+      "3250": 215.027417,
+      "3500": 225.010439
+    },
+    "person_index_after_entries": {
+      "250": 229.601736,
+      "500": 232.114074,
+      "750": 234.616405,
+      "1000": 237.247815,
+      "1250": 239.761463,
+      "1500": 242.338525,
+      "1750": 245.05731,
+      "2000": 247.704644
+    }
+  },
+  "source_structure_counts": {
+    "latex_page_link_macro_calls": 17321,
+    "hypertarget_commands": 17768,
+    "label_commands": 17768,
+    "unique_target_names": 17768,
+    "target_name_occurrences": 52868
+  },
+  "interpretation": {
+    "documentary_appendix_interval_seconds": 118.174348,
+    "person_profiles_interval_seconds": 46.415796,
+    "family_connections_interval_seconds": 32.010182,
+    "family_notices_interval_seconds": 21.69174,
+    "person_index_interval_to_last_checkpoint_seconds": 20.780799,
+    "next_target": "Reduce LuaLaTeX work in the documentary appendix while preserving each citation entry and its link back to its owning profile or family notice."
+  },
+  "limits": [
+    "One instrumented pass only; no full multi-pass PDF was produced from this temporary source.",
+    "Instrumentation overhead was not separately measured or removed.",
+    "Section intervals can include deferred page-building and shipout work.",
+    "Synthetic fixture only; no PDF/UA conformance claim is made."
+  ]
+}

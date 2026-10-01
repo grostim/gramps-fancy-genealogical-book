@@ -1340,9 +1340,8 @@ def _render_citation_appendix(
                     if context_target and context_target in emitted_targets
                     else escape_latex_text(call_label)
                 )
-                linked_call_labels.append(
-                    f"{_latex_anchor(call.call_id, emitted_targets)}{linked_label}"
-                )
+                # The link targets its owning profile or notice; call IDs have no PDF backlinks.
+                linked_call_labels.append(linked_label)
             if len(linked_call_labels) == 1:
                 output.append(
                     "\\par "

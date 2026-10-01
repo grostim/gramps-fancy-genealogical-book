@@ -1,0 +1,124 @@
+{
+  "title": "Remove unreferenced citation-call PDF anchors",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "benchmark_dependencies": {
+      "mistune": "3.3.4",
+      "Pillow": "12.3.0",
+      "pypdfium2": "5.13.0",
+      "pypdf": "6.19.0"
+    }
+  },
+  "implementation": {
+    "change": "Do not emit a separate hypertarget/label for each citation call in the PDF appendix. Its visible call label still links to the owning profile or family notice.",
+    "identity_stability": "Unchanged; all destinations that have PDF links continue to use identity-derived BLAKE2s target names.",
+    "removed_n1000_call_targets": 3270,
+    "targeted_call_destination_occurrences": 0
+  },
+  "n1000_source_generation": {
+    "fixture": {
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "citations": 3003,
+      "family_notices": 1001,
+      "profiles": 2002,
+      "synthetic_portraits": 200,
+      "portrait_size": "96x72"
+    },
+    "baseline": {
+      "latex_source_bytes": 5147816,
+      "latex_generation_seconds": [
+        0.644227,
+        0.638116,
+        0.640712
+      ],
+      "median_seconds": 0.640712
+    },
+    "candidate": {
+      "latex_source_bytes": 4918916,
+      "latex_generation_seconds": [
+        0.620243,
+        0.632874,
+        0.617401
+      ],
+      "median_seconds": 0.620243
+    },
+    "comparison": {
+      "source_bytes_delta": -228900,
+      "source_reduction_percent": 4.45,
+      "generation_seconds_delta": -0.020469,
+      "generation_reduction_percent": 3.19
+    }
+  },
+  "n100_compile_comparison": {
+    "fixture": {
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "citations": 303,
+      "synthetic_portraits": 20,
+      "portrait_size": "96x72"
+    },
+    "baseline": {
+      "target_strategy": "identity-derived 96-bit BLAKE2s labels, with citation-call anchors",
+      "latex_source_bytes": 521949,
+      "latex_generation_seconds": 0.063745,
+      "pdf_compile_seconds": 68.898323,
+      "pdf_bytes": 1455375,
+      "repetitions": 1
+    },
+    "candidate": {
+      "target_strategy": "identity-derived 96-bit BLAKE2s labels; no unreferenced citation-call anchors",
+      "latex_source_bytes": 498849,
+      "latex_generation_seconds": [
+        0.062209,
+        0.061316,
+        0.061295
+      ],
+      "pdf_compile_seconds": 67.993585,
+      "pdf_bytes": 1437997,
+      "repetitions": 1
+    },
+    "comparison": {
+      "source_bytes_delta": -23100,
+      "source_reduction_percent": 4.43,
+      "pdf_compile_seconds_delta": -0.904738,
+      "pdf_compile_reduction_percent": 1.31,
+      "pdf_bytes_delta": -17378,
+      "pdf_size_reduction_percent": 1.19,
+      "timing_is_indicative": true
+    }
+  },
+  "candidate_pdf_preview": {
+    "fixture_descendant_couples": 100,
+    "pages": 169,
+    "page_size": "A4",
+    "tagged": true,
+    "named_destinations": 3568,
+    "target_destinations": 1475,
+    "link_annotations": 3073,
+    "resolved_internal_links": 1861,
+    "unresolved_internal_named_destinations": 0,
+    "visually_reviewed_physical_pages_at_110_dpi": [
+      12,
+      29,
+      49,
+      99,
+      163
+    ],
+    "file": "../output/pdf/gramps-fancy-book-no-unused-call-targets-preview-20261001.pdf",
+    "sha256": "74eb25edc8d9c3504585beef7172e49256d9b165fc6500684e544a5104465923",
+    "preview_bytes": 1437993
+  },
+  "limits": [
+    "The N=100 full-compile comparison has one run per variant and is indicative.",
+    "The N=1,000 complete PDF was not rerun after removing citation-call anchors; the current production timeout remains to be qualified.",
+    "The PDF preview uses fictitious people, events, media, and citations."
+  ]
+}
