@@ -1,0 +1,153 @@
+{
+  "title": "Rejected experiment: compact PDF destinations with sequential labels",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "benchmark_dependencies": {
+      "mistune": "3.3.4",
+      "Pillow": "12.3.0",
+      "pypdfium2": "5.13.0",
+      "pypdf": "6.19.0"
+    }
+  },
+  "implementation": {
+    "status": "rejected",
+    "target_prefix": "target-",
+    "target_name_format": "target-{sequential integer}",
+    "assignment": "Sort the complete reversible URL-safe Base64 target seeds, then replace references in gfbpagelink, hyperlink, hypertarget, and label commands with dense sequential names.",
+    "collision_behavior": "Collision-free within a rendered document; names are deterministic for an unchanged target set and independent of pagination.",
+    "rejection_reason": "Adding or removing a target whose seed sorts earlier shifts existing labels. This violates the identity-derived anchor contract in docs/decisions/001-data-contracts.md.",
+    "production_behavior": "The production renderer retains identity-derived 96-bit BLAKE2s target digests."
+  },
+  "n1000_generation_comparison": {
+    "fixture": {
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "notes": 267,
+      "citations": 3003,
+      "sources": 121,
+      "family_notices": 1001,
+      "profiles": 2002,
+      "synthetic_portraits": 200,
+      "portrait_size": "96x72"
+    },
+    "baseline_direct_base64": {
+      "latex_source_bytes": 7167003
+    },
+    "baseline_blake2s_digest": {
+      "latex_generation_seconds_median": 0.640712,
+      "latex_source_bytes": 5147816
+    },
+    "candidate": {
+      "latex_generation_seconds": [
+        0.900435,
+        0.873835,
+        0.871486
+      ],
+      "median_seconds": 0.873835,
+      "latex_source_bytes": 4532920,
+      "repetitions": 3
+    },
+    "comparison": {
+      "source_bytes_delta_vs_direct_base64": -2634083,
+      "source_reduction_percent_vs_direct_base64": 36.76,
+      "source_bytes_delta_vs_blake2s": -614896,
+      "source_reduction_percent_vs_blake2s": 11.95,
+      "generation_seconds_delta_vs_blake2s_median": 0.233123,
+      "generation_increase_percent_vs_blake2s_median": 36.38
+    }
+  },
+  "n1000_full_compile": {
+    "fixture": {
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "citations": 3003,
+      "family_notices": 1001,
+      "profiles": 2002,
+      "synthetic_portraits": 200
+    },
+    "diagnostic_timeout_overrides_seconds": {
+      "per_pass": 420,
+      "total": 900
+    },
+    "latex_generation_seconds": 0.807231,
+    "latex_source_bytes": 4532920,
+    "pass_seconds": [
+      261.899,
+      259.468,
+      259.112
+    ],
+    "pdf": {
+      "status": "compiled",
+      "compile_seconds": 781.41521,
+      "bytes": 13215543,
+      "pages": null
+    },
+    "production_timeout_exceeded": true,
+    "production_limits_seconds": {
+      "per_pass": 120,
+      "total": 180
+    }
+  },
+  "n100_compile_comparison": {
+    "fixture": {
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "citations": 303,
+      "synthetic_portraits": 20,
+      "portrait_size": "96x72"
+    },
+    "baseline_blake2s": {
+      "latex_generation_seconds": 0.063745,
+      "latex_source_bytes": 521949,
+      "pdf_compile_seconds": 68.898323,
+      "pdf_bytes": 1455375
+    },
+    "candidate": {
+      "latex_generation_seconds": 0.086677,
+      "latex_source_bytes": 454248,
+      "pdf_compile_seconds": 68.628602,
+      "pdf_bytes": 1371810,
+      "repetitions": 1
+    },
+    "comparison": {
+      "source_bytes_delta": -67701,
+      "source_reduction_percent": 12.97,
+      "compile_seconds_delta": -0.269721,
+      "compile_reduction_percent": 0.39,
+      "pdf_bytes_delta": -83565,
+      "pdf_size_reduction_percent": 5.74,
+      "timing_is_indicative": true
+    }
+  },
+  "small_pdf_preview": {
+    "fixture_descendant_couples": 10,
+    "pages": 23,
+    "page_size": "A4",
+    "tagged": true,
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "named_destinations": 455,
+    "target_destinations": 206,
+    "target_names_are_unique_and_dense": true,
+    "link_annotations": 342,
+    "internal_link_annotations": 210,
+    "unresolved_internal_named_destinations": 0,
+    "file": "../output/pdf/gramps-fancy-book-indexed-targets-preview-20261001.pdf",
+    "sha256": "60920f931695a1593259640acfd1b3c89378528d9a29f90ff64c423ba93c7aee"
+  },
+  "limits": [
+    "The sequential-label prototype is rejected and is not part of the production renderer.",
+    "The N=1,000 PDF completed only with diagnostic timeouts increased to 420 seconds per pass and 900 seconds total; the production limits remain 120 seconds per pass and 180 seconds total.",
+    "The N=1,000 full compile is one run. The N=100 full-compile comparison has one run per variant and is indicative.",
+    "The complete N=1,000 PDF was generated in a temporary benchmark directory and was not retained as a deliverable preview.",
+    "People, events, media, and citations in the synthetic previews are fictitious."
+  ]
+}
