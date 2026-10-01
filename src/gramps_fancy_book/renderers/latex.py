@@ -988,10 +988,7 @@ def _render_family_notice(
         )
 
     if notice.event_refs:
-        output.append(
-            "\\paragraph{" + escape_latex_text(label(model, "events"))
-            + "}\n\\begin{itemize}\n"
-        )
+        event_items: list[str] = []
         for index, reference in enumerate(notice.event_refs):
             target_id = (
                 notice.event_target_ids[index]
@@ -1039,10 +1036,24 @@ def _render_family_notice(
                     )
                 )
             suffix = f" ({'; '.join(details)})" if details else ""
-            output.append(
-                f"\\item {anchor}{escape_latex_text(event_name)}{suffix}\n"
+            event_items.append(
+                f"{anchor}{escape_latex_text(event_name)}{suffix}"
             )
-        output.append("\\end{itemize}\n")
+        if len(event_items) == 1:
+            output.append(
+                "\\paragraph{"
+                + escape_latex_text(label(model, "events"))
+                + "}\\par\n"
+            )
+            output.append(f"\\noindent {event_items[0]}\\par\n")
+        else:
+            output.append(
+                "\\paragraph{"
+                + escape_latex_text(label(model, "events"))
+                + "}\n\\begin{itemize}\n"
+            )
+            output.extend(f"\\item {item}\n" for item in event_items)
+            output.append("\\end{itemize}\n")
 
     for reference in notice.media_refs:
         media = model.media.get(reference.media_handle)
@@ -1117,13 +1128,25 @@ def _render_family_notice(
         if call_id in citation_by_call
     }
     if citations:
-        output.append(
-            "\\paragraph{" + escape_latex_text(label(model, "sources"))
-            + "}\n\\begin{itemize}\n"
-        )
-        for entry in citations.values():
-            output.append(f"\\item {_citation_reference(entry, citation_numbers)}\n")
-        output.append("\\end{itemize}\n")
+        citation_references = [
+            _citation_reference(entry, citation_numbers)
+            for entry in citations.values()
+        ]
+        if len(citation_references) == 1:
+            output.append(
+                "\\paragraph{"
+                + escape_latex_text(label(model, "sources"))
+                + "}\\par\n"
+            )
+            output.append(f"\\noindent {citation_references[0]}\\par\n")
+        else:
+            output.append(
+                "\\paragraph{"
+                + escape_latex_text(label(model, "sources"))
+                + "}\n\\begin{itemize}\n"
+            )
+            output.extend(f"\\item {reference}\n" for reference in citation_references)
+            output.append("\\end{itemize}\n")
     return "".join(output)
 
 

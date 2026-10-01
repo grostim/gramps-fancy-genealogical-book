@@ -1,0 +1,114 @@
+{
+  "title": "Single-item family notice LaTeX optimization",
+  "measured_at": "2026-10-01",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "lualatex": "LuaHBTeX 1.24.0"
+  },
+  "change": "Render exactly one family-notice event and one distinct citation reference as paragraphs; preserve itemized lists for multiple entries.",
+  "fixture": {
+    "n100": {
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events_and_citations": 303,
+      "family_notices": 101,
+      "person_profiles": 202,
+      "portraits": 20,
+      "portrait_pixels": "96x72",
+      "family_notices_with_one_event_and_one_distinct_citation": 101
+    },
+    "n1000": {
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events_and_citations": 3003,
+      "family_notices": 1001,
+      "person_profiles": 2002,
+      "portraits": 200,
+      "portrait_pixels": "96x72",
+      "family_notices_with_one_event_and_one_distinct_citation": 1001
+    }
+  },
+  "n100": {
+    "baseline_after_person_profile_optimization": {
+      "latex_bytes": 786832,
+      "compile_seconds": 93.419,
+      "compile_runs": 1,
+      "pdf_bytes": 1470734,
+      "pdf_pages": 177,
+      "structure_counts": {
+        "L": 292,
+        "LI": 1174,
+        "Link": 2669
+      }
+    },
+    "family_notice_optimization": {
+      "latex_bytes": 783196,
+      "compile_seconds": 90.315,
+      "compile_runs": 1,
+      "pdf_bytes": 1409982,
+      "pdf_pages": 169,
+      "structure_counts": {
+        "L": 90,
+        "LI": 972,
+        "Link": 2669
+      }
+    },
+    "comparison": {
+      "latex_bytes_delta": -3636,
+      "latex_percent_delta": -0.46,
+      "compile_seconds_delta": -3.104,
+      "compile_percent_delta": -3.32,
+      "pdf_bytes_delta": -60752,
+      "pdf_percent_delta": -4.13,
+      "pages_delta": -8,
+      "named_book_destinations": 1805,
+      "named_destinations_unchanged": true,
+      "pdf_link_annotations": 3073,
+      "annotations_unchanged": true
+    },
+    "visual_review": {
+      "physical_pages": [
+        29,
+        31
+      ],
+      "render_dpi": 130,
+      "result": "No visible clipping or overlap."
+    },
+    "preview": {
+      "path": "output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf",
+      "sha256": "0b3b395928504f2ad8a1b6412d878443a64200be5fe533892f080a2804db00b0"
+    }
+  },
+  "n1000": {
+    "baseline_after_person_profile_optimization": {
+      "latex_bytes": 7771881,
+      "compile_seconds": 122.644694,
+      "result": "timeout_no_pdf",
+      "sampled_temp_peak_bytes": 22266020
+    },
+    "family_notice_optimization": {
+      "latex_bytes": 7735845,
+      "compile_seconds": 122.653644,
+      "result": "timeout_no_pdf",
+      "sampled_temp_peak_bytes": 23310001
+    },
+    "comparison": {
+      "latex_bytes_delta": -36036,
+      "latex_percent_delta": -0.46,
+      "compile_seconds_delta": 0.00895,
+      "measurable_compile_improvement": false,
+      "sampled_temp_peak_delta_bytes": 1043981,
+      "resolves_timeout": false
+    }
+  },
+  "limitations": [
+    "One full compile per N=100 variant; runtime difference is indicative only.",
+    "N=1000 attempts hit the compile timeout and produced no PDF.",
+    "Temporary directory sizes were sampled periodically, so brief file peaks may be missed.",
+    "Fixtures and portraits are synthetic; visual inspection was limited to the listed physical pages.",
+    "No PDF/UA conformance claim is made."
+  ]
+}
