@@ -199,3 +199,16 @@ Une passe unique instrumentée de la fixture ramifiée N=100, balisage activé e
 | Passe complète | 52,284 |
 
 Les liens familiaux, l’annexe documentaire et les fiches individuelles dominent cette passe. Les hooks internes tagpdf mesurent 3,284 s pour la finalisation de l’arbre, dont 2,77 s pour l’écriture des éléments de structure. Une seule exécution instrumentée sert à orienter la suite du profilage ; elle ne confirme pas de budget statistique et ne décompose pas les opérations LaTeX internes à chaque section. Le PDF obtenu reste balisé (Tagged: yes). Les données brutes figurent dans le [profil des passes](validation-latex-pass-profile-20261001.json).
+
+### Encodage compact des destinations PDF — 1er octobre 2026
+
+Sur la même fixture N=100 et dans deux répertoires temporaires neufs par comparaison, la variante base32 modifie uniquement les noms internes des cibles PDF. Chaque exécution complète utilise les trois passes du helper de production ; l’ordre des variantes est inversé lors de la seconde paire.
+
+| Encodage des cibles | Durées (s) | Médiane (s) | Source compilée | PDF final médian |
+| --- | ---: | ---: | ---: | ---: |
+| Hexadécimal UTF-8 | 159,271 ; 157,841 | 158,556 | 1 265 310 octets | 1 935 501 octets |
+| Base32 minuscule sans remplissage | 143,177 ; 146,125 | 144,651 | 1 123 555 octets | 1 946 333 octets |
+
+Le temps complet médian baisse de 8,77 % et la source de 141 755 octets (11,2 %). Les PDF gardent 194 pages A4 et le balisage. Les 4 905 destinations nommées, dont 1 805 cibles du livre, sont présentes dans les deux variantes et chaque cible est remappée exactement une fois. La sortie de l’arbre tagpdf et le texte extrait sont identiques octet pour octet dans chaque paire. En contrepartie, le PDF final augmente de 10 833 octets environ (0,56 %). Deux paires suffisent à retenir cette piste pour le renderer ; elles ne constituent pas un budget statistique. La précédente mesure de source N=100 à 1 249 510 octets correspond à un rendu avant préparation des dérivés média ; la comparaison ci-dessus inclut les dérivés réellement compilés. Les détails sont dans le [profil brut des passes](validation-latex-pass-profile-20261001.json).
+
+Le profil par blocs précise l’origine des longues connexions familiales : les 50 sections qui ont des enfants contiennent 200 liens parent-enfant et prennent 10,90 s sur les deux premiers blocs de 25 ; les 51 sections sans enfant prennent environ 2,50 s. Ces mesures incluent les coupures de page. Les blocs de 25 fiches et références de l’annexe sont beaucoup plus réguliers, autour de 1,1 à 1,4 s. L’association avec les listes relationnelles est nette, mais le chronométrage ne sépare pas leur composition du travail de mise en page et de sortie des pages.

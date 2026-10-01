@@ -11,7 +11,7 @@ from gramps_fancy_book.domain import (
     Snapshot,
 )
 from gramps_fancy_book.normalization import build_book_model
-from gramps_fancy_book.renderers.latex import render_latex
+from gramps_fancy_book.renderers.latex import _latex_target, render_latex
 
 
 def _person(
@@ -146,7 +146,7 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
     descent_start = rendered.index(r"\section*{Descent}", ancestry_start)
     connections_start = rendered.index(r"\section*{Family connections}", descent_start)
     ancestry_text = rendered[ancestry_start:descent_start]
-    ancestry_generation_target = "target-" + "generation:ancestry:0".encode().hex()
+    ancestry_generation_target = _latex_target("generation:ancestry:0")
     assert r"\textbf{Browse generations}" in ancestry_text
     assert (
         f"\\item \\hyperlink{{{ancestry_generation_target}}}{{Generation 0}}"
@@ -163,7 +163,7 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
 
     descent_text = rendered[descent_start:connections_start]
     assert r"\subsection*{Generation 1}" in descent_text
-    descent_generation_target = "target-" + "generation:descent:1".encode().hex()
+    descent_generation_target = _latex_target("generation:descent:1")
     assert (
         f"\\item \\hyperlink{{{descent_generation_target}}}{{Generation 1}}"
         in descent_text

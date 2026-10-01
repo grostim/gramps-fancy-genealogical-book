@@ -140,6 +140,61 @@
     "tagpdf_finalization_sum_seconds": 3.284,
     "interpretation": "Family connections, the documentary appendix and person profiles account for most measured section time; final tagpdf tree writing takes about 3.28 seconds in this pass. This single instrumented pass is diagnostic only and does not establish a stable performance budget or isolate the cost of individual LaTeX operations."
   },
+  "section_group_profile_diagnostic": {
+    "fixture": "branching N=100, 202 people, 101 families, 303 events, 20 synthetic 96x72 portraits, tagging on",
+    "method": "Instrument one first LuaLaTeX pass in a temporary source with benchmark tic/toc pairs around groups of 25 top-level family sections, profile subsections and citation entries.",
+    "passes": 1,
+    "total_pass_seconds": 52.353,
+    "group_size": 25,
+    "family_connections": {
+      "family_sections": 101,
+      "sections_with_children": 50,
+      "parent_child_links_in_child_bearing_sections": 200,
+      "group_seconds": [5.35, 5.55, 1.22, 1.2, 0.0789],
+      "childless_sections": 51,
+      "childless_group_sum_seconds": 2.499
+    },
+    "person_profiles": {
+      "profiles": 202,
+      "group_seconds": [1.26, 1.34, 1.27, 1.3, 1.24, 1.41, 1.32, 1.24, 0.12]
+    },
+    "documentary_appendix": {
+      "citation_entries": 303,
+      "group_seconds": [1.21, 1.19, 1.29, 1.22, 1.09, 1.12, 1.06, 1.2, 1.05, 1.17, 1.14, 1.06, 0.155]
+    },
+    "interpretation": "The two groups of 25 child-bearing family sections take 10.90 seconds together and contain 200 parent-child links; the remaining 51 childless sections take about 2.50 seconds. This aligns with the extra nested relationship-list content, but the timers include page breaks and shipout and do not isolate the cost of those operations. Profile and citation groups have broadly even times."
+  },
+  "target_encoding_diagnostic": {
+    "measured_on": "2026-10-01",
+    "fixture": "branching N=100, 202 people, 101 families, 303 events, 20 prepared synthetic 96x72 portraits, tagging on",
+    "method": "Compile paired target-label variants through the production _compile_latex helper in fresh temporary directories. The compact variant changes only the internal target-name encoding from UTF-8 hex to padding-free lowercase RFC 4648 base32. Repeat the pair with the execution order reversed.",
+    "passes_per_compile": 3,
+    "run_order": ["base32", "hex", "hex", "base32"],
+    "runs": [
+      {"encoding": "base32", "seconds": 143.177, "source_bytes": 1123555, "pdf_bytes": 1946338},
+      {"encoding": "hex", "seconds": 159.271, "source_bytes": 1265310, "pdf_bytes": 1935503},
+      {"encoding": "hex", "seconds": 157.841, "source_bytes": 1265310, "pdf_bytes": 1935498},
+      {"encoding": "base32", "seconds": 146.125, "source_bytes": 1123555, "pdf_bytes": 1946328}
+    ],
+    "median_seconds": {"hex": 158.556, "base32": 144.651},
+    "median_compile_time_reduction_percent": 8.77,
+    "source_bytes_reduced": 141755,
+    "source_size_reduction_percent": 11.2,
+    "median_pdf_bytes": {"hex": 1935500.5, "base32": 1946333},
+    "median_pdf_size_increase_bytes": 10832.5,
+    "median_pdf_size_increase_percent": 0.56,
+    "pdf_pages": 194,
+    "pdf_tagged": true,
+    "destination_count_each_pdf": 4905,
+    "book_target_count_each_pdf": 1805,
+    "all_book_targets_mapped_one_to_one": true,
+    "pdfinfo_structure_output_identical_within_each_pair": true,
+    "pdfinfo_structure_sha256": "7484b49c86a976201844c1d5acd77fda6bbba30ef4a87e2a3035cf241a13a32a",
+    "pdftotext_output_identical_within_each_pair": true,
+    "pdftotext_sha256": "384d58b8f29126de71fd19cbfa42007660703d7fddfb7660536fb64850835e46",
+    "interpretation": "Across two paired runs, base32 target labels reduce the median complete compile time by 8.77% and source size by 141755 bytes. The produced PDFs retain the same page count, tagged status, named-destination count, structure output and extracted text; the final PDF grows by about 0.56%. This is a two-pair local benchmark, not a statistical performance budget.",
+    "source_size_note": "The earlier N=100 source-size figure of 1249510 bytes matches rendering the model before media derivatives are prepared. These paired runs measure the prepared source actually compiled, at 1265310 bytes for hex labels."
+  },
   "comparison": {
     "n100_tagged_minus_untagged_seconds": 95.527,
     "n100_tagged_runtime_ratio": 2.455,

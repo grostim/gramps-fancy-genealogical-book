@@ -29,7 +29,7 @@ from gramps_fancy_book.domain import (
     Source,
     Url,
 )
-from gramps_fancy_book.renderers.latex import render_latex
+from gramps_fancy_book.renderers.latex import _latex_target, render_latex
 from gramps_fancy_book.renderers.latex_notes import render_latex_note
 
 
@@ -238,7 +238,7 @@ def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
     )
 
     rendered = render_latex(model)
-    target = "target-" + f"media-{cache_key}".encode().hex()
+    target = _latex_target(f"media-{cache_key}")
 
     assert rendered.startswith(r"\DocumentMetadata{lang=fr-FR,tagging=on}")
     image_command = r"\includegraphics[width=0.6\linewidth,alt={Document partagé}]"
@@ -328,7 +328,7 @@ def test_running_headers_include_section_generation_branch_and_page_number():
     assert r"\setlength{\headheight}{30pt}" in rendered
     assert rendered.index(r"\markboth{Contents}{}") < rendered.index(r"\tableofcontents")
     for part_id in ("ancestry", "descent"):
-        target = "target-" + part_id.encode().hex()
+        target = _latex_target(part_id)
         assert f"\\hypertarget{{{target}}}" in rendered
     assert r"\markboth{Ancestry}{Generation 0 / Branch: Alex Exemple}" in rendered
     assert r"\markright{Generation 0 / Branch: Camille Exemple}" in rendered
@@ -353,7 +353,7 @@ def test_front_matter_heading_uses_shared_stable_target():
     )
 
     rendered = render_latex(model)
-    target = "target-" + "front-matter".encode().hex()
+    target = _latex_target("front-matter")
 
     assert f"\\hypertarget{{{target}}}" in rendered
     assert r"\section*{Avant-propos}" in rendered
