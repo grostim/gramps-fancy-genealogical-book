@@ -1,5 +1,5 @@
 {
-  "title": "Compact PDF destinations with deterministic sequential labels",
+  "title": "Rejected experiment: compact PDF destinations with sequential labels",
   "measured_on": "2026-10-01",
   "environment": {
     "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
@@ -13,10 +13,13 @@
     }
   },
   "implementation": {
+    "status": "rejected",
     "target_prefix": "target-",
     "target_name_format": "target-{sequential integer}",
     "assignment": "Sort the complete reversible URL-safe Base64 target seeds, then replace references in gfbpagelink, hyperlink, hypertarget, and label commands with dense sequential names.",
-    "collision_behavior": "Collision-free within a rendered document; names are deterministic for an unchanged target set and independent of pagination."
+    "collision_behavior": "Collision-free within a rendered document; names are deterministic for an unchanged target set and independent of pagination.",
+    "rejection_reason": "Adding or removing a target whose seed sorts earlier shifts existing labels. This violates the identity-derived anchor contract in docs/decisions/001-data-contracts.md.",
+    "production_behavior": "The production renderer retains identity-derived 96-bit BLAKE2s target digests."
   },
   "n1000_generation_comparison": {
     "fixture": {
@@ -141,6 +144,7 @@
     "sha256": "60920f931695a1593259640acfd1b3c89378528d9a29f90ff64c423ba93c7aee"
   },
   "limits": [
+    "The sequential-label prototype is rejected and is not part of the production renderer.",
     "The N=1,000 PDF completed only with diagnostic timeouts increased to 420 seconds per pass and 900 seconds total; the production limits remain 120 seconds per pass and 180 seconds total.",
     "The N=1,000 full compile is one run. The N=100 full-compile comparison has one run per variant and is indicative.",
     "The complete N=1,000 PDF was generated in a temporary benchmark directory and was not retained as a deliverable preview.",

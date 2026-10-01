@@ -1,7 +1,7 @@
 """LaTeX renderer for the genealogy book."""
 
 import base64
-import re
+import hashlib
 from pathlib import PurePosixPath
 
 from ..book_language import model_book_language
@@ -53,10 +53,6 @@ from .latex_text import escape_latex_text, format_latex_url
 
 # Keep nested PDF lists bounded so tagpdf's paragraph hooks stay balanced.
 _MAX_CHILDREN_PER_LIST = 20
-_LATEX_TARGET_REFERENCE = re.compile(
-    r"(\\(?:gfbpagelink|hyperlink|hypertarget|label)\{)"
-    r"(target-[A-Za-z0-9_-]+)(\})"
-)
 
 
 def label(model: BookModel, key: str) -> str:
@@ -507,27 +503,7 @@ def render_latex(
         document.append("\\end{itemize}\n")
 
     document.append("\\end{document}\n")
-    return _compact_latex_targets("".join(document))
-
-
-def _compact_latex_targets(source: str) -> str:
-    """Assign deterministic, collision-free labels in stable seed order.
-
-    The reversible seeds sort independently of pagination, so the compact names
-    remain stable when only page numbers change.
-    """
-    target_names = sorted(
-        {match.group(2) for match in _LATEX_TARGET_REFERENCE.finditer(source)}
-    )
-    compact_names = {
-        name: f"target-{index}" for index, name in enumerate(target_names)
-    }
-    return _LATEX_TARGET_REFERENCE.sub(
-        lambda match: (
-            f"{match.group(1)}{compact_names[match.group(2)]}{match.group(3)}"
-        ),
-        source,
-    )
+    return "".join(document)
 
 
 def _render_genealogy_part(
@@ -1842,6 +1818,11 @@ def _section_heading(
 
 
 def _latex_target(target_id: str) -> str:
-    """Encode a stable ID reversibly before the renderer compacts all labels."""
-    encoded = base64.urlsafe_b64encode(target_id.encode("utf-8")).decode("ascii")
+    """Map stable model IDs to compact, deterministic hyperref labels.
+
+    A 96-bit BLAKE2s digest keeps repeated page links short while making target
+    names independent of the source ID's alphabet and length.
+    """
+    digest = hashlib.blake2s(target_id.encode("utf-8"), digest_size=12).digest()
+    encoded = base64.urlsafe_b64encode(digest).decode("ascii")
     return f"target-{encoded.rstrip('=')}"
