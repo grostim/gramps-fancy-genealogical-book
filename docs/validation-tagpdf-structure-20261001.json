@@ -34,6 +34,23 @@
       "pdf_median_bytes": 211287
     }
   ],
+  "paragraph_tagging_diagnostic": {
+    "name": "direct-paragraph-tagging-disabled",
+    "fixture": "Same branching N=10 fixture; three fresh temporary directories",
+    "method": "Insert \\tagpdfsetup{para/tagging=false} directly before \\begin{document} in the rendered source; compile with the production _compile_latex helper. This is a diagnostic-only change.",
+    "compile_seconds": [19.937, 19.759, 20.111],
+    "compile_median_seconds": 19.937,
+    "pdf_bytes": [221551, 221551, 221551],
+    "pdf_median_bytes": 221551,
+    "pdfinfo_tagged": false,
+    "pages": 25,
+    "named_destinations": 561,
+    "external_url_annotations": 132,
+    "extracted_text_characters": 27853,
+    "extracted_text_sha256_each_run": "ac9195bd190847a2ef80641a0c61e25343dc772b42caa133cefc22a0a28d86f6",
+    "production_change": "none",
+    "conclusion": "The median is 0.304 s (1.55%) slower than the current tagged baseline, with only 150 fewer bytes. Poppler reports Tagged: no, so this is not a viable production optimization."
+  },
   "structure_comparison": {
     "tagged": true,
     "pages": 25,
