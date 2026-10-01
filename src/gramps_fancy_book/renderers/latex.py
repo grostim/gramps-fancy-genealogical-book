@@ -1,6 +1,7 @@
 """LaTeX renderer for the genealogy book."""
 
 import base64
+import hashlib
 from pathlib import PurePosixPath
 
 from ..book_language import model_book_language
@@ -1817,6 +1818,11 @@ def _section_heading(
 
 
 def _latex_target(target_id: str) -> str:
-    """Map arbitrary stable model IDs to safe, deterministic hyperref labels."""
-    encoded = base64.urlsafe_b64encode(target_id.encode("utf-8")).decode("ascii")
+    """Map stable model IDs to compact, deterministic hyperref labels.
+
+    A 96-bit BLAKE2s digest keeps repeated page links short while making target
+    names independent of the source ID's alphabet and length.
+    """
+    digest = hashlib.blake2s(target_id.encode("utf-8"), digest_size=12).digest()
+    encoded = base64.urlsafe_b64encode(digest).decode("ascii")
     return f"target-{encoded.rstrip('=')}"

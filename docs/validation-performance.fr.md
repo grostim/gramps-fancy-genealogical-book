@@ -332,3 +332,15 @@ Une comparaison séparée N=100, avec 20 portraits synthétiques, a été exécu
 | PDF | 1 409 982 octets | 1 405 934 octets | −4 048 (−0,29 %) |
 
 Le temps de compilation repose sur une exécution par variante et reste indicatif. Le PDF N=1 000 n’a pas été recompilé ; son délai précédent reste non résolu. Voir les [données brutes](validation-latex-url-safe-targets-20261001.json) et l’aperçu local `../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf` (SHA-256 `feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078`).
+
+### Destinations PDF compactées par condensat BLAKE2s — 1er octobre 2026
+
+Les noms Hyperref gardent le préfixe `target-` et encodent maintenant en Base64 URL sûre sans remplissage un condensat BLAKE2s de 96 bits de l’identifiant stable. Le nom obtenu est déterministe, indépendant de la pagination et beaucoup plus court que l’encodage réversible de l’identifiant complet. Pour 17 768 cibles, la probabilité théorique d’au moins une collision est d’environ 2 × 10⁻²¹.
+
+Sur le jeu ramifié N=1 000 avec 2 002 personnes et 200 portraits fictifs, la source baisse de 7 167 003 à 5 147 816 octets (−28,17 %). La génération LaTeX médiane passe de 0,612325 à 0,640712 s (+0,028387 s, +4,64 %), un coût négligeable face à la compilation PDF. Les mesures de chaque variante comprennent trois répétitions sur macOS 27 arm64 et CPython 3.14.0 ; le point de référence Base64 a été rejoué dans le même environnement avec l’encodeur précédent.
+
+Sur le jeu N=100 avec 20 portraits, une compilation par variante passe de 84,805061 à 68,898323 s (−15,906738 s, −18,76 %). La source baisse de 725 713 à 521 949 octets (−28,08 %). Le PDF candidat pèse 1 455 375 octets, soit 49 441 octets (+3,52 %) de plus que la référence. La durée vient d’une exécution par variante et reste indicative.
+
+Un aperçu synthétique N=10 compilé avec LuaHBTeX 1.24.0 fait 23 pages A4 balisées. `pypdf` trouve 455 destinations nommées, dont 206 cibles au format attendu, 342 annotations de lien et aucune destination interne manquante. Les pages physiques 1, 6, 7, 11, 20 et 23 ont été rendues à 120 ppp et examinées. Voir les [mesures détaillées](validation-latex-short-targets-20261001.json) et l’[aperçu PDF](../output/pdf/gramps-fancy-book-short-target-digest-preview-20261001.pdf), SHA-256 `3757bc729a94a5c885fb26a2581417c4fe009148156b7978ab65af71b5faf51b`.
+
+La compilation PDF N=1 000 n’a pas été relancée ; le délai précédent reste à résoudre. Les personnes, événements, médias et citations de cet aperçu sont fictifs.
