@@ -229,6 +229,42 @@
     "pdftotext_sha256": "384d58b8f29126de71fd19cbfa42007660703d7fddfb7660536fb64850835e46",
     "interpretation": "The macro cuts generated source by 26.86% and sampled temporary workspace peak by about 10.16%. The two-run median compile time is effectively unchanged from the base32 reference; this source compaction does not provide a measured runtime improvement. PDF size, page count, tagged status, named destinations, structure output and extracted text remain equivalent."
   },
+  "single_link_annotation_diagnostic": {
+    "measured_on": "2026-10-01",
+    "environment": {
+      "platform": "macOS 27.0 arm64",
+      "python": "CPython 3.13.7",
+      "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+    },
+    "fixture": "branching N=100, 202 people, 101 families, 303 events, 20 prepared synthetic 96x72 portraits, tagging on",
+    "method": "Place the person's name and its page number inside one hyperlink to the same destination, instead of two separate hyperlinks. Run the production benchmark twice in fresh temporary directories. The baseline is the immediately preceding two-link macro, measured with the same Python and LuaHBTeX versions.",
+    "page_link_calls": 1945,
+    "baseline_runs": [143.479122, 146.611265],
+    "runs": [
+      {"seconds": 116.94768, "source_bytes": 821670, "pdf_bytes": 1719597, "temporary_workspace_peak_bytes": 4131277},
+      {"seconds": 116.99065, "source_bytes": 821670, "pdf_bytes": 1719597, "temporary_workspace_peak_bytes": 4131276}
+    ],
+    "baseline_median_seconds": 145.0451935,
+    "median_seconds": 116.969165,
+    "compile_time_reduction_percent": 19.36,
+    "baseline_median_pdf_bytes": 1946325,
+    "median_pdf_bytes": 1719597,
+    "pdf_size_reduction_bytes": 226728,
+    "pdf_size_reduction_percent": 11.65,
+    "baseline_temporary_workspace_peak_bytes": 4345714,
+    "median_temporary_workspace_peak_bytes": 4131276.5,
+    "temporary_workspace_peak_reduction_percent": 4.93,
+    "baseline_tagged_link_elements": 4814,
+    "tagged_link_elements": 2869,
+    "tagged_link_elements_reduced": 1945,
+    "pdf_pages": 194,
+    "pdf_tagged": true,
+    "destination_count": 4905,
+    "pdfinfo_structure_sha256": "bab4752dde77d76cd4c9f97c6fe222a598264616a653f3e00998984d1c4c5a70",
+    "pdftotext_output_matches_base32_reference": true,
+    "pdftotext_sha256": "384d58b8f29126de71fd19cbfa42007660703d7fddfb7660536fb64850835e46",
+    "interpretation": "Combining the name and page number reduces one tagged Link element for each of 1,945 page references. The 194-page PDF remains tagged, keeps all 4,905 named destinations and has byte-identical extracted text. The structure hash changes as expected because the link tree has fewer elements. Two production compiles reduce median time by 19.36% and final PDF size by 11.65% against the immediately preceding two-link macro."
+  },
   "comparison": {
     "n100_tagged_minus_untagged_seconds": 95.527,
     "n100_tagged_runtime_ratio": 2.455,
