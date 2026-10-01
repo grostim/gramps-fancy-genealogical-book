@@ -93,6 +93,28 @@
     "medium_pdf_seconds": 4.483,
     "large_pdf_median_seconds": 34.459,
     "earlier_report": "docs/validation-performance.fr.md",
-    "note": "Those earlier measurements recorded the same LuaHBTeX version and macOS configuration. The discrepancy remains unexplained; the earlier timings are retained as historical results."
+    "measured_before_tagged_pdf": true,
+    "tagged_pdf_pr": 132,
+    "note": "The earlier measurements were collected on 2026-09-29 before PR 132 enabled tagged PDF output on 2026-09-30, so they are not directly comparable with current measurements."
+  },
+  "tagging_diagnostic": {
+    "descendant_couples": 10,
+    "people": 22,
+    "families": 11,
+    "events": 33,
+    "media": 0,
+    "method": "Compile the same synthetic LaTeX source with the production compiler helper; in the temporary diagnostic copy only, replace tagging=on with tagging=off.",
+    "tagged": {
+      "tagging": "on",
+      "seconds": 19.104,
+      "pdf_bytes": 221703
+    },
+    "diagnostic_copy": {
+      "tagging": "off",
+      "seconds": 9.039,
+      "pdf_bytes": 101525,
+      "not_a_shippable_output": true
+    },
+    "interpretation": "This single small case indicates tagging adds compilation cost but does not establish the cause of the medium and large timing gaps."
   }
 }
