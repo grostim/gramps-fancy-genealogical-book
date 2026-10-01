@@ -1,0 +1,78 @@
+{
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdfinfo": "Poppler 24.04.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 10,
+    "people": 22,
+    "families": 11,
+    "events": 33,
+    "media": 0,
+    "language": "en-US"
+  },
+  "method": "Build the fixture with scripts/benchmark_book.py helpers, render with the production LaTeX renderer, and compile each variant in three fresh temporary directories through the production _compile_latex helper. Inspect structure with pdfinfo -struct, named destinations with pdfinfo -dests, external URL annotations with pdfinfo -url, and text with pdftotext -layout.",
+  "variants": [
+    {
+      "name": "tagging-on",
+      "document_metadata": "\\DocumentMetadata{lang=en-US,tagging=on}",
+      "compile_seconds": [19.179, 19.633, 19.883],
+      "compile_median_seconds": 19.633,
+      "pdf_bytes": [221702, 221701, 221701],
+      "pdf_median_bytes": 221701
+    },
+    {
+      "name": "tagging-on-structure-destinations-disabled",
+      "document_metadata": "\\DocumentMetadata{lang=en-US,tagging=on,tagging-setup={activate/struct-dest=false}}",
+      "compile_seconds": [19.543, 19.121, 19.991],
+      "compile_median_seconds": 19.543,
+      "pdf_bytes": [211283, 211291, 211287],
+      "pdf_median_bytes": 211287
+    }
+  ],
+  "structure_comparison": {
+    "tagged": true,
+    "pages": 25,
+    "page_size": "A4",
+    "structure_nodes": 2520,
+    "tag_counts": {
+      "Document": 1,
+      "Part": 520,
+      "P": 441,
+      "Sect": 115,
+      "H1": 8,
+      "TOC": 1,
+      "TOCI": 7,
+      "Reference": 7,
+      "Link": 525,
+      "L": 114,
+      "LI": 217,
+      "Lbl": 217,
+      "LBody": 217,
+      "H2": 38,
+      "Formula": 20,
+      "H3": 69,
+      "BlockQuote": 3
+    },
+    "tree_order_and_tag_counts_identical": true,
+    "named_destinations": 561,
+    "named_destinations_identical": true,
+    "external_url_annotations": 132,
+    "external_url_annotations_identical": true,
+    "extracted_text_identical": true,
+    "poppler_structure_warning_count_per_variant": 114,
+    "poppler_structure_warning": "Syntax Warning: Attribute ListNumbering value is of wrong type (name)"
+  },
+  "interpretation": {
+    "median_runtime_delta_seconds": -0.09,
+    "median_runtime_delta_percent": -0.46,
+    "median_pdf_size_delta_bytes": -10414,
+    "median_pdf_size_delta_percent": -4.7,
+    "production_change": "none",
+    "conclusion": "Disabling structure destinations retained the inspected structure and links and reduced file size, but produced no meaningful compile-time improvement on this small fixture. This does not confirm the proposed PDF performance budget or predict larger books."
+  }
+}

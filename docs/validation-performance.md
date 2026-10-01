@@ -62,7 +62,9 @@ Times are in seconds. Additional peak is the maximum traced Python heap above th
 | Branching | 100 | 1,639,117 | 543,853 | 1,188,448 | 331,657 |
 | Branching | 1,000 | 16,265,394 | 5,363,871 | 11,797,460 | 3,306,591 |
 
-### Complete PDF compilation
+### Complete PDF compilation — untagged baseline from 29 September
+
+These timings describe the renderer before PDF tagging was enabled; they are not comparable with the current tagged renderer.
 
 | Descendant couples N | People | Events | Media | Median LuaLaTeX time | Range | PDF (bytes) |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -124,10 +126,10 @@ To make L8.3 actionable, these provisional budgets use the only measured referen
 | Reference workload | Proposed budget | Observed result |
 | --- | --- | --- |
 | Gramps CLI export, N=1,000, five synthetic shapes | ≤ 10 s; RSS ≤ 512 MB; JSON ≤ 64 MB | Separate maxima: 5.861 s and 372.1 MB RSS (multiple unions); 52.090 MB JSON (ancestry) |
-| Branching PDF compile, 2,002 people, 3,003 events and 200 derived media files | ≤ 60 s; PDF ≤ 16 MB | Highest of three runs: 34.714 s and 7,074,362 bytes |
+| Branching PDF compile, 2,002 people, 3,003 events and 200 derived media files | ≤ 60 s; PDF ≤ 16 MB | Current tagged renderer: timeout after 120.804 s, no PDF; untagged baseline: 34.714 s and 7,074,362 bytes |
 | Generate fixture, derivatives and HTML ZIP, N=100 with 20 PNGs at 1,600 × 1,200 | ≤ 8 s total; `tracemalloc` peak ≤ 256 MB | 2.071 s for fixture generation, 1.484 s for derivatives, and 1.149 s for the archive; 4.704 s and 126.17 MB traced peak overall |
 
-The renderer now limits LuaLaTeX to 120 s per pass and 180 s overall, replacing the previous theoretical maximum of five 120-second passes. This time guard is wider than the PDF performance budget and stops a stuck export. The RSS and final-file budgets remain qualification criteria, not runtime-enforced limits. Temporary-directory disk usage has not yet been measured or capped; these criteria must be qualified on a clean installation and other environments before they become release thresholds.
+The renderer now limits LuaLaTeX to 120 s per pass and 180 s overall, replacing the previous theoretical maximum of five 120-second passes. This time guard is wider than the PDF performance budget and stops a stuck export. The RSS and final-file budgets remain qualification criteria, not runtime-enforced limits. Temporary-directory disk usage has an initial measurement but is not capped; these criteria must be qualified on a clean installation and other environments before they become release thresholds.
 
 ### Temporary workspace measured on 1 October 2026
 
@@ -140,3 +142,16 @@ The benchmark sums the logical sizes of files under its temporary directory ever
 | 1,000 unions, 200 standard 96 × 72 portraits, PDF | `timeout` after 120.804 s; no PDF delivered | 24,584,541 bytes before termination |
 
 The compiled medium case exceeds the provisional 60-second budget. The N=1,000 case reached the 120-second per-pass limit twice with 10 ms sampling and a third time at 100 ms; the sampling interval therefore does not explain the timeout. The earlier medians of 4.483 s for N=100 and 34.459 s for N=1,000 were measured on 29 September, before tagged PDF output was enabled by [PR #132](https://github.com/grostim/gramps-fancy-genealogical-book/pull/132), merged on 30 September, and before the family-list fix in [PR #180](https://github.com/grostim/gramps-fancy-genealogical-book/pull/180), merged on 1 October. They are not directly comparable with the current tagged renderer. A diagnostic compilation of the same small book took 19.104 s with `tagging=on` and 9.039 s with tagging disabled only in the temporary copy; this suggests a meaningful tagging cost but does not by itself explain the medium and large book times. Repeat current measurements after qualifying or optimizing the tagged renderer; the proposed PDF envelope is not confirmed. See the [raw temporary-workspace record](validation-temp-disk-20261001.json).
+
+### PDF structure-destination diagnostic — 1 October 2026
+
+A branching fixture without media (N=10, 22 people, 11 families, 33 events) was compiled three times per variant in fresh temporary directories through the production renderer's `_compile_latex` helper with LuaHBTeX 1.24.0. The `activate/struct-dest=false` variant disables destinations for structure elements while keeping tagging enabled, as described in the [tagpdf documentation](https://tug.ctan.org/macros/latex/contrib/tagpdf/tagpdf-code.pdf).
+
+| Setting | Compilation (s, median [range]) | PDF (bytes, median [range]) |
+| --- | ---: | ---: |
+| Current tagging | 19.633 [19.179–19.883] | 221,701 [221,701–221,702] |
+| Structure destinations disabled | 19.543 [19.121–19.991] | 211,287 [211,283–211,291] |
+
+Both files are recognized as tagged and contain 25 A4 pages. The structure tree reported by `pdfinfo -struct` is identical in the same order (2,520 elements, including 525 links, 441 paragraphs and 217 list items); all 561 named destinations, 132 external-link annotations and extracted text are identical. `pdfinfo -struct` also emits 114 identical `ListNumbering` attribute warnings for each file; this record is not a conformance check.
+
+Disabling structure destinations reduces the median PDF size by 10,414 bytes (4.7%), but improves the median compile time by only 0.090 s from 19.633 s (0.46%), too little to justify an optimization. No production setting is changed; this fixture does not confirm the PDF budget or predict medium and large books. Tree inspection does not replace a screen-reader check. Raw results are in the [tagpdf measurement record](validation-tagpdf-structure-20261001.json).
