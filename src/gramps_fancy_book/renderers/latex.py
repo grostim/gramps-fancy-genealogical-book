@@ -318,7 +318,7 @@ def render_latex(
         "\\documentclass[a4paper]{article}\n"
         f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
-        "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2} (\\hyperlink{#1}{p.~\\pageref*{#1}})}\n"
+        "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2 (p.~\\pageref*{#1})}}\n"
         f"\\hypersetup{{pdftitle={{{escape_latex_text(_pdf_title(model))}}},pdfdisplaydoctitle=true}}\n"
         "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
