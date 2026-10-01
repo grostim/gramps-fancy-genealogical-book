@@ -1,0 +1,155 @@
+{
+  "title": "Instrumented LuaLaTeX first-pass section profile after citation-target and metadata reductions",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "family_notices": 1001,
+    "person_profiles": 2002,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_latex_bytes": 4900298
+  },
+  "method": {
+    "passes": 1,
+    "fresh_temporary_directory": true,
+    "compile_flags": [
+      "-no-shell-escape",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-file-line-error"
+    ],
+    "return_code": 0,
+    "timing_clock": "Lua os.clock() CPU seconds at inserted checkpoints.",
+    "instrumentation": "Temporary source copy only. Seven section-boundary markers and periodic entry checkpoints were inserted: every 100 family-connection, family-notice, or person-profile entries; every 250 appendix or index entries.",
+    "instrumented_latex_bytes": 4907178,
+    "instrumentation_overhead_bytes": 6880,
+    "marker_count": 68,
+    "production_source_or_settings_changed": false
+  },
+  "diagnostic_single_pass_pdf": {
+    "pages": 1572,
+    "page_size": "A4",
+    "tagged": true,
+    "bytes": 13582170,
+    "references_converged": false,
+    "use_as_final_preview": false
+  },
+  "source_structure_counts": {
+    "latex_page_link_macro_calls": 17321,
+    "hypertarget_commands": 14498,
+    "label_commands": 14498,
+    "unique_anchor_names": 14498
+  },
+  "section_start_cpu_seconds": {
+    "ancestry": 1.105832,
+    "descent": 1.132226,
+    "family_connections": 8.678429,
+    "family_notices": 40.422187,
+    "person_profiles": 62.161754,
+    "documentary_appendix": 108.750114,
+    "person_index": 216.61753,
+    "document_start": 1.084273
+  },
+  "periodic_checkpoint_cpu_seconds": {
+    "family_connections": {
+      "100": 12.96041,
+      "200": 17.583212,
+      "300": 22.235893,
+      "400": 27.106268,
+      "500": 32.017385,
+      "600": 33.738944,
+      "700": 35.355807,
+      "800": 36.976888,
+      "900": 38.609212,
+      "1000": 40.364968
+    },
+    "family_notices": {
+      "100": 42.519298,
+      "200": 44.616968,
+      "300": 46.817564,
+      "400": 48.922343,
+      "500": 51.013906,
+      "600": 53.259956,
+      "700": 55.379187,
+      "800": 57.570052,
+      "900": 59.897668,
+      "1000": 62.095691
+    },
+    "person_profiles": {
+      "100": 64.395334,
+      "200": 66.797746,
+      "300": 69.003075,
+      "400": 71.354994,
+      "500": 73.459696,
+      "600": 75.978678,
+      "700": 78.354216,
+      "800": 80.659487,
+      "900": 82.756807,
+      "1000": 85.064905,
+      "1100": 87.455616,
+      "1200": 89.941751,
+      "1300": 92.516244,
+      "1400": 95.011876,
+      "1500": 97.425959,
+      "1600": 99.672421,
+      "1700": 101.883406,
+      "1800": 104.283695,
+      "1900": 106.489921,
+      "2000": 108.679688
+    },
+    "documentary_appendix": {
+      "250": 116.767558,
+      "500": 124.980242,
+      "750": 133.66155,
+      "1000": 142.695384,
+      "1250": 151.25758,
+      "1500": 160.236649,
+      "1750": 169.333074,
+      "2000": 178.148814,
+      "2250": 187.706046,
+      "2500": 197.770028,
+      "2750": 206.85369,
+      "3000": 216.433547
+    },
+    "person_index": {
+      "250": 219.118687,
+      "500": 221.652263,
+      "750": 224.196216,
+      "1000": 226.871783,
+      "1250": 229.423565,
+      "1500": 232.108764,
+      "1750": 234.968585,
+      "2000": 237.558201
+    }
+  },
+  "interpretation": {
+    "family_connections_interval_seconds": 31.743758,
+    "family_notices_interval_seconds": 21.739567,
+    "person_profiles_interval_seconds": 46.58836,
+    "documentary_appendix_interval_seconds": 107.867416,
+    "person_index_interval_to_last_checkpoint_seconds": 20.940671,
+    "documentary_appendix_previous_profile_seconds": 118.174348,
+    "documentary_appendix_delta_seconds": -10.306932,
+    "documentary_appendix_reduction_percent": 8.72,
+    "comparison_scope": "The previous instrumented profile predates both citation-call-anchor pruning and metadata paragraph grouping; this delta is combined and does not isolate either change.",
+    "last_periodic_checkpoint_cpu_seconds": 237.558201,
+    "production_pass_limit_seconds": 120,
+    "next_target": "Continue reducing LuaLaTeX processing in the appendix while preserving each citation and its identity-derived cross-references."
+  },
+  "limits": [
+    "One instrumented pass only; the diagnostic PDF references were not converged across passes.",
+    "The last recorded CPU checkpoint is already above the 120-second production pass limit; no final multi-pass N=1,000 PDF was produced.",
+    "Section intervals can include deferred page-building and shipout work.",
+    "Synthetic fixture only; no PDF/UA conformance claim is made."
+  ]
+}
