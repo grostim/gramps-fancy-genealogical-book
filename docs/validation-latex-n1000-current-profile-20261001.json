@@ -1,0 +1,164 @@
+{
+  "title": "Instrumented LuaLaTeX first-pass section profile after citation-target and metadata reductions",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "family_notices": 1001,
+    "person_profiles": 2002,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_latex_bytes": 4900298
+  },
+  "method": {
+    "passes": 1,
+    "fresh_temporary_directory": true,
+    "compile_flags": [
+      "-no-shell-escape",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-file-line-error"
+    ],
+    "return_code": 0,
+    "timing_clock": "Lua os.clock() CPU seconds at inserted checkpoints.",
+    "instrumentation": "Temporary source copy only. Seven section-boundary markers and periodic entry checkpoints were inserted: every 100 family-connection, family-notice, or person-profile entries; every 250 appendix or index entries.",
+    "instrumented_latex_bytes": 4907178,
+    "instrumentation_overhead_bytes": 6880,
+    "marker_count": 68,
+    "production_source_or_settings_changed": false,
+    "wall_seconds": 272.254375,
+    "wall_clock_timer": "Python time.perf_counter() around direct subprocess.run of one LuaLaTeX pass.",
+    "diagnostic_timeout_seconds": null,
+    "diagnostic_timeout_override": "None; the diagnostic invocation had no timeout. Production uses a 120-second per-pass limit and a 180-second total-compilation limit."
+  },
+  "diagnostic_single_pass_pdf": {
+    "pages": 1572,
+    "page_size": "A4",
+    "tagged": true,
+    "bytes": 13582172,
+    "references_converged": false,
+    "use_as_final_preview": false
+  },
+  "source_structure_counts": {
+    "latex_page_link_macro_calls": 17321,
+    "hypertarget_commands": 14498,
+    "label_commands": 14498,
+    "unique_anchor_names": 14498
+  },
+  "section_start_cpu_seconds": {
+    "ancestry": 1.1187,
+    "descent": 1.144757,
+    "family_connections": 8.787596,
+    "family_notices": 47.750508,
+    "person_profiles": 69.729158,
+    "documentary_appendix": 116.455752,
+    "person_index": 224.556194,
+    "document_start": 1.097242
+  },
+  "periodic_checkpoint_cpu_seconds": {
+    "family_connections": {
+      "100": 13.104334,
+      "200": 17.791074,
+      "300": 22.545158,
+      "400": 31.723771,
+      "500": 38.073695,
+      "600": 40.090095,
+      "700": 42.034617,
+      "800": 44.146791,
+      "900": 45.854563,
+      "1000": 47.69112
+    },
+    "family_notices": {
+      "100": 49.894429,
+      "200": 52.03861,
+      "300": 54.262419,
+      "400": 56.382395,
+      "500": 58.510807,
+      "600": 60.794687,
+      "700": 62.952803,
+      "800": 65.136992,
+      "900": 67.490768,
+      "1000": 69.665971
+    },
+    "person_profiles": {
+      "100": 71.919676,
+      "200": 74.326198,
+      "300": 76.534393,
+      "400": 78.90836,
+      "500": 81.038573,
+      "600": 83.613707,
+      "700": 85.998713,
+      "800": 88.307846,
+      "900": 90.414627,
+      "1000": 92.764707,
+      "1100": 95.141917,
+      "1200": 97.608372,
+      "1300": 100.171996,
+      "1400": 102.70029,
+      "1500": 105.117014,
+      "1600": 107.342713,
+      "1700": 109.585748,
+      "1800": 111.988195,
+      "1900": 114.190181,
+      "2000": 116.385017
+    },
+    "documentary_appendix": {
+      "250": 124.469156,
+      "500": 132.891986,
+      "750": 141.520713,
+      "1000": 150.520529,
+      "1250": 159.087043,
+      "1500": 168.06991,
+      "1750": 177.206322,
+      "2000": 186.023756,
+      "2250": 195.560659,
+      "2500": 205.668172,
+      "2750": 214.772839,
+      "3000": 224.372432
+    },
+    "person_index": {
+      "250": 227.04793,
+      "500": 229.576838,
+      "750": 232.125437,
+      "1000": 234.808276,
+      "1250": 237.378394,
+      "1500": 240.113156,
+      "1750": 243.003258,
+      "2000": 245.604562
+    }
+  },
+  "interpretation": {
+    "family_connections_interval_seconds": 38.962912,
+    "family_notices_interval_seconds": 21.97865,
+    "person_profiles_interval_seconds": 46.726594,
+    "documentary_appendix_interval_seconds": 108.100442,
+    "person_index_interval_to_last_checkpoint_seconds": 21.048368,
+    "documentary_appendix_previous_profile_seconds": 118.174348,
+    "documentary_appendix_delta_seconds": -10.073906,
+    "documentary_appendix_reduction_percent": 8.52,
+    "comparison_scope": "The previous instrumented profile predates both citation-call-anchor pruning and metadata paragraph grouping; this delta is combined and does not isolate either change.",
+    "last_periodic_checkpoint_cpu_seconds": 245.604562,
+    "production_pass_limit_seconds": 120,
+    "next_target": "Continue reducing LuaLaTeX processing in the appendix while preserving each citation and its identity-derived cross-references.",
+    "diagnostic_wall_seconds": 272.254375,
+    "production_total_compilation_limit_seconds": 180,
+    "diagnostic_exceeded_pass_limit_by_seconds": 152.254375,
+    "diagnostic_exceeded_total_limit_by_seconds": 92.254375,
+    "timeout_conclusion": "The measured wall duration exceeds both production wall-clock limits; the CPU checkpoint is recorded separately and is not used for that comparison."
+  },
+  "limits": [
+    "One instrumented pass only; the diagnostic PDF references were not converged across passes.",
+    "The directly timed pass took 272.254375 wall seconds with no diagnostic timeout, exceeding the 120-second per-pass and 180-second total production limits.",
+    "Section intervals use Lua CPU checkpoints and can include deferred page-building and shipout work; they are not wall-clock deadline measurements.",
+    "Synthetic fixture only; no PDF/UA conformance claim is made."
+  ]
+}
