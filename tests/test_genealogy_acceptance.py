@@ -566,7 +566,9 @@ def test_single_parent_family_section_has_only_the_recorded_parent():
     )
 
     rendered = render_latex(model)
-    connection_section = rendered.split(r"\section*{Family connections}", 1)[1]
+    connection_section = rendered.split(r"\section*{Family connections}", 1)[1].split(
+        r"\section*{Family notices}", 1
+    )[0]
     section_label = f"(descent, generation {section.generation})"
     assert any(
         section_label in line and "}{p0}" in line and "p1" not in line
