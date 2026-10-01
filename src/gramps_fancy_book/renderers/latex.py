@@ -1213,8 +1213,9 @@ def _render_citation_appendix(
             )
         if citation is not None and citation.date is not None and citation.date.display:
             details.append(escape_latex_text(citation.date.display))
+        metadata_lines = []
         if details:
-            output.append(f"\\par {'; '.join(details)}\n")
+            metadata_lines.append("; ".join(details))
 
         urls: list[Url] = []
         if citation is not None:
@@ -1233,19 +1234,21 @@ def _render_citation_appendix(
             if repository is not None:
                 urls.extend(repository.urls)
         if repositories:
-            output.append("\\par " + escape_latex_text(label(model, "repositories")) + ": ")
-            output.append(
-                "; ".join(
+            metadata_lines.append(
+                escape_latex_text(label(model, "repositories"))
+                + ": "
+                + "; ".join(
                     _format_repository(repository_name, reference)
                     for repository_name, reference in repositories
                 )
             )
-            output.append("\n")
 
         if urls:
-            output.append("\\par " + escape_latex_text(label(model, "urls")) + ": ")
-            output.append("; ".join(_format_url(item) for item in _unique_urls(urls)))
-            output.append("\n")
+            metadata_lines.append(
+                escape_latex_text(label(model, "urls"))
+                + ": "
+                + "; ".join(_format_url(item) for item in _unique_urls(urls))
+            )
 
         media_labels = []
         for reference in entry.media_refs:
@@ -1255,13 +1258,16 @@ def _render_citation_appendix(
                 or reference.media_handle
             )
         if media_labels:
-            output.append(
-                "\\par " + escape_latex_text(label(model, "media")) + ": "
+            metadata_lines.append(
+                escape_latex_text(label(model, "media"))
+                + ": "
                 + "; ".join(
                     escape_latex_text(media_label) for media_label in media_labels
                 )
-                + "\n"
             )
+        if metadata_lines:
+            # Keep related metadata in one tagged paragraph while preserving rows.
+            output.append("\\par " + "\\\\\n".join(metadata_lines) + "\n")
         for reference in entry.media_refs:
             media = model.media.get(reference.media_handle)
             placement = _media_placement_for_reference(model, reference)
