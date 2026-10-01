@@ -292,3 +292,20 @@ La source courante après la compaction des notices fait 7 735 845 octets pour 2
 | Fiches individuelles, 800 premières sur 2 002 | 24,365 |
 
 LuaHBTeX a atteint le délai après 121,023 s. Le journal indique qu’il se trouvait encore dans la section des fiches ; l’annexe documentaire et l’index n’ont pas été atteints. Le fichier PDF interrompu (3 727 852 octets) n’a pas de dictionnaire de fin ni de table xref : ce n’est pas un PDF livrable. Ce profil partiel montre que les connexions familiales avec liens de filiation, les notices et les fiches consomment déjà presque tout le budget d’une passe ; il ne mesure pas le temps de l’annexe. Les résultats orientent la prochaine analyse vers les liens de filiation et la production répétée des liens de page. Ils ne constituent pas une mesure de performance non instrumentée. Les détails sont dans les [données brutes](validation-latex-first-pass-n1000-20261001.json).
+
+### Essai rejeté — marques d’en-tête répétées — N=100 — 1er octobre 2026
+
+Une variante temporaire n’émettait `\markright` dans les connexions familiales, les notices et les fiches que lorsque le texte du contexte changeait.
+
+| Mesure | Référence | Variante |
+| --- | ---: | ---: |
+| Compilation complète N=100 | 90,315 s | 90,613 s |
+| PDF | 1 409 982 octets ; 169 pages | 1 410 100 octets ; 169 pages |
+| Destinations nommées comptées par pypdf | 3 898 | 3 898 |
+| Annotations de lien | 3 073 | 3 073 |
+| PDF balisé | oui | oui |
+| Texte extrait par page identique | oui | non |
+
+Les deux extractions comptent 215 988 caractères, mais les en-têtes de contexte et la pagination de plusieurs entrées diffèrent, notamment aux pages physiques 13–16 et 30–31. L’aperçu temporaire a donc été supprimé et le changement de source annulé.
+
+Ces durées reposent sur une exécution chacune et ne sont pas directement comparables : elles ont été mesurées avec CPython 3.14.0 et 3.13.7 respectivement. Le résultat ne démontre aucun gain de performance et ne conserve pas le rendu existant. Voir les [données brutes](validation-latex-running-header-marks-20261001.json) ; le dernier aperçu accepté reste celui des [notices compactées](../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf).

@@ -1,0 +1,56 @@
+{
+  "title": "Rejected repeated running-header mark suppression",
+  "measured_at": "2026-10-01",
+  "fixture": {
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "family_sections": 101,
+    "family_notices": 101,
+    "person_profiles": 202,
+    "synthetic_portraits": 20,
+    "portrait_pixels": "96x72"
+  },
+  "baseline": {
+    "source_commit": "9b301e3e5ad5fcf478e6185a6d9f8ecda303c98d",
+    "python": "CPython 3.13.7",
+    "compile_seconds": 90.315,
+    "compile_runs": 1,
+    "pdf_bytes": 1409982,
+    "pdf_pages": 169,
+    "extracted_text_characters": 215988,
+    "pypdf_named_destinations": 3898,
+    "link_annotations": 3073,
+    "tagged": true,
+    "preview_sha256": "0b3b395928504f2ad8a1b6412d878443a64200be5fe533892f080a2804db00b0"
+  },
+  "candidate": {
+    "source_change": "Emit markright only when family-section, notice, or profile context changes.",
+    "python": "CPython 3.14.0",
+    "lualatex": "LuaHBTeX 1.24.0",
+    "compile_seconds": 90.613,
+    "compile_runs": 1,
+    "pdf_bytes": 1410100,
+    "pdf_pages": 169,
+    "extracted_text_characters": 215988,
+    "pypdf_named_destinations": 3898,
+    "link_annotations": 3073,
+    "tagged": true,
+    "pdf_sha256": null,
+    "preview_retained": false
+  },
+  "comparison": {
+    "compile_seconds_delta": 0.298,
+    "compile_percent_delta": 0.33,
+    "timings_directly_comparable": false,
+    "timing_limitations": [
+      "One full compile per variant.",
+      "The Python versions differ between the reference measurement and candidate run."
+    ],
+    "same_page_count": true,
+    "same_extracted_text_character_count": true,
+    "same_page_text": false,
+    "changed_page_examples": [13, 14, 15, 16, 30, 31, 39, 41],
+    "decision": "rejected; source change reverted and candidate preview removed"
+  }
+}

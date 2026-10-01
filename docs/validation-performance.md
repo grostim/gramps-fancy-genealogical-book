@@ -280,3 +280,20 @@ The current source after compacting family notices is 7,735,845 bytes for 2,002 
 | First 800 of 2,002 person profiles | 24.365 |
 
 LuaHBTeX hit the timeout after 121.023 s. The log shows it was still in the profile section; the documentary appendix and person index were not reached. The interrupted PDF file (3,727,852 bytes) has no trailer dictionary or xref table and is not a deliverable PDF. This partial profile shows that family connections with parentage links, family notices, and profiles already consume nearly all of one pass; it does not measure the appendix. The results point to parentage links and repeated page-link generation as the next areas to investigate. They are not an uninstrumented performance measurement. See the [raw data](validation-latex-first-pass-n1000-20261001.json).
+
+### Rejected experiment — repeated running-header marks — N=100 — 1 October 2026
+
+A temporary variant emitted `\markright` in family connections, notices, and profiles only when the context string changed.
+
+| Measure | Reference | Candidate |
+| --- | ---: | ---: |
+| N=100 full compile | 90.315 s | 90.613 s |
+| PDF | 1,409,982 bytes; 169 pages | 1,410,100 bytes; 169 pages |
+| Named destinations counted by pypdf | 3,898 | 3,898 |
+| Link annotations | 3,073 | 3,073 |
+| Tagged PDF | yes | yes |
+| Identical extracted text per page | yes | no |
+
+Both extractions contain 215,988 characters, but running context headers and the pagination of several entries differ, including physical pages 13–16 and 30–31. The temporary preview was removed and the source change was reverted.
+
+Each timing comes from one run, and the runs are not directly comparable: they used CPython 3.14.0 and 3.13.7, respectively. The result establishes no performance gain and does not preserve the current output. See the [raw data](validation-latex-running-header-marks-20261001.json); the latest accepted preview remains the [compact-notice PDF](../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf).
