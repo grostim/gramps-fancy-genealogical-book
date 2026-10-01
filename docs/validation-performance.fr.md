@@ -139,4 +139,16 @@ Pour rendre L8.3 actionnable, ces budgets provisoires s’appuient sur la seule 
 | Compilation PDF ramifiée, 2 002 personnes, 3 003 événements et 200 médias dérivés | ≤ 60 s ; PDF ≤ 16 Mo | Maximum observé sur trois exécutions : 34,714 s et 7 074 362 octets |
 | Création de la fixture, dérivés et archive HTML, N=100 avec 20 PNG de 1 600 × 1 200 pixels | ≤ 8 s au total ; pic `tracemalloc` ≤ 256 Mo | 2,071 s pour la fixture, 1,484 s pour les dérivés, 1,149 s pour l’archive ; 4,704 s et 126,17 Mo de pic tracé au total |
 
-Le renderer limite maintenant la compilation LuaLaTeX à 120 s par passe et 180 s au total, contre un maximum théorique antérieur de cinq passes de 120 s. Ce garde-fou temporel est plus large que le budget de performance PDF et sert à interrompre un export bloqué. Les budgets RSS et de taille finale restent des critères de qualification, pas des limites imposées pendant l’exécution. Le pic d’espace disque du répertoire temporaire n’a pas encore été mesuré ni plafonné ; ces critères doivent être qualifiés sur une installation propre et sur d’autres environnements avant de devenir des seuils de livraison.
+Le renderer limite maintenant la compilation LuaLaTeX à 120 s par passe et 180 s au total, contre un maximum théorique antérieur de cinq passes de 120 s. Ce garde-fou temporel est plus large que le budget de performance PDF et sert à interrompre un export bloqué. Les budgets RSS et de taille finale restent des critères de qualification, pas des limites imposées pendant l’exécution. Une première mesure de l’espace temporaire est consignée ci-dessous ; elle ne constitue pas encore un plafond d’exécution.
+
+### Espace temporaire mesuré le 1er octobre 2026
+
+Le banc somme la taille logique des fichiers sous son répertoire temporaire toutes les 100 ms. Il ignore les liens symboliques ; un fichier créé et supprimé entre deux échantillons peut manquer au pic mesuré. La mesure porte sur le banc synthétique local, pas sur l’espace temporaire global du système.
+
+| Cas | Résultat PDF | Pic observé des fichiers temporaires |
+| --- | --- | ---: |
+| 100 unions, 20 PNG synthétiques de 1 600 × 1 200, dérivés et ZIP HTML | Pas de compilation PDF | 157 472 942 octets |
+| 100 unions, portraits standards de 96 × 72, PDF | Compilé en 163,058 s ; 1 935 494 octets | 4 837 119 octets |
+| 1 000 unions, 200 portraits standards de 96 × 72, PDF | Échec `timeout` après 120,804 s ; aucun PDF livré | 24 584 541 octets avant l’arrêt |
+
+Le cas moyen compilé dépasse le budget provisoire de 60 s. Le cas N=1 000 a atteint deux fois la limite de passe de 120 s avec échantillonnage à 10 ms, puis une troisième fois à 100 ms ; le changement de cadence n’explique donc pas le timeout. Ces résultats locaux ne concordent pas avec les médianes antérieures de 4,483 s pour N=100 et 34,459 s pour N=1 000, bien que le rapport indique la même version de LuaHBTeX et la même configuration macOS. L’origine de l’écart est à investiguer ; les anciens temps restent des relevés historiques, et aucune enveloppe PDF ne peut encore être confirmée pour l’installation actuelle. Les détails sont dans [le relevé temporaire brut](validation-temp-disk-20261001.json).

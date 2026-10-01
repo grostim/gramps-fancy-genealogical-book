@@ -6,10 +6,12 @@ import argparse
 import gc
 import hashlib
 import json
+import os
 import platform
 import random
 import sys
 import tempfile
+import threading
 import time
 import tracemalloc
 from collections import deque
@@ -47,6 +49,55 @@ _MEDIA_INTERVAL = 10
 _DEFAULT_PORTRAIT_SIZE = (96, 72)
 _MAX_SYNTHETIC_PORTRAIT_PIXELS = 24_000_000
 _MAX_SYNTHETIC_MEDIA_SOURCE_BYTES = 256 * 1024 * 1024
+_TEMPORARY_WORKSPACE_SAMPLE_SECONDS = 0.1
+
+
+class _TemporaryWorkspaceMonitor:
+    """Sample the logical size of files in a temporary benchmark workspace."""
+
+    def __init__(self, root: Path) -> None:
+        self._root = root
+        self._stop = threading.Event()
+        self._peak_bytes = 0
+        self._thread = threading.Thread(target=self._sample_until_stopped, daemon=True)
+
+    @property
+    def peak_bytes(self) -> int:
+        return self._peak_bytes
+
+    def __enter__(self) -> _TemporaryWorkspaceMonitor:
+        self._sample()
+        self._thread.start()
+        return self
+
+    def __exit__(self, *_exception_info: object) -> None:
+        self._stop.set()
+        self._thread.join()
+        self._sample()
+
+    def _sample_until_stopped(self) -> None:
+        while not self._stop.wait(_TEMPORARY_WORKSPACE_SAMPLE_SECONDS):
+            self._sample()
+
+    def _sample(self) -> None:
+        total_bytes = 0
+        pending = [self._root]
+        while pending:
+            directory = pending.pop()
+            try:
+                entries = os.scandir(directory)
+            except OSError:
+                continue
+            with entries:
+                for entry in entries:
+                    try:
+                        if entry.is_dir(follow_symlinks=False):
+                            pending.append(Path(entry.path))
+                        elif entry.is_file(follow_symlinks=False):
+                            total_bytes += entry.stat(follow_symlinks=False).st_size
+                    except OSError:
+                        continue
+        self._peak_bytes = max(self._peak_bytes, total_bytes)
 
 
 def synthetic_wide_snapshot(descendant_couples: int) -> Snapshot:
@@ -515,7 +566,10 @@ def benchmark(
         model = build_book_model(snapshot)
         model_seconds = time.perf_counter() - start
 
-        with tempfile.TemporaryDirectory(prefix="gramps-book-benchmark-") as folder:
+        with (
+            tempfile.TemporaryDirectory(prefix="gramps-book-benchmark-") as folder,
+            _TemporaryWorkspaceMonitor(Path(folder)) as temporary_monitor,
+        ):
             temporary = Path(folder)
             media_directory = temporary / "media"
             media_seconds = 0.0
@@ -589,6 +643,7 @@ def benchmark(
                         "bytes": pdf_path.stat().st_size,
                     }
 
+        temporary_workspace_peak_bytes = temporary_monitor.peak_bytes
         _, peak_heap = tracemalloc.get_traced_memory()
         family_count = len(model.families)
         if model.reference_family.handle not in model.families:
@@ -626,6 +681,7 @@ def benchmark(
             "fixture_peak_heap_bytes": fixture_peak_heap,
             "peak_additional_heap_bytes": max(0, peak_heap - fixture_heap),
             "peak_total_heap_bytes": max(fixture_peak_heap, peak_heap),
+            "temporary_workspace_peak_bytes": temporary_workspace_peak_bytes,
         }
         if pdf_result is not None:
             result["pdf"] = pdf_result
@@ -749,6 +805,11 @@ def main() -> None:
         "platform": platform.platform(),
         "memory_metric": (
             "tracemalloc Python heap; excludes native allocations and subprocesses"
+        ),
+        "temporary_workspace_metric": (
+            "sampled logical file sizes under the benchmark temporary directory; "
+            f"sample interval {int(_TEMPORARY_WORKSPACE_SAMPLE_SECONDS * 1000)} ms; "
+            "shorter-lived peaks may be missed"
         ),
         "media_enabled": arguments.with_media,
         "portrait_size": (
