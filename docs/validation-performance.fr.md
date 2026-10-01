@@ -248,3 +248,16 @@ Dans l’annexe documentaire, une citation ayant un seul appel utilise maintenan
 | Éléments structurels `L` / `LI` / `Link` | 972 / 1 854 / 2 669 | 696 / 1 578 / 2 669 | −276 listes et éléments de liste ; liens inchangés |
 
 Le dernier PDF balisé conserve les 1 805 cibles nommées du livre. La page physique 123 a été rendue à 130 ppp et examinée : les appels uniques sont présentés en paragraphes « Voir », tandis que les appels multiples restent en puces ; aucune coupure ni superposition n’a été observée sur cette page ciblée. La comparaison de durée porte sur une exécution contre la médiane des deux précédentes et ne constitue pas une estimation stable. La source et la compilation PDF complète N=1 000 n’ont pas encore été remesurées après ce changement. L’aperçu PDF local (`../output/pdf/gramps-fancy-book-single-call-citation-preview-20261001.pdf`) contient des notices et portraits fictifs ; SHA-256 `3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578`.
+
+### Sections unitaires des fiches individuelles — 1er octobre 2026
+
+Pour une fiche avec un seul événement ou une seule citation distincte, le PDF affiche maintenant l’événement ou le renvoi cliquable vers la source dans un paragraphe sous son titre. Les groupes de plusieurs événements ou sources restent des listes. Dans la fixture ramifiée N=100, les 202 fiches ont un événement et une référence distincte à une source. Seize fiches ont deux appels de citation qui désignent la même entrée ; le renderer continue à dédupliquer les entrées répétées.
+
+| Cas | Aperçu avec renvoi simple | Paragraphes de fiche | Écart |
+| --- | ---: | ---: | ---: |
+| Source LaTeX N=100 | 794 104 octets | 786 832 octets | −7 272 octets (−0,92 %) |
+| Compilation complète N=100 | 101,429 s, une exécution | 93,419 s, une exécution | −8,010 s (−7,90 %) ; indicatif seulement |
+| PDF balisé N=100 | 1 583 991 octets ; 193 pages | 1 470 734 octets ; 177 pages | −113 257 octets (−7,15 %) ; −16 pages |
+| Structure `L` / `LI` / `Link` | 696 / 1 578 / 2 669 | 292 / 1 174 / 2 669 | −404 listes et éléments de liste ; liens inchangés |
+
+Le PDF candidat conserve exactement les mêmes 1 805 cibles nommées du livre et les 3 073 annotations de lien que l’aperçu précédent. Les pages physiques 57–58 ont été rendues à 130 ppp et examinées ; les lignes compactes des événements et sources restent lisibles, sans coupure ni superposition visible. Les deux durées sont des mesures isolées et ne constituent pas une estimation stable ; le cas N=1 000 et les fiches comportant plusieurs événements ou citations distinctes restent à mesurer. Voir la [mesure brute](validation-latex-profile-singletons-20261001.json) et l’aperçu local (`../output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf`, SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`).

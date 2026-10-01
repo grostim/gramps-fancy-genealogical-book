@@ -1,0 +1,85 @@
+{
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "profiles": 202,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "profile_events_per_profile": {
+      "1": 202
+    },
+    "distinct_profile_citation_entries_per_profile": {
+      "1": 202
+    }
+  },
+  "method": "Generate LaTeX with the benchmark_book branching fixture and prepared media, then compile through the production write_latex_pdf helper. Each complete PDF compile was observed once. Source sizes and PDF structure were measured independently; the output comparison is targeted, not a statistical performance qualification.",
+  "comparison": {
+    "baseline": {
+      "renderer": "single-call citation paragraphs",
+      "latex_source_bytes": 794104,
+      "compile_seconds": 101.429,
+      "pdf_bytes": 1583991,
+      "pages": 193,
+      "structure": {
+        "L": 696,
+        "LI": 1578,
+        "Link": 2669,
+        "link_annotations": 3073,
+        "named_book_targets": 1805
+      },
+      "pdf_sha256": "3cf5f9b8025258db353f71d2292875c5bc0e5d244d5bbbda47f9cd143dfc2578"
+    },
+    "candidate": {
+      "renderer": "single-item profile paragraphs",
+      "latex_source_bytes": 786832,
+      "compile_seconds": 93.419,
+      "pdf_bytes": 1470734,
+      "pages": 177,
+      "structure": {
+        "L": 292,
+        "LI": 1174,
+        "Link": 2669,
+        "link_annotations": 3073,
+        "named_book_targets": 1805,
+        "named_book_target_set_matches_baseline": true
+      },
+      "pdf_sha256": "6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac"
+    }
+  },
+  "differences": {
+    "latex_source_bytes": -7272,
+    "latex_source_percent": -0.92,
+    "compile_seconds": -8.01,
+    "compile_percent": -7.9,
+    "pdf_bytes": -113257,
+    "pdf_percent": -7.15,
+    "pages": -16,
+    "L": -404,
+    "LI": -404,
+    "Link": 0,
+    "link_annotations": 0,
+    "named_book_targets": 0
+  },
+  "visual_review": {
+    "pages": [57, 58],
+    "dpi": 130,
+    "result": "No clipping or overlap observed; single event and source rows remain readable; portrait and caption remain centered."
+  },
+  "limitations": [
+    "Only one complete timed compile is recorded for each version.",
+    "The N=1000 source and PDF compile have not been repeated for this change.",
+    "Profiles with multiple distinct events or citation entries need a targeted visual fixture.",
+    "The preview uses fictitious records and synthetic portraits.",
+    "No screen-reader or PDF/UA conformance claim is made."
+  ]
+}
