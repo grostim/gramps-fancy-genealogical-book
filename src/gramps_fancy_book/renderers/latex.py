@@ -48,6 +48,9 @@ from .labels import (
 from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
 
+# Keep nested PDF lists bounded so tagpdf's paragraph hooks stay balanced.
+_MAX_PARENT_CHILD_LINKS_PER_LIST = 20
+
 
 def label(model: BookModel, key: str) -> str:
     """Use English for legacy direct renderer calls without language metadata."""
@@ -699,7 +702,7 @@ def _render_family_sections(
             )
         if section.parent_child_links:
             output.append("\\begin{itemize}\n")
-            for link in section.parent_child_links:
+            for index, link in enumerate(section.parent_child_links, start=1):
                 parent = _occurrence_link(
                     link.parent_occurrence_id,
                     occurrences_by_id,
@@ -719,6 +722,11 @@ def _render_family_sections(
                 )
                 suffix = f" ({escape_latex_text(relationship)})" if relationship else ""
                 output.append(f"\\item {parent} $\\to$ {child}{suffix}\n")
+                if (
+                    index % _MAX_PARENT_CHILD_LINKS_PER_LIST == 0
+                    and index < len(section.parent_child_links)
+                ):
+                    output.append("\\end{itemize}\n\\begin{itemize}\n")
             output.append("\\end{itemize}\n")
     output.append("\\end{itemize}\n")
     return "".join(output)
