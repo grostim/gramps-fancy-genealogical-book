@@ -195,6 +195,40 @@
     "interpretation": "Across two paired runs, base32 target labels reduce the median complete compile time by 8.77% and source size by 141755 bytes. The produced PDFs retain the same page count, tagged status, named-destination count, structure output and extracted text; the final PDF grows by about 0.56%. This is a two-pair local benchmark, not a statistical performance budget.",
     "source_size_note": "The earlier N=100 source-size figure of 1249510 bytes matches rendering the model before media derivatives are prepared. These paired runs measure the prepared source actually compiled, at 1265310 bytes for hex labels."
   },
+  "page_link_macro_diagnostic": {
+    "measured_on": "2026-10-01",
+    "environment": {
+      "platform": "macOS 27.0 arm64",
+      "python": "CPython 3.13.7",
+      "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+    },
+    "fixture": "branching N=100, 202 people, 101 families, 303 events, 20 prepared synthetic 96x72 portraits, tagging on",
+    "method": "Factor the repeated page-reference source into a LaTeX macro that expands to the same two hyperlinks and page reference. Run the production benchmark twice in fresh temporary directories. Compare with the two base32 runs above; LuaHBTeX is the same, while the Python runtime differs.",
+    "runs": [
+      {"seconds": 143.479122, "source_bytes": 821686, "pdf_bytes": 1946332, "temporary_workspace_peak_bytes": 4345714},
+      {"seconds": 146.611265, "source_bytes": 821686, "pdf_bytes": 1946318, "temporary_workspace_peak_bytes": 4345713}
+    ],
+    "median_seconds": 145.0451935,
+    "base32_reference_median_seconds": 144.651,
+    "median_compile_time_change_seconds": 0.3941935,
+    "median_compile_time_change_percent": 0.27,
+    "base32_reference_source_bytes": 1123555,
+    "source_bytes_reduced": 301869,
+    "source_size_reduction_percent": 26.86,
+    "base32_reference_temporary_workspace_peak_bytes": 4837119,
+    "median_temporary_workspace_peak_bytes": 4345713.5,
+    "temporary_workspace_peak_reduction_percent": 10.16,
+    "median_pdf_bytes": 1946325,
+    "base32_reference_median_pdf_bytes": 1946333,
+    "pdf_pages": 194,
+    "pdf_tagged": true,
+    "destination_count": 4905,
+    "pdfinfo_structure_output_matches_base32_reference": true,
+    "pdfinfo_structure_sha256": "7484b49c86a976201844c1d5acd77fda6bbba30ef4a87e2a3035cf241a13a32a",
+    "pdftotext_output_matches_base32_reference": true,
+    "pdftotext_sha256": "384d58b8f29126de71fd19cbfa42007660703d7fddfb7660536fb64850835e46",
+    "interpretation": "The macro cuts generated source by 26.86% and sampled temporary workspace peak by about 10.16%. The two-run median compile time is effectively unchanged from the base32 reference; this source compaction does not provide a measured runtime improvement. PDF size, page count, tagged status, named destinations, structure output and extracted text remain equivalent."
+  },
   "comparison": {
     "n100_tagged_minus_untagged_seconds": 95.527,
     "n100_tagged_runtime_ratio": 2.455,

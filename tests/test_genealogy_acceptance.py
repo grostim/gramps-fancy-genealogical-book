@@ -181,7 +181,7 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
     ]
     for parent in ("p0", "p1"):
         assert any(
-            parent in line and r"\hyperlink{" in line
+            parent in line and r"\gfbpagelink{" in line
             for line in parent_child_lines
         ), parent_child_lines
 

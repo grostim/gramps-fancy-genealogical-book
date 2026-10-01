@@ -318,6 +318,7 @@ def render_latex(
         "\\documentclass[a4paper]{article}\n"
         f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
+        "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2} (\\hyperlink{#1}{p.~\\pageref*{#1}})}\n"
         f"\\hypersetup{{pdftitle={{{escape_latex_text(_pdf_title(model))}}},pdfdisplaydoctitle=true}}\n"
         "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
@@ -1656,10 +1657,7 @@ def _safe_latex_media_path(asset_path: str, cache_key: str | None) -> str | None
 def _latex_page_link(target_id: str, label: str) -> str:
     target = _latex_target(target_id)
     escaped_label = escape_latex_text(label)
-    return (
-        f"\\hyperlink{{{target}}}{{{escaped_label}}}"
-        f" (\\hyperlink{{{target}}}{{p.~\\pageref*{{{target}}}}})"
-    )
+    return f"\\gfbpagelink{{{target}}}{{{escaped_label}}}"
 
 
 def _latex_anchor(target_id: str, emitted_targets: set[str]) -> str:
