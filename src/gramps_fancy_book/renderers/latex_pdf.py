@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path, PurePosixPath
 
 from ..domain import BookModel
@@ -17,6 +18,7 @@ from .latex import render_latex
 
 _MAX_PASSES = 5
 _PASS_TIMEOUT_SECONDS = 120
+_TOTAL_COMPILATION_TIMEOUT_SECONDS = 180
 _LAYOUT_WARNING = re.compile(
     r"Reference .*undefined|There were undefined references|"
     r"Label\(s\) may have changed|Overfull \\[hv]box"
@@ -117,7 +119,11 @@ def _find_lualatex() -> str | None:
 def _compile_latex(compiler: str, work_directory: Path) -> None:
     previous_fingerprint = None
     stable = False
+    deadline = time.monotonic() + _TOTAL_COMPILATION_TIMEOUT_SECONDS
     for _pass_number in range(1, _MAX_PASSES + 1):
+        remaining_seconds = deadline - time.monotonic()
+        if remaining_seconds <= 0:
+            raise LatexCompilationError("timeout")
         try:
             result = subprocess.run(
                 [
@@ -133,7 +139,7 @@ def _compile_latex(compiler: str, work_directory: Path) -> None:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.STDOUT,
                 check=False,
-                timeout=_PASS_TIMEOUT_SECONDS,
+                timeout=min(_PASS_TIMEOUT_SECONDS, remaining_seconds),
             )
         except subprocess.TimeoutExpired as error:
             raise LatexCompilationError("timeout") from error
