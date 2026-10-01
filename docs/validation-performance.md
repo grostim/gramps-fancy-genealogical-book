@@ -125,6 +125,6 @@ To make L8.3 actionable, these provisional budgets use the only measured referen
 | --- | --- | --- |
 | Gramps CLI export, N=1,000, five synthetic shapes | ≤ 10 s; RSS ≤ 512 MB; JSON ≤ 64 MB | Separate maxima: 5.861 s and 372.1 MB RSS (multiple unions); 52.090 MB JSON (ancestry) |
 | Branching PDF compile, 2,002 people, 3,003 events and 200 derived media files | ≤ 60 s; PDF ≤ 16 MB | Highest of three runs: 34.714 s and 7,074,362 bytes |
-| Derivatives and HTML ZIP, N=100 with 20 source images at 1,600 × 1,200 (fixture generation excluded) | ≤ 5 s total; `tracemalloc` peak ≤ 256 MB | 1.484 s for derivatives, 1.149 s for the archive, and 126.17 MB traced peak |
+| Generate fixture, derivatives and HTML ZIP, N=100 with 20 PNGs at 1,600 × 1,200 | ≤ 8 s total; `tracemalloc` peak ≤ 256 MB | 2.071 s for fixture generation, 1.484 s for derivatives, and 1.149 s for the archive; 4.704 s and 126.17 MB traced peak overall |
 
 The renderer now limits LuaLaTeX to 120 s per pass and 180 s overall, replacing the previous theoretical maximum of five 120-second passes. This time guard is wider than the PDF performance budget and stops a stuck export. The RSS and final-file budgets remain qualification criteria, not runtime-enforced limits. Temporary-directory disk usage has not yet been measured or capped; these criteria must be qualified on a clean installation and other environments before they become release thresholds.

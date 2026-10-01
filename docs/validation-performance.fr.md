@@ -137,6 +137,6 @@ Pour rendre L8.3 actionnable, ces budgets provisoires s’appuient sur la seule 
 | --- | --- | --- |
 | Export CLI Gramps, N=1 000, cinq formes synthétiques | ≤ 10 s ; RSS ≤ 512 Mo ; JSON ≤ 64 Mo | Maxima distincts : 5,861 s et 372,1 Mo RSS (unions multiples) ; 52,090 Mo JSON (ascendance) |
 | Compilation PDF ramifiée, 2 002 personnes, 3 003 événements et 200 médias dérivés | ≤ 60 s ; PDF ≤ 16 Mo | Maximum observé sur trois exécutions : 34,714 s et 7 074 362 octets |
-| Dérivés et archive HTML, N=100 avec 20 sources de 1 600 × 1 200 pixels (hors création de la fixture) | ≤ 5 s au total ; pic `tracemalloc` ≤ 256 Mo | 1,484 s pour les dérivés, 1,149 s pour l’archive et 126,17 Mo de pic tracé |
+| Création de la fixture, dérivés et archive HTML, N=100 avec 20 PNG de 1 600 × 1 200 pixels | ≤ 8 s au total ; pic `tracemalloc` ≤ 256 Mo | 2,071 s pour la fixture, 1,484 s pour les dérivés, 1,149 s pour l’archive ; 4,704 s et 126,17 Mo de pic tracé au total |
 
 Le renderer limite maintenant la compilation LuaLaTeX à 120 s par passe et 180 s au total, contre un maximum théorique antérieur de cinq passes de 120 s. Ce garde-fou temporel est plus large que le budget de performance PDF et sert à interrompre un export bloqué. Les budgets RSS et de taille finale restent des critères de qualification, pas des limites imposées pendant l’exécution. Le pic d’espace disque du répertoire temporaire n’a pas encore été mesuré ni plafonné ; ces critères doivent être qualifiés sur une installation propre et sur d’autres environnements avant de devenir des seuils de livraison.
