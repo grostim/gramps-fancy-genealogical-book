@@ -262,3 +262,21 @@ In PDF family notices, one event and one distinct source entry now appear as par
 | Structure `L` / `LI` / `Link` | 292 / 1,174 / 2,669 | 90 / 972 / 2,669 | −202 lists and list items; links unchanged |
 
 All 1,805 named book destinations and 3,073 link annotations remain identical. Physical pages 29 and 31 were rendered at 130 dpi and reviewed; no clipping or visible overlap was found. Each compile time is a single run. At N=1,000, source size falls from 7,771,881 to 7,735,845 bytes (−0.46%), but both compiles time out after about 122.65 s and produce no PDF. Sampled temporary-file peaks are 22,266,020 bytes for the reference and 23,310,001 for the candidate; this single measurement does not show lower disk use. The large-book timeout remains unresolved. See the [raw data](validation-latex-family-notices-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf` (SHA-256 `0b3b395928504f2ad8a1b6412d878443a64200be5fe533892f080a2804db00b0`).
+
+### Partial LuaLaTeX first-pass profile — N=1,000 — 1 October 2026
+
+The current source after compacting family notices is 7,735,845 bytes for 2,002 people, 1,001 families, 3,003 events, 3,003 citations, 1,001 notices, 2,002 profiles, and 200 synthetic portraits. A temporary copy received Lua `os.clock()` markers before the main sections and every 100 entries in larger sections. One pass was launched with production options in a fresh directory; the diagnostic timeout was 121 s. The values below are Lua-reported CPU intervals rounded to the nearest millisecond. The instrumentation adds markers to the document, and its overhead was not subtracted.
+
+| Completed section or block | CPU (s) |
+| --- | ---: |
+| Cover, front matter, and contents | 0.022 |
+| Ancestry | 0.030 |
+| Descent | 10.686 |
+| Family connections, 500 sections with children | 39.627 |
+| Family connections, 500 sections without children | 13.910 |
+| End of family connections | 0.056 |
+| First 1,000 family notices | 29.593 |
+| End of family notices | 0.047 |
+| First 800 of 2,002 person profiles | 24.365 |
+
+LuaHBTeX hit the timeout after 121.023 s. The log shows it was still in the profile section; the documentary appendix and person index were not reached. The interrupted PDF file (3,727,852 bytes) has no trailer dictionary or xref table and is not a deliverable PDF. This partial profile shows that family connections with parentage links, family notices, and profiles already consume nearly all of one pass; it does not measure the appendix. The results point to parentage links and repeated page-link generation as the next areas to investigate. They are not an uninstrumented performance measurement. See the [raw data](validation-latex-first-pass-n1000-20261001.json).

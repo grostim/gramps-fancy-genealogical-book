@@ -1,0 +1,73 @@
+{
+  "title": "Partial instrumented LuaLaTeX first-pass profile for N=1000 branching book",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "family_notices": 1001,
+    "person_profiles": 2002,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_source_bytes": 7735845
+  },
+  "method": {
+    "passes": 1,
+    "fresh_temporary_directory": true,
+    "compile_flags": [
+      "-no-shell-escape",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-file-line-error"
+    ],
+    "timeout_seconds": 121.0,
+    "actual_wall_seconds": 121.023,
+    "timing_clock": "Lua os.clock() CPU seconds, intervals between injected markers, rounded to 0.001 s.",
+    "instrumentation": "Temporary source copy only. Markers were inserted before main sections and every 100 family connection entries, family notices, person profiles, appendix citations, and person index entries. Instrumentation increased source by 5801 bytes; overhead was not measured or removed.",
+    "production_source_or_settings_changed": false
+  },
+  "completed_intervals_seconds": {
+    "cover_front_matter_contents": 0.022,
+    "ancestry": 0.03,
+    "descent": 10.686,
+    "family_connections_first_500_sections_with_children": 39.627,
+    "family_connections_next_500_sections_without_children": 13.91,
+    "family_connections_final_section_remainder": 0.056,
+    "family_notices_first_1000": 29.593,
+    "family_notices_final_remainder": 0.047,
+    "person_profiles_first_800_of_2002": 24.365
+  },
+  "at_timeout": {
+    "compiler_status": "timeout",
+    "last_completed_checkpoint": "person_profiles_after_800",
+    "current_section": "person_profiles",
+    "documentary_appendix_reached": false,
+    "person_index_reached": false,
+    "partial_pdf_bytes": 3727852,
+    "partial_pdf_valid": false,
+    "pdfinfo_diagnostic": "Poppler could not find trailer dictionary or xref table."
+  },
+  "source_structure_counts": {
+    "latex_page_link_macro_calls": 17321,
+    "hypertarget_commands": 17768,
+    "label_commands": 17768,
+    "target_name_occurrences": 52868,
+    "unique_target_names": 17768,
+    "repeated_target_occurrences": 35100
+  },
+  "limitations": [
+    "Single instrumented pass; no uninstrumented comparison was run.",
+    "Marker overhead was not measured.",
+    "The appendix and index were not reached.",
+    "The partial PDF is corrupt/incomplete and is not a deliverable.",
+    "Synthetic fixture only; no PDF/UA claim is made."
+  ]
+}

@@ -274,3 +274,21 @@ Dans les notices familiales PDF, un événement unique et une source distincte u
 | Structure `L` / `LI` / `Link` | 292 / 1 174 / 2 669 | 90 / 972 / 2 669 | −202 listes et éléments de liste ; liens inchangés |
 
 Les 1 805 destinations nommées du livre et les 3 073 annotations de lien restent identiques. Les pages physiques 29 et 31 ont été rendues à 130 ppp et examinées ; aucun texte coupé ni chevauchement visible. La durée repose sur une seule exécution de chaque variante. À N=1 000, la source passe de 7 771 881 à 7 735 845 octets (−0,46 %), mais la compilation expire après environ 122,65 s dans les deux cas et ne produit aucun PDF. Le pic temporaire échantillonné est de 22 266 020 octets pour la référence et 23 310 001 pour la variante ; ce relevé ponctuel n’établit pas une baisse d’espace disque. Le délai des grands livres reste à résoudre. Voir les [données brutes](validation-latex-family-notices-20261001.json) et l’aperçu local (`../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf`, SHA-256 `0b3b395928504f2ad8a1b6412d878443a64200be5fe533892f080a2804db00b0`).
+
+### Profil partiel de la première passe LuaLaTeX — N=1 000 — 1er octobre 2026
+
+La source courante après la compaction des notices fait 7 735 845 octets pour 2 002 personnes, 1 001 familles, 3 003 événements, 3 003 citations, 1 001 notices, 2 002 fiches et 200 portraits synthétiques. Une copie temporaire a reçu des marqueurs Lua `os.clock()` avant les principales sections et tous les cent éléments dans les sections volumineuses. Une seule passe a été lancée avec les options de production, dans un répertoire neuf ; la limite diagnostique était de 121 s. Les temps ci-dessous sont les intervalles CPU rapportés par Lua, arrondis au millième ; l’instrumentation ajoute des marqueurs au document et ses coûts n’ont pas été soustraits.
+
+| Section ou bloc achevé | CPU (s) |
+| --- | ---: |
+| Couverture, préliminaires et sommaire | 0,022 |
+| Ascendance | 0,030 |
+| Descendance | 10,686 |
+| Connexions familiales, 500 sections avec enfants | 39,627 |
+| Connexions familiales, 500 sections sans enfants | 13,910 |
+| Fin de la section des connexions | 0,056 |
+| Notices familiales, 1 000 premières | 29,593 |
+| Fin des notices familiales | 0,047 |
+| Fiches individuelles, 800 premières sur 2 002 | 24,365 |
+
+LuaHBTeX a atteint le délai après 121,023 s. Le journal indique qu’il se trouvait encore dans la section des fiches ; l’annexe documentaire et l’index n’ont pas été atteints. Le fichier PDF interrompu (3 727 852 octets) n’a pas de dictionnaire de fin ni de table xref : ce n’est pas un PDF livrable. Ce profil partiel montre que les connexions familiales avec liens de filiation, les notices et les fiches consomment déjà presque tout le budget d’une passe ; il ne mesure pas le temps de l’annexe. Les résultats orientent la prochaine analyse vers les liens de filiation et la production répétée des liens de page. Ils ne constituent pas une mesure de performance non instrumentée. Les détails sont dans les [données brutes](validation-latex-first-pass-n1000-20261001.json).
