@@ -1818,5 +1818,5 @@ def _section_heading(
 
 def _latex_target(target_id: str) -> str:
     """Map arbitrary stable model IDs to safe, deterministic hyperref labels."""
-    encoded = base64.b32encode(target_id.encode("utf-8")).decode("ascii")
-    return f"target-{encoded.rstrip('=').lower()}"
+    encoded = base64.urlsafe_b64encode(target_id.encode("utf-8")).decode("ascii")
+    return f"target-{encoded.rstrip('=')}"

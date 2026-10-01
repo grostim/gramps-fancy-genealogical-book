@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-01",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "python": "3.14.0",
+  "benchmark": {
+    "command": "scripts/benchmark_book.py --descendant-couples 1000 --shape branching --with-media --repeat 3",
+    "fixture": {
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "citations": 3003,
+      "family_notices": 1001,
+      "profiles": 2002,
+      "synthetic_portraits": 200,
+      "portrait_size": "96x72"
+    },
+    "baseline": {
+      "target_encoding": "unpadded lowercase base32",
+      "latex_generation_seconds": [
+        2.034417,
+        2.034938,
+        2.081349
+      ],
+      "median_seconds": 2.034938,
+      "latex_source_bytes": 7735845
+    },
+    "candidate": {
+      "target_encoding": "unpadded URL-safe base64",
+      "latex_generation_seconds": [
+        0.623534,
+        0.609830,
+        0.613341
+      ],
+      "median_seconds": 0.613341,
+      "latex_source_bytes": 7167003
+    },
+    "comparison": {
+      "generation_time_reduction_percent": 69.85947483412271,
+      "latex_source_bytes_delta": -568842,
+      "latex_source_reduction_percent": 7.353327270647227
+    }
+  },
+  "small_pdf_review": {
+    "fixture_descendant_couples": 10,
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pages": 22,
+    "page_size": "A4",
+    "tagged": true,
+    "named_destinations": 452,
+    "target_destinations": 204,
+    "link_annotations": 342,
+    "unresolved_internal_named_destinations": 0,
+    "visually_reviewed_physical_pages_at_120_dpi": [
+      5,
+      6,
+      14,
+      22
+    ],
+    "file": "../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf",
+    "sha256": "feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078"
+  },
+  "limits": [
+    "No full PDF compilation comparison was run for N=100 or N=1000.",
+    "The benchmark measures LaTeX source generation, not LuaLaTeX compilation.",
+    "The N=1000 tagged-PDF compilation timeout remains unresolved."
+  ]
+}
