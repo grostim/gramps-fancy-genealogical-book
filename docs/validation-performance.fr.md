@@ -320,4 +320,15 @@ La source LaTeX reste exactement identique : 7 735 845 octets et SHA-256 `26cc3b
 
 Les identifiants de cibles hyperref passent du Base32 minuscule sans remplissage au Base64 URL sûr sans remplissage (`A–Z`, `a–z`, chiffres, `-` et `_`). Sur la même fixture ramifiée N=1 000, avec 200 portraits synthétiques, trois mesures de génération LaTeX passent d’une médiane de 2,034938 s à 0,613341 s (−69,86 %). La source générée passe de 7 735 845 à 7 167 003 octets (−568 842 octets, −7,35 %). Les deux séries utilisent CPython 3.14.0 sur le même Mac.
 
-Un livre fictif N=10 a été compilé avec LuaHBTeX 1.24.0 en un PDF A4 balisé de 22 pages. `pypdf` y trouve 452 destinations nommées, dont 204 cibles `target-*` avec l’alphabet attendu, ainsi que 342 annotations de lien sans destination interne nommée manquante. Les pages physiques 5, 6, 14 et 22 ont été rendues à 120 ppp et examinées. Cette recette confirme la compilation et les renvois sur ce petit livre ; la compilation N=100/N=1 000 n’a pas été répétée et le délai des grands livres n’est pas considéré comme résolu. Voir les [données brutes](validation-latex-url-safe-targets-20261001.json) et l’aperçu local `../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf` (SHA-256 `feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078`).
+Un livre fictif N=10 a été compilé avec LuaHBTeX 1.24.0 en un PDF A4 balisé de 22 pages. `pypdf` y trouve 452 destinations nommées, dont 204 cibles `target-*` avec l’alphabet attendu, ainsi que 342 annotations de lien sans destination interne nommée manquante. Les pages physiques 5, 6, 14 et 22 ont été rendues à 120 ppp et examinées.
+
+Une comparaison séparée N=100, avec 20 portraits synthétiques, a été exécutée une fois par variante sur macOS 27.0 arm64, CPython 3.14.0 et LuaHBTeX 1.24.0 :
+
+| Mesure | Base32 | Base64 URL sûre | Écart |
+| --- | ---: | ---: | ---: |
+| Génération LaTeX | 0,205227 s | 0,061724 s | −69,92 % |
+| Source LaTeX | 783 196 octets | 725 713 octets | −57 483 (−7,34 %) |
+| Compilation PDF complète | 90,437760 s | 84,805061 s | −5,632699 s (−6,23 %) |
+| PDF | 1 409 982 octets | 1 405 934 octets | −4 048 (−0,29 %) |
+
+Le temps de compilation repose sur une exécution par variante et reste indicatif. Le PDF N=1 000 n’a pas été recompilé ; son délai précédent reste non résolu. Voir les [données brutes](validation-latex-url-safe-targets-20261001.json) et l’aperçu local `../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf` (SHA-256 `feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078`).

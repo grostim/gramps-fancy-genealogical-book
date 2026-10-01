@@ -60,9 +60,53 @@
     "file": "../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf",
     "sha256": "feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078"
   },
+  "n100_compile_comparison": {
+    "fixture": {
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "citations": 303,
+      "synthetic_portraits": 20,
+      "portrait_size": "96x72"
+    },
+    "environment": {
+      "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+      "python": "3.14.0",
+      "lualatex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+    },
+    "baseline": {
+      "target_encoding": "unpadded lowercase base32",
+      "latex_generation_seconds": 0.205227,
+      "latex_source_bytes": 783196,
+      "pdf_compile_seconds": 90.43776,
+      "pdf_status": "compiled",
+      "pdf_bytes": 1409982,
+      "repetitions": 1
+    },
+    "candidate": {
+      "target_encoding": "unpadded URL-safe base64",
+      "latex_generation_seconds": 0.061724,
+      "latex_source_bytes": 725713,
+      "pdf_compile_seconds": 84.805061,
+      "pdf_status": "compiled",
+      "pdf_bytes": 1405934,
+      "repetitions": 1
+    },
+    "comparison": {
+      "latex_generation_reduction_percent": 69.92403533648105,
+      "latex_source_bytes_delta": -57483,
+      "latex_source_reduction_percent": 7.339542081420232,
+      "pdf_compile_seconds_delta": -5.632699,
+      "pdf_compile_reduction_percent": 6.228260186895388,
+      "pdf_bytes_delta": -4048,
+      "pdf_size_reduction_percent": 0.2870958636351386,
+      "timing_is_indicative": true
+    }
+  },
   "limits": [
-    "No full PDF compilation comparison was run for N=100 or N=1000.",
-    "The benchmark measures LaTeX source generation, not LuaLaTeX compilation.",
+    "The N=100 full-compilation comparison has one run per variant and is indicative.",
+    "No N=1000 PDF compilation was run after changing target encoding.",
     "The N=1000 tagged-PDF compilation timeout remains unresolved."
   ]
 }
