@@ -1,0 +1,92 @@
+{
+  "title": "Group citation appendix metadata into tagged paragraphs",
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "benchmark_dependencies": {
+      "mistune": "3.3.4",
+      "Pillow": "12.3.0",
+      "pypdfium2": "5.13.0",
+      "pypdf": "6.19.0"
+    }
+  },
+  "implementation": {
+    "change": "Compose citation source details, repositories, URLs, and media labels in one tagged paragraph per entry, retaining line breaks between fields.",
+    "multiple_call_lists_preserved": true,
+    "identity_derived_targets_changed": false
+  },
+  "n100_compile_comparison": {
+    "fixture": {
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "citations": 303,
+      "synthetic_portraits": 20,
+      "portrait_size": "96x72"
+    },
+    "baseline": {
+      "latex_source_bytes": 498849,
+      "pdf_compile_seconds": 67.993585,
+      "pdf_preview_bytes": 1437993,
+      "timed_compile_output_bytes": 1437997,
+      "pages": 169,
+      "repetitions": 1,
+      "renderer": "BLAKE2s destinations without unreferenced citation-call anchors"
+    },
+    "candidate": {
+      "latex_source_bytes": 496971,
+      "pdf_compile_seconds": 63.967656,
+      "pdf_preview_bytes": 1398169,
+      "timed_compile_output_bytes": 1398173,
+      "pages": 165,
+      "tagged": true,
+      "page_size": "A4",
+      "repetitions": 1,
+      "link_annotations": 3073,
+      "internal_links": 1861,
+      "unresolved_named_internal_destinations": 0,
+      "identity_target_names_unchanged": true,
+      "extracted_text_tokens_match_after_removing_running_headers_and_page_references": true,
+      "visually_reviewed_physical_pages_at_110_dpi": [
+        99,
+        165
+      ],
+      "file": "../output/pdf/gramps-fancy-book-appendix-metadata-compact-preview-20261001.pdf",
+      "sha256": "6c51b6cb0756faacd2bff70676af756b04f63a54d09ded006d5b7aa90c66ebbc"
+    },
+    "comparison": {
+      "latex_source_bytes_delta": -1878,
+      "latex_source_reduction_percent": 0.3765,
+      "pdf_compile_seconds_delta": -4.025929,
+      "pdf_compile_reduction_percent": 5.921,
+      "pdf_bytes_delta": -39824,
+      "pdf_size_reduction_percent": 2.7694,
+      "page_count_delta": -4,
+      "timing_is_indicative": true
+    }
+  },
+  "n1000_source_generation": {
+    "fixture": {
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "citations": 3003,
+      "synthetic_portraits": 200,
+      "portrait_size": "96x72"
+    },
+    "baseline_latex_source_bytes": 4918916,
+    "candidate_latex_source_bytes": 4900298,
+    "latex_source_bytes_delta": -18618,
+    "latex_source_reduction_percent": 0.3785,
+    "candidate_repetitions": 3
+  },
+  "limits": [
+    "The N=100 compile comparison has one timed run per variant and is indicative.",
+    "The full N=1,000 PDF was not compiled after this change; its production timeout remains unresolved.",
+    "The PDF preview uses fictional people, events, media, and citations."
+  ]
+}
