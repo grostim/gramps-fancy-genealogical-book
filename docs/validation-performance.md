@@ -332,3 +332,13 @@ On the N=100 fixture with 20 portraits, one full compile per variant falls from 
 A synthetic N=10 preview compiled with LuaHBTeX 1.24.0 is a 23-page tagged A4 PDF. `pypdf` found 455 named destinations, including 206 targets with the expected name format, 342 link annotations, and no missing internal destination. Physical pages 1, 6, 7, 11, 20, and 23 were rendered at 120 dpi and reviewed. See the [detailed measurements](validation-latex-short-targets-20261001.json) and [PDF preview](../output/pdf/gramps-fancy-book-short-target-digest-preview-20261001.pdf), SHA-256 `3757bc729a94a5c885fb26a2581417c4fe009148156b7978ab65af71b5faf51b`.
 
 The N=1,000 PDF was not recompiled; the previous timeout remains unresolved. The people, events, media, and citations in the preview are synthetic.
+
+### Deterministic indexed PDF destinations — 1 October 2026
+
+After the BLAKE2s digest experiment, the renderer now assigns labels such as `target-0`, `target-1`, and so on. It sorts reversible Base64 target seeds, then consistently replaces references in `\gfbpagelink`, `\hyperlink`, `\hypertarget`, and `\label`. Names are collision-free within a document and independent of page numbers; they remain unchanged while the target set stays the same.
+
+For N=1,000, the LaTeX source shrinks from 7,167,003 bytes with direct Base64 labels to 4,532,920 bytes (−36.76%), and from 5,147,816 bytes with BLAKE2s to 4,532,920 (−11.95%). Three source-generation measurements have a 0.873835 s median, compared with 0.640712 s for BLAKE2s. The smaller source therefore adds about 0.23 s of Python generation time on this fixture.
+
+A full N=1,000 compilation succeeded in three passes of 261.899, 259.468, and 259.112 s, for 781.415 s total and a 13,215,543-byte PDF. This diagnostic run temporarily raised the limits to 420 s per pass and 900 s total. Production limits remain 120 s per pass and 180 s total, so N=1,000 still exceeds the current production limits and is not a deliverable export under current settings.
+
+On N=100, one compile per variant took 68.629 s with indexed labels and 68.898 s with BLAKE2s; the 0.39% difference is indicative. The PDF shrank from 1,455,375 to 1,371,810 bytes (−5.74%). The N=10 preview remains a 23-page tagged A4 PDF; `pypdf` found 455 named destinations, 206 unique and dense numeric targets, and 342 link annotations, including 210 internal links, with no unresolved destination. The N=1,000 PDF was not retained; smaller synthetic previews are available. See the [raw data](validation-latex-indexed-targets-20261001.json) and [N=10 preview](../output/pdf/gramps-fancy-book-indexed-targets-preview-20261001.pdf), SHA-256 `60920f931695a1593259640acfd1b3c89378528d9a29f90ff64c423ba93c7aee`.

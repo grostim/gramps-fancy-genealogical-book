@@ -1,3 +1,5 @@
+import re
+
 from gramps_fancy_book.domain import (
     BookModel,
     Citation,
@@ -29,7 +31,7 @@ from gramps_fancy_book.domain import (
     Source,
     Url,
 )
-from gramps_fancy_book.renderers.latex import _latex_target, render_latex
+from gramps_fancy_book.renderers.latex import render_latex
 from gramps_fancy_book.renderers.latex_notes import render_latex_note
 
 
@@ -238,13 +240,13 @@ def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
     )
 
     rendered = render_latex(model)
-    target = _latex_target(f"media-{cache_key}")
-
     assert rendered.startswith(r"\DocumentMetadata{lang=fr-FR,tagging=on}")
     image_command = r"\includegraphics[width=0.6\linewidth,alt={Document partagé}]"
     assert rendered.count(image_command) == 1
+    page_targets = re.findall(r"\\gfbpagelink\{(target-\d+)\}", rendered)
+    assert len(page_targets) == 1
+    target = page_targets[0]
     assert rendered.count(f"\\hypertarget{{{target}}}") == 1
-    assert rendered.count(f"\\gfbpagelink{{{target}}}") == 1
     assert "Voir la reproduction :" in rendered
     assert rendered.index(image_command) < rendered.index("Voir la reproduction :")
 
@@ -327,9 +329,11 @@ def test_running_headers_include_section_generation_branch_and_page_number():
     assert r"\thepage" in rendered
     assert r"\setlength{\headheight}{30pt}" in rendered
     assert rendered.index(r"\markboth{Contents}{}") < rendered.index(r"\tableofcontents")
-    for part_id in ("ancestry", "descent"):
-        target = _latex_target(part_id)
-        assert f"\\hypertarget{{{target}}}" in rendered
+    for part_title in ("Ancestry", "Descent"):
+        assert re.search(
+            rf"\\hypertarget\{{(target-\d+)\}}\{{\}}\\label\{{\1\}}\\section\*\{{{part_title}\}}",
+            rendered,
+        )
     assert r"\markboth{Ancestry}{Generation 0 / Branch: Alex Exemple}" in rendered
     assert r"\markright{Generation 0 / Branch: Camille Exemple}" in rendered
     assert r"\markright{Generation 1 / Branch: Alex Exemple}" in rendered
@@ -353,8 +357,10 @@ def test_front_matter_heading_uses_shared_stable_target():
     )
 
     rendered = render_latex(model)
-    target = _latex_target("front-matter")
-
-    assert f"\\hypertarget{{{target}}}" in rendered
+    assert re.search(
+        r"\\hypertarget\{(target-\d+)\}\{\}\\label\{\1\}"
+        r"\\section\*\{Avant-propos\}",
+        rendered,
+    )
     assert r"\section*{Avant-propos}" in rendered
     assert "Pour nos familles." in rendered
