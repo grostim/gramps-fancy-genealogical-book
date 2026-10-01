@@ -169,3 +169,21 @@ One run per variant timed each LuaLaTeX subprocess launched by the production `_
 | N=100, tagging disabled for diagnosis | 2 | 32.694; 32.923 | 65.639 | 868,690 bytes |
 
 At N=100, all three tagged passes take about 54 seconds each, bringing the complete generation to 161.166 seconds. The untagged copy is 2.46 times faster, but Poppler reports `Tagged: no` for its 194-page PDF. This points to a substantial tagging cost, but does not support disabling it in production. Each variant was run once; these figures guide further profiling and do not establish a new statistical budget. The record also includes the LaTeX source sizes: [raw pass profile](validation-latex-pass-profile-20261001.json).
+
+The N=10 convergence profile explains the third tagged pass: adding the table-of-contents entries changes the sole auxiliary record `@tag@LastPage`, from 1,921 to 1,949 marked-content chunks and from 2,520 to 2,541 structure elements. The table of contents and page count are already stable, but extracted text changes between passes 1 and 2. The counters then stabilize, and extracted text, structure, destinations and links remain unchanged between passes 2 and 3. The [tagpdf code that derives structure-ID padding from `tagstruct`](https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx#L1895-L1903) and [assembles the ParentTree through `tagmcabs`](https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx#L2203-L2214) relies on these values; excluding them from the convergence check could leave an incomplete PDF. Optimization must therefore reduce per-pass cost while retaining the passes.
+
+A single instrumented first pass of the branching N=100 fixture, with tagging enabled and twenty 96 × 72 pixel portraits, took 52.284 s and produced a tagged 194-page PDF. Each section timer runs to the next section marker and includes page breaks and shipout.
+
+| Section | Time (s) |
+| --- | ---: |
+| Ancestry | 0.033 |
+| Descent | 1.26 |
+| Family connections | 13.5 |
+| Family notices | 5.1 |
+| Person profiles | 10.5 |
+| Documentary appendix | 14.1 |
+| Person index | 3.03 |
+| Timed sections total | 47.523 |
+| Complete pass | 52.284 |
+
+Family connections, the documentary appendix and person profiles dominate this pass. Internal tagpdf hooks time tree finalization at 3.284 s, including 2.77 s to write structure elements. This one instrumented run guides further profiling; it does not establish a statistical budget or break down LaTeX operations within each section. The PDF remains tagged (Tagged: yes). Raw results are in the [pass profile](validation-latex-pass-profile-20261001.json).

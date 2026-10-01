@@ -181,3 +181,21 @@ Une exécution par variante a chronométré séparément chaque appel LuaLaTeX d
 | N=100, balisage désactivé pour le diagnostic | 2 | 32,694 ; 32,923 | 65,639 | 868 690 octets |
 
 À N=100, les trois passes balisées durent chacune près de 54 s ; elles portent la génération complète à 161,166 s. La copie non balisée est 2,46 fois plus rapide, mais Poppler indique `Tagged: no` sur son PDF de 194 pages. Cette mesure suggère un surcoût substantiel du balisage, sans autoriser à le désactiver en production. Chaque variante n’a été exécutée qu’une fois ; ces chiffres servent à orienter le profilage, pas à établir une nouvelle enveloppe statistique. Le relevé contient aussi les tailles des sources LaTeX : [profil brut des passes](validation-latex-pass-profile-20261001.json).
+
+Le profil de convergence N=10 explique le troisième passage balisé : l’ajout des entrées du sommaire change le seul enregistrement auxiliaire `@tag@LastPage`, dont les compteurs passent de 1 921 à 1 949 contenus marqués et de 2 520 à 2 541 éléments de structure. Le sommaire et le nombre de pages sont déjà stables, mais le texte extrait change entre les passes 1 et 2. Les compteurs restent ensuite stables, et le texte, l’arbre, les destinations et les liens ne changent plus entre les passes 2 et 3. Le [code tagpdf qui calcule le remplissage des identifiants de structure à partir de `tagstruct`](https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx#L1895-L1903) et [assemble le ParentTree jusqu’au compteur `tagmcabs`](https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx#L2203-L2214) s’appuie sur ces valeurs ; les exclure du contrôle de convergence risquerait un PDF incomplet. L’optimisation doit donc réduire le coût des passes sans les supprimer.
+
+Une passe unique instrumentée de la fixture ramifiée N=100, balisage activé et 20 portraits de 96 × 72 pixels, a duré 52,284 s et produit un PDF balisé de 194 pages. Les chronomètres englobent chaque section jusqu’au marqueur suivant, y compris les coupures et sorties de pages.
+
+| Section | Durée (s) |
+| --- | ---: |
+| Ascendance | 0,033 |
+| Descendance | 1,26 |
+| Liens familiaux | 13,5 |
+| Notices familiales | 5,1 |
+| Fiches individuelles | 10,5 |
+| Annexe documentaire | 14,1 |
+| Index des personnes | 3,03 |
+| Total des sections chronométrées | 47,523 |
+| Passe complète | 52,284 |
+
+Les liens familiaux, l’annexe documentaire et les fiches individuelles dominent cette passe. Les hooks internes tagpdf mesurent 3,284 s pour la finalisation de l’arbre, dont 2,77 s pour l’écriture des éléments de structure. Une seule exécution instrumentée sert à orienter la suite du profilage ; elle ne confirme pas de budget statistique et ne décompose pas les opérations LaTeX internes à chaque section. Le PDF obtenu reste balisé (Tagged: yes). Les données brutes figurent dans le [profil des passes](validation-latex-pass-profile-20261001.json).
