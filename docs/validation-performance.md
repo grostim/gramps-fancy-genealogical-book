@@ -320,3 +320,15 @@ A separate N=100 comparison with 20 synthetic portraits was run once per variant
 | PDF | 1,409,982 bytes | 1,405,934 bytes | −4,048 (−0.29%) |
 
 The compile-time comparison has one run per variant and is indicative. The N=1,000 PDF was not recompiled; its earlier timeout remains unresolved. See the [raw data](validation-latex-url-safe-targets-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf` (SHA-256 `feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078`).
+
+### Compact PDF destinations with BLAKE2s digests — 1 October 2026
+
+Hyperref names keep the `target-` prefix and now encode a 96-bit BLAKE2s digest of each stable ID using unpadded URL-safe Base64. Names are deterministic, independent of pagination, and much shorter than a reversible encoding of the complete ID. For 17,768 targets, the theoretical probability of at least one collision is about 2 × 10⁻²¹.
+
+On the N=1,000 branching fixture with 2,002 people and 200 synthetic portraits, source shrinks from 7,167,003 to 5,147,816 bytes (−28.17%). Median LaTeX generation rises from 0.612325 to 0.640712 s (+0.028387 s, +4.64%), a small cost compared with PDF compilation. Each variant has three repetitions on macOS 27 arm64 and CPython 3.14.0; the Base64 reference was replayed in the same environment using the previous encoder.
+
+On the N=100 fixture with 20 portraits, one full compile per variant falls from 84.805061 to 68.898323 s (−15.906738 s, −18.76%). Source shrinks from 725,713 to 521,949 bytes (−28.08%). The candidate PDF is 1,455,375 bytes, 49,441 bytes (+3.52%) larger than the reference. Each compile time is a single indicative run.
+
+A synthetic N=10 preview compiled with LuaHBTeX 1.24.0 is a 23-page tagged A4 PDF. `pypdf` found 455 named destinations, including 206 targets with the expected name format, 342 link annotations, and no missing internal destination. Physical pages 1, 6, 7, 11, 20, and 23 were rendered at 120 dpi and reviewed. See the [detailed measurements](validation-latex-short-targets-20261001.json) and [PDF preview](../output/pdf/gramps-fancy-book-short-target-digest-preview-20261001.pdf), SHA-256 `3757bc729a94a5c885fb26a2581417c4fe009148156b7978ab65af71b5faf51b`.
+
+The N=1,000 PDF was not recompiled; the previous timeout remains unresolved. The people, events, media, and citations in the preview are synthetic.
