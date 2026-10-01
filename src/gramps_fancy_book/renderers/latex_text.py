@@ -5,7 +5,7 @@ from urllib.parse import quote, urlsplit
 
 def escape_latex_text(value: str) -> str:
     """Escape user supplied text so it cannot introduce LaTeX commands."""
-    return "".join(_TEXT_ESCAPE.get(char, char) for char in value)
+    return value.translate(_TEXT_TRANSLATION)
 
 
 def format_latex_url(value: str) -> str:
@@ -49,3 +49,4 @@ _TEXT_ESCAPE = {
     "~": r"\textasciitilde{}",
     "^": r"\textasciicircum{}",
 }
+_TEXT_TRANSLATION = str.maketrans(_TEXT_ESCAPE)

@@ -309,3 +309,9 @@ Une variante temporaire n’émettait `\markright` dans les connexions familiale
 Les deux extractions comptent 215 988 caractères, mais les en-têtes de contexte et la pagination de plusieurs entrées diffèrent, notamment aux pages physiques 13–16 et 30–31. L’aperçu temporaire a donc été supprimé et le changement de source annulé.
 
 Ces durées reposent sur une exécution chacune et ne sont pas directement comparables : elles ont été mesurées avec CPython 3.14.0 et 3.13.7 respectivement. Le résultat ne démontre aucun gain de performance et ne conserve pas le rendu existant. Voir les [données brutes](validation-latex-running-header-marks-20261001.json) ; le dernier aperçu accepté reste celui des [notices compactées](../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf).
+
+### Échappement LaTeX par table de traduction — N=1 000 — 1er octobre 2026
+
+`escape_latex_text` utilise maintenant `str.translate` avec une table de traduction pré-calculée, au lieu d’un générateur Python caractère par caractère. Sur la fixture ramifiée avec 1 000 unions descendantes, 2 002 personnes et 200 portraits synthétiques, les trois mesures de génération de source passent d’une médiane de 2,202271 s à 2,034793 s (−7,61 %, soit −0,167478 s). Elles utilisent le même CPython 3.14.0, le même Mac et trois répétitions de chaque variante.
+
+La source LaTeX reste exactement identique : 7 735 845 octets et SHA-256 `26cc3b3a77946413b08f19ee058de3ba451d7e359e40c32eb6167c94c05950e9` avant et après. La compilation PDF n’a pas été répétée : ce changement accélère seulement la génération Python de la source et n’allège pas le travail dominant de LuaLaTeX. Le délai N=1 000 reste à résoudre. Voir les [mesures brutes](validation-latex-text-translation-20261001.json).
