@@ -61,6 +61,85 @@
       "pages": 194
     }
   ],
+  "convergence_diagnostic": {
+    "fixture": "branching N=10, 22 people, 11 families, 33 events, 2 synthetic 96x72 portraits, tagging on",
+    "method": "Capture book.aux, book.toc and book.out after each pass of the production _compile_latex helper; compare extracted text and Poppler structure output from saved pass PDFs.",
+    "auxiliary_files": {
+      "book.aux": {
+        "bytes_each_pass": 37745,
+        "sha256_by_pass": [
+          "8dca46ef4b415cb13435b076b0c18ba1622e9254841bf97a179a0a1d976d1e59",
+          "a1ba98b28e7a10835b59e6a6347768dd2bbb7093ed9fc1077fed47ce71e112b4",
+          "a1ba98b28e7a10835b59e6a6347768dd2bbb7093ed9fc1077fed47ce71e112b4"
+        ]
+      },
+      "book.toc": {
+        "bytes_each_pass": 4220,
+        "sha256_by_pass": [
+          "8cd3aa21480edbc4d96b0463d423c53fb59795abc93bd1ce2e30ddc5605f4d61",
+          "8cd3aa21480edbc4d96b0463d423c53fb59795abc93bd1ce2e30ddc5605f4d61",
+          "8cd3aa21480edbc4d96b0463d423c53fb59795abc93bd1ce2e30ddc5605f4d61"
+        ]
+      },
+      "book.out": "not present"
+    },
+    "tagpdf_lastpage_record_by_pass": [
+      {"pass": 1, "abspage": 27, "tagmcabs": 1921, "tagstruct": 2520},
+      {"pass": 2, "abspage": 27, "tagmcabs": 1949, "tagstruct": 2541},
+      {"pass": 3, "abspage": 27, "tagmcabs": 1949, "tagstruct": 2541}
+    ],
+    "pass_1_to_2": {
+      "only_auxiliary_record_changed": "@tag@LastPage",
+      "toc_unchanged": true,
+      "page_count_unchanged": true,
+      "extracted_text_changed": true,
+      "extracted_text_sha256": [
+        "65b76e0a8d4bd27dda42705d9e6d451f8aad6c84dbf1d8f2f33432ff7a14658a",
+        "8ba6c79ccae67b80d97094d7d73cfabe4904045498fba7dde2190cb7e41626cb"
+      ]
+    },
+    "pass_2_to_3": {
+      "auxiliary_fingerprint_unchanged": true,
+      "structure_output_sha256_unchanged": true,
+      "extracted_text_sha256_unchanged": true,
+      "named_destinations_unchanged": true,
+      "external_url_annotations_unchanged": true
+    },
+    "interpretation": "Do not ignore @tag@LastPage when checking convergence. The official tagpdf tree code uses the recorded tagstruct count to determine structure-ID padding and the recorded tagmcabs count to assemble the ParentTree; the third pass reads the counts produced after the table of contents has been tagged.",
+    "official_sources": [
+      "https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx#L1895-L1903",
+      "https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx#L2203-L2214"
+    ]
+  },
+  "section_profile_diagnostic": {
+    "fixture": "branching N=100, 202 people, 101 families, 303 events, 20 synthetic 96x72 portraits, tagging on",
+    "method": "Instrument a single first LuaLaTeX pass in a temporary rendered source with expl3 benchmark tic/toc pairs around the seven book sections and retain tagpdf finalization timing hooks. Section intervals include page breaks and shipout between their start and next section marker.",
+    "passes": 1,
+    "total_pass_seconds": 52.284,
+    "pages": 194,
+    "pdfinfo_tagged": true,
+    "section_seconds": {
+      "ancestry": 0.0331,
+      "descent": 1.26,
+      "family_connections": 13.5,
+      "family_notices": 5.1,
+      "person_profiles": 10.5,
+      "documentary_appendix": 14.1,
+      "person_index": 3.03
+    },
+    "section_sum_seconds": 47.523,
+    "tagpdf_finalization_seconds": {
+      "ParentTree": 0.0533,
+      "IDTree": 0.456,
+      "RoleMap": 0.00368,
+      "ClassMap": 0.000244,
+      "Namespaces": 0.000763,
+      "StructElems": 2.77,
+      "Root": 0.000183
+    },
+    "tagpdf_finalization_sum_seconds": 3.284,
+    "interpretation": "Family connections, the documentary appendix and person profiles account for most measured section time; final tagpdf tree writing takes about 3.28 seconds in this pass. This single instrumented pass is diagnostic only and does not establish a stable performance budget or isolate the cost of individual LaTeX operations."
+  },
   "comparison": {
     "n100_tagged_minus_untagged_seconds": 95.527,
     "n100_tagged_runtime_ratio": 2.455,
