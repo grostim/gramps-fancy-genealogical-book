@@ -308,4 +308,15 @@ The generated LaTeX source is byte-identical: 7,735,845 bytes and SHA-256 `26cc3
 
 Hyperref target IDs now use unpadded URL-safe Base64 (`A–Z`, `a–z`, digits, `-`, and `_`) instead of unpadded lowercase Base32. On the same N=1,000 branching fixture with 200 synthetic portraits, three LaTeX-generation measurements fall from a 2.034938 s median to 0.613341 s (−69.86%). The generated source shrinks from 7,735,845 to 7,167,003 bytes (−568,842 bytes, −7.35%). Both series use CPython 3.14.0 on the same Mac.
 
-A fictitious N=10 book compiled with LuaHBTeX 1.24.0 into a 22-page tagged A4 PDF. `pypdf` found 452 named destinations, including 204 `target-*` labels using the expected alphabet, and 342 link annotations with no missing internal named destination. Physical pages 5, 6, 14, and 22 were rendered at 120 dpi and visually reviewed. This confirms compilation and links for the small book; N=100/N=1,000 PDF compilation was not repeated, so the large-book timeout is not considered resolved. See the [raw data](validation-latex-url-safe-targets-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf` (SHA-256 `feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078`).
+A fictitious N=10 book compiled with LuaHBTeX 1.24.0 into a 22-page tagged A4 PDF. `pypdf` found 452 named destinations, including 204 `target-*` labels using the expected alphabet, and 342 link annotations with no missing internal named destination. Physical pages 5, 6, 14, and 22 were rendered at 120 dpi and visually reviewed.
+
+A separate N=100 comparison with 20 synthetic portraits was run once per variant on macOS 27.0 arm64, CPython 3.14.0, and LuaHBTeX 1.24.0:
+
+| Measure | Base32 | URL-safe Base64 | Difference |
+| --- | ---: | ---: | ---: |
+| LaTeX generation | 0.205227 s | 0.061724 s | −69.92% |
+| LaTeX source | 783,196 bytes | 725,713 bytes | −57,483 (−7.34%) |
+| Full PDF compile | 90.437760 s | 84.805061 s | −5.632699 s (−6.23%) |
+| PDF | 1,409,982 bytes | 1,405,934 bytes | −4,048 (−0.29%) |
+
+The compile-time comparison has one run per variant and is indicative. The N=1,000 PDF was not recompiled; its earlier timeout remains unresolved. See the [raw data](validation-latex-url-safe-targets-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-target-encoding-preview-20261001.pdf` (SHA-256 `feda0dcb2bd5ab550dff8592ba673d4271bff952757705a126bcf426c2017078`).
