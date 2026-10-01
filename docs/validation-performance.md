@@ -249,3 +249,16 @@ For a profile with exactly one event or one distinct citation entry, the PDF now
 | Structure `L` / `LI` / `Link` | 696 / 1,578 / 2,669 | 292 / 1,174 / 2,669 | −404 lists and list items; links unchanged |
 
 The candidate retains exactly the same 1,805 named book destinations and 3,073 PDF link annotations as the preceding preview. Physical pages 57–58 were rendered at 130 dpi and reviewed; the compact event/source rows remain legible and no clipping or overlap was visible. The old and new timings are single runs, not a stable performance estimate; the N=1,000 case and profiles with multiple distinct events or citations still need measurement. See the [raw measurement](validation-latex-profile-singletons-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf` (SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`).
+
+### Single-item family notices — 1 October 2026
+
+In PDF family notices, one event and one distinct source entry now appear as paragraphs beneath their headings; multiple entries remain lists. The N=100 branching fixture has 101 notices, each with one event and one distinct citation. This variant is compared with the PDF after the single-item person-profile change.
+
+| Case | Profile-singleton reference | Compact family notices | Change |
+| --- | ---: | ---: | ---: |
+| N=100 LaTeX source | 786,832 bytes | 783,196 bytes | −3,636 bytes (−0.46%) |
+| N=100 full compile | 93.419 s, one run | 90.315 s, one run | −3.104 s (−3.32%), indicative |
+| N=100 tagged PDF | 1,470,734 bytes; 177 pages | 1,409,982 bytes; 169 pages | −60,752 bytes (−4.13%); −8 pages |
+| Structure `L` / `LI` / `Link` | 292 / 1,174 / 2,669 | 90 / 972 / 2,669 | −202 lists and list items; links unchanged |
+
+All 1,805 named book destinations and 3,073 link annotations remain identical. Physical pages 29 and 31 were rendered at 130 dpi and reviewed; no clipping or visible overlap was found. Each compile time is a single run. At N=1,000, source size falls from 7,771,881 to 7,735,845 bytes (−0.46%), but both compiles time out after about 122.65 s and produce no PDF. Sampled temporary-file peaks are 22,266,020 bytes for the reference and 23,310,001 for the candidate; this single measurement does not show lower disk use. The large-book timeout remains unresolved. See the [raw data](validation-latex-family-notices-20261001.json) and local preview at `../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf` (SHA-256 `0b3b395928504f2ad8a1b6412d878443a64200be5fe533892f080a2804db00b0`).

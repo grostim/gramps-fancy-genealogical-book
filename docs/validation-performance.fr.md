@@ -261,3 +261,16 @@ Pour une fiche avec un seul événement ou une seule citation distincte, le PDF 
 | Structure `L` / `LI` / `Link` | 696 / 1 578 / 2 669 | 292 / 1 174 / 2 669 | −404 listes et éléments de liste ; liens inchangés |
 
 Le PDF candidat conserve exactement les mêmes 1 805 cibles nommées du livre et les 3 073 annotations de lien que l’aperçu précédent. Les pages physiques 57–58 ont été rendues à 130 ppp et examinées ; les lignes compactes des événements et sources restent lisibles, sans coupure ni superposition visible. Les deux durées sont des mesures isolées et ne constituent pas une estimation stable ; le cas N=1 000 et les fiches comportant plusieurs événements ou citations distinctes restent à mesurer. Voir la [mesure brute](validation-latex-profile-singletons-20261001.json) et l’aperçu local (`../output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf`, SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`).
+
+### Notices familiales à entrée unique — 1er octobre 2026
+
+Dans les notices familiales PDF, un événement unique et une source distincte unique sont maintenant présentés en paragraphes sous leurs titres ; plusieurs entrées restent en listes. La fixture ramifiée N=100 comprend 101 notices, chacune avec un événement et une citation distincte. Cette variante est comparée au PDF après les sections unitaires des fiches individuelles.
+
+| Cas | Référence après fiches unitaires | Notices familiales compactées | Écart |
+| --- | ---: | ---: | ---: |
+| Source LaTeX N=100 | 786 832 octets | 783 196 octets | −3 636 octets (−0,46 %) |
+| Compilation complète N=100 | 93,419 s, une exécution | 90,315 s, une exécution | −3,104 s (−3,32 %), indicatif |
+| PDF balisé N=100 | 1 470 734 octets ; 177 pages | 1 409 982 octets ; 169 pages | −60 752 octets (−4,13 %) ; −8 pages |
+| Structure `L` / `LI` / `Link` | 292 / 1 174 / 2 669 | 90 / 972 / 2 669 | −202 listes et éléments de liste ; liens inchangés |
+
+Les 1 805 destinations nommées du livre et les 3 073 annotations de lien restent identiques. Les pages physiques 29 et 31 ont été rendues à 130 ppp et examinées ; aucun texte coupé ni chevauchement visible. La durée repose sur une seule exécution de chaque variante. À N=1 000, la source passe de 7 771 881 à 7 735 845 octets (−0,46 %), mais la compilation expire après environ 122,65 s dans les deux cas et ne produit aucun PDF. Le pic temporaire échantillonné est de 22 266 020 octets pour la référence et 23 310 001 pour la variante ; ce relevé ponctuel n’établit pas une baisse d’espace disque. Le délai des grands livres reste à résoudre. Voir les [données brutes](validation-latex-family-notices-20261001.json) et l’aperçu local (`../output/pdf/gramps-fancy-book-single-event-notice-preview-20261001.pdf`, SHA-256 `0b3b395928504f2ad8a1b6412d878443a64200be5fe533892f080a2804db00b0`).
