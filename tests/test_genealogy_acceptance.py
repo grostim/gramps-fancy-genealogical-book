@@ -174,16 +174,17 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
         for line in descent_text.splitlines()
     )
     connection_text = rendered[connections_start:]
-    parent_child_lines = [
-        line
-        for line in connection_text.splitlines()
-        if "child" in line and "to$" in line
+    parentage_blocks = [
+        block
+        for block in connection_text.split(r"\item ")
+        if "child" in block
+        and any(term in block for term in ("filiation", "parentage"))
     ]
     for parent in ("p0", "p1"):
         assert any(
-            parent in line and r"\gfbpagelink{" in line
-            for line in parent_child_lines
-        ), parent_child_lines
+            parent in block and r"\gfbpagelink{" in block
+            for block in parentage_blocks
+        ), parentage_blocks
 
 
 def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry():
@@ -572,8 +573,12 @@ def test_single_parent_family_section_has_only_the_recorded_parent():
         for line in connection_section.splitlines()
     )
     assert any(
-        "p0}" in line and "$\\to$" in line and "child" in line and "(Birth)" in line
-        for line in connection_section.splitlines()
+        "p0}" in block
+        and "child" in block
+        and any(term in block for term in ("filiation", "parentage"))
+        and "(Birth)" in block
+        and "p1" not in block
+        for block in connection_section.split(r"\item ")
     )
 
 

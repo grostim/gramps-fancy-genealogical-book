@@ -208,3 +208,17 @@ The page-reference macro expands to the same two clickable text spans and page r
 The page-reference macro now makes the person's name and printed page number one clickable link. On the same fixture and runtime as the preceding two-link macro, two three-pass compiles took 116.948 s and 116.991 s (median 116.969 s), 19.36% below the preceding median of 145.045 s. The 194-page tagged PDF fell by 226,728 bytes (11.65%), from a median 1,946,325 to 1,719,597 bytes. Its sampled temporary-workspace peak fell by 4.93%. The structure contains 2,869 Link elements, down from 4,814; all 4,905 named destinations remain. Extracted text is byte-for-byte identical to the earlier PDF. The changed structure hash reflects the intentionally consolidated link annotations; pages 12–13 of the family-connection section were reviewed for layout. Details are in the [pass profile](validation-latex-pass-profile-20261001.json).
 
 The grouped profile clarifies the high family-connections cost: fifty sections with children contain 200 parent-child links and take 10.90 s across the first two groups of 25; the 51 childless sections take about 2.50 s. Those timers include page breaks. Groups of 25 profiles and appendix citations are much more even, at around 1.1 to 1.4 s. The result aligns with the nested relationship lists, but the timing does not separate their composition from layout and page output.
+
+### Grouped child and parentage entries — 1 October 2026
+
+The PDF family-connection section now lists each child once and groups that child's recorded parents and relationship types underneath. This follows the HTML renderer's child-first grouping while preserving the recorded parentage links. The baseline is the single-link renderer from PR #190; both variants use the same branching fixture and twenty 96 × 72 synthetic portraits on macOS 27.0 arm64, CPython 3.13.7 and LuaHBTeX 1.24.0.
+
+| Case | Baseline | Grouped | Change |
+| --- | ---: | ---: | ---: |
+| N=100 LaTeX source | 821,686 bytes | 801,556 bytes | −20,130 bytes (−2.45%) |
+| N=100 full PDF compile, two runs | 116.948 s; 116.991 s | 111.406 s; 110.942 s | Median 116.969 → 111.174 s (−4.95%) |
+| N=100 final PDF size | 1,719,597 bytes | median 1,628,692 bytes | −90,905 bytes (−5.29%) |
+| N=1,000 LaTeX source | 8,119,289 bytes | 7,917,825 bytes | −201,464 bytes (−2.48%) |
+| N=1,000 full PDF compile | `timeout` at 122.715 s | `timeout` at 122.718 s | No measurable improvement; neither produced a PDF |
+
+The grouped N=100 PDF is tagged, 195 pages, and 1,628,695 bytes. Poppler reports 2,669 Link structure elements, down from 2,869, and all 1,805 named book targets are present. Pages 12–13 show the grouped parentage; the relationship type can wrap onto its own continuation line but remains readable. The N=1,000 source and compile result show that this reduction alone does not resolve the large-book timeout. The local preview is `output/pdf/gramps-fancy-book-parentage-grouping-preview-20261001.pdf`; its records and synthetic portraits are fictitious. These are targeted measurements, not a three-run performance qualification.

@@ -27,6 +27,7 @@ from ..domain import (
     Media,
     MediaReference,
     Note,
+    ParentChildLink,
     Person,
     PersonOccurrence,
     RepositoryReference,
@@ -50,7 +51,7 @@ from .latex_notes import render_latex_note
 from .latex_text import escape_latex_text, format_latex_url
 
 # Keep nested PDF lists bounded so tagpdf's paragraph hooks stay balanced.
-_MAX_PARENT_CHILD_LINKS_PER_LIST = 20
+_MAX_CHILDREN_PER_LIST = 20
 
 
 def label(model: BookModel, key: str) -> str:
@@ -666,10 +667,6 @@ def _render_family_sections(
             _occurrence_link(target_id, occurrences_by_id, people_by_handle, emitted_targets)
             for target_id in section.partner_occurrence_ids
         ]
-        children = [
-            _occurrence_link(target_id, occurrences_by_id, people_by_handle, emitted_targets)
-            for target_id in section.child_occurrence_ids
-        ]
         partner_label = label(model, "and").join(item for item in partners if item)
         section_part = label(model, section.part).lower()
         if section_part == section.part:
@@ -694,39 +691,58 @@ def _render_family_sections(
                 + _latex_page_link(notice.notice_id, label(model, "family_details"))
                 + "\n"
             )
-        if children:
+        if section.child_occurrence_ids:
+            links_by_child: dict[str, list[ParentChildLink]] = {}
+            for link in section.parent_child_links:
+                links_by_child.setdefault(link.child_occurrence_id, []).append(link)
             output.append(
                 "\\par "
-                + escape_latex_text(label(model, "children"))
-                + ": "
-                + ", ".join(item for item in children if item)
-                + "\n"
+                + escape_latex_text(label(model, "children_and_parentage"))
+                + ":\n\\begin{itemize}\n"
             )
-        if section.parent_child_links:
-            output.append("\\begin{itemize}\n")
-            for index, link in enumerate(section.parent_child_links, start=1):
-                parent = _occurrence_link(
-                    link.parent_occurrence_id,
-                    occurrences_by_id,
-                    people_by_handle,
-                    emitted_targets,
-                )
+            for index, child_id in enumerate(section.child_occurrence_ids, start=1):
                 child = _occurrence_link(
-                    link.child_occurrence_id,
+                    child_id,
                     occurrences_by_id,
                     people_by_handle,
                     emitted_targets,
                 )
-                relationship = _shared_gramps_type_label(
-                    "child_relationship",
-                    _relationship_label(link.relationship_type),
-                    gramps_type_labels,
-                )
-                suffix = f" ({escape_latex_text(relationship)})" if relationship else ""
-                output.append(f"\\item {parent} $\\to$ {child}{suffix}\n")
+                parentage = []
+                seen_parentage: set[tuple[str, str]] = set()
+                for link in links_by_child.get(child_id, ()):
+                    parent = _occurrence_link(
+                        link.parent_occurrence_id,
+                        occurrences_by_id,
+                        people_by_handle,
+                        emitted_targets,
+                    )
+                    relationship = _shared_gramps_type_label(
+                        "child_relationship",
+                        _relationship_label(link.relationship_type),
+                        gramps_type_labels,
+                    )
+                    relation = (
+                        f"{parent} ({escape_latex_text(relationship)})"
+                        if relationship
+                        else parent
+                    )
+                    relation_key = (link.parent_occurrence_id, relationship)
+                    if relation_key in seen_parentage:
+                        continue
+                    seen_parentage.add(relation_key)
+                    parentage.append(relation)
+                output.append(f"\\item {child}\n")
+                if parentage:
+                    output.append(
+                        "\\par\\noindent\\hspace*{1em}"
+                        + escape_latex_text(label(model, "filiation"))
+                        + ": "
+                        + "; ".join(parentage)
+                        + "\n"
+                    )
                 if (
-                    index % _MAX_PARENT_CHILD_LINKS_PER_LIST == 0
-                    and index < len(section.parent_child_links)
+                    index % _MAX_CHILDREN_PER_LIST == 0
+                    and index < len(section.child_occurrence_ids)
                 ):
                     output.append("\\end{itemize}\n\\begin{itemize}\n")
             output.append("\\end{itemize}\n")
