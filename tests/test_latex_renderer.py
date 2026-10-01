@@ -244,7 +244,7 @@ def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
     image_command = r"\includegraphics[width=0.6\linewidth,alt={Document partagé}]"
     assert rendered.count(image_command) == 1
     assert rendered.count(f"\\hypertarget{{{target}}}") == 1
-    assert rendered.count(f"\\hyperlink{{{target}}}") == 2
+    assert rendered.count(f"\\gfbpagelink{{{target}}}") == 1
     assert "Voir la reproduction :" in rendered
     assert rendered.index(image_command) < rendered.index("Voir la reproduction :")
 
