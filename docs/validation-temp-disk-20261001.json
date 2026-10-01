@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-01",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "python": "3.14.0",
+  "lualatex": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+  "temporary_workspace_metric": {
+    "definition": "Sum of logical file sizes under the benchmark temporary directory",
+    "sampling_interval_ms": 100,
+    "symlinks_followed": false,
+    "limitations": "Files created and removed between samples may be missed; this is not a system-wide disk quota measurement."
+  },
+  "cases": [
+    {
+      "name": "high-resolution-media-html",
+      "command": "scripts/benchmark_book.py --shape branching --descendant-couples 100 --with-media --portrait-size 1600x1200 --repeat 1",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "media": 20,
+      "source_media_bytes_in_memory": 115379213,
+      "fixture_seconds": 2.17413,
+      "media_prepare_seconds": 1.540876,
+      "html_zip_seconds": 1.182178,
+      "html_zip_bytes": 78768528,
+      "temporary_workspace_peak_bytes": 157472942,
+      "pdf": {
+        "status": "not_requested"
+      },
+      "repetitions": 1
+    },
+    {
+      "name": "medium-pdf-standard-media",
+      "command": "scripts/benchmark_book.py --shape branching --descendant-couples 100 --with-media --compile-pdf-for 100 --repeat 1",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "media": 20,
+      "portrait_size": "96x72",
+      "fixture_seconds": 0.085967,
+      "model_seconds": 0.13459,
+      "media_prepare_seconds": 0.013583,
+      "json_bytes": 1639117,
+      "html_zip_bytes": 334266,
+      "html_zip_seconds": 0.050089,
+      "temporary_workspace_peak_bytes": 4837119,
+      "pdf": {
+        "status": "compiled",
+        "seconds": 163.058194,
+        "bytes": 1935494
+      },
+      "repetitions": 1
+    },
+    {
+      "name": "large-pdf-standard-media",
+      "command": "scripts/benchmark_book.py --shape branching --descendant-couples 1000 --with-media --compile-pdf-for 1000 --repeat 1",
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "media": 200,
+      "portrait_size": "96x72",
+      "fixture_seconds": 0.390059,
+      "model_seconds": 1.267466,
+      "media_prepare_seconds": 0.096439,
+      "json_bytes": 16265394,
+      "html_zip_bytes": 3329847,
+      "html_zip_seconds": 0.477068,
+      "temporary_workspace_peak_bytes": 24584541,
+      "pdf": {
+        "status": "failed",
+        "seconds": 120.804304,
+        "reason": "timeout",
+        "bytes": null
+      },
+      "repetitions": 1,
+      "additional_timeout_attempts": [
+        {
+          "sampling_interval_ms": 10,
+          "seconds": 120.785639,
+          "temporary_workspace_peak_bytes": 24589180
+        },
+        {
+          "sampling_interval_ms": 10,
+          "seconds": 120.801411,
+          "temporary_workspace_peak_bytes": 24583998
+        }
+      ]
+    }
+  ],
+  "historical_comparison": {
+    "medium_pdf_seconds": 4.483,
+    "large_pdf_median_seconds": 34.459,
+    "earlier_report": "docs/validation-performance.fr.md",
+    "note": "Those earlier measurements recorded the same LuaHBTeX version and macOS configuration. The discrepancy remains unexplained; the earlier timings are retained as historical results."
+  }
+}

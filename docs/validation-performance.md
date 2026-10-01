@@ -128,3 +128,15 @@ To make L8.3 actionable, these provisional budgets use the only measured referen
 | Generate fixture, derivatives and HTML ZIP, N=100 with 20 PNGs at 1,600 × 1,200 | ≤ 8 s total; `tracemalloc` peak ≤ 256 MB | 2.071 s for fixture generation, 1.484 s for derivatives, and 1.149 s for the archive; 4.704 s and 126.17 MB traced peak overall |
 
 The renderer now limits LuaLaTeX to 120 s per pass and 180 s overall, replacing the previous theoretical maximum of five 120-second passes. This time guard is wider than the PDF performance budget and stops a stuck export. The RSS and final-file budgets remain qualification criteria, not runtime-enforced limits. Temporary-directory disk usage has not yet been measured or capped; these criteria must be qualified on a clean installation and other environments before they become release thresholds.
+
+### Temporary workspace measured on 1 October 2026
+
+The benchmark sums the logical sizes of files under its temporary directory every 100 ms. It ignores symbolic links; files created and removed between samples can be missed. This measures the local synthetic benchmark workspace, not total system temporary storage. The preceding statement that temporary usage was unmeasured describes the state before this first measurement.
+
+| Case | PDF result | Observed temporary-file peak |
+| --- | --- | ---: |
+| 100 unions, 20 synthetic 1,600 × 1,200 PNGs, derivatives and HTML ZIP | PDF compilation not requested | 157,472,942 bytes |
+| 100 unions, standard 96 × 72 portraits, PDF | Compiled in 163.058 s; 1,935,494 bytes | 4,837,119 bytes |
+| 1,000 unions, 200 standard 96 × 72 portraits, PDF | `timeout` after 120.804 s; no PDF delivered | 24,584,541 bytes before termination |
+
+The compiled medium case exceeds the provisional 60-second budget. The N=1,000 case reached the 120-second per-pass limit twice with 10 ms sampling and a third time at 100 ms; the sampling interval therefore does not explain the timeout. These local results conflict with the earlier medians of 4.483 s for N=100 and 34.459 s for N=1,000, although the report records the same LuaHBTeX version and macOS configuration. The discrepancy needs investigation; the earlier timings remain historical, and no PDF envelope is confirmed for the current installation. See the [raw temporary-workspace record](validation-temp-disk-20261001.json).
