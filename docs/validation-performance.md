@@ -187,3 +187,16 @@ A single instrumented first pass of the branching N=100 fixture, with tagging en
 | Complete pass | 52.284 |
 
 Family connections, the documentary appendix and person profiles dominate this pass. Internal tagpdf hooks time tree finalization at 3.284 s, including 2.77 s to write structure elements. This one instrumented run guides further profiling; it does not establish a statistical budget or break down LaTeX operations within each section. The PDF remains tagged (Tagged: yes). Raw results are in the [pass profile](validation-latex-pass-profile-20261001.json).
+
+### Compact PDF destination encoding — 1 October 2026
+
+On the same N=100 fixture, each comparison used fresh temporary directories. The base32 variant changes only internal PDF target names. Each full run uses the production helper's three passes, and the variant order is reversed for the second pair.
+
+| Target encoding | Times (s) | Median (s) | Compiled source | Median final PDF |
+| --- | ---: | ---: | ---: | ---: |
+| UTF-8 hexadecimal | 159.271; 157.841 | 158.556 | 1,265,310 bytes | 1,935,501 bytes |
+| Lowercase base32 without padding | 143.177; 146.125 | 144.651 | 1,123,555 bytes | 1,946,333 bytes |
+
+Median full compile time falls by 8.77% and source size by 141,755 bytes (11.2%). Both PDFs retain 194 A4 pages and tagging. They contain the same 4,905 named destinations, including 1,805 book targets, each remapped one-to-one. Poppler's structure output and extracted text are byte-for-byte identical within both pairs. The tradeoff is a final PDF increase of about 10,833 bytes (0.56%). Two pairs support this renderer optimization but do not establish a statistical budget. The earlier N=100 source-size figure of 1,249,510 bytes matches rendering before media derivatives are prepared; this comparison includes the derivatives actually compiled. Raw details are in the [pass profile](validation-latex-pass-profile-20261001.json).
+
+The grouped profile clarifies the high family-connections cost: fifty sections with children contain 200 parent-child links and take 10.90 s across the first two groups of 25; the 51 childless sections take about 2.50 s. Those timers include page breaks. Groups of 25 profiles and appendix citations are much more even, at around 1.1 to 1.4 s. The result aligns with the nested relationship lists, but the timing does not separate their composition from layout and page output.

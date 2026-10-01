@@ -1,5 +1,6 @@
 """LaTeX renderer for the genealogy book."""
 
+import base64
 from pathlib import PurePosixPath
 
 from ..book_language import model_book_language
@@ -1744,4 +1745,5 @@ def _section_heading(
 
 def _latex_target(target_id: str) -> str:
     """Map arbitrary stable model IDs to safe, deterministic hyperref labels."""
-    return f"target-{target_id.encode('utf-8').hex()}"
+    encoded = base64.b32encode(target_id.encode("utf-8")).decode("ascii")
+    return f"target-{encoded.rstrip('=').lower()}"
