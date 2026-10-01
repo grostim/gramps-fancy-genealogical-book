@@ -1279,7 +1279,7 @@ def _render_citation_appendix(
             for call in entry.calls
         ]
         if call_labels:
-            output.append("\\begin{itemize}\n")
+            linked_call_labels: list[str] = []
             for call, call_label in call_labels:
                 context_profile = profiles.get(call.context_id)
                 context_notice = notices.get(call.context_id)
@@ -1293,11 +1293,24 @@ def _render_citation_appendix(
                     if context_target and context_target in emitted_targets
                     else escape_latex_text(call_label)
                 )
-                output.append(
-                    f"\\item {_latex_anchor(call.call_id, emitted_targets)}"
-                    f"{linked_label}\n"
+                linked_call_labels.append(
+                    f"{_latex_anchor(call.call_id, emitted_targets)}{linked_label}"
                 )
-            output.append("\\end{itemize}\n")
+            if len(linked_call_labels) == 1:
+                output.append(
+                    "\\par "
+                    + escape_latex_text(label(model, "see"))
+                    + " "
+                    + linked_call_labels[0]
+                    + "\n"
+                )
+            else:
+                output.append("\\begin{itemize}\n")
+                output.extend(
+                    f"\\item {call_label}\n"
+                    for call_label in linked_call_labels
+                )
+                output.append("\\end{itemize}\n")
     output.append("\\end{itemize}\n")
     return "".join(output)
 
