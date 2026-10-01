@@ -573,7 +573,7 @@ def test_single_parent_family_section_has_only_the_recorded_parent():
         for line in connection_section.splitlines()
     )
     assert any(
-        "p0}" in block
+        "p0" in block
         and "child" in block
         and any(term in block for term in ("filiation", "parentage"))
         and "(Birth)" in block
