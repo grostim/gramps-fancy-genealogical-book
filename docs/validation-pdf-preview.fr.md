@@ -1,5 +1,12 @@
 # Revue de l’aperçu PDF synthétique
 
+## Filiation regroupée — 1er octobre 2026
+
+- Aperçu local non suivi : `output/pdf/gramps-fancy-book-parentage-grouping-preview-20261001.pdf` ; SHA-256 `69da39763be7ff34901663cdddf89fa81db178b0741f467b78050b6e4a0642d2`.
+- La fixture ramifiée contient 202 personnes, 101 familles, 303 événements, 20 portraits synthétiques et 101 sections familiales. LuaHBTeX 1.24.0 a produit un PDF A4 balisé de 195 pages (1 628 695 octets). Les données et les portraits sont fictifs.
+- Les pages physiques 12–13, qui montrent les liens familiaux regroupés, ont été rendues à 130 ppp puis examinées. Chaque enfant est affiché une fois ; les parents et types de relation correspondants restent visibles. Certains libellés de relation passent seuls sur la ligne suivante ; aucun chevauchement ni texte coupé n’a été observé sur ces pages.
+- Cette inspection ciblée ne couvre pas les autres pages en haute résolution, les données Gramps réelles, l’essai avec lecteur d’écran, l’export depuis Desktop ou la conformité PDF/UA. Aucune conformité PDF/UA n’est revendiquée.
+
 ## Aperçu courant — 1er octobre 2026
 
 - Fichier local non suivi par Git : `output/pdf/gramps-fancy-book-preview.pdf` ; SHA-256 `1196e8e97c80033c20a97ae34ef36a515b2f244d5fc8a1331a723c93f27bc2c2`.

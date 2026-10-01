@@ -220,3 +220,17 @@ La nouvelle commande LaTeX se développe en les deux mêmes liens cliquables et 
 La commande de renvoi rend maintenant le nom de la personne et son numéro de page cliquables dans un seul lien. Sur la même fixture et le même runtime que la macro précédente à deux liens, deux compilations de trois passes prennent 116,948 s et 116,991 s (médiane 116,969 s), soit 19,36 % de moins que la médiane précédente de 145,045 s. Le PDF balisé de 194 pages baisse de 226 728 octets (11,65 %), de 1 946 325 à 1 719 597 octets. Le pic du dossier temporaire mesuré baisse de 4,93 %. L’arbre contient 2 869 éléments Link au lieu de 4 814 ; les 4 905 destinations nommées restent présentes. Le texte extrait est identique octet pour octet au PDF antérieur. Le hash structurel change comme attendu, car l’arbre de liens est regroupé ; les pages 12–13 des connexions familiales ont été relues pour la mise en page. Les détails figurent dans le [profil brut des passes](validation-latex-pass-profile-20261001.json).
 
 Le profil par blocs précise l’origine des longues connexions familiales : les 50 sections qui ont des enfants contiennent 200 liens parent-enfant et prennent 10,90 s sur les deux premiers blocs de 25 ; les 51 sections sans enfant prennent environ 2,50 s. Ces mesures incluent les coupures de page. Les blocs de 25 fiches et références de l’annexe sont beaucoup plus réguliers, autour de 1,1 à 1,4 s. L’association avec les listes relationnelles est nette, mais le chronométrage ne sépare pas leur composition du travail de mise en page et de sortie des pages.
+
+### Enfants et filiations regroupés — 1er octobre 2026
+
+La section PDF des liens familiaux affiche maintenant chaque enfant une seule fois, puis regroupe ses parents enregistrés et les types de relation. Cette présentation suit le regroupement enfant-d’abord déjà utilisé par le renderer HTML, tout en conservant les liens de filiation enregistrés. La référence est le renderer à lien unique de la PR #190 ; les deux variantes utilisent la même fixture ramifiée et vingt portraits synthétiques de 96 × 72 pixels sur macOS 27.0 arm64, CPython 3.13.7 et LuaHBTeX 1.24.0.
+
+| Cas | Référence | Regroupement | Écart |
+| --- | ---: | ---: | ---: |
+| Source LaTeX N=100 | 821 686 octets | 801 556 octets | −20 130 octets (−2,45 %) |
+| Compilation PDF N=100, deux exécutions | 116,948 s ; 116,991 s | 111,406 s ; 110,942 s | Médiane 116,969 → 111,174 s (−4,95 %) |
+| PDF final N=100 | 1 719 597 octets | médiane 1 628 692 octets | −90 905 octets (−5,29 %) |
+| Source LaTeX N=1 000 | 8 119 289 octets | 7 917 825 octets | −201 464 octets (−2,48 %) |
+| Compilation PDF N=1 000 | `timeout` après 122,715 s | `timeout` après 122,718 s | Pas d’amélioration mesurable ; aucun PDF produit |
+
+Le PDF regroupé N=100 est balisé, fait 195 pages et pèse 1 628 695 octets. Poppler compte 2 669 éléments Link dans l’arbre, contre 2 869 auparavant ; les 1 805 cibles nommées propres au livre sont toutes présentes. Les pages 12–13 montrent les filiations regroupées ; le type de relation peut passer seul sur la ligne suivante, où il reste lisible. La source N=1 000 et sa compilation montrent que cette réduction ne résout pas le dépassement de délai des livres longs. L’aperçu local se trouve dans `output/pdf/gramps-fancy-book-parentage-grouping-preview-20261001.pdf` ; les notices et portraits sont fictifs. Il s’agit de mesures ciblées, et non d’une qualification de performance sur trois exécutions.
