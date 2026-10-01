@@ -169,3 +169,15 @@ Les deux fichiers sont reconnus comme balisés et contiennent 25 pages A4. L’a
 La désactivation des destinations réduit la taille médiane du PDF de 10 414 octets (4,7 %), mais la compilation ne gagne que 0,090 s sur une médiane de 19,633 s (0,46 %), différence trop faible pour justifier une optimisation. Aucun réglage de production n’est changé ; cette fixture ne confirme pas le budget PDF et ne prédit pas le comportement des livres moyens et grands. L’inspection de l’arbre ne remplace pas un essai au lecteur d’écran. Les résultats bruts figurent dans [le relevé tagpdf](validation-tagpdf-structure-20261001.json).
 
 Un second essai désactive directement `para/tagging` dans la copie temporaire, juste avant `\begin{document}`. Sur trois compilations de la même fixture, la médiane est de 19,937 s [19,759–20,111], contre 19,633 s avec le balisage normal ; les PDF font 221 551 octets chacun contre une médiane de 221 701 octets. Poppler indique `Tagged: no` sur les trois fichiers. Ils gardent 25 pages, 561 destinations nommées, 132 liens externes et 27 853 caractères extraits, identiques entre les répétitions. L’écart de temps (+0,304 s, +1,55 %) n’est pas un gain et le balisage est perdu : ce réglage est écarté. Il s’agit d’un diagnostic sur un petit jeu, pas d’une proposition de configuration.
+
+### Profil des passes LuaLaTeX — 1er octobre 2026
+
+Une exécution par variante a chronométré séparément chaque appel LuaLaTeX du helper de production `_compile_latex`, dans un répertoire temporaire neuf. Les fixtures ramifiées contiennent deux portraits synthétiques à N=10 et vingt à N=100 (96 × 72 pixels). À N=100, la copie balisée et la copie diagnostique non balisée utilisent le même modèle, les mêmes médias et la même source rendue ; seul `tagging=on` est remplacé par `tagging=off` dans la source temporaire.
+
+| Cas | Passes | Durée par passe (s) | Total (s) | Taille PDF |
+| --- | ---: | ---: | ---: | ---: |
+| N=10, balisé | 3 | 6,794 ; 6,829 ; 6,828 | 20,452 | 255 856 octets |
+| N=100, balisé | 3 | 53,302 ; 53,800 ; 54,063 | 161,166 | 1 935 504 octets |
+| N=100, balisage désactivé pour le diagnostic | 2 | 32,694 ; 32,923 | 65,639 | 868 690 octets |
+
+À N=100, les trois passes balisées durent chacune près de 54 s ; elles portent la génération complète à 161,166 s. La copie non balisée est 2,46 fois plus rapide, mais Poppler indique `Tagged: no` sur son PDF de 194 pages. Cette mesure suggère un surcoût substantiel du balisage, sans autoriser à le désactiver en production. Chaque variante n’a été exécutée qu’une fois ; ces chiffres servent à orienter le profilage, pas à établir une nouvelle enveloppe statistique. Le relevé contient aussi les tailles des sources LaTeX : [profil brut des passes](validation-latex-pass-profile-20261001.json).

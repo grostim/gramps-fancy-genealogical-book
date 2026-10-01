@@ -157,3 +157,15 @@ Both files are recognized as tagged and contain 25 A4 pages. The structure tree 
 Disabling structure destinations reduces the median PDF size by 10,414 bytes (4.7%), but improves the median compile time by only 0.090 s from 19.633 s (0.46%), too little to justify an optimization. No production setting is changed; this fixture does not confirm the PDF budget or predict medium and large books. Tree inspection does not replace a screen-reader check. Raw results are in the [tagpdf measurement record](validation-tagpdf-structure-20261001.json).
 
 A second experiment directly disables `para/tagging` in the temporary copy immediately before `\begin{document}`. Across three compilations of the same fixture, the median is 19.937 s [19.759–20.111], compared with 19.633 s for current tagging; the PDFs are each 221,551 bytes, versus the current median of 221,701 bytes. Poppler reports `Tagged: no` for all three files. They retain 25 pages, 561 named destinations, 132 external links and 27,853 extracted text characters, identical across repetitions. The timing difference (+0.304 s, +1.55%) is not a gain, and tagging is lost, so this setting is ruled out. This is a small-fixture diagnostic, not a proposed configuration.
+
+### LuaLaTeX pass profile — 1 October 2026
+
+One run per variant timed each LuaLaTeX subprocess launched by the production `_compile_latex` helper in a fresh temporary directory. The branching fixtures contain two synthetic portraits at N=10 and twenty at N=100 (96 × 72 pixels). At N=100, the tagged and untagged diagnostic copies use the same model, media and rendered source; only `tagging=on` is replaced with `tagging=off` in the temporary source.
+
+| Case | Passes | Time per pass (s) | Total (s) | PDF size |
+| --- | ---: | ---: | ---: | ---: |
+| N=10, tagged | 3 | 6.794; 6.829; 6.828 | 20.452 | 255,856 bytes |
+| N=100, tagged | 3 | 53.302; 53.800; 54.063 | 161.166 | 1,935,504 bytes |
+| N=100, tagging disabled for diagnosis | 2 | 32.694; 32.923 | 65.639 | 868,690 bytes |
+
+At N=100, all three tagged passes take about 54 seconds each, bringing the complete generation to 161.166 seconds. The untagged copy is 2.46 times faster, but Poppler reports `Tagged: no` for its 194-page PDF. This points to a substantial tagging cost, but does not support disabling it in production. Each variant was run once; these figures guide further profiling and do not establish a new statistical budget. The record also includes the LaTeX source sizes: [raw pass profile](validation-latex-pass-profile-20261001.json).

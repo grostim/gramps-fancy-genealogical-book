@@ -1,0 +1,72 @@
+{
+  "measured_on": "2026-10-01",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "method": "One run per fixture in a fresh temporary directory. Time each LuaLaTeX subprocess launched by the production _compile_latex helper; total_seconds covers all passes. The N=100 untagged variant changes only tagging=on to tagging=off in the temporary rendered source. No production files or settings are changed.",
+  "measurements": [
+    {
+      "fixture": {
+        "shape": "branching",
+        "descendant_couples": 10,
+        "people": 22,
+        "families": 11,
+        "events": 33,
+        "synthetic_portraits": 2,
+        "portrait_size": "96x72",
+        "latex_source_bytes": 137835
+      },
+      "tagging": "on",
+      "passes": 3,
+      "pass_seconds": [6.794, 6.829, 6.828],
+      "total_seconds": 20.452,
+      "pdf_bytes": 255856
+    },
+    {
+      "fixture": {
+        "shape": "branching",
+        "descendant_couples": 100,
+        "people": 202,
+        "families": 101,
+        "events": 303,
+        "synthetic_portraits": 20,
+        "portrait_size": "96x72",
+        "latex_source_bytes": 1249510
+      },
+      "tagging": "on",
+      "passes": 3,
+      "pass_seconds": [53.302, 53.8, 54.063],
+      "total_seconds": 161.166,
+      "pdf_bytes": 1935504
+    },
+    {
+      "fixture": {
+        "shape": "branching",
+        "descendant_couples": 100,
+        "people": 202,
+        "families": 101,
+        "events": 303,
+        "synthetic_portraits": 20,
+        "portrait_size": "96x72",
+        "latex_source_bytes": 1249510
+      },
+      "tagging": "off (temporary diagnostic only)",
+      "passes": 2,
+      "pass_seconds": [32.694, 32.923],
+      "total_seconds": 65.639,
+      "pdf_bytes": 868690,
+      "pdfinfo_tagged": false,
+      "pages": 194
+    }
+  ],
+  "comparison": {
+    "n100_tagged_minus_untagged_seconds": 95.527,
+    "n100_tagged_runtime_ratio": 2.455,
+    "tagged_pass_median_seconds": 53.8,
+    "untagged_pass_median_seconds": 32.809,
+    "tagging_off_is_a_production_candidate": false,
+    "reason": "Poppler reports Tagged: no for the untagged diagnostic PDF. The experiment points to substantial time spent in tagged compilation, but disabling tagging loses the PDF structure required by the project."
+  }
+}
