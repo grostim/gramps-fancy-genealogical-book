@@ -1,5 +1,7 @@
 # Revue de l’aperçu PDF synthétique
 
+La recette du [PDF AC-20 exporté depuis la fenêtre Gramps Desktop](validation-gramps-gui-ac20.fr.md) le 2 octobre 2026 est consignée séparément ; elle couvre 87 pages et un ZIP issu du même profil fictif.
+
 ## Sections unitaires des fiches — 1er octobre 2026
 
 - Aperçu local : `output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf` ; SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`.
