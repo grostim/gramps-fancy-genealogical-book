@@ -23,3 +23,5 @@
 Le navigateur intégré de cette session refuse le protocole `file://` pour des raisons de sécurité ; l'ouverture interactive hors ligne de **ce** ZIP GUI n'a donc pas été refaite. L'intégrité de l'archive, les ressources relatives et les ancres ont été contrôlées statiquement. Des archives antérieures AC-20 avaient déjà été ouvertes hors ligne dans Chrome, mais elles ne prouvent pas le comportement interactif de cette sortie précise.
 
 Les images et données sont fictives. La revue à haute résolution couvre quatre pages, pas les 87. Il reste à essayer ce PDF et ce ZIP avec un lecteur d'écran, à comparer complètement les deux rendus et à qualifier le PDF selon les critères d'accessibilité applicables ; aucune conformité PDF/UA n'est revendiquée.
+
+Les [exports GUI anglais de la même base](validation-language.fr.md) sont qualifiés séparément.
