@@ -32,6 +32,8 @@ Gramps may return exit code zero even when a report fails. Check that the reques
 
 PDF output requires LuaLaTeX. Install TeX Live and ensure Gramps can find `lualatex` on `PATH`; on macOS the report also checks `/Library/TeX/texbin/lualatex`, the standard BasicTeX/MacTeX link. The application may have a different `PATH` from an interactive shell. If compilation fails, the report will indicate whether LuaLaTeX was unavailable, references failed to stabilize, or the log reported unresolved references or overfull boxes. Use HTML ZIP output when LuaLaTeX is unavailable.
 
+If a large PDF book times out, enable **Allow extended PDF compilation (up to 30 minutes)** in the report options and retry the export. The standard overall limit remains three minutes; extended mode allows 30 minutes overall and ten minutes per pass. If it still fails, inspect the book size and compilation diagnostics.
+
 ## Gramps Web
 
 Execution in Gramps Web has not been qualified. The add-on and its Python dependencies would need to be installed in the server environment, and there is no validated test instance documented yet.

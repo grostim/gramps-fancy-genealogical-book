@@ -105,3 +105,11 @@ msgstr ""
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
 msgid "Automatic mode follows the language configured in Gramps. If that language is not supported, the book uses English."
 msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Allow extended PDF compilation (up to 30 minutes)"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Use this for long PDF books when the standard three-minute limit expires. Each LuaLaTeX pass is limited to ten minutes."
+msgstr ""

@@ -68,6 +68,17 @@ class GrampsFancyBookOptions(MenuReportOptions):
         )
         menu.add_option(_("Book"), "output_format", output_format)
 
+        extended_pdf_compilation = BooleanOption(
+            _("Allow extended PDF compilation (up to 30 minutes)"), False
+        )
+        extended_pdf_compilation.set_help(
+            _(
+                "Use this for long PDF books when the standard three-minute limit expires. "
+                "Each LuaLaTeX pass is limited to ten minutes."
+            )
+        )
+        menu.add_option(_("Book"), "extended_pdf_compilation", extended_pdf_compilation)
+
         privacy_acknowledged = BooleanOption(
             _(
                 "I understand this export may include private data and information about living people."
@@ -126,6 +137,9 @@ class GrampsFancyBookOptions(MenuReportOptions):
         if suffix == ".json":
             return "json_snapshot"
         return "html_zip"
+
+    def get_extended_pdf_compilation(self) -> bool:
+        return bool(self.menu.get_option_by_name("extended_pdf_compilation").get_value())
 
     def get_destination(self) -> str:
         output_format = self.get_output_format()

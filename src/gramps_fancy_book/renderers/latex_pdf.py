@@ -19,6 +19,8 @@ from .latex import render_latex
 _MAX_PASSES = 5
 _PASS_TIMEOUT_SECONDS = 120
 _TOTAL_COMPILATION_TIMEOUT_SECONDS = 180
+_EXTENDED_PASS_TIMEOUT_SECONDS = 600
+_EXTENDED_TOTAL_COMPILATION_TIMEOUT_SECONDS = 1800
 _LAYOUT_WARNING = re.compile(
     r"Reference .*undefined|There were undefined references|"
     r"Label\(s\) may have changed|Overfull \\[hv]box"
@@ -64,6 +66,7 @@ def write_latex_pdf(
     media_asset_directory: str | Path | None = None,
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
     overwrite: bool = False,
+    extended_compilation: bool = False,
 ) -> Path:
     """Compile the shared LaTeX renderer and atomically install its PDF.
 
@@ -91,7 +94,15 @@ def write_latex_pdf(
             asset.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(asset_source, asset)
 
-        _compile_latex(compiler, work_directory)
+        if extended_compilation:
+            _compile_latex(
+                compiler,
+                work_directory,
+                pass_timeout_seconds=_EXTENDED_PASS_TIMEOUT_SECONDS,
+                total_timeout_seconds=_EXTENDED_TOTAL_COMPILATION_TIMEOUT_SECONDS,
+            )
+        else:
+            _compile_latex(compiler, work_directory)
         compiled_pdf = work_directory / "book.pdf"
         if not compiled_pdf.is_file() or compiled_pdf.is_symlink():
             raise LatexCompilationError("missing_pdf")
@@ -116,10 +127,16 @@ def _find_lualatex() -> str | None:
     return None
 
 
-def _compile_latex(compiler: str, work_directory: Path) -> None:
+def _compile_latex(
+    compiler: str,
+    work_directory: Path,
+    *,
+    pass_timeout_seconds: int = _PASS_TIMEOUT_SECONDS,
+    total_timeout_seconds: int = _TOTAL_COMPILATION_TIMEOUT_SECONDS,
+) -> None:
     previous_fingerprint = None
     stable = False
-    deadline = time.monotonic() + _TOTAL_COMPILATION_TIMEOUT_SECONDS
+    deadline = time.monotonic() + total_timeout_seconds
     for _pass_number in range(1, _MAX_PASSES + 1):
         remaining_seconds = deadline - time.monotonic()
         if remaining_seconds <= 0:
@@ -139,7 +156,7 @@ def _compile_latex(compiler: str, work_directory: Path) -> None:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.STDOUT,
                 check=False,
-                timeout=min(_PASS_TIMEOUT_SECONDS, remaining_seconds),
+                timeout=min(pass_timeout_seconds, remaining_seconds),
             )
         except subprocess.TimeoutExpired as error:
             raise LatexCompilationError("timeout") from error

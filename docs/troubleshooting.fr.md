@@ -32,6 +32,8 @@ Gramps peut renvoyer le code de sortie zéro même si un rapport échoue. Vérif
 
 La sortie PDF nécessite LuaLaTeX. Installez TeX Live et vérifiez que Gramps trouve `lualatex` dans son `PATH` ; sur macOS, le rapport cherche aussi `/Library/TeX/texbin/lualatex`, le lien standard de BasicTeX/MacTeX. Le `PATH` de l’application peut différer de celui d’un terminal interactif. En cas d’échec, le rapport indique si LuaLaTeX manque, si les renvois n’ont pas convergé ou si le journal signale des renvois non résolus ou des dépassements de marge. Utilisez la sortie HTML ZIP si LuaLaTeX n’est pas disponible.
 
+Si le rapport signale un dépassement de délai sur un livre PDF volumineux, activer **Autoriser une compilation PDF prolongée (jusqu’à 30 minutes)** dans ses options, puis relancer l’export. Le délai standard reste de trois minutes ; le mode prolongé porte le plafond total à 30 minutes et celui de chaque passe à dix minutes. Un échec après ce délai nécessite d’examiner la taille du livre et les diagnostics de compilation.
+
 ## Gramps Web
 
 L’exécution dans Gramps Web n’a pas été qualifiée. Le module et ses dépendances Python devraient être installés dans l’environnement serveur ; aucune instance de test validée n’est documentée à ce jour.

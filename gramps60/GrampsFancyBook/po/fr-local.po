@@ -96,6 +96,14 @@ msgid "PDF book (LuaLaTeX)"
 msgstr "Livre PDF (LuaLaTeX)"
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Allow extended PDF compilation (up to 30 minutes)"
+msgstr "Autoriser une compilation PDF prolongée (jusqu’à 30 minutes)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+msgid "Use this for long PDF books when the standard three-minute limit expires. Each LuaLaTeX pass is limited to ten minutes."
+msgstr "À utiliser pour les longs livres PDF lorsque la limite standard de trois minutes est dépassée. Chaque passe LuaLaTeX est limitée à dix minutes."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
 msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots."
 msgstr "Le mode automatique utilise .pdf pour les livres PDF, .zip pour les livres HTML et .json pour les instantanés de diagnostic."
 
