@@ -54,9 +54,24 @@ Les quatre fichiers contiennent les mêmes trois personnes, une famille et la m�
 
 Un cinquième export graphique, avec Gramps en allemand et le livre forcé en français, a produit un [PDF local de démonstration](../output/pdf/gramps-fancy-book-gramps-gui-fr-demo-20261002.pdf) de sept pages A4, balisé, via LuaHBTeX 1.24.0. Son SHA-256 est `89331f631741dfcc30715cba68d36c4360b4458b7545e65dce1f37bb4411c964`. Le texte extrait commence par « Histoire familiale », « Table des matières » et « Ascendance » ; la couverture et la page d’ascendance ont été examinées visuellement. La petite base ne contient ni photo ni citation ; ce PDF illustre le parcours graphique, sans qualifier une composition riche ou une revue intégrale.
 
+## Comparaison graphique sur la base AC-20 riche — 2 octobre 2026
+
+La même base Gramps fictive de 122 personnes et 61 familles a été exportée depuis la fenêtre Desktop 6.0.8 en français automatique, puis avec l'option **Anglais** sous Gramps français. Chaque export PDF et ZIP a reçu sa propre confirmation de confidentialité. Les deux langues comprennent 183 événements, 183 citations et 12 placements d'image.
+
+| Langue du livre | PDF A4 balisé | HTML ZIP |
+| --- | --- | --- |
+| Français automatique | [87 pages, 5 983 720 octets](../output/pdf/gramps-fancy-book-ac20-gui-20261002.pdf) ; SHA-256 `257159d05201c662b6c546ad4b5202363b9f5d1be578f806cefe5a54c25fff92` | [5 466 042 octets](../output/gramps-fancy-book-ac20-gui-20261002.zip) ; SHA-256 `1f4712d77b938fe9298e7fe9c67d76c88706121d83acc87f7c0e07cc58bc8c89` |
+| Anglais forcé | [87 pages, 5 981 269 octets](../output/pdf/gramps-fancy-book-ac20-gui-en-20261002.pdf) ; SHA-256 `1d199d6ece768b241af4400c711889183157d3fc740eee5fd05aa824210e676d` | [5 465 869 octets](../output/gramps-fancy-book-ac20-gui-en-20261002.zip) ; SHA-256 `d701b3ac359ba94ec309ec1dfcaa4548710f4bda26f5f206d53ba0a989a3f757` |
+
+- Les PDF portent respectivement `fr-FR` / `en-US`, les titres « Histoire familiale » / « Family history » et sept signets traduits. Chacun conserve 2 075 destinations nommées et 1 166 liens internes résolus.
+- Les ZIP portent `lang="fr"` / `lang="en"`. Leurs ensembles de 870 identifiants et 1 108 liens internes sont exactement identiques ; aucune cible ne manque. Les 12 placements d'image et les deux fichiers PNG inclus sont les mêmes dans les deux archives. Les ancres représentent notamment 122 fiches individuelles, 61 notices familiales, 183 événements et 183 citations.
+- Sur la fiche physique 33, `Naissance` et `Principal` deviennent `Birth` et `Primary` ; la date structurée à l'année `1660`, le nom fictif et le portrait restent présents. Les quatre pages anglaises 1, 33, 63 et 87 ont été examinées à 110 ppp : aucun chevauchement ni texte tronqué n'est visible dans ces vues.
+
+Cette fixture ne comporte que des dates structurées à l'année : elle confirme la conservation des années, sans exercer le format des mois et jours dans l'interface graphique. L'ouverture interactive hors ligne de ces ZIP précis, la revue complète du PDF anglais et l'essai au lecteur d'écran restent à faire. Les fichiers liés dans le tableau sont locaux et ignorés par Git ; voir aussi la [recette AC-20 GUI](validation-gramps-gui-ac20.fr.md).
+
 ## Limites
 
-- Les essais PDF et HTML ZIP ci-dessus invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés ; la recette graphique complémentaire porte sur le JSON d’une base fictive plus petite.
+- Les dix essais PDF et HTML ZIP initiaux invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés ; les exports graphiques complémentaires couvrent désormais le JSON de la petite base et les PDF/ZIP FR/EN de la base AC-20 riche.
 - La recette ne compare pas toutes les chaînes de notes et d’événements ; elle confirme la conservation du nom saisi. Les données de la fixture sont fictives.
-- Les dates structurées sont formatées par Gramps dans la langue du livre et la date libre de la fixture CLI reste intacte ; la petite fixture graphique ne contient pas ces dates.
+- Les dates structurées sont formatées par Gramps dans la langue du livre et la date libre de la fixture CLI reste intacte ; la base graphique AC-20 ne contient que des années, sans mois ni jour.
 - Le PDF de démonstration utilise un petit arbre et des portraits synthétiques ; sa mise en page finale, l’accessibilité PDF et la comparaison avec les maquettes privées ne sont pas qualifiées par cette recette.
