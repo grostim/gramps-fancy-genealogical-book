@@ -52,6 +52,8 @@ The Gramps Desktop 6.0.8 report dialog was opened with the add-on archive built 
 
 All four JSON files contain the same normalized genealogy and reference family; after removing `BOOK_LANGUAGE`, their contents match. The two French outputs are byte-identical, as are the two English outputs. Under German Gramps, untranslated add-on labels appear in English while native Gramps controls are German. This GUI check covers the language selector and JSON model; the CLI checks above cover PDF and HTML ZIP output.
 
+A fifth GUI export used German Gramps with the book forced to French. It produced a [local seven-page A4 PDF](../output/pdf/gramps-fancy-book-gramps-gui-fr-demo-20261002.pdf), tagged by LuaHBTeX 1.24.0, with SHA-256 `89331f631741dfcc30715cba68d36c4360b4458b7545e65dce1f37bb4411c964`. Extracted text begins with “Histoire familiale”, “Table des matières”, and “Ascendance”. The cover and ancestry page were inspected visually. The small tree has no photos or citations, so this PDF demonstrates the GUI path without qualifying a richer layout or a full-page review.
+
 ## Limits
 
 - The PDF and HTML ZIP checks above invoke Gramps Desktop through its CLI with isolated profiles; the additional GUI check uses a smaller fictional JSON fixture.

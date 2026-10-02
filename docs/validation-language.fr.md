@@ -52,6 +52,8 @@ La boîte de rapport de Gramps Desktop 6.0.8 a été ouverte avec l’archive de
 
 Les quatre fichiers contiennent les mêmes trois personnes, une famille et la même référence `BOOK_REFERENCE_FAMILY`. Leur contenu est identique après retrait de `BOOK_LANGUAGE` ; les sorties françaises sont identiques octet pour octet entre elles, tout comme les sorties anglaises. Les libellés de l’extension non traduits en allemand restent en anglais, tandis que la boîte native Gramps est en allemand. Cette recette graphique contrôle la sélection et le modèle JSON ; les sorties PDF et HTML ZIP des combinaisons de langue ont été qualifiées séparément par le CLI ci-dessus.
 
+Un cinquième export graphique, avec Gramps en allemand et le livre forcé en français, a produit un [PDF local de démonstration](../output/pdf/gramps-fancy-book-gramps-gui-fr-demo-20261002.pdf) de sept pages A4, balisé, via LuaHBTeX 1.24.0. Son SHA-256 est `89331f631741dfcc30715cba68d36c4360b4458b7545e65dce1f37bb4411c964`. Le texte extrait commence par « Histoire familiale », « Table des matières » et « Ascendance » ; la couverture et la page d’ascendance ont été examinées visuellement. La petite base ne contient ni photo ni citation ; ce PDF illustre le parcours graphique, sans qualifier une composition riche ou une revue intégrale.
+
 ## Limites
 
 - Les essais PDF et HTML ZIP ci-dessus invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés ; la recette graphique complémentaire porte sur le JSON d’une base fictive plus petite.
