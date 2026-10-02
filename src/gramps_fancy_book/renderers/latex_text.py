@@ -26,8 +26,7 @@ def format_latex_url(value: str) -> str:
     authority = normalized[:authority_end]
     suffix = normalized[authority_end:]
     return (
-        f"\\bookurl{{{_escape_latex_url(normalized)}}}"
-        f"{{{_escape_latex_url(authority)}}}"
+        f"\\bookurl{{{_escape_latex_url(authority)}}}"
         f"{{{_escape_latex_url(suffix)}}}"
     )
 

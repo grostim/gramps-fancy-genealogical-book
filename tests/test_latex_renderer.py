@@ -133,7 +133,7 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     assert r"Repository\_\&" in rendered
     assert r"R\_1\&" in rendered
     assert (
-        r"\newcommand{\bookurl}[3]{\href{#1}{{\useOriginalUrlSetting\nolinkurl{#2}}\nolinkurl{#3}}}"
+        r"\newcommand{\bookurl}[2]{\href{#1#2}{{\useOriginalUrlSetting\nolinkurl{#1}}\nolinkurl{#2}}}"
         in rendered
     )
     assert (
@@ -142,8 +142,8 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     )
     assert r"\tagstructbegin{tag=Span,attribute-class={gfb-strikethrough}}" in rendered
     assert (
-        r"\bookurl{https://example.org/archive\%2Fdocument?folio=1&format=full\#record}"
-        r"{https://example.org}{/archive\%2Fdocument?folio=1&format=full\#record}"
+        r"\bookurl{https://example.org}"
+        r"{/archive\%2Fdocument?folio=1&format=full\#record}"
         in rendered
     )
     assert r"(record\_\&)" in rendered
