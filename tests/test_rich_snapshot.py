@@ -339,7 +339,7 @@ def test_book_content_and_anchors_are_stable_across_generations(tmp_path):
     first_latex = render_latex(first_model)
     second_latex = render_latex(second_model)
     assert first_latex == second_latex
-    assert r"\hypertarget{target-" in first_latex
+    assert r"\gfbanchor{target-" in first_latex
 
     first_archive = write_html_archive(first_model, tmp_path / "first.zip")
     second_archive = write_html_archive(second_model, tmp_path / "second.zip")
