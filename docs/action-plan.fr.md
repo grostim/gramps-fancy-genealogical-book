@@ -225,7 +225,7 @@ Les statuts de suivi seront : à préparer, prêt, en cours, à revoir, validé 
 
 Les estimations calendaires seront établies après L0 et L1 : le détail des 27 scénarios et les contraintes constatées dans Gramps peuvent modifier sensiblement la charge. Le périmètre des futurs rendus ne doit pas être chiffré à partir des seuls exemples actuels.
 
-## 8. Suivi d’exécution — 1er octobre 2026
+## 8. Suivi d’exécution — 2 octobre 2026
 
 - Le dépôt reste privé et les PR #55, #56 et #57 sont fusionnées. Elles livrent l’archive HTML ZIP, préservent la compatibilité des appels JSON historiques, puis ajoutent les améliorations d’accessibilité et d’affichage mobile.
 - **L0–L3 — socle livré.** Référentiel, schéma JSON 0.8, extraction Gramps, métadonnées `BOOK_*`, médias et rapport séparé de cohérence sont présents. Les règles restent à prouver par les scénarios de bout en bout sur les environnements cibles.
@@ -294,6 +294,8 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 **L8.3 — profil actualisé d’une passe N=1 000 :** après la suppression des ancres d’appel inutilisées et le regroupement des métadonnées, l’intervalle CPU instrumenté de l’annexe est de 108,100 s contre 118,174 s au profil précédent ; cette comparaison combine les deux changements. Une mesure murale directe de la passe a pris 272,254 s, sans délai d’expiration diagnostique, au-delà des plafonds de production de 120 s par passe et 180 s au total. LuaLaTeX a écrit un PDF diagnostique balisé de 1 572 pages, mais ses références ne sont pas convergées ; le PDF final multipasse N=1 000 n’est pas encore produit. Voir le [profil brut](validation-latex-n1000-current-profile-20261001.json).
 
 **L8.3 — paragraphes d’annexe regroupés :** le titre et les rangées de métadonnées partagent un paragraphe LaTeX avec sauts de ligne visibles ; le renvoi simple s’y ajoute lorsqu’aucun média ne s’intercale. Les reproductions médias et appels multiples gardent leur ordre. À N=100, le PDF candidat passe de 165 à 161 pages et de 1 398 169 à 1 362 256 octets ; les 303 entrées, 579 appels, cibles d’identité et URI sont conservés, sans destination interne manquante. Une passe diagnostique N=1 000 situe l’annexe à 101,872 s CPU contre 108,100 s et dure 262,122 s au mur ; ces mesures uniques restent indicatives, et le délai de production reste dépassé. La passe diagnostique balisée de 1 535 pages n’a pas de références convergées ; aucun PDF final multipasse N=1 000 n’est produit. Voir [validation performance](validation-performance.fr.md) et les [données brutes](validation-latex-citation-paragraphs-20261002.json).
+
+**L8.3 — compilation répétée après regroupement :** trois compilations N=100 par variante, alternées sur macOS 27 arm64 avec CPython 3.12.10 et LuaHBTeX 1.24.0, confirment une médiane de 66,120 s sans regroupement et de 63,492 s avec regroupement (−3,98 %). La médiane du PDF baisse de 2,57 % à 1 362 253 octets ; les six compilations multipasses réussissent. Le budget provisoire de 60 s reste dépassé et N=1 000 n’est pas qualifié : une passe diagnostique y prend 262,122 s et aucun PDF final n’a été produit. Voir [validation performance](validation-performance.fr.md) et les [mesures brutes](validation-latex-citation-paragraph-repeats-20261002.json).
 
 ### Prochaines actions
 
