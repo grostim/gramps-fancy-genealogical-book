@@ -39,9 +39,22 @@ The fixture’s entered event description remains intact. The French PDF has 10 
 
 The native Gramps 6.0.8 integration check exports the same events with the book set to English and French while the Gramps profile locale stays English. For `Birth`, both displayed values include 1900 and differ according to the selected language; the raw and normalized values remain identical. The marriage’s entered free-text date, “Entre l’hiver 1924 et le printemps 1925,” remains unchanged in both languages, with the same raw value.
 
+## Desktop dialog selection — 2 October 2026
+
+The Gramps Desktop 6.0.8 report dialog was opened with the add-on archive built from `891a10b462ec` (SHA-256 `0260be914cf71e3e5be95794f58f7d22df492ef3036bbbe4fd12304e85e6d391`). A temporary Gramps profile contained the add-on and a fictional tree of three people and one reference family, `F0001`. The profile-local `plugins/lib` directory provided `mistune` 3.3.4. Each export required a fresh privacy acknowledgement.
+
+| Gramps locale | Dialog selection | Exported `BOOK_LANGUAGE` | JSON SHA-256 |
+| --- | --- | --- | --- |
+| French | Use Gramps language | `fr` | `ad2f15318697259a90b260305b627f97ba0ba5c96b224808117358c7baf981d9` |
+| French | English | `en` | `96d24deae3a6efd89efc47a3ee9a64c1c495d927f72cd37fe01bf31abfadb1d9` |
+| French | French | `fr` | `ad2f15318697259a90b260305b627f97ba0ba5c96b224808117358c7baf981d9` |
+| Unsupported German | Use Gramps language | `en` | `96d24deae3a6efd89efc47a3ee9a64c1c495d927f72cd37fe01bf31abfadb1d9` |
+
+All four JSON files contain the same normalized genealogy and reference family; after removing `BOOK_LANGUAGE`, their contents match. The two French outputs are byte-identical, as are the two English outputs. Under German Gramps, untranslated add-on labels appear in English while native Gramps controls are German. This GUI check covers the language selector and JSON model; the CLI checks above cover PDF and HTML ZIP output.
+
 ## Limits
 
-- These checks invoke the Gramps Desktop executable through its CLI with isolated profiles. They do not verify the report option’s graphical display or selection in the report dialog.
+- The PDF and HTML ZIP checks above invoke Gramps Desktop through its CLI with isolated profiles; the additional GUI check uses a smaller fictional JSON fixture.
 - The check does not compare every note and event string; it confirms retention of the entered name. All fixture data is fictional.
-- Structured dates are formatted by Gramps in the book language and the fixture’s free-text date remains intact; graphical selection of the language is not yet covered.
+- Structured dates are formatted by Gramps in the book language and the CLI fixture’s free-text date remains intact; the small GUI fixture does not contain those dates.
 - The demonstration PDF uses a small tree and synthetic portraits; final layout, PDF accessibility, and comparison with private mockups are outside this check.
