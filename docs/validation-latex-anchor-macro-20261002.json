@@ -1,0 +1,493 @@
+{
+  "title": "LaTeX anchor macro source and compilation comparison",
+  "date": "2026-10-02",
+  "base_commit": "e879c9dfbd0cf504de17467f02fabbd642f7c689",
+  "change": "Replace each repeated identity target in a hypertarget-plus-label pair with one gfbanchor call that expands to the same commands.",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "python": "3.12.10",
+    "mistune": "3.3.4",
+    "pillow": "9.5.0",
+    "lualatex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "n100": {
+    "fixture": {
+      "shape": "branching",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "citations": 303,
+      "media": 20,
+      "portrait_size": "96x72"
+    },
+    "method": {
+      "runs_per_variant": 3,
+      "run_order": [
+        "candidate",
+        "baseline",
+        "candidate",
+        "baseline",
+        "baseline",
+        "candidate"
+      ],
+      "command": "PYTHONPATH=src python scripts/benchmark_book.py --shape branching --descendant-couples 100 --with-media --compile-pdf-for 100 --repeat 1",
+      "all_pdf_statuses": [
+        "compiled",
+        "compiled",
+        "compiled",
+        "compiled",
+        "compiled",
+        "compiled"
+      ]
+    },
+    "measurements": {
+      "pdf.seconds": {
+        "baseline": {
+          "runs": [
+            63.430764,
+            63.935522,
+            63.254461
+          ],
+          "median": 63.430764
+        },
+        "candidate": {
+          "runs": [
+            63.316642,
+            63.871626,
+            63.157227
+          ],
+          "median": 63.316642
+        },
+        "median_delta": -0.11412200000000183,
+        "median_change_percent": -0.17991585281867617
+      },
+      "latex_bytes": {
+        "baseline": {
+          "runs": [
+            495847,
+            495847,
+            495847
+          ],
+          "median": 495847
+        },
+        "candidate": {
+          "runs": [
+            444279,
+            444279,
+            444279
+          ],
+          "median": 444279
+        },
+        "median_delta": -51568,
+        "median_change_percent": -10.399982252590013
+      },
+      "pdf.bytes": {
+        "baseline": {
+          "runs": [
+            1362249,
+            1362251,
+            1362254
+          ],
+          "median": 1362251
+        },
+        "candidate": {
+          "runs": [
+            1362257,
+            1362253,
+            1362254
+          ],
+          "median": 1362254
+        },
+        "median_delta": 3,
+        "median_change_percent": 0.00022022373263077066
+      },
+      "temporary_workspace_peak_bytes": {
+        "baseline": {
+          "runs": [
+            3238062,
+            3238060,
+            3238059
+          ],
+          "median": 3238060
+        },
+        "candidate": {
+          "runs": [
+            3186495,
+            3186496,
+            3186492
+          ],
+          "median": 3186495
+        },
+        "median_delta": -51565,
+        "median_change_percent": -1.5924658591872913
+      }
+    }
+  },
+  "n1000_source": {
+    "baseline_bytes": 4889154,
+    "candidate_bytes": 4381781,
+    "delta_bytes": -507373,
+    "change_percent": -10.377521346228816,
+    "baseline_sha256": "a9bc6293711f5a28962baff8827205b8e7f9ab4301588b2a2d6d0db989bf1103",
+    "candidate_sha256": "12df61306fb56abfc70e36143dbf4e03bc35c679fd148bdbf61e059259243964",
+    "macro_calls_expanded": 14498,
+    "normalized_candidate_equals_baseline": true
+  },
+  "limits": [
+    "The N=100 comparison shows no meaningful compilation-time change; the measured 0.18% median difference is below the observed run-to-run range.",
+    "The N=1000 source comparison did not compile a PDF and does not establish a change in the production timeout.",
+    "Temporary workspace peaks are sampled every 100 ms and may miss shorter-lived peaks.",
+    "The local Pillow 9.5.0 used for the synthetic portrait fixture is older than the package optional dependency floor of Pillow 10; both variants used the same version.",
+    "The N=1000 textual normalization verifies the macro expansion of all 14,498 emitted identity anchors but does not independently validate a screen-reader workflow."
+  ],
+  "runs": [
+    {
+      "order": 1,
+      "variant": "candidate",
+      "report": {
+        "python": "3.12.10",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+        "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+        "media_enabled": true,
+        "portrait_size": "96x72",
+        "repetitions": 1,
+        "pdf_compile_case": {
+          "shape": "branching",
+          "descendant_couples": 100
+        },
+        "cases": [
+          {
+            "shape": "branching",
+            "descendant_couples": 100,
+            "people": 202,
+            "families": 101,
+            "events": 303,
+            "notes": 27,
+            "citations": 303,
+            "sources": 13,
+            "media": 20,
+            "portrait_size": "96x72",
+            "media_source_bytes": 417520,
+            "family_notices": 101,
+            "family_sections": 101,
+            "profiles": 202,
+            "media_artifacts": 20,
+            "fixture_seconds": 0.09679,
+            "model_seconds": 0.132556,
+            "media_prepare_seconds": 0.025786,
+            "json_seconds": 0.319284,
+            "html_seconds": 0.044214,
+            "latex_seconds": 0.093064,
+            "html_zip_seconds": 0.046477,
+            "json_bytes": 1639117,
+            "html_bytes": 591583,
+            "latex_bytes": 444279,
+            "html_zip_bytes": 334266,
+            "fixture_heap_bytes": 3652936,
+            "fixture_peak_heap_bytes": 3707869,
+            "peak_additional_heap_bytes": 8351800,
+            "peak_total_heap_bytes": 12004736,
+            "temporary_workspace_peak_bytes": 3186495,
+            "pdf": {
+              "status": "compiled",
+              "seconds": 63.316642,
+              "bytes": 1362257
+            },
+            "repeat": 1
+          }
+        ]
+      }
+    },
+    {
+      "order": 2,
+      "variant": "baseline",
+      "report": {
+        "python": "3.12.10",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+        "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+        "media_enabled": true,
+        "portrait_size": "96x72",
+        "repetitions": 1,
+        "pdf_compile_case": {
+          "shape": "branching",
+          "descendant_couples": 100
+        },
+        "cases": [
+          {
+            "shape": "branching",
+            "descendant_couples": 100,
+            "people": 202,
+            "families": 101,
+            "events": 303,
+            "notes": 27,
+            "citations": 303,
+            "sources": 13,
+            "media": 20,
+            "portrait_size": "96x72",
+            "media_source_bytes": 417520,
+            "family_notices": 101,
+            "family_sections": 101,
+            "profiles": 202,
+            "media_artifacts": 20,
+            "fixture_seconds": 0.086444,
+            "model_seconds": 0.134499,
+            "media_prepare_seconds": 0.028472,
+            "json_seconds": 0.317421,
+            "html_seconds": 0.044118,
+            "latex_seconds": 0.09348,
+            "html_zip_seconds": 0.047238,
+            "json_bytes": 1639117,
+            "html_bytes": 591583,
+            "latex_bytes": 495847,
+            "html_zip_bytes": 334266,
+            "fixture_heap_bytes": 3653469,
+            "fixture_peak_heap_bytes": 3708409,
+            "peak_additional_heap_bytes": 8364858,
+            "peak_total_heap_bytes": 12018327,
+            "temporary_workspace_peak_bytes": 3238062,
+            "pdf": {
+              "status": "compiled",
+              "seconds": 63.430764,
+              "bytes": 1362249
+            },
+            "repeat": 1
+          }
+        ]
+      }
+    },
+    {
+      "order": 3,
+      "variant": "candidate",
+      "report": {
+        "python": "3.12.10",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+        "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+        "media_enabled": true,
+        "portrait_size": "96x72",
+        "repetitions": 1,
+        "pdf_compile_case": {
+          "shape": "branching",
+          "descendant_couples": 100
+        },
+        "cases": [
+          {
+            "shape": "branching",
+            "descendant_couples": 100,
+            "people": 202,
+            "families": 101,
+            "events": 303,
+            "notes": 27,
+            "citations": 303,
+            "sources": 13,
+            "media": 20,
+            "portrait_size": "96x72",
+            "media_source_bytes": 417520,
+            "family_notices": 101,
+            "family_sections": 101,
+            "profiles": 202,
+            "media_artifacts": 20,
+            "fixture_seconds": 0.089083,
+            "model_seconds": 0.1401,
+            "media_prepare_seconds": 0.02592,
+            "json_seconds": 0.336851,
+            "html_seconds": 0.046762,
+            "latex_seconds": 0.098206,
+            "html_zip_seconds": 0.049146,
+            "json_bytes": 1639117,
+            "html_bytes": 591583,
+            "latex_bytes": 444279,
+            "html_zip_bytes": 334266,
+            "fixture_heap_bytes": 3652473,
+            "fixture_peak_heap_bytes": 3707361,
+            "peak_additional_heap_bytes": 8351790,
+            "peak_total_heap_bytes": 12004263,
+            "temporary_workspace_peak_bytes": 3186496,
+            "pdf": {
+              "status": "compiled",
+              "seconds": 63.871626,
+              "bytes": 1362253
+            },
+            "repeat": 1
+          }
+        ]
+      }
+    },
+    {
+      "order": 4,
+      "variant": "baseline",
+      "report": {
+        "python": "3.12.10",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+        "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+        "media_enabled": true,
+        "portrait_size": "96x72",
+        "repetitions": 1,
+        "pdf_compile_case": {
+          "shape": "branching",
+          "descendant_couples": 100
+        },
+        "cases": [
+          {
+            "shape": "branching",
+            "descendant_couples": 100,
+            "people": 202,
+            "families": 101,
+            "events": 303,
+            "notes": 27,
+            "citations": 303,
+            "sources": 13,
+            "media": 20,
+            "portrait_size": "96x72",
+            "media_source_bytes": 417520,
+            "family_notices": 101,
+            "family_sections": 101,
+            "profiles": 202,
+            "media_artifacts": 20,
+            "fixture_seconds": 0.089458,
+            "model_seconds": 0.139653,
+            "media_prepare_seconds": 0.026136,
+            "json_seconds": 0.339168,
+            "html_seconds": 0.046815,
+            "latex_seconds": 0.099409,
+            "html_zip_seconds": 0.049786,
+            "json_bytes": 1639117,
+            "html_bytes": 591583,
+            "latex_bytes": 495847,
+            "html_zip_bytes": 334266,
+            "fixture_heap_bytes": 3652781,
+            "fixture_peak_heap_bytes": 3707721,
+            "peak_additional_heap_bytes": 8351282,
+            "peak_total_heap_bytes": 12004063,
+            "temporary_workspace_peak_bytes": 3238060,
+            "pdf": {
+              "status": "compiled",
+              "seconds": 63.935522,
+              "bytes": 1362251
+            },
+            "repeat": 1
+          }
+        ]
+      }
+    },
+    {
+      "order": 5,
+      "variant": "baseline",
+      "report": {
+        "python": "3.12.10",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+        "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+        "media_enabled": true,
+        "portrait_size": "96x72",
+        "repetitions": 1,
+        "pdf_compile_case": {
+          "shape": "branching",
+          "descendant_couples": 100
+        },
+        "cases": [
+          {
+            "shape": "branching",
+            "descendant_couples": 100,
+            "people": 202,
+            "families": 101,
+            "events": 303,
+            "notes": 27,
+            "citations": 303,
+            "sources": 13,
+            "media": 20,
+            "portrait_size": "96x72",
+            "media_source_bytes": 417520,
+            "family_notices": 101,
+            "family_sections": 101,
+            "profiles": 202,
+            "media_artifacts": 20,
+            "fixture_seconds": 0.089361,
+            "model_seconds": 0.139724,
+            "media_prepare_seconds": 0.026066,
+            "json_seconds": 0.337705,
+            "html_seconds": 0.04665,
+            "latex_seconds": 0.099443,
+            "html_zip_seconds": 0.049845,
+            "json_bytes": 1639117,
+            "html_bytes": 591583,
+            "latex_bytes": 495847,
+            "html_zip_bytes": 334266,
+            "fixture_heap_bytes": 3652872,
+            "fixture_peak_heap_bytes": 3707760,
+            "peak_additional_heap_bytes": 8351740,
+            "peak_total_heap_bytes": 12004612,
+            "temporary_workspace_peak_bytes": 3238059,
+            "pdf": {
+              "status": "compiled",
+              "seconds": 63.254461,
+              "bytes": 1362254
+            },
+            "repeat": 1
+          }
+        ]
+      }
+    },
+    {
+      "order": 6,
+      "variant": "candidate",
+      "report": {
+        "python": "3.12.10",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+        "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+        "media_enabled": true,
+        "portrait_size": "96x72",
+        "repetitions": 1,
+        "pdf_compile_case": {
+          "shape": "branching",
+          "descendant_couples": 100
+        },
+        "cases": [
+          {
+            "shape": "branching",
+            "descendant_couples": 100,
+            "people": 202,
+            "families": 101,
+            "events": 303,
+            "notes": 27,
+            "citations": 303,
+            "sources": 13,
+            "media": 20,
+            "portrait_size": "96x72",
+            "media_source_bytes": 417520,
+            "family_notices": 101,
+            "family_sections": 101,
+            "profiles": 202,
+            "media_artifacts": 20,
+            "fixture_seconds": 0.088286,
+            "model_seconds": 0.139286,
+            "media_prepare_seconds": 0.025813,
+            "json_seconds": 0.334692,
+            "html_seconds": 0.046836,
+            "latex_seconds": 0.098779,
+            "html_zip_seconds": 0.048977,
+            "json_bytes": 1639117,
+            "html_bytes": 591583,
+            "latex_bytes": 444279,
+            "html_zip_bytes": 334266,
+            "fixture_heap_bytes": 3653164,
+            "fixture_peak_heap_bytes": 3708052,
+            "peak_additional_heap_bytes": 8351677,
+            "peak_total_heap_bytes": 12004841,
+            "temporary_workspace_peak_bytes": 3186492,
+            "pdf": {
+              "status": "compiled",
+              "seconds": 63.157227,
+              "bytes": 1362254
+            },
+            "repeat": 1
+          }
+        ]
+      }
+    }
+  ]
+}

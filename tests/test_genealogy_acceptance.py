@@ -152,8 +152,8 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
         f"\\item \\hyperlink{{{ancestry_generation_target}}}{{Generation 0}}"
         in ancestry_text
     )
-    assert f"\\hypertarget{{{ancestry_generation_target}}}" in ancestry_text
-    assert ancestry_text.index(r"\hypertarget{") < ancestry_text.index(
+    assert f"\\gfbanchor{{{ancestry_generation_target}}}" in ancestry_text
+    assert ancestry_text.index(r"\gfbanchor{") < ancestry_text.index(
         r"\subsection*{Generation 0}"
     )
     generation_zero_text = ancestry_text.split(
@@ -168,9 +168,9 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
         f"\\item \\hyperlink{{{descent_generation_target}}}{{Generation 1}}"
         in descent_text
     )
-    assert f"\\hypertarget{{{descent_generation_target}}}" in descent_text
+    assert f"\\gfbanchor{{{descent_generation_target}}}" in descent_text
     assert any(
-        r"\hypertarget{" in line and "child" in line
+        r"\gfbanchor{" in line and "child" in line
         for line in descent_text.splitlines()
     )
     connection_text = rendered[connections_start:]
