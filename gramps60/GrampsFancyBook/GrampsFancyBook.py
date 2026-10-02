@@ -161,6 +161,9 @@ class GrampsFancyBookReport(Report):
                         media_asset_directory=asset_staging,
                         gramps_type_labels=gramps_type_labels,
                         overwrite=overwrite,
+                        extended_compilation=(
+                            self.options_class.get_extended_pdf_compilation()
+                        ),
                     )
             elif output_format == "json_snapshot":
                 consistency_report = build_consistency_report(model)

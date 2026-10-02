@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-02",
+  "base_commit": "a280ea7b983cc0f0d6de774311d4f34f8fa4792d",
+  "environment": {
+    "os": "macOS 27 arm64",
+    "python": "CPython 3.12.10",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72"
+  },
+  "method": {
+    "model": "build_book_model on synthetic_branching_snapshot",
+    "renderer": "render_latex at base commit",
+    "compiler": "production _compile_latex with diagnostic limits",
+    "pass_timeout_seconds": 600,
+    "total_timeout_seconds": 1800,
+    "shell_escape": false,
+    "max_passes": 5,
+    "gramps_desktop_export": false
+  },
+  "result": {
+    "status": "compiled",
+    "passes": 3,
+    "pass_wall_seconds": [
+      253.537,
+      261.122,
+      276.413
+    ],
+    "total_compile_wall_seconds": 791.078,
+    "source_bytes": 4037240,
+    "pdf_pages": 1535,
+    "pdf_bytes": 13103813,
+    "pdf_sha256": "ff2d84665fd3b2589576628ad5794b9d8887306dca39a7479728ce4ae73344bf",
+    "a4": true,
+    "tagged": true,
+    "final_log_layout_warnings": 0,
+    "named_destinations": 34883,
+    "link_annotations": 31271,
+    "internal_links": 19210,
+    "uri_links": 12061,
+    "missing_named_destinations": 0,
+    "visual_sample_pages": [
+      1,
+      500,
+      1000,
+      1535
+    ]
+  },
+  "preview": "output/pdf/gramps-fancy-book-n1000-extended-preview-20261002.pdf",
+  "limits": [
+    "Single N=1000 diagnostic run; no repeated timing distribution.",
+    "The compiler was called directly on a synthetic model, not from the Gramps Desktop report.",
+    "Four pages were sampled visually; the full 1535-page layout was not reviewed page by page.",
+    "The 60-second provisional performance target remains unmet."
+  ]
+}
