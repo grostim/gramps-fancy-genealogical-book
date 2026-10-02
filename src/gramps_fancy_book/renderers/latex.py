@@ -1266,8 +1266,9 @@ def _render_citation_appendix(
                 )
             )
         if metadata_lines:
-            # Keep related metadata in one tagged paragraph while preserving rows.
-            output.append("\\par " + "\\\\\n".join(metadata_lines) + "\n")
+            # Keep the citation's title and related metadata in one tagged paragraph.
+            output.append("\\\\ " + "\\\\\n".join(metadata_lines) + "\n")
+        media_rendered = False
         for reference in entry.media_refs:
             media = model.media.get(reference.media_handle)
             placement = _media_placement_for_reference(model, reference)
@@ -1283,39 +1284,35 @@ def _render_citation_appendix(
                     and primary_use.context_type == "citation"
                     and primary_use.context_id == entry.entry_id
                 ):
-                    output.append(
-                        _render_featured_media(
-                            placement,
-                            primary_use.media_ref,
-                            caption,
-                            model.media_artifacts,
-                            emitted_targets,
-                            model_book_language(model, default="en"),
-                            model.media,
-                        )
-                    )
-                else:
-                    output.append(
-                        _render_featured_media_link(
-                            placement,
-                            caption,
-                            emitted_targets,
-                            model_book_language(model, default="en"),
-                        )
-                    )
-            else:
-                output.append(
-                    _render_shared_media_reference(
-                        reference,
-                        caption,
+                    rendered_media = _render_featured_media(
                         placement,
+                        primary_use.media_ref,
+                        caption,
                         model.media_artifacts,
                         emitted_targets,
                         model_book_language(model, default="en"),
-                        media_by_handle=model.media,
-                        width="0.6\\linewidth",
+                        model.media,
                     )
+                else:
+                    rendered_media = _render_featured_media_link(
+                        placement,
+                        caption,
+                        emitted_targets,
+                        model_book_language(model, default="en"),
+                    )
+            else:
+                rendered_media = _render_shared_media_reference(
+                    reference,
+                    caption,
+                    placement,
+                    model.media_artifacts,
+                    emitted_targets,
+                    model_book_language(model, default="en"),
+                    media_by_handle=model.media,
+                    width="0.6\\linewidth",
                 )
+            output.append(rendered_media)
+            media_rendered = media_rendered or bool(rendered_media)
 
         call_labels = [
             (
@@ -1350,7 +1347,7 @@ def _render_citation_appendix(
                 linked_call_labels.append(linked_label)
             if len(linked_call_labels) == 1:
                 output.append(
-                    "\\par "
+                    ("\\par " if media_rendered else "\\\\\n")
                     + escape_latex_text(label(model, "see"))
                     + " "
                     + linked_call_labels[0]

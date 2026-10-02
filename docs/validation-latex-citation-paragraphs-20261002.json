@@ -1,0 +1,139 @@
+{
+  "title": "Citation appendix paragraph consolidation profile",
+  "measured_on": "2026-10-02",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "CPython 3.12.14",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "change": {
+    "description": "Citation titles and metadata share a paragraph with visible line breaks. A single call reference shares that paragraph when no rendered citation media separates it; media and multiple-call lists retain their existing order and structure.",
+    "production_source_or_settings_changed": false
+  },
+  "n100_candidate": {
+    "fixture": {
+      "shape": "branching",
+      "descendant_couples": 100,
+      "people": 202,
+      "citations": 303,
+      "synthetic_portraits": 20,
+      "portrait_size": "96x72"
+    },
+    "method": {
+      "passes": "production multipass; references converged",
+      "timer": "Python time.perf_counter() around write_latex_pdf after fixture and media preparation",
+      "candidate_runs": 1,
+      "reference_runs": 1
+    },
+    "reference": {
+      "wall_seconds": 63.967656,
+      "pages": 165,
+      "bytes": 1398169,
+      "tagged": true,
+      "link_annotations": 3073,
+      "internal_link_annotations": 1861,
+      "identity_targets": 1475,
+      "unique_uri_targets": 317
+    },
+    "candidate": {
+      "wall_seconds": 65.62885,
+      "pages": 161,
+      "bytes": 1362256,
+      "tagged": true,
+      "link_annotations": 3079,
+      "internal_link_annotations": 1861,
+      "unresolved_named_internal_destinations": 0,
+      "identity_targets": 1475,
+      "unique_uri_targets": 317,
+      "citation_entries": 303,
+      "numbered_citation_entries_consecutive": true,
+      "citation_calls": 579,
+      "call_label_text_equal_after_page_reference_normalization": true,
+      "uri_target_set_equal": true,
+      "tag_structure_elements": 12215,
+      "reference_tag_structure_elements": 13339
+    },
+    "interpretation": {
+      "page_delta": -4,
+      "pdf_byte_delta": -35913,
+      "pdf_size_reduction_percent": 2.57,
+      "wall_delta_seconds": 1.661194,
+      "wall_delta_percent": 2.60,
+      "wall_comparison_note": "One run per variant; the reference was measured with CPython 3.14.0 and the candidate with CPython 3.12.14. This does not establish a compile-time regression or improvement."
+    }
+  },
+  "n1000_diagnostic_profile": {
+    "fixture": {
+      "shape": "branching",
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "citations": 3003,
+      "family_notices": 1001,
+      "person_profiles": 2002,
+      "synthetic_portraits": 200,
+      "portrait_size": "96x72"
+    },
+    "method": {
+      "passes": 1,
+      "fresh_temporary_directory": true,
+      "compile_flags": [
+        "-no-shell-escape",
+        "-interaction=nonstopmode",
+        "-halt-on-error",
+        "-file-line-error"
+      ],
+      "return_code": 0,
+      "wall_clock_timer": "Python time.perf_counter() around direct subprocess.run of one LuaLaTeX pass.",
+      "diagnostic_timeout_seconds": null,
+      "instrumentation": "Two Lua os.clock() markers were inserted before the Documentary appendix and Person index section headings in a temporary source copy.",
+      "instrumented_source_bytes": 4889312,
+      "instrumentation_overhead_bytes": 158,
+      "candidate_production_source_bytes": 4889154,
+      "reference_production_source_bytes": 4900298,
+      "production_source_delta_bytes": -11144,
+      "production_source_delta_percent": -0.23,
+      "production_source_or_settings_changed": false
+    },
+    "candidate": {
+      "wall_seconds": 262.122201,
+      "appendix_cpu_seconds": 101.87151,
+      "pdf_pages": 1535,
+      "pdf_page_size": "A4",
+      "pdf_tagged": true,
+      "pdf_bytes": 13242192,
+      "references_converged": false,
+      "use_as_final_preview": false
+    },
+    "reference_profile": {
+      "wall_seconds": 272.254375,
+      "appendix_cpu_seconds": 108.100442,
+      "pdf_pages": 1572,
+      "pdf_bytes": 13582172
+    },
+    "interpretation": {
+      "wall_delta_seconds": -10.132174,
+      "wall_reduction_percent": 3.72,
+      "appendix_cpu_delta_seconds": -6.228932,
+      "appendix_cpu_reduction_percent": 5.76,
+      "pdf_page_delta": -37,
+      "pdf_byte_delta": -339980,
+      "pdf_size_reduction_percent": 2.50,
+      "comparison_scope": "One pass per variant on the same macOS and LuaHBTeX version with the same synthetic fixture. The prior profile used CPython 3.14.0 while this run used CPython 3.12.14; CPU checkpoints come from Lua os.clock(). These measurements are indicative, not a multi-run qualification."
+    }
+  },
+  "production_limits": {
+    "per_pass_seconds": 120,
+    "total_compilation_seconds": 180,
+    "candidate_wall_seconds_exceeds_per_pass_limit": true,
+    "candidate_wall_seconds_exceeds_total_limit": true
+  },
+  "limits": [
+    "The N=1000 result is one diagnostic pass; references are not converged, so its PDF is not a final preview.",
+    "The N=1000 candidate wall time still exceeds both production time limits.",
+    "One run per variant does not establish a stable performance percentage.",
+    "The candidate PDF was visually inspected on the appendix start, continuation, final appendix, index start, and final page; this does not constitute a full-page review.",
+    "Synthetic records and portraits only; no PDF/UA conformance claim is made."
+  ]
+}
