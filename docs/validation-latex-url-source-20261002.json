@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-02",
+  "environment": {
+    "os": "macOS 27 arm64",
+    "python": "CPython 3.12.10",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": "branching N=100 with 20 synthetic portraits, A4 tagged PDF",
+  "diagnostic_source": {
+    "has_section_markers": true,
+    "url_calls": 909,
+    "baseline_bytes": 444452,
+    "two_arg_bytes": 410244,
+    "saved_bytes": 34208,
+    "all_old_urls_equal_joined_new_args": true
+  },
+  "large_source": {
+    "fixture": "branching N=1000 with 200 synthetic portraits",
+    "url_calls": 9009,
+    "baseline_bytes": 4381781,
+    "two_arg_bytes": 4037240,
+    "saved_bytes": 344541,
+    "all_old_urls_equal_joined_new_args": true
+  },
+  "single_pass_diagnostics": [
+    {
+      "variant": "baseline",
+      "return_code": 0,
+      "wall_seconds": 20.506986499996856,
+      "marks_cpu_seconds": {
+        "appendix": 10.655427,
+        "index": 17.091752
+      },
+      "appendix_cpu_seconds": 6.436325,
+      "pdf_bytes": 1378333,
+      "pdf_pages": "161",
+      "pdf_tagged": "yes"
+    },
+    {
+      "variant": "single-url",
+      "return_code": 0,
+      "wall_seconds": 20.981626916967798,
+      "marks_cpu_seconds": {
+        "appendix": 11.00639,
+        "index": 17.567512
+      },
+      "appendix_cpu_seconds": 6.561122000000001,
+      "pdf_bytes": 1382648,
+      "pdf_pages": "161",
+      "pdf_tagged": "yes"
+    },
+    {
+      "variant": "no-href",
+      "return_code": 0,
+      "wall_seconds": 18.04471641598502,
+      "marks_cpu_seconds": {
+        "appendix": 11.151334,
+        "index": 14.791767
+      },
+      "appendix_cpu_seconds": 3.640433,
+      "pdf_bytes": 1261096,
+      "pdf_pages": "161",
+      "pdf_tagged": "yes"
+    },
+    {
+      "variant": "two-arg",
+      "return_code": 0,
+      "wall_seconds": 20.751253208,
+      "pdf_bytes_first_pass": 1378334,
+      "pdf_pages_first_pass": 161,
+      "pdf_tagged_first_pass": "yes"
+    }
+  ],
+  "final_pdf": {
+    "passes": 3,
+    "two_arg_passes_2_3_wall_seconds": [
+      20.548,
+      21.044
+    ],
+    "baseline_pdf_bytes": 1362256,
+    "two_arg_pdf_bytes": 1362254,
+    "pages_each": 161,
+    "tagged": true,
+    "extracted_text_identical": true,
+    "named_destinations_each": 3560,
+    "link_annotations_each": 3079,
+    "uri_links_each": 1218,
+    "internal_links_each": 1861,
+    "link_target_multisets_identical": true,
+    "preview": "output/pdf/gramps-fancy-book-url-source-preview-20261002.pdf"
+  },
+  "limitations": [
+    "Single-pass wall times are isolated measurements, not a repeated compile benchmark.",
+    "The no-href variant removes required clickable URLs and is diagnostic only.",
+    "No N=1000 multipass PDF was compiled with the two-argument macro."
+  ]
+}

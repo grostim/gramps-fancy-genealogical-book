@@ -323,7 +323,7 @@ def render_latex(
         "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2 (p.~\\pageref*{#1})}}\n"
         "\\newcommand{\\gfbanchor}[1]{\\hypertarget{#1}{}\\label{#1}}\n"
         f"\\hypersetup{{pdftitle={{{escape_latex_text(_pdf_title(model))}}},pdfdisplaydoctitle=true}}\n"
-        "\\newcommand{\\bookurl}[3]{\\href{#1}{{\\useOriginalUrlSetting\\nolinkurl{#2}}\\nolinkurl{#3}}}\n"
+        "\\newcommand{\\bookurl}[2]{\\href{#1#2}{{\\useOriginalUrlSetting\\nolinkurl{#1}}\\nolinkurl{#2}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
         "\\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}\n"
         "\\tagpdfsetup{role/new-tag={paragraph/H3}}\n"
