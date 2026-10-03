@@ -110,8 +110,16 @@ msgstr ""
 msgid "Select a reference family."
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:152
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:235
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:122
+msgid "Maximum ancestry generations must be a non-negative integer or 'unlimited'."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:132
+msgid "Maximum descendant generations must be a non-negative integer or 'unlimited'."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:166
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:240
 msgid "Select a supported output format."
 msgstr ""
 
@@ -163,47 +171,59 @@ msgstr ""
 msgid "The consistency report destination cannot be a directory."
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:59
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:56
+msgid "Family contains a child reference without a handle."
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:62
 msgid "Output directory does not exist:"
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:60
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:63
 msgid "Output destination cannot be a directory:"
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:144
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:64
+msgid "No family exists for Gramps ID"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:65
+msgid "Family references an unavailable person:"
+msgstr ""
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:149
 msgid "Privacy warning not acknowledged"
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:146
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:151
 msgid "Confirm that you are authorized to export and share data about living people and records marked private."
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:161
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:166
 msgid "The reference family must have two known partners."
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:238
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:243
 msgid "Output already exists"
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:239
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:244
 msgid "Choose another destination or enable 'Replace an existing file'."
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:243
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:248
 msgid "PDF output unavailable"
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:244
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:249
 msgid "LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:256
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:261
 msgid "PDF generation failed"
 msgstr ""
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:258
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:263
 msgid "Book generation failed"
 msgstr ""
 
