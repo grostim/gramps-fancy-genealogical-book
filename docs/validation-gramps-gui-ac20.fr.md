@@ -17,6 +17,7 @@
 - Les 1 166 annotations de lien interne PDF sont des actions `GoTo` dont les destinations existent. Le fichier expose 2 075 destinations nommées.
 - Le ZIP passe `unzip -t`. Son HTML `lang="fr"` contient 122 ancres de fiche, 61 de notice familiale, 183 d'événement et 183 de citation. Ses 1 108 liens pointent tous vers une ancre locale existante ; les 870 identifiants sont uniques. Les 12 images HTML ont un texte alternatif et réutilisent deux fichiers PNG dédupliqués dans l'archive.
 - Les 87 pages PDF ont été rendues à 45 ppp et parcourues sur dix planches de contact. Les pages physiques 33 (portrait), 56 (paysage et fin de fiche), 63 (citations) et 87 (index) ont été examinées à 140 ppp. Aucun chevauchement, texte tronqué ou folio manquant n'est visible dans ces vues.
+- Les deux PNG du ZIP sont des photographies fictives en niveaux de gris de 1 024 × 1 536 px (personne) et 1 536 × 1 024 px (maison). Ils sont réutilisés dans 12 placements. Ils sont distincts des images minimales de la petite fixture GUI décrite dans la [validation L7](validation-l7.fr.md).
 
 ## Limites de cette recette
 
@@ -38,3 +39,11 @@ Le paquet construit depuis `main` au commit `4d18a22` a été installé dans une
 - Les 12 placements d'image et les 183 notices de source sont conservés. Les 2 063 destinations nommées du nouveau PDF correspondent à celles de l'ancien, à l'exception de 12 destinations `page.*` liées aux pages disparues. Les 1 048 liens internes de la nouvelle pagination atteignent tous une destination. Les 12 éléments `Figure` du balisage possèdent chacun un texte alternatif.
 - Les 75 pages ont été parcourues sur trois planches de contact à basse résolution. Les pages physiques 1, 3, 27 (portrait), 51 (paysage), 56 (annexe) et 75 (index) ont été examinées séparément à 1 200 px. Aucun chevauchement ni texte tronqué n'a été observé dans ces vues ; la photographie de paysage et sa légende restent dans la zone de composition.
 - La couverture et les pages généalogiques courtes restent aérées parce que ce jeu fictif n'apporte pas de notes éditoriales ni de portraits du couple central et que les grandes parties commencent sur une nouvelle page. La revue ne constitue pas un essai au lecteur d'écran ni une preuve de conformité PDF/UA. Il reste à refaire l'export avec la **boîte de dialogue graphique** et à qualifier un livre avec des médias familiaux représentatifs.
+
+## Texte alternatif des images HTML — 3 octobre 2026
+
+L'ancien ZIP AC-20 attribuait « Portrait de [personne] » aux 12 images principales. Cette formule décrivait à tort les deux placements de la photo de maison. Le renderer HTML donne maintenant priorité à la description enregistrée du média ; en son absence, il conserve le libellé localisé avec le nom de la personne. Le PDF utilisait déjà cette priorité.
+
+Un [nouvel export ZIP par Gramps CLI](../output/gramps-fancy-book-ac20-alt-descriptions-20261003.zip), issu du même profil fictif isolé, contient les mêmes deux PNG octet pour octet. Seuls les 12 attributs `alt` de `index.html` diffèrent de l'ancien export ; ils reprennent ici les titres génériques « Synthetic benchmark image … » de la fixture. L'archive fait 5 466 039 octets, passe le contrôle CRC et porte le SHA-256 `e8ecc81307db16fef16c7e53510a96cc5ef9cd1e3e0935fc1984c70e013fe763`. Des descriptions Gramps plus informatives amélioreraient ces textes ; le plugin ne peut pas déduire qu'une image représente une maison à partir de ses seuls pixels.
+
+Le navigateur intégré refuse l'ouverture directe de cette archive extraite sous `file://`. Cette revue vérifie les fichiers, les descriptions et les dimensions, sans prouver l'équilibre visuel du HTML ni les annonces d'un lecteur d'écran.
