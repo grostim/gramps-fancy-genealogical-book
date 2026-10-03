@@ -38,7 +38,19 @@ Le paquet construit depuis `main` au commit `4d18a22` a été installé dans une
 - Le PDF balisé porte le titre « Histoire familiale » et la langue `fr-FR`. Il compte 12 pages de moins que l'ancien export GUI de 87 pages. Le bord gauche du texte passe d'environ 44 mm à 20 mm ; la différence de pagination est cohérente avec l'espace de composition accru.
 - Les 12 placements d'image et les 183 notices de source sont conservés. Les 2 063 destinations nommées du nouveau PDF correspondent à celles de l'ancien, à l'exception de 12 destinations `page.*` liées aux pages disparues. Les 1 048 liens internes de la nouvelle pagination atteignent tous une destination. Les 12 éléments `Figure` du balisage possèdent chacun un texte alternatif.
 - Les 75 pages ont été parcourues sur trois planches de contact à basse résolution. Les pages physiques 1, 3, 27 (portrait), 51 (paysage), 56 (annexe) et 75 (index) ont été examinées séparément à 1 200 px. Aucun chevauchement ni texte tronqué n'a été observé dans ces vues ; la photographie de paysage et sa légende restent dans la zone de composition.
-- La couverture et les pages généalogiques courtes restent aérées parce que ce jeu fictif n'apporte pas de notes éditoriales ni de portraits du couple central et que les grandes parties commencent sur une nouvelle page. La revue ne constitue pas un essai au lecteur d'écran ni une preuve de conformité PDF/UA. Il reste à refaire l'export avec la **boîte de dialogue graphique** et à qualifier un livre avec des médias familiaux représentatifs.
+- La couverture et les pages généalogiques courtes restent aérées parce que ce jeu fictif n'apporte pas de notes éditoriales ni de portraits du couple central et que les grandes parties commencent sur une nouvelle page. La revue ne constitue pas un essai au lecteur d'écran ni une preuve de conformité PDF/UA. Il reste à qualifier un livre avec des médias familiaux représentatifs.
+
+## Export graphique à marges de 20 mm — 3 octobre 2026
+
+Une copie locale de Gramps Desktop 6.0.8 dotée d'un identifiant d'application distinct a ouvert le profil fictif isolé **FancyBook GUI AC20**, sans passer par l'arbre personnel du Mac. Le paquet de ce profil contient déjà la marge de production de 20 mm. La famille F0001 a été conservée dans la boîte de dialogue ; le format automatique a reconnu une destination `.pdf`, l'option de confidentialité a été cochée et le délai PDF prolongé a été activé. Gramps est revenu au tableau de bord après l'export, sans erreur affichée.
+
+| Sortie | Fichier local non suivi par Git | Mesure | SHA-256 |
+| --- | --- | --- | --- |
+| PDF graphique à 20 mm | [`output/pdf/gramps-fancy-book-ac20-gui-20mm-20261003.pdf`](../output/pdf/gramps-fancy-book-ac20-gui-20mm-20261003.pdf) | 75 pages A4 ; 5 960 833 octets ; PDF 2.0 balisé | `4722102dcc084781d0b47e669edd107833922c42c8ea660b568c84aab0e1cee3` |
+
+`pdfinfo` donne le titre « Histoire familiale » et `Tagged: yes`. Le PDF comporte 12 images. Le texte extrait des 75 pages avec `pdftotext -layout` est identique, par SHA-256, à celui du PDF obtenu par Gramps CLI ci-dessus (`0b0ba78b3156842db42fc8487015efcfaa05380d5c668cf514845d2daa752668`). Les pages physiques 1 (couverture), 3 (généalogie), 27 (portrait), 51 (photo de maison), 56 (annexe) et 75 (index) ont été rendues à 110 ppp ; les pages 1, 27, 51 et 75 ont été ouvertes séparément et ne montrent pas de débordement visible.
+
+Cette recette confirme le parcours de la boîte de dialogue et la pagination de 75 pages sur ce profil fictif. Elle ne remplace pas la revue de toutes les pages, l'essai au lecteur d'écran ni la qualification PDF/UA. La copie isolée de l'application reste locale, hors Git.
 
 ## Texte alternatif des images HTML — 3 octobre 2026
 
