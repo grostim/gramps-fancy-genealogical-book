@@ -2,6 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps Fancy Genealogical Book 0.9.0\n"
 "Report-Msgid-Bugs-To: https://github.com/grostim/gramps-fancy-genealogical-book/issues\n"
+"POT-Creation-Date: 2026-10-03 00:00+0000\n"
 "PO-Revision-Date: 2026-09-28 00:00+0000\n"
 "Last-Translator: Gramps Fancy Genealogical Book contributors\n"
 "Language-Team: French\n"
@@ -11,186 +12,179 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:14
-msgid "Gramps Fancy Genealogical Book"
-msgstr "Livre généalogique illustré pour Gramps"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:15
-msgid "Generate a PDF or static HTML book for the selected reference family."
-msgstr "Générer un livre PDF ou HTML statique pour la famille de référence sélectionnée."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:29
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:32
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:37
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:42
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:55
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:69
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:80
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:105
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:106
 msgid "Book"
 msgstr "Livre"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:31
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:34
 msgid "Reference family"
 msgstr "Famille de référence"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:35
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:39
 msgid "Maximum ancestry generations ('unlimited' or a number)"
 msgstr "Nombre maximal de générations d’ascendance (« unlimited » ou un nombre)"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:40
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:44
 msgid "Maximum descendant generations ('unlimited' or a number)"
 msgstr "Nombre maximal de générations de descendance (« unlimited » ou un nombre)"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:44
-msgid "Output format"
-msgstr "Format de sortie"
-
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:46
-msgid "Automatic (use destination extension)"
-msgstr "Automatique (selon l’extension du fichier)"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:48
-msgid "HTML book (ZIP archive)"
-msgstr "Livre HTML (archive ZIP)"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:50
-msgid "JSON snapshot (development diagnostics)"
-msgstr "Instantané JSON (diagnostic de développement)"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:53
-msgid "Automatic mode uses .zip for HTML books and .json for diagnostic snapshots."
-msgstr "Le mode automatique utilise .zip pour les livres HTML et .json pour les instantanés de diagnostic."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:56
-msgid "Output file"
-msgstr "Fichier de sortie"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:59
-msgid "Automatic mode uses .zip for HTML, or .json for the development snapshot."
-msgstr "Le mode automatique utilise .zip pour le livre HTML ou .json pour l’instantané de développement."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:64
-msgid "Replace an existing file"
-msgstr "Remplacer un fichier existant"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:70
-msgid "Select a reference family."
-msgstr "Sélectionnez une famille de référence."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:95
-msgid "Select a supported output format."
-msgstr "Sélectionnez un format de sortie pris en charge."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:49
-msgid "The reference family must have two known partners."
-msgstr "La famille de référence doit avoir deux partenaires connus."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:90
-msgid "Output already exists"
-msgstr "Le fichier de sortie existe déjà"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:91
-msgid "Choose another destination or enable 'Replace an existing file'."
-msgstr "Choisissez une autre destination ou activez « Remplacer un fichier existant »."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:95
-msgid "Book generation failed"
-msgstr "La génération du livre a échoué"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "PDF book (LuaLaTeX)"
-msgstr "Livre PDF (LuaLaTeX)"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "Allow extended PDF compilation (up to 30 minutes)"
-msgstr "Autoriser une compilation PDF prolongée (jusqu’à 30 minutes)"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "Use this for long PDF books when the standard three-minute limit expires. Each LuaLaTeX pass is limited to ten minutes."
-msgstr "À utiliser pour les longs livres PDF lorsque la limite standard de trois minutes est dépassée. Chaque passe LuaLaTeX est limitée à dix minutes."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots."
-msgstr "Le mode automatique utilise .pdf pour les livres PDF, .zip pour les livres HTML et .json pour les instantanés de diagnostic."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development snapshot."
-msgstr "Le mode automatique utilise .pdf pour le PDF, .zip pour le HTML ou .json pour l’instantané de développement."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "PDF output unavailable"
-msgstr "Sortie PDF indisponible"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."
-msgstr "LuaLaTeX est nécessaire pour produire un PDF. Installez TeX Live et rendez lualatex disponible dans le PATH."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "PDF generation failed"
-msgstr "La génération du PDF a échoué"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "LuaLaTeX could not compile the selected book."
-msgstr "LuaLaTeX n’a pas pu compiler le livre sélectionné."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "LuaLaTeX compilation timed out."
-msgstr "La compilation LuaLaTeX a dépassé le délai maximal."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "PDF references did not stabilize after five compilation passes."
-msgstr "Les renvois du PDF ne se sont pas stabilisés après cinq passes de compilation."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "PDF compilation reported unresolved references or overfull boxes."
-msgstr "La compilation du PDF signale des renvois non résolus ou des dépassements de marge."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "LuaLaTeX completed without producing a PDF file."
-msgstr "LuaLaTeX s’est terminé sans produire de fichier PDF."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "PDF compilation did not produce auxiliary files required to resolve references."
-msgstr "La compilation du PDF n’a pas produit les fichiers auxiliaires nécessaires à la résolution des renvois."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "LuaLaTeX did not produce a compilation log."
-msgstr "LuaLaTeX n’a pas produit de journal de compilation."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "LuaLaTeX could not produce a valid PDF."
-msgstr "LuaLaTeX n’a pas pu produire un PDF valide."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py
-msgid "Generate a PDF or static HTML book for the selected reference family. Exports may include readable private data and information about living people; confirm that you are authorized to create and share the file."
-msgstr "Générer un livre PDF ou HTML statique pour la famille de référence sélectionnée. L’export peut inclure des données privées accessibles et des informations sur des personnes vivantes ; confirmez que vous êtes autorisé à créer et partager le fichier."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "I understand this export may include private data and information about living people."
-msgstr "Je comprends que cet export peut contenir des données privées et des informations sur des personnes vivantes."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
-msgid "Gramps access permissions remain in force, but this report does not filter or anonymize readable data. Confirm that you are authorized to create and share this export."
-msgstr "Les autorisations d’accès de Gramps restent appliquées, mais ce rapport ne filtre ni n’anonymise les données accessibles. Confirmez que vous êtes autorisé à créer et partager cet export."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "Privacy warning not acknowledged"
-msgstr "L’avertissement de confidentialité n’a pas été confirmé"
-
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py
-msgid "Confirm that you are authorized to export and share data about living people and records marked private."
-msgstr "Confirmez que vous êtes autorisé à exporter et partager des données sur des personnes vivantes et des enregistrements marqués privés."
-
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
 msgid "Book language"
 msgstr "Langue du livre"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:47
 msgid "Use Gramps language"
 msgstr "Utiliser la langue de Gramps"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:48
 msgid "French"
 msgstr "Français"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:49
 msgid "English"
 msgstr "Anglais"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:52
 msgid "Automatic mode follows the language configured in Gramps. If that language is not supported, the book uses English."
 msgstr "Le mode automatique suit la langue configurée dans Gramps. Si cette langue n’est pas prise en charge, le livre utilise l’anglais."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:57
+msgid "Output format"
+msgstr "Format de sortie"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:59
+msgid "Automatic (use destination extension)"
+msgstr "Automatique (selon l’extension du fichier)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:61
+msgid "HTML book (ZIP archive)"
+msgstr "Livre HTML (archive ZIP)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:62
+msgid "PDF book (LuaLaTeX)"
+msgstr "Livre PDF (LuaLaTeX)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:64
+msgid "JSON snapshot (development diagnostics)"
+msgstr "Instantané JSON (diagnostic de développement)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:67
+msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots."
+msgstr "Le mode automatique utilise .pdf pour les livres PDF, .zip pour les livres HTML et .json pour les instantanés de diagnostic."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:72
+msgid "Allow extended PDF compilation (up to 30 minutes)"
+msgstr "Autoriser une compilation PDF prolongée (jusqu’à 30 minutes)"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:76
+msgid "Use this for long PDF books when the standard three-minute limit expires. Each LuaLaTeX pass is limited to ten minutes."
+msgstr "À utiliser pour les longs livres PDF lorsque la limite standard de trois minutes est dépassée. Chaque passe LuaLaTeX est limitée à dix minutes."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:84
+msgid "I understand this export may include private data and information about living people."
+msgstr "Je comprends que cet export peut contenir des données privées et des informations sur des personnes vivantes."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:90
+msgid "Gramps access permissions remain in force, but this report does not filter or anonymize readable data. Confirm that you are authorized to create and share this export."
+msgstr "Les autorisations d’accès de Gramps restent appliquées, mais ce rapport ne filtre ni n’anonymise les données accessibles. Confirmez que vous êtes autorisé à créer et partager cet export."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:93
+msgid "Privacy"
+msgstr "Confidentialité"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:95
+msgid "Output file"
+msgstr "Fichier de sortie"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:101
+msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development snapshot."
+msgstr "Le mode automatique utilise .pdf pour le PDF, .zip pour le HTML ou .json pour l’instantané de développement."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:106
+msgid "Replace an existing file"
+msgstr "Remplacer un fichier existant"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:112
+msgid "Select a reference family."
+msgstr "Sélectionnez une famille de référence."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:152
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:189
+msgid "Select a supported output format."
+msgstr "Sélectionnez un format de sortie pris en charge."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:98
+msgid "Privacy warning not acknowledged"
+msgstr "L’avertissement de confidentialité n’a pas été confirmé"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:100
+msgid "Confirm that you are authorized to export and share data about living people and records marked private."
+msgstr "Confirmez que vous êtes autorisé à exporter et partager des données sur des personnes vivantes et des enregistrements marqués privés."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:115
+msgid "The reference family must have two known partners."
+msgstr "La famille de référence doit avoir deux partenaires connus."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:192
+msgid "Output already exists"
+msgstr "Le fichier de sortie existe déjà"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:193
+msgid "Choose another destination or enable 'Replace an existing file'."
+msgstr "Choisissez une autre destination ou activez « Remplacer un fichier existant »."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:197
+msgid "PDF output unavailable"
+msgstr "Sortie PDF indisponible"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:198
+msgid "LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."
+msgstr "LuaLaTeX est nécessaire pour produire un PDF. Installez TeX Live et rendez lualatex disponible dans le PATH."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:210
+msgid "PDF generation failed"
+msgstr "La génération du PDF a échoué"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:212
+msgid "Book generation failed"
+msgstr "La génération du livre a échoué"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:8
+msgid "Gramps Fancy Genealogical Book"
+msgstr "Livre généalogique illustré pour Gramps"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py:10
+msgid "Generate a PDF or static HTML book for the selected reference family. Exports may include readable private data and information about living people; confirm that you are authorized to create and share the file."
+msgstr "Générer un livre PDF ou HTML statique pour la famille de référence sélectionnée. L’export peut inclure des données privées accessibles et des informations sur des personnes vivantes ; confirmez que vous êtes autorisé à créer et partager le fichier."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:202
+msgid "LuaLaTeX could not compile the selected book."
+msgstr "LuaLaTeX n’a pas pu compiler le livre sélectionné."
+
+msgid "LuaLaTeX compilation timed out."
+msgstr "La compilation LuaLaTeX a dépassé le délai maximal."
+
+msgid "PDF references did not stabilize after five compilation passes."
+msgstr "Les renvois du PDF ne se sont pas stabilisés après cinq passes de compilation."
+
+msgid "PDF compilation reported unresolved references or overfull boxes."
+msgstr "La compilation du PDF signale des renvois non résolus ou des dépassements de marge."
+
+msgid "LuaLaTeX completed without producing a PDF file."
+msgstr "LuaLaTeX s’est terminé sans produire de fichier PDF."
+
+msgid "PDF compilation did not produce auxiliary files required to resolve references."
+msgstr "La compilation du PDF n’a pas produit les fichiers auxiliaires nécessaires à la résolution des renvois."
+
+msgid "LuaLaTeX did not produce a compilation log."
+msgstr "LuaLaTeX n’a pas produit de journal de compilation."
+
+msgid "LuaLaTeX could not produce a valid PDF."
+msgstr "LuaLaTeX n’a pas pu produire un PDF valide."

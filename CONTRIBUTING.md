@@ -37,7 +37,7 @@ The runner installs the built add-on into a temporary Gramps profile and imports
 
 ## Translation and generated files
 
-Add or update report labels in `gramps60/GrampsFancyBook/po/fr-local.po`. The build compiles this catalog and includes the resulting `addon.mo` in the archive. Keep translations in sync with source labels. Do not commit generated `.mo` files or `gramps60/download/GrampsFancyBook.addon.tgz`; the build creates the catalog temporarily and the archive is generated output.
+Add or update report labels in `gramps60/GrampsFancyBook/po/fr-local.po` and keep `po/template.pot` aligned with the source strings. PDF compilation error messages are selected dynamically in `GrampsFancyBook.py`; preserve them explicitly in both catalogs. The build compiles the French catalog and includes the resulting `addon.mo` in the archive. Do not commit generated `.mo` files or `gramps60/download/GrampsFancyBook.addon.tgz`; the build creates the catalog temporarily and the archive is generated output.
 
 ## Pull request checklist
 

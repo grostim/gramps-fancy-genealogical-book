@@ -37,7 +37,7 @@ Le script installe l’archive construite dans un profil Gramps temporaire et im
 
 ## Traduction et fichiers générés
 
-Ajouter ou modifier les libellés du rapport dans `gramps60/GrampsFancyBook/po/fr-local.po`. La construction compile ce catalogue et inclut le fichier `addon.mo` dans l’archive. Maintenir les traductions synchronisées avec les libellés source. Ne pas committer les fichiers `.mo` générés ni `gramps60/download/GrampsFancyBook.addon.tgz) : le catalogue est créé temporairement par le build et l’archive est un artefact généré.
+Ajouter ou modifier les libellés du rapport dans `gramps60/GrampsFancyBook/po/fr-local.po` et synchroniser `po/template.pot` avec les chaînes source. Les messages d’échec de compilation PDF sont sélectionnés dynamiquement dans `GrampsFancyBook.py` : les conserver explicitement dans les deux catalogues. La construction compile le catalogue français et inclut `addon.mo` dans l’archive. Ne pas committer les fichiers `.mo` générés ni `gramps60/download/GrampsFancyBook.addon.tgz` : le catalogue est créé temporairement par la construction et l’archive est un artefact généré.
 
 ## Liste de contrôle de la pull request
 
