@@ -48,3 +48,5 @@ Le guide de contribution de l’API demande de discuter les changements non triv
 > What contract would fit the API best, and what security, cleanup, option-validation, and task-status requirements should a plugin meet? We can adapt the report and add integration coverage once the supported interface is agreed.
 
 Les constats de version ci-dessus ont été revérifiés le 30 septembre 2026 sur les sources épinglées de [v3.22.3 : constantes MIME et catégories](https://github.com/gramps-project/gramps-web-api/blob/v3.22.3/gramps_webapi/const.py) et [implémentation de l’API des rapports](https://github.com/gramps-project/gramps-web-api/blob/v3.22.3/gramps_webapi/api/report.py). GitHub indique toujours `v3.22.3` comme dernière release publiée à cette date.
+
+Le 3 octobre, la dernière version publiée est toujours v3.22.3. Le [nouvel audit épinglé sur `master`](validation-gramps-web.fr.md) au commit `375371f` ne révèle pas de contrat de sortie personnalisée ; le texte de l’issue proposée reste applicable. Aucune issue n’a été soumise aux mainteneurs.

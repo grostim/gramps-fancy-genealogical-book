@@ -8,6 +8,8 @@ Gramps Fancy Genealogical Book registers as a `CATEGORY_WEB` report and generate
 
 The add-on needs to keep its Desktop flow. Gramps Web must provide a supported, safe server contract for installed reports that produce their own files.
 
+As of October 3, 2026, v3.22.3 remains the latest published release. A [fresh pinned audit of `master`](validation-gramps-web.md) at commit `375371f` finds the same gaps, so the proposed contract remains relevant. No issue has been submitted to the maintainers.
+
 ## Minimum capability to discuss
 
 1. **Explicit report discovery.** The server can expose an installed report that opts into the custom-output contract, without making every report in a new or existing category runnable by default.
