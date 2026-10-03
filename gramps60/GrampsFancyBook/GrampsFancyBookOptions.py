@@ -113,10 +113,24 @@ class GrampsFancyBookOptions(MenuReportOptions):
         return family_id
 
     def get_max_ancestor_depth(self) -> int | None:
-        return parse_depth_limit(self.menu.get_option_by_name("max_ancestor_depth").get_value())
+        try:
+            return parse_depth_limit(
+                self.menu.get_option_by_name("max_ancestor_depth").get_value()
+            )
+        except ValueError as error:
+            raise ValueError(
+                _("Maximum ancestry generations must be a non-negative integer or 'unlimited'.")
+            ) from error
 
     def get_max_descendant_depth(self) -> int | None:
-        return parse_depth_limit(self.menu.get_option_by_name("max_descendant_depth").get_value())
+        try:
+            return parse_depth_limit(
+                self.menu.get_option_by_name("max_descendant_depth").get_value()
+            )
+        except ValueError as error:
+            raise ValueError(
+                _("Maximum descendant generations must be a non-negative integer or 'unlimited'.")
+            ) from error
 
     def get_book_language(self) -> str:
         selected = self.menu.get_option_by_name("book_language").get_value()

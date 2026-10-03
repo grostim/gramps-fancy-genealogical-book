@@ -115,8 +115,16 @@ msgstr "Remplacer un fichier existant"
 msgid "Select a reference family."
 msgstr "Sélectionnez une famille de référence."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:152
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:235
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:122
+msgid "Maximum ancestry generations must be a non-negative integer or 'unlimited'."
+msgstr "Le nombre maximal de générations d’ascendance doit être un entier positif ou nul, ou « illimité » (« unlimited »)."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:132
+msgid "Maximum descendant generations must be a non-negative integer or 'unlimited'."
+msgstr "Le nombre maximal de générations de descendance doit être un entier positif ou nul, ou « illimité » (« unlimited »)."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:166
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:240
 msgid "Select a supported output format."
 msgstr "Sélectionnez un format de sortie pris en charge."
 
@@ -168,47 +176,59 @@ msgstr "Le fichier de sortie JSON ne peut pas être un dossier."
 msgid "The consistency report destination cannot be a directory."
 msgstr "Le fichier du rapport de cohérence ne peut pas être un dossier."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:59
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:56
+msgid "Family contains a child reference without a handle."
+msgstr "La famille contient une référence d’enfant sans identifiant interne."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:62
 msgid "Output directory does not exist:"
 msgstr "Le dossier de sortie n’existe pas :"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:60
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:63
 msgid "Output destination cannot be a directory:"
 msgstr "La destination de sortie ne peut pas être un dossier :"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:144
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:64
+msgid "No family exists for Gramps ID"
+msgstr "Aucune famille ne correspond à l’identifiant Gramps"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:65
+msgid "Family references an unavailable person:"
+msgstr "La famille référence une personne indisponible :"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:149
 msgid "Privacy warning not acknowledged"
 msgstr "L’avertissement de confidentialité n’a pas été confirmé"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:146
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:151
 msgid "Confirm that you are authorized to export and share data about living people and records marked private."
 msgstr "Confirmez que vous êtes autorisé à exporter et partager des données sur des personnes vivantes et des enregistrements marqués privés."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:161
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:166
 msgid "The reference family must have two known partners."
 msgstr "La famille de référence doit avoir deux partenaires connus."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:238
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:243
 msgid "Output already exists"
 msgstr "Le fichier de sortie existe déjà"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:239
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:244
 msgid "Choose another destination or enable 'Replace an existing file'."
 msgstr "Choisissez une autre destination ou activez « Remplacer un fichier existant »."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:243
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:248
 msgid "PDF output unavailable"
 msgstr "Sortie PDF indisponible"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:244
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:249
 msgid "LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."
 msgstr "LuaLaTeX est nécessaire pour produire un PDF. Installez TeX Live et rendez lualatex disponible dans le PATH."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:256
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:261
 msgid "PDF generation failed"
 msgstr "La génération du PDF a échoué"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:258
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:263
 msgid "Book generation failed"
 msgstr "La génération du livre a échoué"
 

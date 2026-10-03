@@ -18,8 +18,8 @@ except ValueError:
 _ = _trans.gettext
 
 
-def _localized_output_error(error: Exception) -> str:
-    """Translate expected destination errors at the Gramps UI boundary."""
+def _localized_report_error(error: Exception) -> str:
+    """Translate expected report errors at the Gramps UI boundary."""
     message = str(error)
     translated = {
         "Select an HTML ZIP output file.": _("Select an HTML ZIP output file."),
@@ -52,12 +52,17 @@ def _localized_output_error(error: Exception) -> str:
         "The consistency report destination cannot be a directory.": _(
             "The consistency report destination cannot be a directory."
         ),
+        "Family contains a child reference without a handle.": _(
+            "Family contains a child reference without a handle."
+        ),
     }.get(message)
     if translated is not None:
         return translated
     for prefix, translated_prefix in (
         ("Output directory does not exist: ", _("Output directory does not exist:")),
         ("Output destination cannot be a directory: ", _("Output destination cannot be a directory:")),
+        ("No family exists for Gramps ID ", _("No family exists for Gramps ID")),
+        ("Family references an unavailable person: ", _("Family references an unavailable person:")),
     ):
         if message.startswith(prefix):
             return f"{translated_prefix} {message[len(prefix):]}"
@@ -255,4 +260,4 @@ class GrampsFancyBookReport(Report):
             }.get(exc.reason, "LuaLaTeX could not produce a valid PDF.")
             raise ReportError(_("PDF generation failed"), _(message_id)) from exc
         except (LookupError, ValueError, OSError) as exc:
-            raise ReportError(_("Book generation failed"), _localized_output_error(exc)) from exc
+            raise ReportError(_("Book generation failed"), _localized_report_error(exc)) from exc
