@@ -2,6 +2,13 @@
 
 La recette du [PDF AC-20 exporté depuis la fenêtre Gramps Desktop](validation-gramps-gui-ac20.fr.md) le 2 octobre 2026 est consignée séparément ; elle couvre 87 pages et un ZIP issu du même profil fictif.
 
+## Marges de production — 3 octobre 2026
+
+- Le renderer PDF fixe désormais les quatre marges A4 à 20 mm, comme le prototype LaTeX L2. L'en-tête est inclus dans le calcul de la page, avec une hauteur de 30 pt et une séparation de 12 pt. Avant cette correction, le texte du PDF GUI commençait à environ 44 mm du bord gauche, sous les valeurs implicites de la classe `article`.
+- [Aperçu local de 71 pages](../output/pdf/gramps-fancy-book-20mm-long-preview-20261003.pdf), SHA-256 `6b1beba28f2970582001562c660e7d6f181ac1c941e6516d8abb8f1fbfb7a864` : livre fictif ramifié de 122 personnes et 60 unions descendantes, avec portraits synthétiques. LuaHBTeX 1.24.0 a produit un PDF A4 balisé de 613 542 octets ; les renvois ont convergé sans avertissement de débordement.
+- Les pages physiques 1, 3, 33, 55 et 71 ont été rendues et examinées. Le texte commence à 56,693 pt (20 mm) du bord gauche ; l'en-tête, les fiches, l'annexe et l'index restent lisibles dans cet échantillon. La couverture est clairsemée parce que ce jeu ne fournit ni titre éditorial ni portraits du couple de référence.
+- Cet aperçu vient du moteur direct et d'un jeu fictif en anglais. L'export GUI avec la nouvelle marge, les photographies représentatives et la revue visuelle complète restent à qualifier.
+
 ## Sections unitaires des fiches — 1er octobre 2026
 
 - Aperçu local : `output/pdf/gramps-fancy-book-single-event-profile-preview-20261001.pdf` ; SHA-256 `6ae26746fcc1588982c7be0786226f6ad8de146636280bc5e9846cafc698c3ac`.
