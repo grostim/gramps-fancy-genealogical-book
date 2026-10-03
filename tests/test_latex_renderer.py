@@ -326,7 +326,10 @@ def test_running_headers_include_section_generation_branch_and_page_number():
     )
     assert r"\fancyhead[R]{}" in rendered
     assert r"\thepage" in rendered
-    assert r"\setlength{\headheight}{30pt}" in rendered
+    assert (
+        r"\usepackage[margin=20mm,includehead,headheight=30pt,headsep=12pt]{geometry}"
+        in rendered
+    )
     assert rendered.index(r"\markboth{Contents}{}") < rendered.index(r"\tableofcontents")
     for part_id in ("ancestry", "descent"):
         target = _latex_target(part_id)
