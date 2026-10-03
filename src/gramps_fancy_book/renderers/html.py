@@ -489,7 +489,10 @@ def _render_profile(
                 media_context,
                 context_type="portrait",
                 context_id=profile.profile_id,
-                alt=_portrait_alt(profile.person_handle, model),
+                alt=(
+                    profile.portrait.caption.strip()
+                    or _portrait_alt(profile.person_handle, model)
+                ),
             )
         )
         placement = media_context["placements"].get(
@@ -913,7 +916,10 @@ def _render_cover_portraits(model, people, media_context) -> str:
                 media_context,
                 context_type="cover",
                 context_id="cover",
-                alt=f"{label(model, 'portrait_of')} {_person_name(person, portrait.person_handle)}",
+                alt=(
+                    portrait.caption.strip()
+                    or f"{label(model, 'portrait_of')} {_person_name(person, portrait.person_handle)}"
+                ),
             )
         )
     output.append("</div>\n")
