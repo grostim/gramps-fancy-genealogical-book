@@ -18,6 +18,8 @@ Des références de lieux distinctes ne suffisent pas à prouver une contradicti
 
 Le JSON de contrôle contient une version de schéma, la famille de référence, les groupes comparés, les événements et leurs valeurs affichées, les conclusions et les diagnostics. Un rapport sans conclusion est quand même écrit ; il indique que le contrôle a été exécuté et quels groupes ont été comparés.
 
+Dans Gramps, l’option **Instantané JSON et rapport de cohérence** rend cette sortie distincte visible. Le mode automatique sur une destination `.json` garde le même comportement pour les appels existants ; aucun rapport de contrôle n’est inséré dans les livres PDF ou HTML.
+
 ## Validation restante
 
 La fixture d'intégration Gramps 6.0.8 vérifie maintenant l'import natif de deux versions d'un événement portant le même `BOOK_FACT_ID`, la comparaison de leurs plages calendaires et le classement d'identifiants de lieux distincts en `review_required`. Elle confirme aussi que les deux versions restent dans le modèle du livre et que les conclusions sont absentes de ses diagnostics. Le parcours de saisie de l'attribut dans l'interface Gramps reste à valider manuellement. Les divergences de lieux demandent toujours une revue humaine tant qu'aucune identité canonique n'est déclarée dans Gramps.
