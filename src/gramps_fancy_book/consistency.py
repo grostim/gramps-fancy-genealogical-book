@@ -56,7 +56,12 @@ def build_consistency_report(model: BookModel) -> dict[str, object]:
             continue
         compared_group_count += 1
 
-        event_summaries = [_event_summary(event, model) for event in events]
+        # A fact may have several versions; normalize each Gramps range once.
+        date_ranges = [_date_range(event.date) for event in events]
+        event_summaries = [
+            _event_summary(event, model, date_range)
+            for event, date_range in zip(events, date_ranges)
+        ]
         groups.append(
             {
                 "book_fact_id": fact_id,
@@ -65,9 +70,9 @@ def build_consistency_report(model: BookModel) -> dict[str, object]:
             }
         )
 
-        for left, right in combinations(events, 2):
-            left_range = _date_range(left.date)
-            right_range = _date_range(right.date)
+        for (left, left_range), (right, right_range) in combinations(
+            zip(events, date_ranges), 2
+        ):
             if left_range is not None and right_range is not None:
                 if left_range[1] < right_range[0] or right_range[1] < left_range[0]:
                     findings.append(
@@ -141,14 +146,18 @@ def build_consistency_report(model: BookModel) -> dict[str, object]:
     }
 
 
-def _event_summary(event: Event, model: BookModel) -> dict[str, Any]:
+def _event_summary(
+    event: Event,
+    model: BookModel,
+    date_range: tuple[tuple[int, int, int], tuple[int, int, int]] | None,
+) -> dict[str, Any]:
     return {
         "handle": event.handle,
         "gramps_id": event.gramps_id,
         "type": event.type,
         "description": event.description,
         "date": event.date.display if event.date else "",
-        "date_range": _json_range(_date_range(event.date)) if _date_range(event.date) else None,
+        "date_range": _json_range(date_range),
         "place_handle": event.place_handle,
         "place": _place_display(event.place_handle, model) if event.place_handle else "",
     }
