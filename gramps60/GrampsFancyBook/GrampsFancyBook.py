@@ -18,6 +18,52 @@ except ValueError:
 _ = _trans.gettext
 
 
+def _localized_output_error(error: Exception) -> str:
+    """Translate expected destination errors at the Gramps UI boundary."""
+    message = str(error)
+    translated = {
+        "Select an HTML ZIP output file.": _("Select an HTML ZIP output file."),
+        "The HTML archive destination must end in .zip.": _(
+            "The HTML archive destination must end in .zip."
+        ),
+        "The HTML archive destination cannot be a directory.": _(
+            "The HTML archive destination cannot be a directory."
+        ),
+        "The HTML archive destination cannot be a symbolic link.": _(
+            "The HTML archive destination cannot be a symbolic link."
+        ),
+        "Select a PDF output file.": _("Select a PDF output file."),
+        "The PDF destination must end in .pdf.": _(
+            "The PDF destination must end in .pdf."
+        ),
+        "The PDF destination cannot be a directory.": _(
+            "The PDF destination cannot be a directory."
+        ),
+        "The PDF destination cannot be a symbolic link.": _(
+            "The PDF destination cannot be a symbolic link."
+        ),
+        "Select a JSON output file.": _("Select a JSON output file."),
+        "The output file must use the .json extension.": _(
+            "The output file must use the .json extension."
+        ),
+        "The JSON destination cannot be a directory.": _(
+            "The JSON destination cannot be a directory."
+        ),
+        "The consistency report destination cannot be a directory.": _(
+            "The consistency report destination cannot be a directory."
+        ),
+    }.get(message)
+    if translated is not None:
+        return translated
+    for prefix, translated_prefix in (
+        ("Output directory does not exist: ", _("Output directory does not exist:")),
+        ("Output destination cannot be a directory: ", _("Output destination cannot be a directory:")),
+    ):
+        if message.startswith(prefix):
+            return f"{translated_prefix} {message[len(prefix):]}"
+    return message
+
+
 def _gramps_type_labels(language: str) -> dict[tuple[str, str], str]:
     """Translate standard Gramps event, parentage, and role labels."""
     from gramps.gen.lib.childreftype import ChildRefType
@@ -209,4 +255,4 @@ class GrampsFancyBookReport(Report):
             }.get(exc.reason, "LuaLaTeX could not produce a valid PDF.")
             raise ReportError(_("PDF generation failed"), _(message_id)) from exc
         except (LookupError, ValueError, OSError) as exc:
-            raise ReportError(_("Book generation failed"), str(exc)) from exc
+            raise ReportError(_("Book generation failed"), _localized_output_error(exc)) from exc

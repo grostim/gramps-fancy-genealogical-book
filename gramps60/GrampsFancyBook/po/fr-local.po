@@ -116,43 +116,99 @@ msgid "Select a reference family."
 msgstr "Sélectionnez une famille de référence."
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:152
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:189
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:235
 msgid "Select a supported output format."
 msgstr "Sélectionnez un format de sortie pris en charge."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:98
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:25
+msgid "Select an HTML ZIP output file."
+msgstr "Sélectionnez un fichier de sortie HTML ZIP."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:27
+msgid "The HTML archive destination must end in .zip."
+msgstr "Le fichier de sortie HTML doit se terminer par .zip."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:30
+msgid "The HTML archive destination cannot be a directory."
+msgstr "Le fichier de sortie HTML ne peut pas être un dossier."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:33
+msgid "The HTML archive destination cannot be a symbolic link."
+msgstr "Le fichier de sortie HTML ne peut pas être un lien symbolique."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:35
+msgid "Select a PDF output file."
+msgstr "Sélectionnez un fichier de sortie PDF."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:37
+msgid "The PDF destination must end in .pdf."
+msgstr "Le fichier de sortie PDF doit se terminer par .pdf."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:40
+msgid "The PDF destination cannot be a directory."
+msgstr "Le fichier de sortie PDF ne peut pas être un dossier."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:43
+msgid "The PDF destination cannot be a symbolic link."
+msgstr "Le fichier de sortie PDF ne peut pas être un lien symbolique."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:45
+msgid "Select a JSON output file."
+msgstr "Sélectionnez un fichier de sortie JSON."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:47
+msgid "The output file must use the .json extension."
+msgstr "Le fichier de sortie doit utiliser l’extension .json."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:50
+msgid "The JSON destination cannot be a directory."
+msgstr "Le fichier de sortie JSON ne peut pas être un dossier."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:53
+msgid "The consistency report destination cannot be a directory."
+msgstr "Le fichier du rapport de cohérence ne peut pas être un dossier."
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:59
+msgid "Output directory does not exist:"
+msgstr "Le dossier de sortie n’existe pas :"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:60
+msgid "Output destination cannot be a directory:"
+msgstr "La destination de sortie ne peut pas être un dossier :"
+
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:144
 msgid "Privacy warning not acknowledged"
 msgstr "L’avertissement de confidentialité n’a pas été confirmé"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:100
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:146
 msgid "Confirm that you are authorized to export and share data about living people and records marked private."
 msgstr "Confirmez que vous êtes autorisé à exporter et partager des données sur des personnes vivantes et des enregistrements marqués privés."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:115
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:161
 msgid "The reference family must have two known partners."
 msgstr "La famille de référence doit avoir deux partenaires connus."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:192
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:238
 msgid "Output already exists"
 msgstr "Le fichier de sortie existe déjà"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:193
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:239
 msgid "Choose another destination or enable 'Replace an existing file'."
 msgstr "Choisissez une autre destination ou activez « Remplacer un fichier existant »."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:197
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:243
 msgid "PDF output unavailable"
 msgstr "Sortie PDF indisponible"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:198
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:244
 msgid "LuaLaTeX is required to produce a PDF. Install TeX Live and make lualatex available on PATH."
 msgstr "LuaLaTeX est nécessaire pour produire un PDF. Installez TeX Live et rendez lualatex disponible dans le PATH."
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:210
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:256
 msgid "PDF generation failed"
 msgstr "La génération du PDF a échoué"
 
-#: gramps60/GrampsFancyBook/GrampsFancyBook.py:212
+#: gramps60/GrampsFancyBook/GrampsFancyBook.py:258
 msgid "Book generation failed"
 msgstr "La génération du livre a échoué"
 
