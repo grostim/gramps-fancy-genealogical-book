@@ -67,11 +67,11 @@ msgid "PDF book (LuaLaTeX)"
 msgstr ""
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:64
-msgid "JSON snapshot (development diagnostics)"
+msgid "JSON snapshot and consistency report"
 msgstr ""
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:67
-msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots."
+msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for the model and separate consistency report."
 msgstr ""
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:72
@@ -99,7 +99,7 @@ msgid "Output file"
 msgstr ""
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:101
-msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development snapshot."
+msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the model and separate consistency report."
 msgstr ""
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:106

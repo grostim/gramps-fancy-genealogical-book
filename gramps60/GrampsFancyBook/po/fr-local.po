@@ -72,12 +72,12 @@ msgid "PDF book (LuaLaTeX)"
 msgstr "Livre PDF (LuaLaTeX)"
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:64
-msgid "JSON snapshot (development diagnostics)"
-msgstr "Instantané JSON (diagnostic de développement)"
+msgid "JSON snapshot and consistency report"
+msgstr "Instantané JSON et rapport de cohérence"
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:67
-msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots."
-msgstr "Le mode automatique utilise .pdf pour les livres PDF, .zip pour les livres HTML et .json pour les instantanés de diagnostic."
+msgid "Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for the model and separate consistency report."
+msgstr "Le mode automatique utilise .pdf pour les livres PDF, .zip pour les livres HTML et .json pour le modèle et son rapport de cohérence séparé."
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:72
 msgid "Allow extended PDF compilation (up to 30 minutes)"
@@ -104,8 +104,8 @@ msgid "Output file"
 msgstr "Fichier de sortie"
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:101
-msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development snapshot."
-msgstr "Le mode automatique utilise .pdf pour le PDF, .zip pour le HTML ou .json pour l’instantané de développement."
+msgid "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the model and separate consistency report."
+msgstr "Le mode automatique utilise .pdf pour le PDF, .zip pour le HTML ou .json pour le modèle et son rapport de cohérence séparé."
 
 #: gramps60/GrampsFancyBook/GrampsFancyBookOptions.py:106
 msgid "Replace an existing file"

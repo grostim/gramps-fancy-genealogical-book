@@ -61,10 +61,10 @@ class GrampsFancyBookOptions(MenuReportOptions):
         output_format.add_item("html_zip", _("HTML book (ZIP archive)"))
         output_format.add_item("pdf", _("PDF book (LuaLaTeX)"))
         output_format.add_item(
-            "json_snapshot", _("JSON snapshot (development diagnostics)")
+            "json_snapshot", _("JSON snapshot and consistency report")
         )
         output_format.set_help(
-            _("Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for diagnostic snapshots.")
+            _("Automatic mode uses .pdf for PDF books, .zip for HTML books, and .json for the model and separate consistency report.")
         )
         menu.add_option(_("Book"), "output_format", output_format)
 
@@ -98,8 +98,8 @@ class GrampsFancyBookOptions(MenuReportOptions):
         destination.set_extension("")
         destination.set_help(
             _(
-                "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the development "
-                "snapshot."
+                "Automatic mode uses .pdf for PDF, .zip for HTML, or .json for the model "
+                "and separate consistency report."
             )
         )
         menu.add_option(_("Book"), "destination", destination)
