@@ -2044,6 +2044,13 @@ def verify(
             occurrences_by_id[foster_links[0]["child_occurrence_id"]]["person_handle"]
             == foster_relationship["person_handle"]
         )
+        assert len(foster_section["partner_occurrence_ids"]) == 1
+        assert (
+            occurrences_by_id[foster_section["partner_occurrence_ids"][0]][
+                "person_handle"
+            ]
+            == foster_family["father"]["handle"]
+        )
         other_union = next(
             family
             for family in model["families"].values()
@@ -2305,6 +2312,10 @@ def verify(
         print(
             "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
             "keeps only recorded parent links and the single-parent family"
+        )
+        print(
+            "PASS: AC-09 native single-parent family has exactly one recorded "
+            "parent occurrence in the model"
         )
         print(
             "PASS: AC-03 native other-union child is in descent generation 1, "
@@ -2750,6 +2761,65 @@ def verify(
             "PASS: AC-06 native HTML includes the eligible sibling and unique "
             "profile/index entry, without the sibling's child"
         )
+        ac09_family_notice = next(
+            notice
+            for notice in editorial_book["family_notices"]
+            if notice["family_handle"] == foster_family["handle"]
+        )
+        ac09_notice_match = re.search(
+            rf'<article class="family-notice" id="{re.escape(ac09_family_notice["notice_id"])}">'
+            r"(.*?)</article>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert ac09_notice_match is not None
+        ac09_partner_lists = re.findall(
+            r'<ul class="family-partners">(.*?)</ul>',
+            ac09_notice_match.group(1),
+            flags=re.DOTALL,
+        )
+        ac09_notice_sections = [
+            section
+            for section in family_sections
+            if section["section_id"] in ac09_family_notice["family_section_ids"]
+        ]
+        assert len(ac09_partner_lists) == len(ac09_notice_sections), (
+            ac09_partner_lists,
+            ac09_notice_sections,
+        )
+        ac09_partner_items = [
+            re.findall(
+                r'<li><a href="#([^"]+)">([^<]+)</a></li>',
+                partner_list,
+            )
+            for partner_list in ac09_partner_lists
+        ]
+        assert all(len(items) == 1 for items in ac09_partner_items), ac09_partner_items
+        ac09_parent_name = next(
+            person["name"]
+            for person in model["people"]
+            if person["handle"] == foster_family["father"]["handle"]
+        )
+        expected_ac09_partner_occurrences = {
+            occurrence_id
+            for section in ac09_notice_sections
+            for occurrence_id in section["partner_occurrence_ids"]
+        }
+        assert all(
+            len(section["partner_occurrence_ids"]) == 1
+            for section in ac09_notice_sections
+        )
+        assert {
+            items[0][0]
+            for items in ac09_partner_items
+        } == expected_ac09_partner_occurrences
+        assert all(
+            items[0][1] == ac09_parent_name for items in ac09_partner_items
+        )
+        print(
+            "PASS: AC-09 native HTML family notice lists only the one recorded "
+            "parent"
+        )
         assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" in html
         assert f"Synthetic, {AC07_FORCED_SPOUSE}" in html
         assert html.count('<section class="person-profile"') == len(
@@ -2945,6 +3015,15 @@ def verify(
             pdf_family_notices = _pdf_section_between_headings(
                 rendered_pdf_text, "Notices familiales", "Fiches individuelles"
             )
+            ac09_pdf_parent_entries = [
+                line.strip()
+                for line in pdf_family_connections.splitlines()
+                if "Isolé, Parent" in line
+                and "(ascendance, génération -1)" in line
+            ]
+            assert len(ac09_pdf_parent_entries) == 1, ac09_pdf_parent_entries
+            assert ac09_pdf_parent_entries[0].startswith("— Isolé, Parent ")
+            assert " et " not in ac09_pdf_parent_entries[0]
             assert pdf_profiles.count(f"Synthetic, {AC06_SIBLING}") == 1
             assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" not in pdf_profiles
             assert pdf_profiles.count(f"Synthetic, {AC07_FORCED_SPOUSE}") == 1
@@ -2996,6 +3075,10 @@ def verify(
             print(
                 "PASS: AC-08 native PDF creates one profile for the spouse; "
                 "Marriage detail appears only in family notices"
+            )
+            print(
+                "PASS: AC-09 native PDF family connection contains only the "
+                "recorded single parent"
             )
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]

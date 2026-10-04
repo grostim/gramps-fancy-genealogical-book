@@ -1,6 +1,6 @@
 # L4 progress — genealogy traversal
 
-Updated on 4 October 2026. L4 remains in progress; AC-01 and AC-03 to AC-09 are qualified against the model and textual LaTeX contract. AC-03, AC-05, AC-06, AC-07, and AC-08 now have native Gramps CLI fixtures verified in HTML and PDF. Entry through the Gramps interface and pagination of a full book remain to be validated.
+Updated on 4 October 2026. L4 remains in progress; AC-01 and AC-03 to AC-09 are qualified against the model and textual LaTeX contract. AC-03, AC-05, AC-06, AC-07, AC-08, and AC-09 now have native Gramps CLI fixtures verified in HTML and PDF. Entry through the Gramps interface and pagination of a full book remain to be validated.
 
 ## Available traversal
 
@@ -23,10 +23,11 @@ Updated on 4 October 2026. L4 remains in progress; AC-01 and AC-03 to AC-09 are 
 - The native AC-06 recipe adds a sibling to one ancestor and gives that sibling a child. Marked `BOOK_PROFILE=YES`, the sibling appears as collateral and receives one profile and index entry; the sibling's child remains outside occurrences, family sections, and HTML/PDF output.
 - The native AC-07 recipe adds two spouses with only birth and death events. Both remain mentioned in their unions; only the spouse marked `BOOK_PROFILE=YES` receives a profile in the model, HTML, and PDF.
 - The native AC-08 recipe adds a spouse with only birth and death events and associates their Marriage with the family using Gramps' `Family` role. The marriage makes the spouse eligible for one profile; its detail appears only in the family notice in the model, HTML, and PDF.
+- The native AC-09 recipe keeps single-parent family F0002 with its one recorded parent and `Foster` relationship. The model and HTML reuse this parent in both genealogy sections without inventing another; the PDF shows only the recorded parent in the family connection.
 
 ## Remaining before L4 exit
 
-- `tests/test_genealogy_acceptance.py` qualifies AC-01 and AC-03 to AC-09 with synthetic graphs and checks their LaTeX output. `scripts/verify_gramps.py` now covers AC-03, AC-05, AC-06, AC-07, and AC-08 from the native fixture through the model, HTML ZIP, and PDF; the Gramps interface workflow remains open.
+- `tests/test_genealogy_acceptance.py` qualifies AC-01 and AC-03 to AC-09 with synthetic graphs and checks their LaTeX output. `scripts/verify_gramps.py` now covers AC-03, AC-05, AC-06, AC-07, AC-08, and AC-09 from the native fixture through the model, HTML ZIP, and PDF; the Gramps interface workflow remains open.
 - `tests/test_date_ranges.py` checks transitive overlap groups, source-order preservation for event timelines, use of bounds when scalar sort values disagree, and final placement of textual/uncomparable dates. On 4 October, the complete suite passes: 54 tests.
 - The LaTeX and HTML renderers consume the `genealogy` model. Their contracts are covered to different degrees; pagination, multipass references, and final PDF appearance still need visual review in L6.
 - The editorial model already provides profiles, family notices, an index, and navigation targets to the LaTeX renderer. These checks cover their textual structure, not the final paginated composition.
@@ -57,3 +58,7 @@ Gramps 6.0.8 and LuaHBTeX 1.24.0 generated a 14-page A4 PDF. Two spouses with on
 ## AC-08 CLI PDF check — 4 October 2026
 
 Gramps 6.0.8 and LuaHBTeX 1.24.0 generated a 14-page A4 PDF. A spouse with only birth and death events receives a profile through a Marriage linked to the family; the marriage description appears only in the family notice, never in the individual profile. Pages 10 and 12 were visually reviewed; the GUI workflow and visual validation of a complete book remain open.
+
+## AC-09 CLI PDF check — 4 October 2026
+
+Gramps 6.0.8 and LuaHBTeX 1.24.0 generated a 14-page A4 PDF. Single-parent family F0002 shows only its recorded parent, with no added partner; the `Foster` relationship remains visible. Page 7 was visually reviewed; the GUI workflow and visual validation of a complete book remain open.
