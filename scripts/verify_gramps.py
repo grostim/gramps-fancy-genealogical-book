@@ -33,6 +33,8 @@ AC05_OTHER_PARTNER = "AC05_P2"
 AC06_SIBLING = "AC06_UNC"
 AC06_PARTNER = "AC06_MAT"
 AC06_UNEXPANDED_CHILD = "AC06_COUS"
+AC07_UNFORCED_SPOUSE = "AC07_UNFORCED_SPOUSE"
+AC07_FORCED_SPOUSE = "AC07_FORCED_SPOUSE"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
@@ -1113,6 +1115,154 @@ def _add_ac06_sibling_without_descendants(
     families.append(child_family)
 
 
+def _add_ac07_spouse_eligibility(
+    root: ET.Element,
+    people: ET.Element,
+    families: ET.Element,
+    events: ET.Element,
+    reference_parent: ET.Element,
+) -> None:
+    """Add two spouse-only unions that differ only by BOOK_PROFILE=YES."""
+    person_ids = {"I0015", "I0016"}
+    family_ids = {"F0009", "F0010"}
+    existing_person_ids = {item.get("id") for item in _children(people, "person")}
+    existing_family_ids = {item.get("id") for item in _children(families, "family")}
+    if person_ids.intersection(existing_person_ids):
+        raise AssertionError("Native AC-07 fixture person IDs I0015/I0016 already exist.")
+    if family_ids.intersection(existing_family_ids):
+        raise AssertionError("Native AC-07 fixture family IDs F0009/F0010 already exist.")
+
+    def event_type(event: ET.Element) -> str:
+        return _text_content(next(iter(_children(event, "type")), None))
+
+    templates = {
+        event_type(event): event
+        for event in _children(events, "event")
+        if event_type(event) in {"Birth", "Death"}
+    }
+    if "Birth" not in templates:
+        raise AssertionError("Native AC-07 fixture requires a Birth event template.")
+    if "Death" not in templates:
+        death_template = copy.deepcopy(templates["Birth"])
+        death_type = next(iter(_children(death_template, "type")), None)
+        if death_type is None:
+            raise AssertionError("Native AC-07 Birth event template has no type.")
+        death_type.text = "Death"
+        templates["Death"] = death_template
+
+    used_event_ids = {
+        item.get("id")
+        for item in _children(events, "event")
+        if item.get("id")
+    }
+    next_event_number = max(
+        (
+            int(event_id[1:])
+            for event_id in used_event_ids
+            if event_id.startswith("E") and event_id[1:].isdigit()
+        ),
+        default=0,
+    ) + 1
+
+    def clone_life_event(kind: str) -> str:
+        nonlocal next_event_number
+        cloned = copy.deepcopy(templates[kind])
+        handle = f"_{uuid.uuid4().hex}"
+        event_id = f"E{next_event_number:04d}"
+        while event_id in used_event_ids:
+            next_event_number += 1
+            event_id = f"E{next_event_number:04d}"
+        next_event_number += 1
+        used_event_ids.add(event_id)
+        cloned.set("handle", handle)
+        cloned.set("id", event_id)
+        cloned.set("change", "0")
+        date = next(
+            (
+                item
+                for item in cloned
+                if item.tag.rsplit("}", 1)[-1]
+                in {"dateval", "daterange", "datespan", "datestr"}
+            ),
+            None,
+        )
+        event_type_node = next(iter(_children(cloned, "type")), None)
+        if date is None or event_type_node is None:
+            raise AssertionError(f"Native {kind} event template is incomplete.")
+        if kind == "Death":
+            date_index = list(cloned).index(date)
+            cloned.remove(date)
+            date = ET.Element(
+                _qualified_name(root, "dateval"),
+                {"val": "1970-01-01"},
+            )
+            cloned.insert(date_index, date)
+        for child in list(cloned):
+            if child is not date and child is not event_type_node:
+                cloned.remove(child)
+        events.append(cloned)
+        return handle
+
+    parent_handle = reference_parent.get("handle")
+    if not parent_handle:
+        raise AssertionError("Native AC-07 reference parent has no Gramps handle.")
+    added_people = []
+    added_families = []
+    for gramps_id, first_name, family_id, force_profile in (
+        ("I0015", AC07_UNFORCED_SPOUSE, "F0009", False),
+        ("I0016", AC07_FORCED_SPOUSE, "F0010", True),
+    ):
+        partner_handle = f"_{uuid.uuid4().hex}"
+        family_handle = f"_{uuid.uuid4().hex}"
+        partner = ET.Element(
+            _qualified_name(root, "person"),
+            {"handle": partner_handle, "change": "0", "id": gramps_id},
+        )
+        ET.SubElement(partner, _qualified_name(root, "gender")).text = "U"
+        name = ET.SubElement(
+            partner,
+            _qualified_name(root, "name"),
+            {"type": "Birth Name"},
+        )
+        ET.SubElement(name, _qualified_name(root, "first")).text = first_name
+        ET.SubElement(name, _qualified_name(root, "surname")).text = "Synthetic"
+        for kind in ("Birth", "Death"):
+            event_handle = clone_life_event(kind)
+            ET.SubElement(
+                partner,
+                _qualified_name(root, "eventref"),
+                {"hlink": event_handle, "role": "Primary"},
+            )
+        if force_profile:
+            ET.SubElement(
+                partner,
+                _qualified_name(root, "attribute"),
+                {"type": "BOOK_PROFILE", "value": "YES"},
+            )
+        _add_person_family_ref(root, partner, "parentin", family_handle)
+        _add_person_family_ref(root, reference_parent, "parentin", family_handle)
+
+        family = ET.Element(
+            _qualified_name(root, "family"),
+            {"handle": family_handle, "change": "0", "id": family_id},
+        )
+        ET.SubElement(
+            family,
+            _qualified_name(root, "father"),
+            {"hlink": parent_handle},
+        )
+        ET.SubElement(
+            family,
+            _qualified_name(root, "mother"),
+            {"hlink": partner_handle},
+        )
+        added_people.append(partner)
+        added_families.append(family)
+
+    people.extend(added_people)
+    families.extend(added_families)
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -1288,6 +1438,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         root, people, families, person, reference_partner
     )
     _add_ac06_sibling_without_descendants(root, people, families)
+    _add_ac07_spouse_eligibility(root, people, families, events, person)
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1697,6 +1848,8 @@ def verify(
             "I0012",
             "I0013",
             "I0014",
+            "I0015",
+            "I0016",
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -1920,6 +2073,62 @@ def verify(
             if entry["person_handle"] == ac06_sibling_handle
         ]
         assert len(ac06_sibling_index_entries) == 1
+        ac07_people = {
+            person["gramps_id"]: person
+            for person in model["people"]
+            if person["gramps_id"] in {"I0015", "I0016"}
+        }
+        assert set(ac07_people) == {"I0015", "I0016"}
+        ac07_occurrences = {}
+        for gramps_id, person in ac07_people.items():
+            event_types = {
+                model["events"][reference["event_handle"]]["type"]
+                for reference in person["links"]["events"]
+            }
+            assert event_types == {"Birth", "Death"}, (gramps_id, event_types)
+            occurrences = [
+                occurrence
+                for generation in model["genealogy"]["descent"]["generations"]
+                for occurrence in generation["occurrences"]
+                if occurrence["person_handle"] == person["handle"]
+            ]
+            assert len(occurrences) == 1, (gramps_id, occurrences)
+            assert occurrences[0]["generation"] == 0
+            assert "partner" in occurrences[0]["roles"]
+            ac07_occurrences[gramps_id] = occurrences[0]
+        ac07_unforced_handle = ac07_people["I0015"]["handle"]
+        ac07_forced_handle = ac07_people["I0016"]["handle"]
+        assert ac07_unforced_handle not in model["genealogy"]["profile_handles"]
+        assert ac07_forced_handle in model["genealogy"]["profile_handles"]
+        ac07_unforced_profiles = [
+            profile
+            for profile in model["editorial_book"]["profiles"]
+            if profile["person_handle"] == ac07_unforced_handle
+        ]
+        ac07_forced_profiles = [
+            profile
+            for profile in model["editorial_book"]["profiles"]
+            if profile["person_handle"] == ac07_forced_handle
+        ]
+        assert not ac07_unforced_profiles
+        assert len(ac07_forced_profiles) == 1
+        for gramps_id, family_id in (("I0015", "F0009"), ("I0016", "F0010")):
+            family = next(
+                family
+                for family in model["families"].values()
+                if family["gramps_id"] == family_id
+            )
+            section = next(
+                section
+                for section in family_sections
+                if section["family_handle"] == family["handle"]
+                and section["part"] == "descent"
+            )
+            assert (
+                ac07_occurrences[gramps_id]["occurrence_id"]
+                in section["partner_occurrence_ids"]
+            )
+            assert not section["child_occurrence_ids"]
         print(
             "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
             "keeps only recorded parent links and the single-parent family"
@@ -1935,6 +2144,10 @@ def verify(
         print(
             "PASS: AC-06 native Gramps shows an eligible ancestor sibling and its "
             "profile without expanding the sibling's child"
+        )
+        print(
+            "PASS: AC-07 native spouse with only Birth/Death stays mention-only; "
+            "BOOK_PROFILE=YES creates one profile"
         )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
@@ -2360,6 +2573,19 @@ def verify(
             "PASS: AC-06 native HTML includes the eligible sibling and unique "
             "profile/index entry, without the sibling's child"
         )
+        assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" in html
+        assert f"Synthetic, {AC07_FORCED_SPOUSE}" in html
+        assert html.count('<section class="person-profile"') == len(
+            editorial_book["profiles"]
+        )
+        ac07_forced_profile = ac07_forced_profiles[0]
+        assert html.count(
+            f'<section class="person-profile" id="{ac07_forced_profile["profile_id"]}">'
+        ) == 1
+        print(
+            "PASS: AC-07 native HTML mentions both spouses and creates only the "
+            "BOOK_PROFILE=YES profile"
+        )
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -2491,9 +2717,13 @@ def verify(
                 rendered_pdf_text, "Fiches individuelles", "Annexe documentaire"
             )
             assert pdf_profiles.count(f"Synthetic, {AC06_SIBLING}") == 1
+            assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" not in pdf_profiles
+            assert pdf_profiles.count(f"Synthetic, {AC07_FORCED_SPOUSE}") == 1
             assert pdf_profiles.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 1
+            assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" in rendered_pdf_text
+            assert f"Synthetic, {AC07_FORCED_SPOUSE}" in rendered_pdf_text
             pdf_person_index = _pdf_section_between_headings(
                 rendered_pdf_text, "Index des personnes"
             )
@@ -2505,6 +2735,10 @@ def verify(
             print(
                 "PASS: AC-06 native PDF includes the eligible sibling and unique "
                 "profile/index entry, without the sibling's child"
+            )
+            print(
+                "PASS: AC-07 native PDF mentions both spouses and includes a "
+                "single profile only for BOOK_PROFILE=YES"
             )
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
