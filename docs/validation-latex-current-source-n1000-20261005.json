@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-05",
+  "base_commit": "93c497d5dc8292fabffed1a7e415761eeb71c79e",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pypdf": "6.19.0",
+    "pillow": "12.3.0",
+    "mistune": "3.3.4"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "media_enabled": true
+  },
+  "method": {
+    "model": "build_book_model on synthetic_branching_snapshot",
+    "renderer": "current main source after PR #258",
+    "compiler": "production write_latex_pdf with extended_compilation=true",
+    "pass_timeout_seconds": 600,
+    "total_timeout_seconds": 1800,
+    "max_passes": 5,
+    "gramps_desktop_export": false,
+    "pass_count_recorded": false
+  },
+  "result": {
+    "status": "compiled",
+    "total_compile_wall_seconds": 741.591,
+    "pdf_pages": 1239,
+    "pdf_bytes": 12620918,
+    "pdf_sha256": "33df2e73e8d35c40fb12709e7abd3f7a7be6089d1f2cbe9b75514dcc91984d51",
+    "a4": true,
+    "tagged": true,
+    "pdf_version": "2.0",
+    "language": "en-US",
+    "named_destinations": 34587,
+    "link_annotations": 29427,
+    "internal_links": 17341,
+    "uri_links": 12086,
+    "distinct_uri_destinations": 3125,
+    "missing_named_destinations": 0,
+    "citation_entries_expected": 3003,
+    "citation_entries_found": 3003,
+    "citation_range": [1, 3003],
+    "appendix_physical_pages": [784, 1181],
+    "index_physical_page": 1239,
+    "figures": 400,
+    "figures_missing_alt_text": 0,
+    "visual_sample_pages": [1, 500, 784, 966, 1181, 1239]
+  },
+  "preview": "output/pdf/gramps-fancy-book-n1000-compact-annex-20261005.pdf",
+  "comparison": {
+    "reference_record": "validation-latex-n1000-extended-20261002.json",
+    "reference_seconds": 791.078,
+    "reference_pdf_pages": 1535,
+    "reference_pdf_bytes": 13103813,
+    "note": "The runs use the same fixture, but cumulative renderer changes occurred between them; the differences cannot be attributed to appendix compaction alone."
+  },
+  "limits": [
+    "Single diagnostic compile; individual pass times were not recorded.",
+    "Extended diagnostic limits were required; standard production limits of 120 seconds per pass and 180 seconds overall remain exceeded.",
+    "The provisional 60-second PDF target remains unmet.",
+    "The synthetic model was compiled directly, not through Gramps Desktop.",
+    "Six representative pages were visually inspected; the complete 1,239-page layout was not reviewed page by page.",
+    "The visual sample had no observed clipping or overlap."
+  ]
+}
