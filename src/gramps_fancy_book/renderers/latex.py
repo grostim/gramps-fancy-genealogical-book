@@ -1188,7 +1188,12 @@ def _render_citation_appendix(
             target_id="documentary-appendix",
             emitted_targets=emitted_targets,
         ),
+        "\\begingroup\n"
         "\\begin{itemize}\n",
+        "\\setlength{\\itemsep}{2pt}\n"
+        "\\setlength{\\parsep}{0pt}\n"
+        "\\setlength{\\topsep}{2pt}\n"
+        "\\setlength{\\partopsep}{0pt}\n",
     ]
     profiles = {
         profile.profile_id: profile
@@ -1374,6 +1379,7 @@ def _render_citation_appendix(
                 )
                 output.append("\\end{itemize}\n")
     output.append("\\end{itemize}\n")
+    output.append("\\endgroup\n")
     return "".join(output)
 
 
