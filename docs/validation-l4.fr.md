@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à AC-09 sont qualifiés sur le modèle et le contrat textuel LaTeX. AC-03, AC-05, AC-06, AC-07 et AC-08 disposent maintenant de fixtures Gramps CLI natives vérifiées en HTML et PDF. La saisie dans l’interface et la pagination d’un livre complet restent à valider.
+Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à AC-09 sont qualifiés sur le modèle et le contrat textuel LaTeX. AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 disposent maintenant de fixtures Gramps CLI natives vérifiées en HTML et PDF. La saisie dans l’interface et la pagination d’un livre complet restent à valider.
 
 ## Parcours disponibles
 
@@ -23,10 +23,11 @@ Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à
 - La recette native AC-06 ajoute un frère à l’un des ancêtres et un enfant à ce frère. Le frère, marqué `BOOK_PROFILE=YES`, apparaît comme occurrence collatérale et reçoit une seule fiche et entrée d’index ; son enfant reste hors des occurrences, sections familiales et rendus HTML/PDF.
 - La recette native AC-07 ajoute deux conjoints avec uniquement des événements naissance et décès. Tous deux restent mentionnés dans leur union ; seul celui marqué `BOOK_PROFILE=YES` reçoit une fiche dans le modèle, le HTML et le PDF.
 - La recette native AC-08 ajoute un conjoint avec uniquement des événements naissance et décès et associe son mariage à la famille, avec le rôle Gramps `Family`. Le mariage le rend admissible à une fiche ; son détail n’apparaît que dans la notice familiale du modèle, du HTML et du PDF.
+- La recette native AC-09 conserve la famille monoparentale F0002 avec son seul parent enregistré et sa filiation `Foster`. Le modèle et le HTML réutilisent ce parent dans ses deux sections généalogiques, sans en ajouter un autre ; le PDF le montre seul dans la section familiale.
 
 ## Limites avant la sortie de L4
 
-- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX. `scripts/verify_gramps.py` couvre maintenant AC-03, AC-05, AC-06, AC-07 et AC-08 depuis la fixture native dans le modèle, le ZIP HTML et le PDF ; l’interface Gramps reste à exercer.
+- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX. `scripts/verify_gramps.py` couvre maintenant AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 depuis la fixture native dans le modèle, le ZIP HTML et le PDF ; l’interface Gramps reste à exercer.
 - `tests/test_date_ranges.py` vérifie les groupes transitifs de plages chevauchantes, le maintien de l’ordre source pour la chronologie d’événements, l’usage des bornes malgré des valeurs scalaires contradictoires et le placement final des dates textuelles/non comparables. Le 4 octobre, la suite complète passe : 54 tests.
 - Les rendus LaTeX et HTML consomment le modèle `genealogy`. Leurs contrats sont couverts à des degrés différents ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
 - Le modèle éditorial fournit déjà profils, notices familiales, index et cibles de navigation au rendu LaTeX. La validation porte ici sur leur structure textuelle, pas sur la composition paginée finale.
@@ -57,3 +58,7 @@ Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 14 pages. Deux conjoint
 ## Essai PDF AC-08 en CLI — 4 octobre 2026
 
 Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 14 pages. Un conjoint n’ayant que des événements de naissance et décès reçoit une fiche grâce à un mariage associé à sa famille ; la description du mariage n’apparaît que dans la notice familiale, jamais dans la fiche individuelle. Les pages 10 et 12 ont été relues visuellement ; la saisie GUI et la revue visuelle du livre complet restent à faire.
+
+## Essai PDF AC-09 en CLI — 4 octobre 2026
+
+Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 14 pages. La famille F0002 ne montre que son parent enregistré, sans partenaire ajouté ; le lien de filiation `Foster` reste visible. La page 7 a été relue visuellement ; la saisie GUI et la revue visuelle du livre complet restent à faire.
