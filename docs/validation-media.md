@@ -1,6 +1,6 @@
 # Media validation / Pillow and PDFium
 
-Status as of 2026-09-30.
+Status as of 2026-10-04.
 
 ## Verified scope
 
@@ -24,7 +24,13 @@ The same scenario can also produce a PDF book with `scripts/verify_gramps.py --p
 
 The `scripts/verify_gramps.py` recipe ran against Gramps macOS 6.0.8 and a fully fictional native XML database. Both partners have cover portraits. One `BOOK_FEATURED` image is linked to the family notice and an individual profile with distinct regions (`[0, 0, 60, 100]` for the notice and `[40, 0, 100, 100]` for the profile). The editorial model preserves both uses and rectangles; family priority selects one primary reproduction. Its PNG derivative for the family region is 540 × 600 pixels. The HTML ZIP contains that one full-page image in the family notice and a link to it from the profile.
 
-The French A4 PDF contains 18 pages. Physical pages 12 and 14 were inspected at 130 DPI: page 12 shows the selected family crop full-page without distortion, and the profile links to that reproduction; page 15 shows the second partner's portrait without overlap. The scenario also checks both cover portraits and the secondary-use HTML link. This is a synthetic fixture and a CLI export; the targeted GUI export and opening its ZIP interactively remain to be qualified. Screen-reader support and the final mockup are not validated by this evidence.
+The French A4 PDF contains 18 pages. Physical pages 12 and 14 were inspected at 130 DPI: page 12 shows the selected family crop full-page without distortion, and the profile links to that reproduction; page 15 shows the second partner's portrait without overlap. The scenario also checks both cover portraits and the secondary-use HTML link. This is a synthetic fixture and a CLI export; the targeted GUI export remains to be qualified. Screen-reader support and the final mockup are not validated by this evidence.
+
+### AC-12 — interactive review of the CLI ZIP — 2026-10-04
+
+The [native integration ZIP](../output/gramps-fancy-book-native-integration-20261004.zip), SHA-256 `4b57d50081362327a48e60fbac6d369c0dc6ddab4f2abba0349d3746e6e67f76`, was extracted and served to the browser from a local server on `127.0.0.1`. Activating the individual profile's link reaches the one figure placed in the family notice. The browser loads the AC-12 crop at 540 × 600 pixels, with its caption and the fixture's synthetic alt text. All four images in this combined archive load and have non-empty alt text; all 282 internal links point to an existing anchor.
+
+At widths of 320, 375, 768, 1,024 and 1,440 px, the page has no horizontal overflow. This check covers the extracted native CLI ZIP served locally, not a ZIP exported from the Gramps dialog or direct `file://` opening. The demonstration alt text is a fixture marker, not a description of a real photograph. Screen-reader testing, realistic media and the targeted GUI export remain outstanding.
 
 The [127-page synthetic book](../output/pdf/gramps-fancy-book-122-person-featured-media-centered-preview-20260930.pdf) contains two additional `BOOK_FEATURED` items. Physical pages 49–51 and 64–67 were inspected individually; full-page images remain centered, preserve their proportions, and include captions. All 127 pages were also reviewed on contact sheets. This confirms PDF rendering on a synthetic volume; the native recipe above now covers media selection and sharing in Gramps.
 

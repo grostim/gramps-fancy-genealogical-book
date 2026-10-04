@@ -1,6 +1,6 @@
 # Validation média / Pillow et PDFium
 
-Statut au 30 septembre 2026.
+Statut au 4 octobre 2026.
 
 ## Périmètre vérifié
 
@@ -24,7 +24,13 @@ Le même scénario produit aussi un livre PDF avec `scripts/verify_gramps.py --p
 
 La recette `scripts/verify_gramps.py` a été exécutée contre Gramps macOS 6.0.8 et une base XML native entièrement fictive. Ses deux partenaires ont chacun un portrait de couverture. Une même image `BOOK_FEATURED` est liée à la notice familiale et à une fiche individuelle, avec des régions distinctes (`[0, 0, 60, 100]` pour la notice et `[40, 0, 100, 100]` pour la fiche). Les deux usages et rectangles sont conservés dans le modèle éditorial ; la règle de priorité familiale choisit une seule reproduction principale. Le dérivé PNG correspondant à la région familiale mesure 540 × 600 pixels. Le ZIP HTML contient cette seule image pleine page dans la notice et un renvoi vers elle depuis la fiche.
 
-Le rendu PDF A4 français produit 18 pages. Les pages physiques 12 et 14 ont été examinées à 130 ppp : la page 12 montre la région familiale choisie en pleine page, sans déformation, et la fiche renvoie à cette reproduction ; la page 15 montre le portrait du second partenaire sans chevauchement. Le scénario vérifie également les deux portraits de couverture et les liens HTML de l’usage secondaire. Il s’agit d’une fixture synthétique et d’un export CLI : l’export GUI ciblé et l’ouverture interactive de son ZIP restent à qualifier. Cette preuve ne valide pas le lecteur d’écran ni la maquette finale.
+Le rendu PDF A4 français produit 18 pages. Les pages physiques 12 et 14 ont été examinées à 130 ppp : la page 12 montre la région familiale choisie en pleine page, sans déformation, et la fiche renvoie à cette reproduction ; la page 15 montre le portrait du second partenaire sans chevauchement. Le scénario vérifie également les deux portraits de couverture et les liens HTML de l’usage secondaire. Il s’agit d’une fixture synthétique et d’un export CLI ; l’export GUI ciblé reste à qualifier. Cette preuve ne valide pas le lecteur d’écran ni la maquette finale.
+
+### AC-12 — revue interactive du ZIP CLI — 4 octobre 2026
+
+Le [ZIP de l’intégration native](../output/gramps-fancy-book-native-integration-20261004.zip), identifié par le SHA-256 `4b57d50081362327a48e60fbac6d369c0dc6ddab4f2abba0349d3746e6e67f76`, a été extrait puis servi au navigateur par un serveur local sur `127.0.0.1`. Le lien de la fiche individuelle a été activé ; il atteint la figure unique placée dans la notice familiale. Le navigateur charge le recadrage AC-12 en 540 × 600 pixels, avec sa légende et le texte alternatif synthétique de la fixture. Les quatre images de cette archive combinée chargent et possèdent un texte alternatif non vide ; les 282 liens internes pointent vers une ancre existante.
+
+Aux largeurs de 320, 375, 768, 1 024 et 1 440 px, la page ne déborde pas horizontalement. Ce contrôle porte sur le ZIP natif CLI extrait et servi localement, pas sur un ZIP exporté depuis la boîte de dialogue Gramps ni sur une ouverture directe par `file://`. Le texte alternatif de démonstration est un marqueur de fixture, pas une description de photographie réelle. L’essai au lecteur d’écran, les médias réalistes et l’export GUI ciblé restent à faire.
 
 Le [livre synthétique de 127 pages](../output/pdf/gramps-fancy-book-122-person-featured-media-centered-preview-20260930.pdf) contient deux autres médias `BOOK_FEATURED`. Les pages physiques 49–51 et 64–67 ont été examinées séparément ; les images pleine page restent centrées, sans déformation, avec leurs légendes. Les 127 pages ont aussi été parcourues sur planches de contact. Cette revue confirme le rendu PDF sur un volume synthétique ; la recette native ci-dessus couvre désormais la sélection et le partage d’un média dans Gramps.
 
