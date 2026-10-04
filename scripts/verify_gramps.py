@@ -97,6 +97,34 @@ def _pdf_text(path: Path) -> str:
     return "\n".join(pages)
 
 
+def _pdf_section_between_headings(
+    text: str, heading: str, next_heading: str | None = None
+) -> str:
+    heading_matches = list(
+        re.finditer(rf"(?m)^{re.escape(heading)}\s*$", text)
+    )
+    if len(heading_matches) != 1:
+        raise AssertionError(
+            f"Expected one standalone PDF heading {heading!r}; "
+            f"found {len(heading_matches)}."
+        )
+    start = heading_matches[0].end()
+    if next_heading is None:
+        return text[start:]
+    next_heading_matches = list(
+        re.finditer(
+            rf"(?m)^{re.escape(next_heading)}\s*$",
+            text[start:],
+        )
+    )
+    if len(next_heading_matches) != 1:
+        raise AssertionError(
+            f"Expected one standalone PDF heading {next_heading!r} "
+            f"after {heading!r}; found {len(next_heading_matches)}."
+        )
+    return text[start : start + next_heading_matches[0].start()]
+
+
 def _pdf_citation_number(text: str, detail_marker: str) -> int:
     entry = _pdf_citation_entry(text, detail_marker)
     match = re.search(r"(?m)^\s*— \[(\d+)\] ", entry)
@@ -2088,10 +2116,22 @@ def verify(
             f'<section class="person-profile" id="{shared_ancestor_profile["profile_id"]}">'
         ) == 1
         for occurrence in shared_ancestor_branch_occurrences:
-            assert (
+            occurrence_start = html.index(
                 f'<li id="{occurrence["occurrence_id"]}">'
-                f"<span>Synthetic, {AC05_SHARED_ANCESTOR}</span>"
-            ) in html
+            )
+            occurrence_end = html.index("</li>", occurrence_start) + len("</li>")
+            occurrence_html = html[occurrence_start:occurrence_end]
+            assert f"Synthetic, {AC05_SHARED_ANCESTOR}" in occurrence_html
+            if occurrence["is_primary_profile"]:
+                assert (
+                    f'<section class="person-profile" '
+                    f'id="{shared_ancestor_profile["profile_id"]}">'
+                ) in occurrence_html
+            else:
+                assert (
+                    f'href="#{shared_ancestor_profile["profile_id"]}"'
+                    in occurrence_html
+                )
         shared_ancestor_index = shared_ancestor_index_entries[0]
         assert (
             f'<li id="{shared_ancestor_index["entry_id"]}">'
@@ -2207,7 +2247,33 @@ def verify(
             )
             assert AC03_OTHER_PARTNER in rendered_pdf_text
             assert AC03_OTHER_CHILD in rendered_pdf_text
-            assert AC05_SHARED_ANCESTOR in rendered_pdf_text
+            pdf_ancestry = _pdf_section_between_headings(
+                rendered_pdf_text, "Ascendance", "Descendance"
+            )
+            pdf_shared_ancestor_branches = _pdf_section_between_headings(
+                pdf_ancestry, "Génération -1", "Génération -2"
+            )
+            assert pdf_shared_ancestor_branches.count(
+                f"Synthetic, {AC05_SHARED_ANCESTOR}"
+            ) == 2
+            for partner_marker in (AC05_PARENT_PARTNER, AC05_OTHER_PARTNER):
+                assert re.search(
+                    rf"Synthetic, {re.escape(AC05_SHARED_ANCESTOR)}\s+"
+                    rf"— Synthetic, {re.escape(partner_marker)}",
+                    pdf_shared_ancestor_branches,
+                )
+            pdf_profiles = _pdf_section_between_headings(
+                rendered_pdf_text, "Fiches individuelles", "Annexe documentaire"
+            )
+            assert pdf_profiles.count(
+                f"Synthetic, {AC05_SHARED_ANCESTOR}"
+            ) == 1
+            pdf_person_index = _pdf_section_between_headings(
+                rendered_pdf_text, "Index des personnes"
+            )
+            assert pdf_person_index.count(
+                f"Synthetic, {AC05_SHARED_ANCESTOR}"
+            ) == 1
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
             ) < rendered_pdf_text.index(
