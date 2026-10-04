@@ -1182,12 +1182,22 @@ def _render_citation_appendix(
     citation_numbers: dict[str, int],
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
+    # Override the list parameters before itemize initializes its first level.
     output = [
         _section_heading(
             label(model, "documentary_appendix"),
             target_id="documentary-appendix",
             emitted_targets=emitted_targets,
         ),
+        "\\begingroup\n"
+        "\\makeatletter\n"
+        "\\let\\gfb@original@listi\\@listi\n"
+        "\\def\\@listi{\\gfb@original@listi\n"
+        "  \\setlength{\\itemsep}{2pt}\n"
+        "  \\setlength{\\parsep}{0pt}\n"
+        "  \\setlength{\\topsep}{2pt}\n"
+        "  \\setlength{\\partopsep}{0pt}}\n"
+        "\\makeatother\n"
         "\\begin{itemize}\n",
     ]
     profiles = {
@@ -1374,6 +1384,7 @@ def _render_citation_appendix(
                 )
                 output.append("\\end{itemize}\n")
     output.append("\\end{itemize}\n")
+    output.append("\\endgroup\n")
     return "".join(output)
 
 
