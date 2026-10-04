@@ -65,12 +65,12 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-01 | Couple central et génération zéro | L1.3, L4.1, L5.1 | Couple central, générations et liens présents ; graphes et contrat LaTeX qualifiés (PR #44), recette complète restante |
 | AC-02 | Refus du couple incomplet | L1.3–L1.7 | Validé en CLI Gramps 6.0.8 ; CI 36288791405 |
 | AC-03 | Descendants des autres unions | L4.3–L4.4 | Qualifié sur graphe et contrat LaTeX (PR #43) ; recette HTML/PDF depuis Gramps restante |
-| AC-04 | Filiations explicites multiples | L3.1, L4.4 | Liens de filiation typés implémentés et qualifiés sur graphe (PR #43) ; recette complète restante |
+| AC-04 | Filiations explicites multiples | L3.1, L4.4 | Types `Adopted` et `Foster` et lien `None` préservés/interprétés dans une fixture Gramps CLI native 6.0.8 ; les autres types, la saisie GUI et la recette complète restent à qualifier |
 | AC-05 | Implexes, fiche unique et cycles | L4.4–L4.5 | Occurrences et fiches uniques implémentées, qualifiées sur graphe (PR #43) ; recette complète restante |
 | AC-06 | Collatéral documenté sans expansion | L4.1, L4.5 | Expansion des collatéraux bornée, qualifiée sur graphe (PR #43) ; recette complète restante |
 | AC-07 | Éligibilité et BOOK_PROFILE=YES | L3.3, L4.5 | Règle d’éligibilité et BOOK_PROFILE=YES implémentés, qualifiés sur graphe (PR #43) ; recette Gramps restante |
 | AC-08 | Événement familial et fiche | L3.2, L5.2 | Événements familiaux et fiches présents et qualifiés sur graphe (PR #43) ; recette complète restante |
-| AC-09 | Famille monoparentale dans le parcours | L3.1, L4.4, L5.2 | Familles monoparentales prises en charge dans le parcours et qualifiées sur graphe (PR #43) ; recette complète restante |
+| AC-09 | Famille monoparentale dans le parcours | L3.1, L4.4, L5.2 | Famille monoparentale native Gramps CLI 6.0.8 traversée avec un seul partenaire connu et sans parent inventé ; saisie GUI et recette complète restantes |
 | AC-10 | Note Markdown partagée | L3.3, L5.2, L6.2, L7.3 | Revue synthétique : la même note publiée est rendue dans la fiche et la notice familiale en HTML et LaTeX. Intégration Gramps 6.0.8 : note native `BOOK_PUBLICATION` extraite pour une personne et sa famille, styles natifs gras/italique et deux ancres HTML distinctes ; un PDF natif de 9 pages confirme aussi le double rendu en gras/italique. Saisie et export depuis l’interface Gramps restent à vérifier |
 | AC-11 | Exclusion des notes non étiquetées | L3.3, L5.2 | Notes non marquées BOOK_PUBLICATION exclues des références éditoriales ; recette native complète restante |
 | AC-12 | Portraits et photo pleine page | L5.5, L6.1, L7.4 | Portraits et reproductions médias présents dans les rendus ; sélection, recadrage, ZIP et rendu visuel à vérifier |

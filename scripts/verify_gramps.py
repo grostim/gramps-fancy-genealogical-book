@@ -676,6 +676,73 @@ def _set_t04_parentage_case(
     child_ref.set("mrel", "None")
 
 
+def _add_t04_foster_parent_family(
+    root: ET.Element,
+    family: ET.Element,
+    child: ET.Element,
+    father: ET.Element,
+) -> None:
+    """Connect I0001 to a single-parent family with an explicit Foster link."""
+    family_handle = family.get("handle")
+    child_handle = child.get("handle")
+    father_handle = father.get("handle")
+    if not family_handle or not child_handle or not father_handle:
+        raise AssertionError("Native T-04 foster-family fixture has a missing handle.")
+    family_father = next(iter(_children(family, "father")), None)
+    if family_father is None or family_father.get("hlink") != father_handle:
+        raise AssertionError("Native T-04 foster family must contain only its known father.")
+    if _children(family, "mother"):
+        raise AssertionError("Native T-04 foster family unexpectedly has a mother.")
+    if any(
+        item.get("hlink") == child_handle
+        for item in _children(family, "childref")
+    ):
+        raise AssertionError("Native T-04 foster family already references its child.")
+
+    child_ref = ET.Element(
+        _qualified_name(root, "childref"),
+        {"hlink": child_handle, "frel": "Foster"},
+    )
+    family_trailing_refs = {"attribute", "noteref", "citationref", "tagref"}
+    family_index = next(
+        (
+            index
+            for index, item in enumerate(family)
+            if item.tag.rsplit("}", 1)[-1] in family_trailing_refs
+        ),
+        len(family),
+    )
+    family.insert(family_index, child_ref)
+
+    if any(
+        item.get("hlink") == family_handle
+        for item in _children(child, "childof")
+    ):
+        raise AssertionError("Native T-04 child already references the foster family.")
+    person_trailing_refs = {
+        "parentin",
+        "personref",
+        "noteref",
+        "citationref",
+        "tagref",
+    }
+    person_index = next(
+        (
+            index
+            for index, item in enumerate(child)
+            if item.tag.rsplit("}", 1)[-1] in person_trailing_refs
+        ),
+        len(child),
+    )
+    child.insert(
+        person_index,
+        ET.Element(
+            _qualified_name(root, "childof"),
+            {"hlink": family_handle},
+        ),
+    )
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -790,11 +857,27 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
+    single_parent = next(
+        (
+            item
+            for item in _children(people, "person")
+            if item.get("id") == "I0004"
+        ),
+        None,
+    )
     family = next(
         (
             item
             for item in _children(families, "family")
             if item.get("id") == "F0001"
+        ),
+        None,
+    )
+    single_parent_family = next(
+        (
+            item
+            for item in _children(families, "family")
+            if item.get("id") == "F0002"
         ),
         None,
     )
@@ -806,12 +889,21 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
-    if person is None or child is None or family is None or media is None:
+    if (
+        person is None
+        or child is None
+        or single_parent is None
+        or family is None
+        or single_parent_family is None
+        or media is None
+    ):
         raise AssertionError(
-            "Gramps XML export is missing fixture person I0001, child I0003, family F0001 or media M0001."
+            "Gramps XML export is missing fixture people I0001/I0003/I0004, "
+            "families F0001/F0002 or media M0001."
         )
 
     _set_t04_parentage_case(family, child)
+    _add_t04_foster_parent_family(root, single_parent_family, person, single_parent)
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1206,7 +1298,12 @@ def verify(
         )
 
         assert model["reference_family"]["gramps_id"] == "F0001"
-        assert [person["gramps_id"] for person in model["people"]] == ["I0001", "I0002", "I0003"]
+        assert {person["gramps_id"] for person in model["people"]} == {
+            "I0001",
+            "I0002",
+            "I0003",
+            "I0004",
+        }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
         assert model["metadata"]["BOOK_SCHEMA_VERSION"] == "0.8"
@@ -1242,9 +1339,36 @@ def verify(
             occurrences_by_id[parent_child_link["child_occurrence_id"]]["person_handle"]
             == child_relationship["person_handle"]
         )
+        foster_family = next(
+            family
+            for family in model["families"].values()
+            if family["gramps_id"] == "F0002"
+        )
+        assert foster_family["mother"] is None
+        foster_relationship = foster_family["child_relationships"][0]
+        assert foster_relationship["father_relation"] == "Foster"
+        foster_section = next(
+            section
+            for section in family_sections
+            if section["family_handle"] == foster_family["handle"]
+            and section["part"] == "ancestry"
+        )
+        assert len(foster_section["partner_occurrence_ids"]) == 1
+        assert len(foster_section["child_occurrence_ids"]) == 1
+        foster_links = foster_section["parent_child_links"]
+        assert len(foster_links) == 1, foster_links
+        assert foster_links[0]["relationship_type"] == "Foster"
+        assert (
+            occurrences_by_id[foster_links[0]["parent_occurrence_id"]]["person_handle"]
+            == foster_family["father"]["handle"]
+        )
+        assert (
+            occurrences_by_id[foster_links[0]["child_occurrence_id"]]["person_handle"]
+            == foster_relationship["person_handle"]
+        )
         print(
-            "PASS: T-04 native Gramps child links preserve Adopted/None and "
-            "traverse only the explicit parent"
+            "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
+            "keeps only recorded parent links and the single-parent family"
         )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
