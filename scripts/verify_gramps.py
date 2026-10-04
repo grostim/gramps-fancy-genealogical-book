@@ -1998,6 +1998,49 @@ def verify(
             and section["part"] == "ancestry"
             and "central" in section["roles"]
         )
+        central_partner_handles = [
+            reference_family["father"]["handle"],
+            reference_family["mother"]["handle"],
+        ]
+        ancestry_generation_zero = next(
+            generation
+            for generation in model["genealogy"]["ancestry"]["generations"]
+            if generation["number"] == 0
+        )
+        central_ancestry_occurrences = [
+            occurrence
+            for occurrence in ancestry_generation_zero["occurrences"]
+            if "central" in occurrence["roles"]
+        ]
+        assert [
+            occurrence["person_handle"] for occurrence in central_ancestry_occurrences
+        ] == central_partner_handles
+        ancestry_occurrence_ids = {
+            occurrence["person_handle"]: occurrence["occurrence_id"]
+            for occurrence in central_ancestry_occurrences
+        }
+        assert set(central_section["partner_occurrence_ids"]) == set(
+            ancestry_occurrence_ids.values()
+        )
+        descent_generation_zero = next(
+            generation
+            for generation in model["genealogy"]["descent"]["generations"]
+            if generation["number"] == 0
+        )
+        central_descent_occurrences = [
+            occurrence
+            for occurrence in descent_generation_zero["occurrences"]
+            if occurrence["person_handle"] in central_partner_handles
+        ]
+        assert len(central_descent_occurrences) == 2
+        assert {
+            occurrence["person_handle"]: occurrence["primary_occurrence_id"]
+            for occurrence in central_descent_occurrences
+        } == ancestry_occurrence_ids
+        print(
+            "PASS: AC-01 native central partners start ancestry generation zero "
+            "and descent occurrences point back to them"
+        )
         occurrences_by_id = {}
         for part in ("ancestry", "descent"):
             for generation in model["genealogy"][part]["generations"]:
@@ -2593,6 +2636,40 @@ def verify(
                 raise AssertionError("Gramps produced an invalid shared-note HTML archive.")
             html = archive.read("index.html").decode("utf-8")
             archive_names = set(archive.namelist())
+        assert '<section class="generation" id="generation:ancestry:0">' in html
+        assert '<section class="generation" id="generation:descent:0">' in html
+        html_people_by_handle = {
+            person["handle"]: person for person in model["people"]
+        }
+        html_profiles_by_person = {
+            profile["person_handle"]: profile
+            for profile in editorial_book["profiles"]
+        }
+        for occurrence in central_ancestry_occurrences:
+            occurrence_start = html.index(
+                f'<li id="{occurrence["occurrence_id"]}">'
+            )
+            occurrence_end = html.index("</li>", occurrence_start) + len("</li>")
+            occurrence_html = html[occurrence_start:occurrence_end]
+            person_name = html_people_by_handle[occurrence["person_handle"]]["name"]
+            assert f"<span>{person_name}</span>" in occurrence_html
+        for occurrence in central_descent_occurrences:
+            occurrence_start = html.index(
+                f'<li id="{occurrence["occurrence_id"]}">'
+            )
+            occurrence_end = html.index("</li>", occurrence_start) + len("</li>")
+            occurrence_html = html[occurrence_start:occurrence_end]
+            profile = html_profiles_by_person.get(occurrence["person_handle"])
+            target = (
+                profile["profile_id"]
+                if profile is not None
+                else occurrence["primary_occurrence_id"]
+            )
+            assert f'href="#{target}"' in occurrence_html
+        print(
+            "PASS: AC-01 native HTML starts with both central partners and "
+            "links their descent mentions back"
+        )
         single_pdf_artifact = artifacts_by_handle[
             media_by_name["ac16-single-unlinked.pdf"]["handle"]
         ]
@@ -3014,6 +3091,42 @@ def verify(
             )
             pdf_family_notices = _pdf_section_between_headings(
                 rendered_pdf_text, "Notices familiales", "Fiches individuelles"
+            )
+            pdf_ancestry_generation_zero = _pdf_section_between_headings(
+                pdf_ancestry, "Génération 0", "Génération -1"
+            )
+            pdf_descent = _pdf_section_between_headings(
+                rendered_pdf_text, "Descendance", "Liens familiaux"
+            )
+            pdf_descent_generation_zero = _pdf_section_between_headings(
+                pdf_descent, "Génération 0", "Génération 1"
+            )
+            central_partner_names = [
+                html_people_by_handle[handle]["name"]
+                for handle in central_partner_handles
+            ]
+            for generation_text in (
+                pdf_ancestry_generation_zero,
+                pdf_descent_generation_zero,
+            ):
+                occurrence_lines = [
+                    line.strip()
+                    for line in generation_text.splitlines()
+                    if line.strip().startswith("— ")
+                ]
+                assert occurrence_lines[:2] == [
+                    f"— {name}" for name in central_partner_names
+                ], occurrence_lines
+            central_pdf_family_entries = [
+                line.strip()
+                for line in pdf_family_connections.splitlines()
+                if all(name in line for name in central_partner_names)
+                and "(ascendance, génération 0)" in line
+            ]
+            assert len(central_pdf_family_entries) == 1, central_pdf_family_entries
+            print(
+                "PASS: AC-01 native PDF opens ancestry and descent generation zero "
+                "with the central pair and renders their F0 connection"
             )
             ac09_pdf_parent_entries = [
                 line.strip()
