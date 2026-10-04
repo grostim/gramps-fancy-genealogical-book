@@ -1,6 +1,6 @@
 # Plan d’action — Gramps Fancy Genealogical Book
 
-Version de travail du 26 septembre 2026, suivi actualisé le 1er octobre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
+Version de travail du 26 septembre 2026, suivi actualisé le 4 octobre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
 
 ## 1. Références et niveau de certitude
 
@@ -56,7 +56,7 @@ La compilation Python et la construction de l’archive ont été réalisées pr
 
 Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 peuvent avancer conjointement. Les deux rendus peuvent être développés indépendamment une fois le modèle éditorial stabilisé. La documentation et les contrôles accompagnent chaque lot.
 
-**État au 1er octobre 2026 :** le socle L0–L3 et le parcours L4 sont livrés ; la recette fonctionnelle L4 reste partielle. Les scénarios AC-01, AC-03 à AC-09 et l’intégration complète du modèle dans les rendus doivent encore être qualifiés. L’export GUI du paquet courant en ZIP HTML et en PDF a été validé sur macOS avec une fixture fictive ; le ZIP GUI et le ZIP synthétique AC-20 ont maintenant été ouverts directement hors ligne dans Chrome, avec quelques liens internes vérifiés. La revue visuelle complète du PDF long a été effectuée sur les 127 pages à 110 ppp ; toutes les 22 pages des maquettes privées ont été comparées à un échantillon représentatif du rendu courant. Les photos réelles de Gramps, l’accessibilité et les essais sur d’autres versions restent à faire. Les livraisons L5–L7 et la progression L8 sont détaillées au § 8.
+**État au 4 octobre 2026 :** le socle L0–L3 et le parcours L4 sont livrés ; la recette fonctionnelle L4 reste partielle. AC-03 est maintenant qualifié avec une fixture Gramps CLI native jusqu’aux rendus HTML et PDF ; AC-04 et AC-09 disposent aussi de preuves natives CLI. L’export GUI du paquet courant en ZIP HTML et en PDF a été validé sur macOS avec une fixture fictive ; le ZIP GUI et le ZIP synthétique AC-20 ont maintenant été ouverts directement hors ligne dans Chrome, avec quelques liens internes vérifiés. La revue visuelle complète du PDF long a été effectuée sur les 127 pages à 110 ppp ; toutes les 22 pages des maquettes privées ont été comparées à un échantillon représentatif du rendu courant. Les photos réelles de Gramps, l’accessibilité et les essais sur d’autres versions restent à faire. Les livraisons L5–L7 et la progression L8 sont détaillées au § 8.
 
 ## 4. Lots détaillés
 
@@ -132,6 +132,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 5. L4.5 — Distinguer l’identité d’une personne de ses apparitions dans plusieurs contextes ; appliquer les règles de fiches détaillées, mentions et renvois.
 6. L4.6 — Définir l’ordre stable des familles et des enfants conformément aux données et au cahier des charges.
 7. L4.7 — Produire les liens vers parents, unions et enfants ainsi que les informations nécessaires au repère généalogique de chaque fiche.
+8. L4.8 — Qualifier les cas à risque depuis une base Gramps native dans le modèle et les rendus disponibles ; consigner séparément les contrôles CLI, GUI et visuels.
 
 **Critères de sortie :** les jeux de référence produisent les familles et chemins attendus, sans boucle infinie ni omission involontaire. Les répétitions de contexte sont distinguées des doublons de données. Les tags influencent la sélection selon une règle documentée.
 

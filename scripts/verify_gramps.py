@@ -25,6 +25,8 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
+AC03_OTHER_PARTNER = "AC03_OTHER_UNION_PARTNER"
+AC03_OTHER_CHILD = "AC03_OTHER_UNION_CHILD"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
@@ -676,6 +678,58 @@ def _set_t04_parentage_case(
     child_ref.set("mrel", "None")
 
 
+def _add_person_family_ref(
+    root: ET.Element,
+    person: ET.Element,
+    ref_type: str,
+    family_handle: str,
+) -> None:
+    """Insert a reciprocal person-to-family reference in Gramps XML order."""
+    if ref_type not in {"childof", "parentin"}:
+        raise ValueError(f"Unsupported person-family reference {ref_type!r}.")
+    if any(
+        item.get("hlink") == family_handle
+        for item in _children(person, ref_type)
+    ):
+        raise AssertionError(
+            f"Native fixture already has a {ref_type} reference to {family_handle}."
+        )
+
+    order = (
+        "gender",
+        "name",
+        "eventref",
+        "lds_ord",
+        "objref",
+        "address",
+        "attribute",
+        "url",
+        "childof",
+        "parentin",
+        "personref",
+        "noteref",
+        "citationref",
+        "tagref",
+    )
+    target_rank = order.index(ref_type)
+    insert_at = next(
+        (
+            index
+            for index, item in enumerate(person)
+            if item.tag.rsplit("}", 1)[-1] in order
+            and order.index(item.tag.rsplit("}", 1)[-1]) > target_rank
+        ),
+        len(person),
+    )
+    person.insert(
+        insert_at,
+        ET.Element(
+            _qualified_name(root, ref_type),
+            {"hlink": family_handle},
+        ),
+    )
+
+
 def _add_t04_foster_parent_family(
     root: ET.Element,
     family: ET.Element,
@@ -714,33 +768,89 @@ def _add_t04_foster_parent_family(
     )
     family.insert(family_index, child_ref)
 
-    if any(
-        item.get("hlink") == family_handle
-        for item in _children(child, "childof")
-    ):
-        raise AssertionError("Native T-04 child already references the foster family.")
-    person_trailing_refs = {
-        "parentin",
-        "personref",
-        "noteref",
-        "citationref",
-        "tagref",
+    _add_person_family_ref(root, child, "childof", family_handle)
+
+
+def _add_ac03_other_union(
+    root: ET.Element,
+    people: ET.Element,
+    families: ET.Element,
+    reference_parent: ET.Element,
+) -> None:
+    """Add a native second union and a profile-eligible child of the F0 parent."""
+    existing_person_ids = {item.get("id") for item in _children(people, "person")}
+    existing_family_ids = {
+        item.get("id") for item in _children(families, "family")
     }
-    person_index = next(
-        (
-            index
-            for index, item in enumerate(child)
-            if item.tag.rsplit("}", 1)[-1] in person_trailing_refs
-        ),
-        len(child),
+    if {"I0005", "I0006"}.intersection(existing_person_ids):
+        raise AssertionError("Native AC-03 fixture person IDs I0005/I0006 already exist.")
+    if "F0003" in existing_family_ids:
+        raise AssertionError("Native AC-03 fixture family F0003 already exists.")
+    parent_handle = reference_parent.get("handle")
+    if not parent_handle:
+        raise AssertionError("Native AC-03 reference parent has no Gramps handle.")
+
+    family_handle = f"_{uuid.uuid4().hex}"
+    partner_handle = f"_{uuid.uuid4().hex}"
+    child_handle = f"_{uuid.uuid4().hex}"
+    partner = ET.Element(
+        _qualified_name(root, "person"),
+        {"handle": partner_handle, "change": "0", "id": "I0005"},
     )
-    child.insert(
-        person_index,
-        ET.Element(
-            _qualified_name(root, "childof"),
-            {"hlink": family_handle},
-        ),
+    ET.SubElement(partner, _qualified_name(root, "gender")).text = "F"
+    partner_name = ET.SubElement(
+        partner,
+        _qualified_name(root, "name"),
+        {"type": "Birth Name"},
     )
+    ET.SubElement(
+        partner_name,
+        _qualified_name(root, "first"),
+    ).text = AC03_OTHER_PARTNER
+    ET.SubElement(partner_name, _qualified_name(root, "surname")).text = "Synthetic"
+    _add_person_family_ref(root, partner, "parentin", family_handle)
+
+    child = ET.Element(
+        _qualified_name(root, "person"),
+        {"handle": child_handle, "change": "0", "id": "I0006"},
+    )
+    ET.SubElement(child, _qualified_name(root, "gender")).text = "U"
+    child_name = ET.SubElement(
+        child,
+        _qualified_name(root, "name"),
+        {"type": "Birth Name"},
+    )
+    ET.SubElement(child_name, _qualified_name(root, "first")).text = AC03_OTHER_CHILD
+    ET.SubElement(child_name, _qualified_name(root, "surname")).text = "Synthetic"
+    ET.SubElement(
+        child,
+        _qualified_name(root, "attribute"),
+        {"type": "BOOK_PROFILE", "value": "YES"},
+    )
+    _add_person_family_ref(root, child, "childof", family_handle)
+
+    family = ET.Element(
+        _qualified_name(root, "family"),
+        {"handle": family_handle, "change": "0", "id": "F0003"},
+    )
+    ET.SubElement(
+        family,
+        _qualified_name(root, "father"),
+        {"hlink": parent_handle},
+    )
+    ET.SubElement(
+        family,
+        _qualified_name(root, "mother"),
+        {"hlink": partner_handle},
+    )
+    ET.SubElement(
+        family,
+        _qualified_name(root, "childref"),
+        {"hlink": child_handle, "frel": "Birth", "mrel": "Birth"},
+    )
+    _add_person_family_ref(root, reference_parent, "parentin", family_handle)
+    people.extend((partner, child))
+    families.append(family)
 
 
 def _install_mistune_dependency(plugins: Path) -> None:
@@ -904,6 +1014,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
 
     _set_t04_parentage_case(family, child)
     _add_t04_foster_parent_family(root, single_parent_family, person, single_parent)
+    _add_ac03_other_union(root, people, families, person)
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1303,6 +1414,8 @@ def verify(
             "I0002",
             "I0003",
             "I0004",
+            "I0005",
+            "I0006",
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -1366,9 +1479,49 @@ def verify(
             occurrences_by_id[foster_links[0]["child_occurrence_id"]]["person_handle"]
             == foster_relationship["person_handle"]
         )
+        other_union = next(
+            family
+            for family in model["families"].values()
+            if family["gramps_id"] == "F0003"
+        )
+        other_union_child_handle = other_union["child_relationships"][0]["person_handle"]
+        other_union_section = next(
+            section
+            for section in family_sections
+            if section["family_handle"] == other_union["handle"]
+            and section["part"] == "descent"
+        )
+        other_child_occurrences = [
+            item
+            for generation in model["genealogy"]["descent"]["generations"]
+            for item in generation["occurrences"]
+            if item["person_handle"] == other_union_child_handle
+        ]
+        assert len(other_child_occurrences) == 1, other_child_occurrences
+        assert other_child_occurrences[0]["generation"] == 1
+        assert other_child_occurrences[0]["family_handle"] == other_union["handle"]
+        assert other_union_section["child_occurrence_ids"] == [
+            other_child_occurrences[0]["occurrence_id"]
+        ]
+        assert len(other_union_section["partner_occurrence_ids"]) == 2
+        assert {
+            link["relationship_type"]
+            for link in other_union_section["parent_child_links"]
+        } == {"Birth"}
+        assert model["genealogy"]["profile_handles"].count(
+            other_union_child_handle
+        ) == 1
+        assert sum(
+            profile["person_handle"] == other_union_child_handle
+            for profile in model["editorial_book"]["profiles"]
+        ) == 1
         print(
             "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
             "keeps only recorded parent links and the single-parent family"
+        )
+        print(
+            "PASS: AC-03 native other-union child is in descent generation 1, "
+            "with a family section and one profile"
         )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
@@ -1720,6 +1873,33 @@ def verify(
         assert html.index(F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]) < html.index(
             F0_EDITORIAL_ROLE_TEXT["BOOK_INTRODUCTION"]
         )
+        ac03_notice = next(
+            notice
+            for notice in editorial_book["family_notices"]
+            if notice["family_handle"] == other_union["handle"]
+        )
+        ac03_notice_match = re.search(
+            rf'<article class="family-notice" id="{re.escape(ac03_notice["notice_id"])}">'
+            r"(.*?)</article>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert ac03_notice_match is not None
+        assert AC03_OTHER_PARTNER in ac03_notice_match.group(1)
+        assert AC03_OTHER_CHILD in ac03_notice_match.group(1)
+        child_occurrence_target = other_child_occurrences[0]["occurrence_id"]
+        assert (
+            f'<li id="{child_occurrence_target}"><span>Synthetic, {AC03_OTHER_CHILD}</span>'
+            in html
+        )
+        ac03_profile = next(
+            profile
+            for profile in editorial_book["profiles"]
+            if profile["person_handle"] == other_union_child_handle
+        )
+        assert html.count(
+            f'<section class="person-profile" id="{ac03_profile["profile_id"]}">'
+        ) == 1
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -1827,6 +2007,8 @@ def verify(
                 marker not in rendered_pdf_text
                 for marker in F0_EDITORIAL_INVALID_TEXT.values()
             )
+            assert AC03_OTHER_PARTNER in rendered_pdf_text
+            assert AC03_OTHER_CHILD in rendered_pdf_text
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
             ) < rendered_pdf_text.index(
