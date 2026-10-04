@@ -1646,8 +1646,10 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         or media is None
     ):
         raise AssertionError(
-            "Gramps XML export is missing fixture people I0001/I0002/I0003/I0004, "
-            "families F0001/F0002 or media M0001."
+            "Gramps XML export is missing expected fixture objects. "
+            f"People IDs: {[item.get('id') for item in _children(people, 'person')]}; "
+            f"family IDs: {[item.get('id') for item in _children(families, 'family')]}; "
+            f"media IDs: {[item.get('id') for item in _children(objects, 'object')]}"
         )
 
     _set_t04_parentage_case(family, child)
