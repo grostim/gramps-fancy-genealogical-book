@@ -20,6 +20,12 @@ The Gramps CLI recipe creates four fictional PDF documents, attaches them to nat
 
 The same scenario can also produce a PDF book with `scripts/verify_gramps.py --pdf-output <file.pdf> --lualatex /Library/TeX/texbin/lualatex`. Gramps 6.0.8 on macOS and LuaHBTeX 1.24.0 produced a nine-page French A4 PDF, kept locally at `output/pdf/gramps-fancy-book-ac16-pdf-cases.pdf` (an unversioned output). All nine pages were reviewed at 110 DPI: no visible clipping or overlap; the appendix renders the unlinked single-page document as an image, retains multipage documents as references, and includes the repository URL for the two linked citations. The source PDFs are blank synthetic pages and the portraits are fictional; this review does not qualify the final design or accessibility.
 
+### AC-12 — partial visual evidence — 2026-09-30
+
+The [127-page synthetic book](../output/pdf/gramps-fancy-book-122-person-featured-media-centered-preview-20260930.pdf) contains two `BOOK_FEATURED` media items. Physical pages 49–51 and 64–67 were inspected individually; the full-page images remain centered and preserve their proportions and captions. All 127 pages were also reviewed on contact sheets. This qualifies the PDF renderer on a synthetic fixture, not media selection from a native Gramps database. The cropped portrait in the AC-16 Gramps CLI recipe is separate native evidence.
+
+The complete AC-12 recipe remains open: use a native Gramps fixture with the couple's cover medallions and the same featured photo linked to several events or sections, potentially with distinct crop regions; confirm one main reproduction and links from the other occurrences in HTML/ZIP and PDF. A GUI export and opening that ZIP also remain to be qualified.
+
 To make the optional dependencies available to Gramps CLI during the recipe, `scripts/verify_gramps.py` copies Pillow and PDFium into its temporary Gramps profile. This is test-only setup; it does not configure a user's Gramps Desktop installation.
 
 The integration uses no real family data. Source files are unchanged; the portrait and four PDFs exist only in the test's temporary directory.

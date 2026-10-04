@@ -20,6 +20,12 @@ La recette CLI Gramps crée quatre justificatifs PDF fictifs, les attache à des
 
 Le même scénario produit aussi un livre PDF avec `scripts/verify_gramps.py --pdf-output <fichier.pdf> --lualatex /Library/TeX/texbin/lualatex`. Gramps macOS 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF français A4 de neuf pages, conservé localement dans `output/pdf/gramps-fancy-book-ac16-pdf-cases.pdf` (sortie non versionnée). Les neuf pages ont été examinées à 110 ppp : aucune coupure ni superposition visible ; l’annexe garde le monopage sans URL comme image, les multipages comme références et l’URL du dépôt des deux citations liées. Les documents justificatifs sont des pages PDF synthétiques vides et les portraits sont fictifs ; cette revue ne qualifie pas encore la maquette finale ni l’accessibilité.
 
+### AC-12 — preuve visuelle partielle — 30 septembre 2026
+
+Le [livre synthétique de 127 pages](../output/pdf/gramps-fancy-book-122-person-featured-media-centered-preview-20260930.pdf) contient deux médias `BOOK_FEATURED`. Les pages physiques 49–51 et 64–67 ont été examinées séparément ; les images pleine page restent centrées, sans déformation, avec leurs légendes. Le reste des 127 pages a également été parcouru sur planches de contact. Cela qualifie le rendu PDF des médias mis en avant sur une fixture synthétique, pas leur sélection dans une base Gramps native. Le portrait recadré de la recette AC-16 est une preuve native Gramps distincte.
+
+La recette AC-12 complète reste à faire avec une fixture Gramps native : portraits du couple en médaillon, même photo mise en avant liée à plusieurs événements ou sections avec des régions éventuelles distinctes, une seule reproduction principale et des renvois depuis les autres occurrences en HTML/ZIP et en PDF. L’export GUI et l’ouverture du ZIP issu de ce scénario restent également à qualifier.
+
 Pour que Gramps CLI utilise les mêmes dépendances optionnelles que l’environnement de recette, `scripts/verify_gramps.py` copie Pillow et PDFium dans le profil Gramps temporaire. Cette manipulation est isolée au test ; elle ne configure pas l’installation Gramps Desktop de l’utilisateur.
 
 L’intégration ne dépend d’aucune donnée familiale réelle. Les fichiers originaux ne sont pas modifiés ; le portrait et les quatre PDF existent uniquement dans le répertoire temporaire du test.
