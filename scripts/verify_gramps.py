@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
 AC03_OTHER_PARTNER = "AC03_OTHER_UNION_PARTNER"
 AC03_OTHER_CHILD = "AC03_OTHER_UNION_CHILD"
+AC04_STEP_PARENT = "AC04_STEP_PARENT"
 AC05_SHARED_ANCESTOR = "AC05_ANC"
 AC05_PARENT_PARTNER = "AC05_P1"
 AC05_OTHER_PARTNER = "AC05_P2"
@@ -838,6 +839,51 @@ def _add_t04_foster_parent_family(
     _add_person_family_ref(root, child, "childof", family_handle)
 
 
+def _add_t04_step_parent_family(
+    root: ET.Element,
+    people: ET.Element,
+    families: ET.Element,
+    child: ET.Element,
+) -> None:
+    """Connect I0001 to a separate step-parent family with a Stepchild link."""
+    if child.get("id") != "I0001" or not child.get("handle"):
+        raise AssertionError("Native T-04 stepchild fixture must use person I0001.")
+    if any(item.get("id") == "I0018" for item in _children(people, "person")):
+        raise AssertionError("Native T-04 step-parent I0018 already exists.")
+    if any(item.get("id") == "F0012" for item in _children(families, "family")):
+        raise AssertionError("Native T-04 step-parent family F0012 already exists.")
+
+    parent_handle = f"_{uuid.uuid4().hex}"
+    family_handle = f"_{uuid.uuid4().hex}"
+    parent = ET.Element(
+        _qualified_name(root, "person"),
+        {"handle": parent_handle, "change": "0", "id": "I0018"},
+    )
+    ET.SubElement(parent, _qualified_name(root, "gender")).text = "M"
+    name = ET.SubElement(
+        parent,
+        _qualified_name(root, "name"),
+        {"type": "Birth Name"},
+    )
+    ET.SubElement(name, _qualified_name(root, "first")).text = AC04_STEP_PARENT
+    ET.SubElement(name, _qualified_name(root, "surname")).text = "Synthetic"
+    _add_person_family_ref(root, parent, "parentin", family_handle)
+    _add_person_family_ref(root, child, "childof", family_handle)
+
+    family = ET.Element(
+        _qualified_name(root, "family"),
+        {"handle": family_handle, "change": "0", "id": "F0012"},
+    )
+    ET.SubElement(family, _qualified_name(root, "father"), {"hlink": parent_handle})
+    ET.SubElement(
+        family,
+        _qualified_name(root, "childref"),
+        {"hlink": child.get("handle", ""), "frel": "Stepchild"},
+    )
+    people.append(parent)
+    families.append(family)
+
+
 def _add_ac03_other_union(
     root: ET.Element,
     people: ET.Element,
@@ -1591,6 +1637,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
 
     _set_t04_parentage_case(family, child)
     _add_t04_foster_parent_family(root, single_parent_family, person, single_parent)
+    _add_t04_step_parent_family(root, people, families, person)
     _add_ac03_other_union(root, people, families, person)
     _add_ac05_implex_and_cycle(
         root, people, families, person, reference_partner
@@ -2010,6 +2057,7 @@ def verify(
             "I0015",
             "I0016",
             "I0017",
+            "I0018",
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -2122,6 +2170,43 @@ def verify(
                 "person_handle"
             ]
             == foster_family["father"]["handle"]
+        )
+        step_parent = next(
+            person for person in model["people"] if person["gramps_id"] == "I0018"
+        )
+        assert step_parent["name"] == f"Synthetic, {AC04_STEP_PARENT}"
+        step_family = next(
+            family
+            for family in model["families"].values()
+            if family["gramps_id"] == "F0012"
+        )
+        assert step_family["father"]["handle"] == step_parent["handle"]
+        assert step_family["mother"] is None
+        step_relationship = step_family["child_relationships"][0]
+        assert step_relationship["person_handle"] == reference_family["father"]["handle"]
+        assert step_relationship["father_relation"] == "Stepchild"
+        step_section = next(
+            section
+            for section in family_sections
+            if section["family_handle"] == step_family["handle"]
+            and section["part"] == "ancestry"
+        )
+        assert len(step_section["partner_occurrence_ids"]) == 1
+        assert len(step_section["child_occurrence_ids"]) == 1
+        step_links = step_section["parent_child_links"]
+        assert len(step_links) == 1, step_links
+        assert step_links[0]["relationship_type"] == "Stepchild"
+        assert (
+            occurrences_by_id[step_links[0]["parent_occurrence_id"]]["person_handle"]
+            == step_parent["handle"]
+        )
+        assert (
+            occurrences_by_id[step_links[0]["child_occurrence_id"]]["person_handle"]
+            == reference_family["father"]["handle"]
+        )
+        print(
+            "PASS: AC-04 native Gramps preserves Adopted, Foster, Stepchild and None; "
+            "the step-parent remains explicitly typed"
         )
         other_union = next(
             family
@@ -2382,8 +2467,8 @@ def verify(
             reference["event_handle"] for reference in ac08_family_notice["event_refs"]
         ] == [ac08_marriage_ref["event_handle"]]
         print(
-            "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
-            "keeps only recorded parent links and the single-parent family"
+            "PASS: T-04 native Gramps preserves Adopted/Foster/Stepchild/None; "
+            "traversal keeps only recorded parent links and single-parent families"
         )
         print(
             "PASS: AC-09 native single-parent family has exactly one recorded "
@@ -2657,7 +2742,12 @@ def verify(
         )
 
         html_output = work / "family-shared-note.zip"
-        log = report("F0001", html_output, output_format="html_zip")
+        log = report(
+            "F0001",
+            html_output,
+            output_format="html_zip",
+            book_language="fr",
+        )
         if not html_output.is_file():
             raise AssertionError(log or "Gramps did not write the shared-note HTML archive.")
         with zipfile.ZipFile(html_output) as archive:
@@ -2695,9 +2785,13 @@ def verify(
                 else occurrence["primary_occurrence_id"]
             )
             assert f'href="#{target}"' in occurrence_html
+        assert f"Synthetic, {AC04_STEP_PARENT} : Enfant du conjoint" in html
         print(
             "PASS: AC-01 native HTML starts with both central partners and "
             "links their descent mentions back"
+        )
+        print(
+            "PASS: AC-04 native HTML preserves the translated Stepchild relationship"
         )
         single_pdf_artifact = artifacts_by_handle[
             media_by_name["ac16-single-unlinked.pdf"]["handle"]
@@ -3154,6 +3248,11 @@ def verify(
                 and "(ascendance, génération 0)" in line
             ]
             assert len(central_pdf_family_entries) == 1, central_pdf_family_entries
+            assert re.search(
+                rf"Synthetic, {re.escape(AC04_STEP_PARENT)}\s+"
+                rf"(?:\(p\.\s*\d+\)\s+)?\(Enfant du conjoint\)",
+                pdf_family_connections,
+            ), pdf_family_connections
             pdf_pages = _pdf_page_texts(destination)
             descent_generation_zero_pages = [
                 page_index
@@ -3190,6 +3289,9 @@ def verify(
                 "PASS: AC-01 native PDF opens ancestry and descent generation zero "
                 "with the central pair, links both to their profile pages, and "
                 "renders their F0 connection"
+            )
+            print(
+                "PASS: AC-04 native PDF preserves the translated Stepchild relationship"
             )
             ac09_pdf_parent_entries = [
                 line.strip()

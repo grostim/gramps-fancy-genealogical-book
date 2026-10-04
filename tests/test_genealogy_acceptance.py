@@ -257,13 +257,16 @@ def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry()
     assert person_index.count("shared-child") == 1
 
 
-def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_links():
-    p0 = _person("p0", parent_family_handles=("f-adoptive", "f-foster"))
+def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
+    p0 = _person(
+        "p0", parent_family_handles=("f-adoptive", "f-foster", "f-step")
+    )
     p1 = _person("p1")
     adoptive_father = _person("adoptive-father", family_handles=("f-adoptive",))
     adoptive_mother = _person("adoptive-mother", family_handles=("f-adoptive",))
     foster_father = _person("foster-father", family_handles=("f-foster",))
     foster_mother = _person("foster-mother", family_handles=("f-foster",))
+    step_parent = _person("step-parent", family_handles=("f-step",))
     central = _family("f0", p0, p1)
     adoptive = _family(
         "f-adoptive",
@@ -279,10 +282,17 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
         (p0,),
         relations={"p0": ("Foster", "None")},
     )
+    step_family = _family(
+        "f-step",
+        step_parent,
+        None,
+        (p0,),
+        relations={"p0": ("Stepchild", None)},
+    )
     model = build_book_model(
         _snapshot(
             central,
-            (central, adoptive, foster),
+            (central, adoptive, foster, step_family),
             (
                 p0,
                 p1,
@@ -290,6 +300,7 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
                 adoptive_mother,
                 foster_father,
                 foster_mother,
+                step_parent,
             ),
         )
     )
@@ -299,7 +310,11 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
         for occurrence in _occurrences_in(model.genealogy, "ancestry")
         if occurrence.generation == -1 and "lineage" in occurrence.roles
     }
-    assert lineage_parent_handles == {"adoptive-father", "foster-father"}
+    assert lineage_parent_handles == {
+        "adoptive-father",
+        "foster-father",
+        "step-parent",
+    }
 
     occurrences_by_id = {
         occurrence.occurrence_id: occurrence
@@ -308,6 +323,7 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
     for family_handle, parent_handle, relationship_type in (
         ("f-adoptive", "adoptive-father", "Adopted"),
         ("f-foster", "foster-father", "Foster"),
+        ("f-step", "step-parent", "Stepchild"),
     ):
         section = next(
             section
@@ -325,6 +341,7 @@ def test_explicit_adoptive_and_foster_parentage_keeps_types_and_excludes_none_li
     rendered = render_latex(model)
     assert "(Adopted)" in rendered
     assert "(Foster)" in rendered
+    assert "(Stepchild)" in rendered
     assert "(None)" not in rendered
 
 
