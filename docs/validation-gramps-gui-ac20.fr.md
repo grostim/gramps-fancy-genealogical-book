@@ -52,6 +52,14 @@ Une copie locale de Gramps Desktop 6.0.8 dotée d'un identifiant d'application d
 
 Cette recette confirme le parcours de la boîte de dialogue et la pagination de 75 pages sur ce profil fictif. Elle ne remplace pas la revue de toutes les pages, l'essai au lecteur d'écran ni la qualification PDF/UA. La copie isolée de l'application reste locale, hors Git.
 
+## Revue complète du PDF graphique à marges de 20 mm — 4 octobre 2026
+
+Le PDF graphique de 75 pages identifié ci-dessus (SHA-256 `4722102dcc084781d0b47e669edd107833922c42c8ea660b568c84aab0e1cee3`) a été rendu page par page et parcouru sur dix planches de contact couvrant les 75 pages. Les pages physiques 1, 3, 18, 37 et 75 ont ensuite été examinées séparément à environ 120 ppp ; les pages 9, 15, 29, 47, 56, 57 et 71 à 130 ppp. Cet échantillon couvre la couverture, les parcours généalogiques, les liens familiaux, les notices, les fiches avec portraits, l'annexe documentaire et l'index.
+
+Aucun chevauchement, texte coupé, folio manquant ni rupture de mise en page n'a été relevé sur les planches ou les pages détaillées. Les portraits et la photo de paysage conservent leurs proportions et leurs légendes. Les marges de composition restent régulières ; les pages plus aérées ou partiellement remplies correspondent aux ruptures de section et aux données fictives de cette base, sans contenu manquant visible.
+
+Cette revue complète porte sur le PDF synthétique exporté depuis Gramps Desktop. Elle ne qualifie pas les photos familiales réelles, l'ordre de lecture au lecteur d'écran ni la conformité PDF/UA. L'essai au lecteur d'écran et la comparaison d'accessibilité restent ouverts.
+
 ## Texte alternatif des images HTML — 3 octobre 2026
 
 L'ancien ZIP AC-20 attribuait « Portrait de [personne] » aux 12 images principales. Cette formule décrivait à tort les deux placements de la photo de maison. Le renderer HTML donne maintenant priorité à la description enregistrée du média ; en son absence, il conserve le libellé localisé avec le nom de la personne. Le PDF utilisait déjà cette priorité.
