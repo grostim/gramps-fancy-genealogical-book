@@ -62,7 +62,7 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 
 | Scénario | Sujet | Tâches | État |
 | --- | --- | --- | --- |
-| AC-01 | Couple central et génération zéro | L1.3, L4.1, L5.1 | Qualifié sur graphe et fixture Gramps CLI 6.0.8 jusqu’au modèle, HTML et PDF : les deux partenaires ouvrent l’ascendance en génération 0, les apparitions en descendance renvoient vers ces occurrences/fiches et F0 reste la première section familiale ; saisie GUI restante |
+| AC-01 | Couple central et génération zéro | L1.3, L4.1, L5.1 | Qualifié sur graphe et fixture Gramps CLI 6.0.8 jusqu’au modèle, HTML et PDF : les deux partenaires ouvrent l’ascendance en génération 0, les annotations de liens internes du PDF renvoient depuis la descendance vers leurs fiches, et F0 reste la première section familiale ; saisie GUI restante |
 | AC-02 | Refus du couple incomplet | L1.3–L1.7 | Validé en CLI Gramps 6.0.8 ; CI 36288791405 |
 | AC-03 | Descendants des autres unions | L4.3–L4.4 | Qualifié sur graphe, contrat LaTeX et fixture Gramps CLI 6.0.8 : enfant en génération 1, section F0003 et profil unique en HTML/PDF ; saisie GUI restante |
 | AC-04 | Filiations explicites multiples | L3.1, L4.4 | Types `Adopted` et `Foster` et lien `None` préservés/interprétés dans une fixture Gramps CLI native 6.0.8 ; les autres types, la saisie GUI et la recette complète restent à qualifier |

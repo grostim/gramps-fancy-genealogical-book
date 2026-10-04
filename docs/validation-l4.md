@@ -18,7 +18,7 @@ Updated on 4 October 2026. L4 remains in progress; AC-01 and AC-03 to AC-09 are 
 - Family sections follow generation and branch-occurrence order, then the source order of unions in the relevant Gramps partner or child family list. The family identifier is only a deterministic tie-breaker.
 - Each family section has a stable ID, references its in-scope partner and child occurrences, and exposes parent-child links with the Gramps-normalized relationship type for each parent when available. Each occurrence links back to its sections; generation, branch, path, and profile anchor provide the genealogy-marker data.
 - The native T-04 recipe imports and rereads `Adopted`, `Foster`, and `None` links through Gramps 6.0.8. The model retains the values, traversal follows both recorded parent links, and a single-parent family is shown with only its known partner. The same fixture confirms that a Marriage event associated with F0 retains Gramps' `Family` role. Entering these values in the Gramps interface and trying the other relationship types remain open.
-- The native AC-01 recipe places both F0 partners at the start of ancestry, generation 0, then links their descendant appearances back to their first occurrence or profile in the model, HTML, and PDF.
+- The native AC-01 recipe places both F0 partners at the start of ancestry, generation 0, then links their descendant appearances back to their first occurrence or profile in the model, HTML, and PDF. The PDF check inspects internal link annotations and confirms that both central partners link from descent generation 0 to their profile page.
 - The native AC-03 recipe adds a second union F0003 to the central parent and a child eligible through `BOOK_PROFILE=YES`. After Gramps 6.0.8 import, the child appears once in generation 1 and in F0003's family section; the model and HTML create only one profile. The child's and partner's names and their links appear in HTML and PDF.
 - The native AC-05 recipe connects a shared ancestor to both central branches and adds an explicit ancestry cycle. After Gramps 6.0.8 import, both ancestor occurrences remain, while the model, HTML, PDF, and index create one profile; a diagnostic records the cycle and no path in this fixture exceeds four people.
 - The native AC-06 recipe adds a sibling to one ancestor and gives that sibling a child. Marked `BOOK_PROFILE=YES`, the sibling appears as collateral and receives one profile and index entry; the sibling's child remains outside occurrences, family sections, and HTML/PDF output.
@@ -42,7 +42,7 @@ Gramps 6.0.8 on macOS generated a 9-page A4 PDF from the synthetic native databa
 
 ## AC-01 CLI PDF check — 4 October 2026
 
-Gramps 6.0.8 and LuaHBTeX 1.24.0 generated a 14-page A4 PDF. Both F0 partners open ancestry at generation 0; their descent occurrences link back to their first mention or profile, and F0 is the first family connection rendered. Pages 4, 6, and 7 were visually reviewed; the GUI workflow and visual validation of a complete book remain open.
+Gramps 6.0.8 and LuaHBTeX 1.24.0 generated a 14-page A4 PDF. Both F0 partners open ancestry at generation 0; their descent occurrences link back to their first mention or profile, and F0 is the first family connection rendered. The PDF's internal link annotations were inspected: both central partner links from descent generation 0 target their profile page. Pages 4, 6, and 7 were visually reviewed; the GUI workflow and visual validation of a complete book remain open.
 
 ## AC-03 CLI PDF check — 4 October 2026
 

@@ -90,7 +90,7 @@ def _html_citation_numbers(html: str) -> dict[str, int]:
     return numbers
 
 
-def _pdf_text(path: Path) -> str:
+def _pdf_page_texts(path: Path) -> list[str]:
     import pypdfium2 as pdfium
 
     document = pdfium.PdfDocument(str(path))
@@ -101,7 +101,36 @@ def _pdf_text(path: Path) -> str:
         text_page.close()
         page.close()
     document.close()
-    return "\n".join(pages)
+    return pages
+
+
+def _pdf_text(path: Path) -> str:
+    return "\n".join(_pdf_page_texts(path))
+
+
+def _pdf_internal_link_destinations(path: Path) -> list[tuple[int, int]]:
+    import ctypes
+
+    import pypdfium2 as pdfium
+
+    document = pdfium.PdfDocument(str(path))
+    destinations = []
+    for page_index, page in enumerate(document):
+        position = ctypes.c_int(0)
+        link = pdfium.raw.FPDF_LINK()
+        while pdfium.raw.FPDFLink_Enumerate(
+            page.raw, ctypes.byref(position), ctypes.byref(link)
+        ):
+            destination = pdfium.raw.FPDFLink_GetDest(document.raw, link)
+            if destination:
+                destination_page = pdfium.raw.FPDFDest_GetDestPageIndex(
+                    document.raw, destination
+                )
+                if destination_page >= 0:
+                    destinations.append((page_index, destination_page))
+        page.close()
+    document.close()
+    return destinations
 
 
 def _pdf_section_between_headings(
@@ -3080,6 +3109,7 @@ def verify(
             for partner_marker in (AC05_PARENT_PARTNER, AC05_OTHER_PARTNER):
                 assert re.search(
                     rf"Synthetic, {re.escape(AC05_SHARED_ANCESTOR)}\s+"
+                    rf"(?:\(p\.\s*\d+\)\s+)?"
                     rf"— Synthetic, {re.escape(partner_marker)}",
                     pdf_shared_ancestor_branches,
                 )
@@ -3110,7 +3140,7 @@ def verify(
                 pdf_descent_generation_zero,
             ):
                 occurrence_lines = [
-                    line.strip()
+                    re.sub(r"\s+\(p\.\s*\d+\)$", "", line.strip())
                     for line in generation_text.splitlines()
                     if line.strip().startswith("— ")
                 ]
@@ -3124,9 +3154,42 @@ def verify(
                 and "(ascendance, génération 0)" in line
             ]
             assert len(central_pdf_family_entries) == 1, central_pdf_family_entries
+            pdf_pages = _pdf_page_texts(destination)
+            descent_generation_zero_pages = [
+                page_index
+                for page_index, page_text in enumerate(pdf_pages)
+                if re.search(r"(?m)^Descendance\s*$", page_text)
+                and "Génération 0" in page_text
+                and all(name in page_text for name in central_partner_names)
+            ]
+            assert len(descent_generation_zero_pages) == 1, (
+                descent_generation_zero_pages
+            )
+            central_profile_pages = [
+                page_index
+                for page_index, page_text in enumerate(pdf_pages)
+                if re.search(r"(?m)^Fiches individuelles\s*$", page_text)
+                and all(name in page_text for name in central_partner_names)
+            ]
+            assert central_profile_pages, "central profiles are not located in the PDF"
+            descent_page_index = descent_generation_zero_pages[0]
+            profile_page_index = central_profile_pages[0]
+            descent_link_destinations = [
+                target_page
+                for source_page, target_page in _pdf_internal_link_destinations(
+                    destination
+                )
+                if source_page == descent_page_index
+            ]
+            assert descent_link_destinations.count(profile_page_index) >= 2, (
+                descent_page_index,
+                profile_page_index,
+                descent_link_destinations,
+            )
             print(
                 "PASS: AC-01 native PDF opens ancestry and descent generation zero "
-                "with the central pair and renders their F0 connection"
+                "with the central pair, links both to their profile pages, and "
+                "renders their F0 connection"
             )
             ac09_pdf_parent_entries = [
                 line.strip()
