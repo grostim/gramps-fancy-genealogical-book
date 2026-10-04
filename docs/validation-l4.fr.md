@@ -17,6 +17,7 @@ Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; les scénarios AC
 - La chronologie des événements utilise les bornes comparables de Gramps plutôt que sa valeur scalaire de tri. Les événements dont les plages se chevauchent conservent leur position source, avec la clé technique comme départage stable ; les dates non comparables arrivent après les dates classables.
 - Les sections familiales suivent d’abord l’ordre des générations et des occurrences de branche, puis l’ordre source des unions dans les listes Gramps du partenaire ou de l’enfant concerné. L’identifiant familial ne sert que de départage déterministe.
 - Chaque section familiale a un identifiant stable, référence les occurrences de ses partenaires et enfants dans le périmètre, et expose les liens parent-enfant avec la valeur du type de filiation normalisée depuis Gramps pour chaque parent, lorsqu’elle est disponible. Chaque occurrence conserve les identifiants de ses sections ; génération, branche, chemin et ancre de fiche fournissent les données du repère.
+- La recette native T-04 fait passer par l’import Gramps 6.0.8 un lien enfant-père `Adopted` et un lien enfant-mère `None` : le modèle conserve les deux valeurs, mais le graphe ne crée que le lien adopté, avec son type. La même fixture confirme qu’un événement Marriage associé à F0 conserve le rôle Gramps `Family`. Les valeurs saisies dans l’interface Gramps et les autres types de relation restent à qualifier.
 
 ## Limites avant la sortie de L4
 
