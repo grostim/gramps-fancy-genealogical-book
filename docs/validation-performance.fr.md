@@ -435,3 +435,15 @@ Après correction du chemin d’import, le banc a été lancé directement depui
 | 1 000 | 1,419 | 0,099 | 3,313 / 16 265 394 | 0,396 / 5 842 609 | 0,985 / 4 037 337 | 0,510 / 3 328 646 | 78,86 | 6,297 |
 
 Ces valeurs constituent un point de contrôle reproductible du renderer Python courant, pas des médianes ni une nouvelle qualification PDF. Le pic Python exclut les allocations natives ; l’espace temporaire est échantillonné toutes les 100 ms. Les détails et les autres durées de fixture figurent dans les [données brutes](validation-benchmark-current-source-20261004.json).
+
+### Trois répétitions du banc actuel — 4 octobre 2026
+
+Le même banc a été relancé trois fois, directement depuis `.venv` sans `PYTHONPATH`, sur les trois tailles ramifiées et avec les portraits de 96 × 72 pixels. Les tailles de toutes les sorties sont stables entre répétitions. Le temps de création de la fixture N=10 montre un coût de démarrage dans le premier run (66 ms contre une médiane de 3,949 ms) ; les autres mesures du tableau sont les médianes des trois runs.
+
+| N | Modèle (s) | Préparation médias (s) | JSON (s) | HTML (s) | LaTeX (s) | ZIP HTML (s) | JSON (octets) | HTML (octets) | LaTeX (octets) | ZIP (octets) | Pic Python total (Mo) | Espace temporaire (Mo) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10 | 0,016774 | 0,001272 | 0,038904 | 0,004765 | 0,011069 | 0,006350 | 186 329 | 67 437 | 47 830 | 34 662 | 2,012 | 0,063 |
+| 100 | 0,145455 | 0,010768 | 0,334421 | 0,040023 | 0,097771 | 0,050559 | 1 639 117 | 591 563 | 410 168 | 334 234 | 9,477 | 0,628 |
+| 1 000 | 1,432872 | 0,102902 | 3,373380 | 0,401161 | 1,009488 | 0,505722 | 16 265 394 | 5 842 609 | 4 037 337 | 3 328 646 | 78,853 | 6,297 |
+
+À N=1 000, les exporteurs Python restent sous 3,4 s pour le JSON et 1,1 s pour HTML, LaTeX et ZIP ; le modèle prend 1,433 s. Le pic Python total inclut les fixtures déjà chargées, mais exclut les allocations natives. L’espace temporaire reste un échantillon toutes les 100 ms. Ce relevé ne compile toujours pas le PDF balisé, dont le budget constitue le poste L8.3 non résolu. Voir les [neuf résultats bruts](validation-benchmark-current-source-repeats-20261004.json).
