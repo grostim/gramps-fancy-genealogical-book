@@ -1,0 +1,85 @@
+{
+  "title": "LuaLaTeX page reference lookup experiments",
+  "measured_on": "2026-10-04",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "citations": 303,
+    "media": 0,
+    "link_macro_calls": 1743,
+    "compile_path": "write_latex_pdf production helper; complete multipass compilation"
+  },
+  "large_source_counts": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "media": 0,
+    "citation_entries": 3003,
+    "gfbpagelink_calls": 17283,
+    "unique_targets": 9009,
+    "repeated_targets": 5005,
+    "calls_to_repeated_targets": 13279,
+    "maximum_calls_per_target": 5
+  },
+  "variants": [
+    {
+      "name": "current-pageref-star",
+      "role": "reference",
+      "n100_runs_seconds": [62.13],
+      "n100_pdf_bytes": 982314,
+      "n100_pages": 112,
+      "n100_annotations": 2980,
+      "n100_internal_links": 1758,
+      "n100_named_destinations": 3491,
+      "n100_tagged": true
+    },
+    {
+      "name": "per-target-page-number-cache",
+      "role": "temporary candidate; not added to production source",
+      "n100_runs_seconds": [62.178],
+      "n100_pdf_bytes": 982318,
+      "n100_pages": 112,
+      "n100_annotations": 2980,
+      "n100_internal_links": 1758,
+      "n100_named_destinations": 3491,
+      "n100_tagged": true,
+      "n100_extracted_text_identical_to_reference": true
+    },
+    {
+      "name": "guarded-refcount-page-number",
+      "role": "temporary candidate; not added to production source",
+      "undefined_reference_behavior": "falls back to pageref* so the existing undefined-reference warning path remains active",
+      "n100_runs_seconds": [61.45],
+      "n100_pdf_bytes": 982319,
+      "n100_pages": 112,
+      "n100_annotations": 2980,
+      "n100_internal_links": 1758,
+      "n100_named_destinations": 3491,
+      "n100_tagged": true,
+      "n100_extracted_text_contains_unresolved_page_markers": false,
+      "n10_side_by_side_check": {
+        "extracted_text_identical_to_reference": true,
+        "pages": 17,
+        "annotations": 334,
+        "named_destinations": 411,
+        "tagged": true
+      }
+    }
+  ],
+  "decision": {
+    "production_renderer_changed": false,
+    "reason": "The cache variant is effectively neutral at N=100. The guarded refcount variant has one N=100 timing and no repeated same-session timing pair; its apparent difference is not sufficient evidence of a speedup.",
+    "retained_behavior": "Keep pageref* in gfbpagelink, including its native unresolved-reference diagnostics."
+  },
+  "limitations": [
+    "One full compilation per N=100 variant; no stable performance percentage can be claimed.",
+    "Synthetic data only; the N=100 timing fixture had no media.",
+    "PDF byte sizes vary slightly between builds even when extracted text and structural counts match."
+  ]
+}
