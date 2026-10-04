@@ -89,7 +89,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/verify_gramps.py --gramps /path/to/gramps
 ```
 
-Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.7 and 6.0.8 for integration.
+Unit tests do not require Gramps. The integration runner requires Python 3.12+ and Gramps 6.0; it checks outputs and diagnostics because Gramps may return exit code zero for a failed report. CI targets Python 3.10–3.13 for the domain and Gramps 6.0.7 and 6.0.8 for stable integration. A non-blocking canary also exercises Gramps 6.1.0-beta2 from a pinned upstream commit; it retargets only the temporary CI package manifest to probe the newer APIs and does not declare stable support.
 
 See the [L1 validation record](docs/validation-l1.md), the [L3 validation record](docs/validation-l3.md), and the [media validation record](docs/validation-media.md) for executed checks and remaining limitations.
 

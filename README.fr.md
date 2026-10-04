@@ -91,7 +91,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/verify_gramps.py --gramps /chemin/vers/gramps
 ```
 
-Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration nécessite Python 3.12+ et Gramps 6.0 ; il vérifie les fichiers et diagnostics car Gramps peut renvoyer un code de sortie zéro malgré l’échec d’un rapport. La CI cible Python 3.10 à 3.13 pour le domaine et Gramps 6.0.7 et 6.0.8 pour l’intégration.
+Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration nécessite Python 3.12+ et Gramps 6.0 ; il vérifie les fichiers et diagnostics car Gramps peut renvoyer un code de sortie zéro malgré l’échec d’un rapport. La CI cible Python 3.10 à 3.13 pour le domaine et Gramps 6.0.7 et 6.0.8 pour l’intégration stable. Un canari non bloquant exerce aussi Gramps 6.1.0-beta2 depuis un commit amont épinglé ; il retargete seulement le manifeste du paquet CI temporaire pour sonder les nouvelles API et ne déclare pas de support stable.
 
 Le [compte rendu L1](docs/validation-l1.fr.md), le [suivi L3](docs/validation-l3.fr.md) et la [validation des médias](docs/validation-media.fr.md) distinguent les contrôles effectués et les limites restantes.
 
