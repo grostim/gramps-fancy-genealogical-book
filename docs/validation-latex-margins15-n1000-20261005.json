@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-05",
+  "base_commit": "66c51586dac389f9a420d3d23a11523d9ea07920",
+  "source_change": {
+    "geometry_page_margin_before_mm": 20,
+    "geometry_page_margin_after_mm": 15,
+    "text_measure_before_mm": 170,
+    "text_measure_after_mm": 180
+  },
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pypdf": "6.19.0",
+    "pillow": "12.3.0",
+    "mistune": "3.3.4"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "media_enabled": true
+  },
+  "method": {
+    "model": "build_book_model on synthetic_branching_snapshot",
+    "renderer": "current source with geometry margin=15mm",
+    "compiler": "production write_latex_pdf with extended_compilation=true",
+    "pass_timeout_seconds": 600,
+    "total_timeout_seconds": 1800,
+    "max_passes": 5,
+    "gramps_desktop_export": false,
+    "pass_count_recorded": false
+  },
+  "result": {
+    "status": "compiled",
+    "total_compile_wall_seconds": 738.982,
+    "pdf_pages": 1214,
+    "pdf_bytes": 12587394,
+    "pdf_sha256": "9d2e7cb627cee17eeda91e41498a8c227354d126080844786e6d55afdb9ebd2f",
+    "page_margin_mm": 15,
+    "text_measure_mm": 180,
+    "a4": true,
+    "tagged": true,
+    "pdf_version": "2.0",
+    "language": "en-US",
+    "named_destinations": 34562,
+    "link_annotations": 29413,
+    "internal_links": 17341,
+    "uri_links": 12072,
+    "distinct_uri_destinations": 3125,
+    "uri_destination_set_matches_20mm_reference": true,
+    "missing_named_destinations": 0,
+    "citation_entries_expected": 3003,
+    "citation_numbers_found": 3003,
+    "citation_range": [1, 3003],
+    "appendix_physical_pages": [776, 1159],
+    "index_physical_pages": [1160, 1214],
+    "figures": 400,
+    "figures_missing_alt_text": 0,
+    "visual_sample_pages": [1, 500, 776, 967, 1159, 1160, 1214]
+  },
+  "preview": "output/pdf/gramps-fancy-book-n1000-margins-15mm-20261005.pdf",
+  "comparison": {
+    "reference_record": "validation-latex-current-source-n1000-20261005.json",
+    "reference_page_margin_mm": 20,
+    "reference_total_compile_wall_seconds": 741.591,
+    "reference_pdf_pages": 1239,
+    "reference_pdf_bytes": 12620918,
+    "page_delta": -25,
+    "pdf_bytes_delta": -33524,
+    "compile_seconds_delta": -2.609,
+    "note": "One compile per variant; the timing difference is too small to establish a speed improvement."
+  },
+  "limits": [
+    "One full extended compile per variant; no statistical timing comparison.",
+    "Extended diagnostic limits were required; standard production limits of 120 seconds per pass and 180 seconds overall remain exceeded.",
+    "The provisional 60-second PDF target remains unmet.",
+    "The synthetic model was compiled directly, not through Gramps Desktop.",
+    "Seven representative pages were visually inspected; the complete 1,214-page layout was not reviewed page by page.",
+    "The visual sample had no observed clipping or overlap."
+  ]
+}

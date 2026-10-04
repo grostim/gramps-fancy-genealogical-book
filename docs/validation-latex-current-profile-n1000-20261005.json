@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-05",
+  "base_commit": "66c51586dac389f9a420d3d23a11523d9ea07920",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pypdf": "6.19.0",
+    "pillow": "12.3.0",
+    "mistune": "3.3.4"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "family_notices": 1001,
+    "person_profiles": 2002,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "page_margin_mm": 20
+  },
+  "method": {
+    "passes": 1,
+    "fresh_temporary_directory": true,
+    "compile_flags": [
+      "-no-shell-escape",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-file-line-error"
+    ],
+    "timeout_seconds": 600,
+    "wall_seconds": 245.200123,
+    "production_source_bytes": 4037422,
+    "instrumented_source_bytes": 4038348,
+    "instrumentation_overhead_bytes": 926,
+    "timing_clock": "Lua os.clock() CPU seconds at inserted checkpoints.",
+    "instrumentation": "Temporary source copy only. One marker at document start, one before each of seven main sections, and one before document end; all nine markers use os.clock().",
+    "production_source_or_settings_changed": false
+  },
+  "diagnostic_single_pass_pdf": {
+    "pages": 1239,
+    "page_size": "A4",
+    "tagged": true,
+    "pdf_version": "2.0",
+    "bytes": 12749121,
+    "references_converged": false,
+    "use_as_final_preview": false
+  },
+  "section_start_cpu_seconds": {
+    "document_start": 0.980303,
+    "ancestry": 1.113927,
+    "descent": 1.14053,
+    "family_connections": 8.943703,
+    "family_notices": 39.589678,
+    "person_profiles": 60.826821,
+    "documentary_appendix": 106.726358,
+    "person_index": 202.103627,
+    "document_end": 222.108347
+  },
+  "section_interval_cpu_seconds": {
+    "document_start_to_ancestry": 0.133624,
+    "ancestry_to_descent": 0.026603,
+    "descent_to_family_connections": 7.803173,
+    "family_connections_to_family_notices": 30.645975,
+    "family_notices_to_person_profiles": 21.237143,
+    "person_profiles_to_documentary_appendix": 45.899537,
+    "documentary_appendix_to_person_index": 95.377269,
+    "person_index_to_document_end": 20.00472
+  },
+  "previous_appendix_profile": {
+    "file": "validation-latex-n1000-current-profile-20261001.json",
+    "appendix_interval_cpu_seconds": 108.100442,
+    "comparison_note": "Not an isolated before/after comparison; renderer code and settings changed between profiles."
+  },
+  "limits": [
+    "One direct compile pass only; the PDF references did not converge.",
+    "Section intervals include page building and shipout between markers.",
+    "tagpdf finalization after the final section marker is not attributed to a section.",
+    "Single-run timing; not a production performance qualification."
+  ]
+}

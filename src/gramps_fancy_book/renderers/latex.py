@@ -318,7 +318,7 @@ def render_latex(
     document = [
         f"\\DocumentMetadata{{lang={pdf_language},tagging=on}}\n"
         "\\documentclass[a4paper]{article}\n"
-        "\\usepackage[margin=20mm,includehead,headheight=30pt,headsep=12pt]{geometry}\n"
+        "\\usepackage[margin=15mm,includehead,headheight=30pt,headsep=12pt]{geometry}\n"
         f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
         "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2 (p.~\\pageref*{#1})}}\n"
