@@ -8,14 +8,24 @@ Le contrôle complémentaire de la branche publique non versionnée `master` a �
 
 Le 3 octobre, GitHub indique toujours [v3.22.3 comme dernière version publiée](https://github.com/gramps-project/gramps-web-api/releases/tag/v3.22.3). Une nouvelle lecture de `master`, épinglée au commit [`375371f54c46bc3d6ceec006ff36c15e2e14efda`](https://github.com/gramps-project/gramps-web-api/commit/375371f54c46bc3d6ceec006ff36c15e2e14efda) du 2 octobre, confirme que [`const.py`](https://github.com/gramps-project/gramps-web-api/blob/375371f54c46bc3d6ceec006ff36c15e2e14efda/gramps_webapi/const.py) ne déclare toujours ni `CATEGORY_WEB` dans `REPORT_DEFAULTS` ni `.zip` dans `MIME_TYPES`. [`api/report.py`](https://github.com/gramps-project/gramps-web-api/blob/375371f54c46bc3d6ceec006ff36c15e2e14efda/gramps_webapi/api/report.py) filtre encore cette catégorie, refuse son exécution, puis impose `of` sous `REPORT_DIR` aux rapports admis. [`api/tasks.py`](https://github.com/gramps-project/gramps-web-api/blob/375371f54c46bc3d6ceec006ff36c15e2e14efda/gramps_webapi/api/tasks.py) appelle `run_report` sans callback de progression. Le commit de `master` porte déjà la version de développement 3.23.0 ; aucune compatibilité Web du module n’en découle.
 
+## Actualisation — 4 octobre 2026
+
+GitHub marque maintenant [v3.23.0 comme dernière version publiée](https://github.com/gramps-project/gramps-web-api/releases/tag/v3.23.0), publiée le 3 octobre au commit [`f2f1443cd356e841b02ab8d71fec11a0a851e5c1`](https://github.com/gramps-project/gramps-web-api/commit/f2f1443cd356e841b02ab8d71fec11a0a851e5c1). La lecture de [`const.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.0/gramps_webapi/const.py), [`api/report.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.0/gramps_webapi/api/report.py) et [`api/tasks.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.0/gramps_webapi/api/tasks.py) confirme que les points bloquants du contrat de rapports n’ont pas changé ; l’API `master` pointe également sur ce commit à la date de l’audit.
+
+- `CATEGORY_WEB` reste absent de `REPORT_DEFAULTS` et `.zip` de `MIME_TYPES` ; `get_reports()` filtre les autres catégories et `run_report()` renvoie 404 pour celles qui ne sont pas admises.
+- `run_report()` impose toujours une destination sous `REPORT_DIR` par l’option `of`. Le module utilise encore son option `destination` personnalisée.
+- `generate_report` reste une tâche non liée à l’instance Celery et appelle `run_report` sans tâche ni callback de progression. La tâche d’export de base de données transmet, elle, un callback ; le constat porte donc bien sur le chemin des rapports.
+
+La version 3.23.0 introduit notamment l’export GEDCOM 7, GOQL dans les filtres et des jetons de synchronisation, mais ne fournit toujours pas le contrat requis pour les rapports personnalisés PDF/ZIP.
+
 ## Incompatibilités relevées
 
 - `REPORT_DEFAULTS` dépend des bibliothèques disponibles : avec GTK, il autorise `CATEGORY_TEXT` et `CATEGORY_DRAW`, plus `CATEGORY_GRAPHVIZ` si Graphviz est installé ; sans PyGObject, seul `CATEGORY_TEXT` est configuré. `CATEGORY_WEB` n’y figure dans aucun de ces cas. La fonction `get_reports()` filtre les rapports selon cette liste et `run_report()` refuse les catégories non prises en charge avec HTTP 404.
-- Le dictionnaire `MIME_TYPES` comprend `.html`, mais pas `.zip`. La génération de rapports vérifie ce dictionnaire avant de lancer le rapport ; l’API 3.22.3 ne peut donc pas retourner une archive ZIP par ce point d’entrée.
+- Le dictionnaire `MIME_TYPES` comprend `.html`, mais pas `.zip`. La génération de rapports vérifie ce dictionnaire avant de lancer le rapport ; l’API 3.23.0 ne peut donc pas retourner une archive ZIP par ce point d’entrée.
 - L’API crée un nom unique sous `REPORT_DIR` et le transmet au rapport dans l’option standard `of`. Le module actuel écrit à l’emplacement reçu dans son option `destination` ; il n’utilise pas cette cible fournie par le serveur.
 - `generate_report` est bien une tâche asynchrone, mais sa fonction n’est pas liée à l’instance Celery et ne transmet aucun callback de progression à `run_report`. Elle retourne les métadonnées du fichier une fois terminé. D’autres tâches de l’API savent publier un état `PROGRESS` ; cela ne signifie pas que cette progression est actuellement disponible pour les rapports.
 
-Ces écarts empêchent l’intégration actuelle de satisfaire T-01 et AC-22 dans l’API 3.22.3. Le fait que Gramps Web réutilise le moteur de rapports Desktop ne suffit pas : son API serveur filtre les catégories et les types de fichiers qu’elle expose.
+Ces écarts empêchent l’intégration actuelle de satisfaire T-01 et AC-22 dans l’API 3.23.0. Le fait que Gramps Web réutilise le moteur de rapports Desktop ne suffit pas : son API serveur filtre les catégories et les types de fichiers qu’elle expose.
 
 ## Comportement de confidentialité déjà présent dans le plugin
 
