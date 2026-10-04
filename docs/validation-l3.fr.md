@@ -28,6 +28,6 @@ Les tests unitaires couvrent en plus les rectangles de média, plusieurs étique
 ## Limites restantes
 
 - L’instantané n’est pas encore le graphe généalogique complet : la traversée ascendante/descendante et les règles de profondeur appartiennent à L4.
-- La fixture Gramps réelle ne porte pas encore de tag personnalisé `BOOK_PUBLICATION` ni de rectangle de recadrage ; ces règles sont couvertes au niveau de l’adaptateur synthétique.
-- La fixture Gramps native vérifie désormais les six rôles de notes F0, leur association directe à la famille, le tag de publication et les diagnostics pour une note dupliquée, multirôle, non publiable ou vide. La saisie dans l’interface Gramps 6 et la revue visuelle PDF restent ouvertes.
+- La fixture XML native Gramps porte maintenant le tag `BOOK_PUBLICATION` et des rectangles de région média fictifs. Les originaux, notes et photos sont entièrement synthétiques.
+- La recette Gramps native vérifie désormais AC-11 : une note de travail sans étiquette, associée à la personne et à la famille centrales, conserve ses liens source mais son texte est absent du modèle éditorial, du HTML et du PDF. Elle vérifie aussi les six rôles de notes F0, leur association directe à la famille, le tag de publication et les diagnostics pour une note dupliquée, multirôle, non publiable ou vide. La saisie dans l’interface Gramps 6 reste ouverte.
 - Les sorties PDF et HTML/ZIP sont réalisées dans L6–L7 avec des recettes partielles ; l’intégration Gramps Web et la vérification du consentement dans cette intégration restent à faire.
