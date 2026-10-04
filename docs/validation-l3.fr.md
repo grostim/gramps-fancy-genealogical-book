@@ -1,6 +1,6 @@
 # Validation L3 — extraction et normalisation
 
-Mise à jour du 27 septembre 2026. Cette validation porte sur le premier instantané JSON v0.2 ; elle ne déclare pas L3 entièrement terminé.
+Mise à jour du 4 octobre 2026. La recette historique du premier instantané JSON v0.2 reste décrite ci-dessous ; cette page ne déclare pas L3 entièrement terminé.
 
 ## Couverture
 
@@ -24,6 +24,10 @@ Mise à jour du 27 septembre 2026. Cette validation porte sur le premier instant
 Résultats : 12 tests unitaires réussis, Ruff réussi, archive construite, puis intégration réussie avec Gramps macOS 6.0.8 dans un profil temporaire. La fixture GEDCOM fictive exerce naissances, profession, mariage, date approximative, lieux, trois citations, source, dépôt et référence de média. Le script contrôle aussi les erreurs de famille incomplète et de destination, le remplacement explicite et la protection des fichiers existants.
 
 Les tests unitaires couvrent en plus les rectangles de média, plusieurs étiquettes, notes publiables et non publiables, données privées, relations de personnes, adresses, filiations typées (y compris une relation explicitement `None`), références facultatives manquantes et absence de lectures répétées des objets référencés.
+
+### AC-19 — rapport natif séparé — 4 octobre 2026
+
+La fixture XML fictive crée deux événements `Birth` reliés au même `BOOK_FACT_ID`, avec dates exactes disjointes et références vers deux lieux Gramps distincts. Le rapport `family_consistency.json` reprend les plages de dates, les handles et libellés de lieu associés à chaque événement ; les assertions comparent ces valeurs au modèle normalisé. Il signale la date comme conflit confirmé et les lieux comme point à examiner. Les diagnostics du livre restent inchangés et le rapport compagnon ne contient aucune ambiguïté. La saisie de `BOOK_FACT_ID` depuis les éditeurs graphiques Gramps reste à qualifier.
 
 ## Limites restantes
 

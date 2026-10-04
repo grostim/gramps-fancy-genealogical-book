@@ -1,6 +1,6 @@
 # L3 validation — extraction and normalization
 
-Updated 27 September 2026. This validates the first JSON v0.2 snapshot; it does not mark all of L3 complete.
+Updated 2026-10-04. The historical recipe for the first JSON v0.2 snapshot remains below; this page does not mark all of L3 complete.
 
 ## Coverage
 
@@ -24,6 +24,10 @@ Updated 27 September 2026. This validates the first JSON v0.2 snapshot; it does 
 Results: 12 unit tests passed, Ruff passed, the add-on archive built, and the integration runner passed with Gramps macOS 6.0.8 in a temporary profile. The fictional GEDCOM fixture exercises birth, occupation, marriage, an approximate date, places, three citations, a source, a repository, and a media reference. The runner also checks incomplete-family and destination errors, explicit replacement, and protection of existing files.
 
 Unit tests additionally cover media crop rectangles, multiple tags, publishable and unpublished notes, private data, person associations, addresses, typed parent-child links (including an explicit `None` relation), missing optional references, and avoiding repeated reads of referenced records.
+
+### AC-19 — separate native report — 2026-10-04
+
+The fictional native XML fixture creates two `Birth` events linked by one `BOOK_FACT_ID`, with disjoint exact dates and references to two distinct Gramps places. The companion `family_consistency.json` retains each event's date ranges, place handles, and place labels; assertions compare those values with the normalized model. It marks the date as a confirmed conflict and the different places for review. Book diagnostics remain unchanged, and the companion report has no ambiguity diagnostics. Entering `BOOK_FACT_ID` through the Gramps GUI editors remains to be qualified.
 
 ## Remaining limits
 
