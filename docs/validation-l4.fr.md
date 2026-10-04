@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à AC-09 sont qualifiés sur le modèle et le contrat textuel LaTeX. AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 disposent maintenant de fixtures Gramps CLI natives vérifiées en HTML et PDF. La saisie dans l’interface et la pagination d’un livre complet restent à valider.
+Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à AC-09 sont qualifiés sur le modèle et le contrat textuel LaTeX. AC-01, AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 disposent maintenant de fixtures Gramps CLI natives vérifiées en HTML et PDF. La saisie dans l’interface et la pagination d’un livre complet restent à valider.
 
 ## Parcours disponibles
 
@@ -18,6 +18,7 @@ Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à
 - Les sections familiales suivent d’abord l’ordre des générations et des occurrences de branche, puis l’ordre source des unions dans les listes Gramps du partenaire ou de l’enfant concerné. L’identifiant familial ne sert que de départage déterministe.
 - Chaque section familiale a un identifiant stable, référence les occurrences de ses partenaires et enfants dans le périmètre, et expose les liens parent-enfant avec la valeur du type de filiation normalisée depuis Gramps pour chaque parent, lorsqu’elle est disponible. Chaque occurrence conserve les identifiants de ses sections ; génération, branche, chemin et ancre de fiche fournissent les données du repère.
 - La recette native T-04 fait passer par l’import Gramps 6.0.8 les liens `Adopted`, `Foster` et `None`. Le modèle conserve les valeurs, le graphe suit les deux liens explicitement enregistrés et présente la famille monoparentale avec son seul partenaire connu. La même fixture confirme qu’un événement Marriage associé à F0 conserve le rôle Gramps `Family`. La saisie graphique et les autres types de relation restent à qualifier.
+- La recette native AC-01 fait apparaître les deux partenaires de F0 au début de l’ascendance, génération 0, puis renvoie leurs apparitions de descendance vers leur première occurrence ou fiche dans le modèle, le HTML et le PDF.
 - La recette native AC-03 ajoute une seconde union F0003 au parent central et un enfant admissible par `BOOK_PROFILE=YES`. Après import Gramps 6.0.8, l’enfant figure une fois en génération 1 dans la section de F0003 ; le modèle et le HTML ne créent qu’une fiche. Les noms de l’enfant, du partenaire et leurs liens sont présents dans le HTML et le PDF.
 - La recette native AC-05 relie un ancêtre commun aux deux branches du couple et introduit une boucle d’ascendance explicite. Après import Gramps 6.0.8, les deux occurrences de l’ancêtre sont conservées, mais le modèle, le HTML, le PDF et l’index n’en créent qu’une fiche ; un diagnostic signale la boucle et aucun chemin de cette fixture ne dépasse quatre personnes.
 - La recette native AC-06 ajoute un frère à l’un des ancêtres et un enfant à ce frère. Le frère, marqué `BOOK_PROFILE=YES`, apparaît comme occurrence collatérale et reçoit une seule fiche et entrée d’index ; son enfant reste hors des occurrences, sections familiales et rendus HTML/PDF.
@@ -27,7 +28,7 @@ Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à
 
 ## Limites avant la sortie de L4
 
-- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX. `scripts/verify_gramps.py` couvre maintenant AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 depuis la fixture native dans le modèle, le ZIP HTML et le PDF ; l’interface Gramps reste à exercer.
+- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX. `scripts/verify_gramps.py` couvre maintenant AC-01, AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 depuis la fixture native dans le modèle, le ZIP HTML et le PDF ; l’interface Gramps reste à exercer.
 - `tests/test_date_ranges.py` vérifie les groupes transitifs de plages chevauchantes, le maintien de l’ordre source pour la chronologie d’événements, l’usage des bornes malgré des valeurs scalaires contradictoires et le placement final des dates textuelles/non comparables. Le 4 octobre, la suite complète passe : 54 tests.
 - Les rendus LaTeX et HTML consomment le modèle `genealogy`. Leurs contrats sont couverts à des degrés différents ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
 - Le modèle éditorial fournit déjà profils, notices familiales, index et cibles de navigation au rendu LaTeX. La validation porte ici sur leur structure textuelle, pas sur la composition paginée finale.
@@ -38,6 +39,10 @@ Le détail des tâches et critères de sortie figure dans le [plan d’action](a
 ## Essai PDF en CLI — 29 septembre 2026
 
 Gramps 6.0.8 sur macOS a produit un PDF A4 de 9 pages depuis la base native fictive avec LuaHBTeX 1.24.0. La fixture comprenait un dérivé de portrait, visible sur la couverture et dans la fiche de la personne. Cet essai confirme l’intégration Gramps–PDF sur un livre synthétique réduit ; il ne qualifie ni la pagination d’un livre long, ni tous les cas de médias/URL, ni l’accessibilité ou l’acceptation visuelle finale, qui restent à traiter en L6.
+
+## Essai PDF AC-01 en CLI — 4 octobre 2026
+
+Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 14 pages. Les deux partenaires de F0 ouvrent l’ascendance en génération 0 ; leurs occurrences de descendance renvoient vers leur première apparition ou fiche, et F0 est le premier lien familial rendu. Les pages 4, 6 et 7 ont été relues visuellement ; la saisie GUI et la revue visuelle du livre complet restent à faire.
 
 ## Essai PDF AC-03 en CLI — 4 octobre 2026
 
