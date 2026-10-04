@@ -1,6 +1,6 @@
 # Validation de la langue du livre
 
-Compte rendu du 29 septembre 2026. Cette recette cible l’option de langue ajoutée par la PR #100 et utilise uniquement une base Gramps fictive.
+Compte rendu actualisé le 4 octobre 2026. Cette recette cible l’option de langue ajoutée par la PR #100 et utilise uniquement des bases Gramps fictives.
 
 ## Environnement
 
@@ -38,6 +38,17 @@ La description d’événement saisie dans la fixture reste intacte. Le PDF fran
 ## Affichage des dates selon la langue du livre — 30 septembre 2026
 
 La vérification d’intégration native Gramps 6.0.8 compare les mêmes événements exportés avec le livre en anglais puis en français, alors que la locale du profil Gramps reste anglaise. Pour `Birth`, le texte affiché contient l’année 1900 dans les deux cas et diffère selon la langue sélectionnée ; les valeurs brutes et normalisées restent identiques. La date textuelle du mariage, « Entre l’hiver 1924 et le printemps 1925 », reste exactement telle qu’elle a été saisie dans les deux langues, et sa valeur brute est identique.
+
+## Date structurée avec jour et mois AC-25 — 4 octobre 2026
+
+La fixture native fictive AC-25 a été importée et exportée avec le rapport Gramps Desktop 6.0.8 en ligne de commande, dans des profils isolés. Pour afficher le nom complet du mois, les profils d’essai règlent `preferences.date-format` à `2` ; le format ISO par défaut (`0`) conserve des chiffres pour le mois et ne permet de vérifier que la traduction du qualificatif.
+
+| Langue du livre | Date affichée | Date normalisée |
+| --- | --- | --- |
+| Français | `vers 14 mars 1900` | `[1900, 3, 14]` |
+| Anglais | `about March 14, 1900` | `[1900, 3, 14]` |
+
+Les deux exports ont le même `raw`, les mêmes bornes de comparaison et le même jour structuré ; seul le texte d’affichage change de langue. Le [PDF français AC-25](../output/pdf/gramps-fancy-book-ac25-month-day-fr-20261004.pdf), généré par le même rapport, compte neuf pages A4 balisées. La page 7 a été examinée : « vers 14 mars 1900 » est lisible dans la fiche et ne déborde pas. Cette recette CLI ne valide pas encore le sélecteur de langue par la boîte de dialogue graphique pour cette fixture.
 
 ## Sélection dans l’interface Desktop — 2 octobre 2026
 
