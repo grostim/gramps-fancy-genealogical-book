@@ -30,6 +30,9 @@ AC03_OTHER_CHILD = "AC03_OTHER_UNION_CHILD"
 AC05_SHARED_ANCESTOR = "AC05_ANC"
 AC05_PARENT_PARTNER = "AC05_P1"
 AC05_OTHER_PARTNER = "AC05_P2"
+AC06_SIBLING = "AC06_UNC"
+AC06_PARTNER = "AC06_MAT"
+AC06_UNEXPANDED_CHILD = "AC06_COUS"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
@@ -992,6 +995,124 @@ def _add_ac05_implex_and_cycle(
     families.extend(added_families)
 
 
+def _add_ac06_sibling_without_descendants(
+    root: ET.Element,
+    people: ET.Element,
+    families: ET.Element,
+) -> None:
+    """Add an eligible sibling to an ancestor family with an unexpanded child."""
+    existing_person_ids = {item.get("id") for item in _children(people, "person")}
+    existing_family_ids = {
+        item.get("id") for item in _children(families, "family")
+    }
+    person_ids = {"I0010", "I0011", "I0012", "I0013", "I0014"}
+    if person_ids.intersection(existing_person_ids):
+        raise AssertionError("Native AC-06 fixture person IDs I0010-I0014 already exist.")
+    if {"F0007", "F0008"}.intersection(existing_family_ids):
+        raise AssertionError("Native AC-06 fixture family IDs F0007/F0008 already exist.")
+
+    ancestor = next(
+        (
+            item
+            for item in _children(people, "person")
+            if item.get("id") == "I0009"
+        ),
+        None,
+    )
+    if ancestor is None or not ancestor.get("handle"):
+        raise AssertionError("Native AC-06 fixture is missing ancestor I0009.")
+
+    uncle_handle, parent_a_handle, parent_b_handle, partner_handle, cousin_handle = (
+        f"_{uuid.uuid4().hex}" for _ in range(5)
+    )
+    added_people = {}
+    for gramps_id, handle, first_name, gender in (
+        ("I0010", uncle_handle, AC06_SIBLING, "M"),
+        ("I0011", parent_a_handle, "AC06_GPA", "M"),
+        ("I0012", parent_b_handle, "AC06_GMA", "F"),
+        ("I0013", partner_handle, AC06_PARTNER, "F"),
+        ("I0014", cousin_handle, AC06_UNEXPANDED_CHILD, "U"),
+    ):
+        person = ET.Element(
+            _qualified_name(root, "person"),
+            {"handle": handle, "change": "0", "id": gramps_id},
+        )
+        ET.SubElement(person, _qualified_name(root, "gender")).text = gender
+        name = ET.SubElement(
+            person,
+            _qualified_name(root, "name"),
+            {"type": "Birth Name"},
+        )
+        ET.SubElement(name, _qualified_name(root, "first")).text = first_name
+        ET.SubElement(name, _qualified_name(root, "surname")).text = "Synthetic"
+        if gramps_id == "I0010":
+            ET.SubElement(
+                person,
+                _qualified_name(root, "attribute"),
+                {"type": "BOOK_PROFILE", "value": "YES"},
+            )
+        added_people[gramps_id] = person
+
+    ancestor_family_handle = f"_{uuid.uuid4().hex}"
+    ancestor_family = ET.Element(
+        _qualified_name(root, "family"),
+        {"handle": ancestor_family_handle, "change": "0", "id": "F0007"},
+    )
+    ET.SubElement(
+        ancestor_family,
+        _qualified_name(root, "father"),
+        {"hlink": parent_a_handle},
+    )
+    ET.SubElement(
+        ancestor_family,
+        _qualified_name(root, "mother"),
+        {"hlink": parent_b_handle},
+    )
+    for child_handle in (ancestor.get("handle"), uncle_handle):
+        ET.SubElement(
+            ancestor_family,
+            _qualified_name(root, "childref"),
+            {"hlink": child_handle, "frel": "Birth", "mrel": "Birth"},
+        )
+    _add_person_family_ref(
+        root,
+        added_people["I0010"],
+        "childof",
+        ancestor_family_handle,
+    )
+    _add_person_family_ref(root, ancestor, "childof", ancestor_family_handle)
+    _add_person_family_ref(root, added_people["I0011"], "parentin", ancestor_family_handle)
+    _add_person_family_ref(root, added_people["I0012"], "parentin", ancestor_family_handle)
+
+    child_family_handle = f"_{uuid.uuid4().hex}"
+    child_family = ET.Element(
+        _qualified_name(root, "family"),
+        {"handle": child_family_handle, "change": "0", "id": "F0008"},
+    )
+    ET.SubElement(
+        child_family,
+        _qualified_name(root, "father"),
+        {"hlink": uncle_handle},
+    )
+    ET.SubElement(
+        child_family,
+        _qualified_name(root, "mother"),
+        {"hlink": partner_handle},
+    )
+    ET.SubElement(
+        child_family,
+        _qualified_name(root, "childref"),
+        {"hlink": cousin_handle, "frel": "Birth", "mrel": "Birth"},
+    )
+    _add_person_family_ref(root, added_people["I0010"], "parentin", child_family_handle)
+    _add_person_family_ref(root, added_people["I0013"], "parentin", child_family_handle)
+    _add_person_family_ref(root, added_people["I0014"], "childof", child_family_handle)
+
+    people.extend(added_people.values())
+    families.append(ancestor_family)
+    families.append(child_family)
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -1166,6 +1287,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     _add_ac05_implex_and_cycle(
         root, people, families, person, reference_partner
     )
+    _add_ac06_sibling_without_descendants(root, people, families)
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1570,6 +1692,11 @@ def verify(
             "I0007",
             "I0008",
             "I0009",
+            "I0010",
+            "I0011",
+            "I0012",
+            "I0013",
+            "I0014",
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -1722,6 +1849,77 @@ def verify(
             for path in occurrence["lineage_paths"]
         ]
         assert max(map(len, ancestry_paths)) == 4
+        ac06_sibling = next(
+            person for person in model["people"]
+            if person["gramps_id"] == "I0010"
+        )
+        ac06_sibling_handle = ac06_sibling["handle"]
+        ac06_child = next(
+            person for person in model["people"]
+            if person["gramps_id"] == "I0014"
+        )
+        ac06_sibling_occurrences = [
+            occurrence
+            for generation in model["genealogy"]["ancestry"]["generations"]
+            for occurrence in generation["occurrences"]
+            if occurrence["person_handle"] == ac06_sibling_handle
+        ]
+        ac06_sibling_parent_generation_occurrences = [
+            occurrence
+            for occurrence in ac06_sibling_occurrences
+            if occurrence["generation"] == -1
+        ]
+        assert len(ac06_sibling_parent_generation_occurrences) == 1, (
+            ac06_sibling_occurrences
+        )
+        ac06_sibling_occurrence = ac06_sibling_parent_generation_occurrences[0]
+        assert all(
+            "sibling" in occurrence["roles"]
+            for occurrence in ac06_sibling_occurrences
+        )
+        assert all(
+            occurrence["person_handle"] != ac06_child["handle"]
+            for occurrence in occurrences_by_id.values()
+        )
+        ac06_child_family = next(
+            family
+            for family in model["families"].values()
+            if family["gramps_id"] == "F0008"
+        )
+        assert all(
+            section["family_handle"] != ac06_child_family["handle"]
+            for section in family_sections
+        )
+        ac06_parent_family = next(
+            family
+            for family in model["families"].values()
+            if family["gramps_id"] == "F0007"
+        )
+        ac06_sibling_family_section = next(
+            section
+            for section in family_sections
+            if section["family_handle"] == ac06_parent_family["handle"]
+            and section["part"] == "ancestry"
+        )
+        assert (
+            ac06_sibling_occurrence["occurrence_id"]
+            in ac06_sibling_family_section["child_occurrence_ids"]
+        )
+        assert model["genealogy"]["profile_handles"].count(
+            ac06_sibling_handle
+        ) == 1
+        ac06_sibling_profiles = [
+            profile
+            for profile in model["editorial_book"]["profiles"]
+            if profile["person_handle"] == ac06_sibling_handle
+        ]
+        assert len(ac06_sibling_profiles) == 1
+        ac06_sibling_index_entries = [
+            entry
+            for entry in model["editorial_book"]["person_index"]
+            if entry["person_handle"] == ac06_sibling_handle
+        ]
+        assert len(ac06_sibling_index_entries) == 1
         print(
             "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
             "keeps only recorded parent links and the single-parent family"
@@ -1733,6 +1931,10 @@ def verify(
         print(
             "PASS: AC-05 native Gramps preserves both shared-ancestor branches, "
             "one profile/index entry, and stops the ancestry cycle"
+        )
+        print(
+            "PASS: AC-06 native Gramps shows an eligible ancestor sibling and its "
+            "profile without expanding the sibling's child"
         )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
@@ -2138,6 +2340,26 @@ def verify(
             f'<a href="#{shared_ancestor_profile["profile_id"]}">'
             f"Synthetic, {AC05_SHARED_ANCESTOR}</a></li>"
         ) in html
+        ac06_sibling_profile = ac06_sibling_profiles[0]
+        assert html.count(
+            f'<section class="person-profile" id="{ac06_sibling_profile["profile_id"]}">'
+        ) == 1
+        assert (
+            f'<li id="{ac06_sibling_occurrence["occurrence_id"]}">'
+            f"<span>Synthetic, {AC06_SIBLING}</span>"
+        ) in html
+        assert AC06_UNEXPANDED_CHILD not in html
+        ac06_sibling_index = ac06_sibling_index_entries[0]
+        ac06_sibling_index_html = (
+            f'<li id="{ac06_sibling_index["entry_id"]}">'
+            f'<a href="#{ac06_sibling_profile["profile_id"]}">'
+            f"Synthetic, {AC06_SIBLING}</a></li>"
+        )
+        assert html.count(ac06_sibling_index_html) == 1
+        print(
+            "PASS: AC-06 native HTML includes the eligible sibling and unique "
+            "profile/index entry, without the sibling's child"
+        )
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -2254,6 +2476,9 @@ def verify(
                 pdf_ancestry, "Génération -1", "Génération -2"
             )
             assert pdf_shared_ancestor_branches.count(
+                f"Synthetic, {AC06_SIBLING}"
+            ) == 1
+            assert pdf_shared_ancestor_branches.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 2
             for partner_marker in (AC05_PARENT_PARTNER, AC05_OTHER_PARTNER):
@@ -2265,6 +2490,7 @@ def verify(
             pdf_profiles = _pdf_section_between_headings(
                 rendered_pdf_text, "Fiches individuelles", "Annexe documentaire"
             )
+            assert pdf_profiles.count(f"Synthetic, {AC06_SIBLING}") == 1
             assert pdf_profiles.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 1
@@ -2274,6 +2500,12 @@ def verify(
             assert pdf_person_index.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 1
+            assert pdf_person_index.count(f"Synthetic, {AC06_SIBLING}") == 1
+            assert AC06_UNEXPANDED_CHILD not in rendered_pdf_text
+            print(
+                "PASS: AC-06 native PDF includes the eligible sibling and unique "
+                "profile/index entry, without the sibling's child"
+            )
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
             ) < rendered_pdf_text.index(

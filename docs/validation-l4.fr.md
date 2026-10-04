@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à AC-09 sont qualifiés sur le modèle et le contrat textuel LaTeX. AC-03 et AC-05 disposent maintenant de fixtures Gramps CLI natives vérifiées en HTML et PDF. La saisie dans l’interface et la pagination d’un livre complet restent à valider.
+Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à AC-09 sont qualifiés sur le modèle et le contrat textuel LaTeX. AC-03, AC-05 et AC-06 disposent maintenant de fixtures Gramps CLI natives vérifiées en HTML et PDF. La saisie dans l’interface et la pagination d’un livre complet restent à valider.
 
 ## Parcours disponibles
 
@@ -20,10 +20,11 @@ Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; AC-01 et AC-03 à
 - La recette native T-04 fait passer par l’import Gramps 6.0.8 les liens `Adopted`, `Foster` et `None`. Le modèle conserve les valeurs, le graphe suit les deux liens explicitement enregistrés et présente la famille monoparentale avec son seul partenaire connu. La même fixture confirme qu’un événement Marriage associé à F0 conserve le rôle Gramps `Family`. La saisie graphique et les autres types de relation restent à qualifier.
 - La recette native AC-03 ajoute une seconde union F0003 au parent central et un enfant admissible par `BOOK_PROFILE=YES`. Après import Gramps 6.0.8, l’enfant figure une fois en génération 1 dans la section de F0003 ; le modèle et le HTML ne créent qu’une fiche. Les noms de l’enfant, du partenaire et leurs liens sont présents dans le HTML et le PDF.
 - La recette native AC-05 relie un ancêtre commun aux deux branches du couple et introduit une boucle d’ascendance explicite. Après import Gramps 6.0.8, les deux occurrences de l’ancêtre sont conservées, mais le modèle, le HTML, le PDF et l’index n’en créent qu’une fiche ; un diagnostic signale la boucle et aucun chemin de cette fixture ne dépasse quatre personnes.
+- La recette native AC-06 ajoute un frère à l’un des ancêtres et un enfant à ce frère. Le frère, marqué `BOOK_PROFILE=YES`, apparaît comme occurrence collatérale et reçoit une seule fiche et entrée d’index ; son enfant reste hors des occurrences, sections familiales et rendus HTML/PDF.
 
 ## Limites avant la sortie de L4
 
-- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX. `scripts/verify_gramps.py` couvre maintenant AC-03 et AC-05 depuis la fixture native dans le modèle, le ZIP HTML et le PDF ; l’interface Gramps reste à exercer.
+- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX. `scripts/verify_gramps.py` couvre maintenant AC-03, AC-05 et AC-06 depuis la fixture native dans le modèle, le ZIP HTML et le PDF ; l’interface Gramps reste à exercer.
 - `tests/test_date_ranges.py` vérifie les groupes transitifs de plages chevauchantes, le maintien de l’ordre source pour la chronologie d’événements, l’usage des bornes malgré des valeurs scalaires contradictoires et le placement final des dates textuelles/non comparables. Le 4 octobre, la suite complète passe : 54 tests.
 - Les rendus LaTeX et HTML consomment le modèle `genealogy`. Leurs contrats sont couverts à des degrés différents ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
 - Le modèle éditorial fournit déjà profils, notices familiales, index et cibles de navigation au rendu LaTeX. La validation porte ici sur leur structure textuelle, pas sur la composition paginée finale.
@@ -42,3 +43,7 @@ Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 10 pages. La personne i
 ## Essai PDF AC-05 en CLI — 4 octobre 2026
 
 Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 13 pages. L’ancêtre commun apparaît sur les deux branches, puis une seule fois dans les fiches et l’index ; le parcours cyclique s’arrête et le PDF compilé est lisible. La validation visuelle du livre complet reste au lot L6.
+
+## Essai PDF AC-06 en CLI — 4 octobre 2026
+
+Gramps 6.0.8 et LuaHBTeX 1.24.0 ont produit un PDF A4 de 14 pages. Le frère d’un ancêtre apparaît dans la fratrie, reçoit une seule fiche et une entrée d’index grâce à `BOOK_PROFILE=YES` ; son enfant n’est développé ni dans le modèle ni dans les sorties HTML/PDF. Les pages concernées ont été relues ; la validation visuelle du livre complet reste au lot L6.
