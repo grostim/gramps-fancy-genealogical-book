@@ -28,6 +28,11 @@ PLUGIN_ID = "gramps_fancy_genealogical_book"
 AC03_OTHER_PARTNER = "AC03_OTHER_UNION_PARTNER"
 AC03_OTHER_CHILD = "AC03_OTHER_UNION_CHILD"
 AC04_STEP_PARENT = "AC04_STEP_PARENT"
+AC04_ADDITIONAL_PARENTAGE = (
+    ("I0019", "F0013", "AC04_SPONSORED_PARENT", "Sponsored"),
+    ("I0020", "F0014", "AC04_UNKNOWN_PARENT", "Unknown"),
+    ("I0021", "F0015", "AC04_CUSTOM_OTHER_PARENT", "Other"),
+)
 AC05_SHARED_ANCESTOR = "AC05_ANC"
 AC05_PARENT_PARTNER = "AC05_P1"
 AC05_OTHER_PARTNER = "AC05_P2"
@@ -839,25 +844,30 @@ def _add_t04_foster_parent_family(
     _add_person_family_ref(root, child, "childof", family_handle)
 
 
-def _add_t04_step_parent_family(
+def _add_t04_parentage_family(
     root: ET.Element,
     people: ET.Element,
     families: ET.Element,
     child: ET.Element,
+    *,
+    parent_id: str,
+    family_id: str,
+    parent_name: str,
+    relationship_type: str,
 ) -> None:
-    """Connect I0001 to a separate step-parent family with a Stepchild link."""
+    """Connect I0001 to a separate single-parent family with a typed link."""
     if child.get("id") != "I0001" or not child.get("handle"):
-        raise AssertionError("Native T-04 stepchild fixture must use person I0001.")
-    if any(item.get("id") == "I0018" for item in _children(people, "person")):
-        raise AssertionError("Native T-04 step-parent I0018 already exists.")
-    if any(item.get("id") == "F0012" for item in _children(families, "family")):
-        raise AssertionError("Native T-04 step-parent family F0012 already exists.")
+        raise AssertionError("Native T-04 parentage fixture must use person I0001.")
+    if any(item.get("id") == parent_id for item in _children(people, "person")):
+        raise AssertionError(f"Native T-04 parent {parent_id} already exists.")
+    if any(item.get("id") == family_id for item in _children(families, "family")):
+        raise AssertionError(f"Native T-04 parentage family {family_id} already exists.")
 
     parent_handle = f"_{uuid.uuid4().hex}"
     family_handle = f"_{uuid.uuid4().hex}"
     parent = ET.Element(
         _qualified_name(root, "person"),
-        {"handle": parent_handle, "change": "0", "id": "I0018"},
+        {"handle": parent_handle, "change": "0", "id": parent_id},
     )
     ET.SubElement(parent, _qualified_name(root, "gender")).text = "M"
     name = ET.SubElement(
@@ -865,20 +875,20 @@ def _add_t04_step_parent_family(
         _qualified_name(root, "name"),
         {"type": "Birth Name"},
     )
-    ET.SubElement(name, _qualified_name(root, "first")).text = AC04_STEP_PARENT
+    ET.SubElement(name, _qualified_name(root, "first")).text = parent_name
     ET.SubElement(name, _qualified_name(root, "surname")).text = "Synthetic"
     _add_person_family_ref(root, parent, "parentin", family_handle)
     _add_person_family_ref(root, child, "childof", family_handle)
 
     family = ET.Element(
         _qualified_name(root, "family"),
-        {"handle": family_handle, "change": "0", "id": "F0012"},
+        {"handle": family_handle, "change": "0", "id": family_id},
     )
     ET.SubElement(family, _qualified_name(root, "father"), {"hlink": parent_handle})
     ET.SubElement(
         family,
         _qualified_name(root, "childref"),
-        {"hlink": child.get("handle", ""), "frel": "Stepchild"},
+        {"hlink": child.get("handle", ""), "frel": relationship_type},
     )
     people.append(parent)
     families.append(family)
@@ -1637,7 +1647,27 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
 
     _set_t04_parentage_case(family, child)
     _add_t04_foster_parent_family(root, single_parent_family, person, single_parent)
-    _add_t04_step_parent_family(root, people, families, person)
+    _add_t04_parentage_family(
+        root,
+        people,
+        families,
+        person,
+        parent_id="I0018",
+        family_id="F0012",
+        parent_name=AC04_STEP_PARENT,
+        relationship_type="Stepchild",
+    )
+    for parent_id, family_id, parent_name, relationship_type in AC04_ADDITIONAL_PARENTAGE:
+        _add_t04_parentage_family(
+            root,
+            people,
+            families,
+            person,
+            parent_id=parent_id,
+            family_id=family_id,
+            parent_name=parent_name,
+            relationship_type=relationship_type,
+        )
     _add_ac03_other_union(root, people, families, person)
     _add_ac05_implex_and_cycle(
         root, people, families, person, reference_partner
@@ -2058,6 +2088,7 @@ def verify(
             "I0016",
             "I0017",
             "I0018",
+            *(item[0] for item in AC04_ADDITIONAL_PARENTAGE),
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -2206,7 +2237,49 @@ def verify(
         )
         print(
             "PASS: AC-04 native Gramps preserves Adopted, Foster, Stepchild and None; "
-            "the step-parent remains explicitly typed"
+            "single-parent links remain explicitly typed"
+        )
+        for parent_id, family_id, parent_name, relationship_type in (
+            AC04_ADDITIONAL_PARENTAGE
+        ):
+            parent = next(
+                person
+                for person in model["people"]
+                if person["gramps_id"] == parent_id
+            )
+            assert parent["name"] == f"Synthetic, {parent_name}"
+            family = next(
+                family
+                for family in model["families"].values()
+                if family["gramps_id"] == family_id
+            )
+            assert family["father"]["handle"] == parent["handle"]
+            assert family["mother"] is None
+            relation = family["child_relationships"][0]
+            assert relation["person_handle"] == reference_family["father"]["handle"]
+            assert relation["father_relation"] == relationship_type
+            section = next(
+                section
+                for section in family_sections
+                if section["family_handle"] == family["handle"]
+                and section["part"] == "ancestry"
+            )
+            assert len(section["partner_occurrence_ids"]) == 1
+            assert len(section["child_occurrence_ids"]) == 1
+            assert len(section["parent_child_links"]) == 1
+            link = section["parent_child_links"][0]
+            assert link["relationship_type"] == relationship_type
+            assert (
+                occurrences_by_id[link["parent_occurrence_id"]]["person_handle"]
+                == parent["handle"]
+            )
+            assert (
+                occurrences_by_id[link["child_occurrence_id"]]["person_handle"]
+                == reference_family["father"]["handle"]
+            )
+        print(
+            "PASS: AC-04 native Gramps preserves Sponsored, Unknown, and the "
+            "custom value Other through the model and single-parent traversal"
         )
         other_union = next(
             family
@@ -2786,12 +2859,19 @@ def verify(
             )
             assert f'href="#{target}"' in occurrence_html
         assert f"Synthetic, {AC04_STEP_PARENT} : Enfant du conjoint" in html
+        for _, _, parent_name, relationship_type in AC04_ADDITIONAL_PARENTAGE:
+            assert re.search(
+                rf"Synthetic, {re.escape(parent_name)}\s*:\s*[^<]+</span>",
+                html,
+            ), (parent_name, relationship_type)
+        assert f"Synthetic, {AC04_ADDITIONAL_PARENTAGE[-1][2]} : Other" in html
         print(
             "PASS: AC-01 native HTML starts with both central partners and "
             "links their descent mentions back"
         )
         print(
-            "PASS: AC-04 native HTML preserves the translated Stepchild relationship"
+            "PASS: AC-04 native HTML preserves the translated Stepchild relationship "
+            "and the remaining Gramps parentage values"
         )
         single_pdf_artifact = artifacts_by_handle[
             media_by_name["ac16-single-unlinked.pdf"]["handle"]
@@ -3253,6 +3333,17 @@ def verify(
                 rf"(?:\(p\.\s*\d+\)\s+)?\(Enfant du conjoint\)",
                 pdf_family_connections,
             ), pdf_family_connections
+            for _, _, parent_name, relationship_type in AC04_ADDITIONAL_PARENTAGE:
+                assert re.search(
+                    rf"Synthetic, {re.escape(parent_name)}\s+"
+                    rf"(?:\(p\.\s*\d+\)\s+)?\([^)]*\)",
+                    pdf_family_connections,
+                ), (parent_name, relationship_type, pdf_family_connections)
+            assert re.search(
+                rf"Synthetic, {re.escape(AC04_ADDITIONAL_PARENTAGE[-1][2])}\s+"
+                rf"(?:\(p\.\s*\d+\)\s+)?\(Other\)",
+                pdf_family_connections,
+            ), pdf_family_connections
             pdf_pages = _pdf_page_texts(destination)
             descent_generation_zero_pages = [
                 page_index
@@ -3291,7 +3382,8 @@ def verify(
                 "renders their F0 connection"
             )
             print(
-                "PASS: AC-04 native PDF preserves the translated Stepchild relationship"
+                "PASS: AC-04 native PDF preserves Stepchild, Sponsored, Unknown, "
+                "and custom Other parentage"
             )
             ac09_pdf_parent_entries = [
                 line.strip()
