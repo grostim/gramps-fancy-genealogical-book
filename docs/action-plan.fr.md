@@ -216,7 +216,7 @@ Les données de test seront fictives et versionnées. Les comparaisons de JSON p
 
 Les règles fonctionnelles sont établies par la v1.1 et résumées dans la matrice. T-02 a une décision, un guide bilingue et une recette CLI Gramps native ; seul le parcours de saisie dans l’interface reste à qualifier. T-04 confirme sur Gramps natif le rôle d’un événement familial, la conservation/interprétation des liens `Adopted`, `Foster`, `Stepchild`, `Sponsored`, `Unknown`, d’un `None` omis du graphe et d’une valeur personnalisée (`Other`), ainsi que les familles monoparentales sans parent inventé. La saisie graphique reste à qualifier. Les autres points T-01 et T-05 à T-10 du § 17 se résolvent par essais : sorties personnalisées Desktop/Web ; médias et PDF ; Markdown et notes riches ; lisibilité A4 ; convergence pagination/index ; matrice des environnements ; export LaTeX futur facultatif.
 
-Gramps Web est requis pour la version cible, avec preuve d’intégration avant annonce. LuaLaTeX est l’hypothèse technique de départ. La licence et le passage éventuel du dépôt privé au public doivent être fixés avant distribution. Le traitement des régions de médias mentionné dans la discussion reste à rapprocher de la déduplication prescrite par la v1.1.
+Gramps Web est requis pour la version cible, avec preuve d’intégration avant annonce. LuaLaTeX est l’hypothèse technique de départ. La licence et le passage éventuel du dépôt privé au public doivent être fixés avant distribution. Pour AC-12, la recette native confirme la règle v1.1 d’une reproduction principale unique, placée dans le contexte familial pertinent avant une fiche individuelle, avec renvoi depuis l’autre occurrence ; voir les [revues média](validation-media.fr.md).
 
 ## 7. Découpage de travail et suivi
 
