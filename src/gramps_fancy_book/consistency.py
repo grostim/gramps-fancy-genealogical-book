@@ -7,13 +7,13 @@ from itertools import combinations
 from typing import TYPE_CHECKING, Any
 
 from .conventions import BOOK_FACT_ID
+from .date_ranges import comparable_date_range
 
 if TYPE_CHECKING:
     from .domain import BookModel, DateValue, Event
 
 
 _REPORT_SCHEMA_VERSION = "1.0"
-_TEXT_ONLY_MODIFIER = 6
 
 
 def build_consistency_report(model: BookModel) -> dict[str, object]:
@@ -172,22 +172,7 @@ def _place_display(place_handle: str, model: BookModel) -> str:
 
 def _date_range(date: DateValue | None) -> tuple[tuple[int, int, int], tuple[int, int, int]] | None:
     """Read Gramps' Gregorian min/max range while rejecting uncomparable dates."""
-    if date is None or date.sort_value is None or date.modifier == _TEXT_ONLY_MODIFIER:
-        return None
-    value = date.range
-    if not isinstance(value, (list, tuple)) or len(value) != 2:
-        return None
-    bounds = []
-    for endpoint in value:
-        if not isinstance(endpoint, (list, tuple)) or len(endpoint) < 3:
-            return None
-        if any(isinstance(part, bool) or not isinstance(part, int) for part in endpoint[:3]):
-            return None
-        bounds.append(tuple(endpoint[:3]))
-    start, stop = bounds
-    if start > stop:
-        return None
-    return start, stop
+    return comparable_date_range(date)
 
 
 def _json_range(

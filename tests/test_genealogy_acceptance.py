@@ -508,6 +508,74 @@ def test_birth_and_death_only_spouse_is_mentioned_but_book_profile_can_force_a_p
     assert r"\subsection*{spouse}" in forced_render
 
 
+def test_siblings_use_birth_ranges_and_stable_id_ties_for_overlaps():
+    def birth_event(handle, display, start=None, stop=None, sort_value=1):
+        date = DateValue(
+            display=display,
+            sort_value=sort_value,
+            modifier=0,
+            range=(start, stop or start) if start is not None else None,
+        )
+        return Event(handle=handle, type="Birth", date=date)
+
+    children = (
+        _person("unknown"),
+        _person("point", event_refs=(_event_ref("birth-point"),)),
+        _person("late", event_refs=(_event_ref("birth-late"),)),
+        _person("broad", event_refs=(_event_ref("birth-broad"),)),
+        _person("early", event_refs=(_event_ref("birth-early"),)),
+    )
+    father = _person("father", family_handles=("f0",))
+    mother = _person("mother", family_handles=("f0",))
+    central = _family("f0", father, mother, children)
+    snapshot = _snapshot(
+        central,
+        (central,),
+        (father, mother, *children),
+        {
+            "birth-point": birth_event(
+                "birth-point", "15 June 1900", (1900, 6, 15), sort_value=6000
+            ),
+            "birth-late": birth_event(
+                "birth-late",
+                "1902",
+                (1902, 1, 1),
+                (1902, 12, 31),
+                sort_value=0,
+            ),
+            "birth-broad": birth_event(
+                "birth-broad",
+                "1900",
+                (1900, 1, 1),
+                (1900, 12, 31),
+                sort_value=100,
+            ),
+            "birth-early": birth_event(
+                "birth-early",
+                "1899",
+                (1899, 1, 1),
+                (1899, 12, 31),
+                sort_value=5000,
+            ),
+        },
+    )
+
+    model = build_book_model(snapshot)
+    generation_one = next(
+        generation
+        for generation in model.genealogy.descent.generations
+        if generation.number == 1
+    )
+
+    assert [item.person_handle for item in generation_one.occurrences] == [
+        "early",
+        "broad",
+        "point",
+        "late",
+        "unknown",
+    ]
+
+
 def test_family_event_qualifies_partner_but_stays_in_family_notice():
     model = build_book_model(_spouse_book(family_event=True))
     spouse_profile = next(

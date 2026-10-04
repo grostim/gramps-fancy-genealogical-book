@@ -1,6 +1,6 @@
 # Avancement L4 — parcours généalogiques
 
-Compte rendu actualisé le 28 septembre 2026. L4 reste en cours ; les scénarios AC-01 et AC-03 à AC-09 sont exercés sur le modèle et sur le contrat textuel du rendu LaTeX. La pagination visuelle du PDF reste à valider en L6.
+Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; les scénarios AC-01 et AC-03 à AC-09 sont exercés sur le modèle et sur le contrat textuel du rendu LaTeX. La pagination visuelle du PDF reste à valider en L6.
 
 ## Parcours disponibles
 
@@ -13,13 +13,15 @@ Compte rendu actualisé le 28 septembre 2026. L4 reste en cours ; les scénarios
 - Un chemin qui revisite une personne est conservé comme occurrence visible, signalé par un diagnostic et arrêté avant de développer la boucle.
 - L’éligibilité de fiche applique `BOOK_PROFILE = YES` ou un événement individuel/familial substantiel autre que naissance et décès.
 - Chaque occurrence renseigne `primary_occurrence_id` pour renvoyer à la première apparition de la personne, même sans fiche complète. Pour une personne éligible, `profile_anchor` et `is_primary_profile` désignent toujours sa fiche unique et son occurrence principale.
-- L’ordre des générations est déterministe ; les dates de naissance complètes et exactes sont ordonnées chronologiquement, puis les dates absentes ou incertaines par identifiant stable.
+- Dans un même groupe de génération, branche et famille, les plages de naissance comparables et disjointes sont ordonnées chronologiquement. Les plages qui se chevauchent, les égalités et les dates non comparables sont départagées par identifiant/handle Gramps ; les dates absentes ou non comparables restent à la fin du groupe. Aucun ordre de naissance précis n’est déduit d’une plage ambiguë.
+- La chronologie des événements utilise les bornes comparables de Gramps plutôt que sa valeur scalaire de tri. Les événements dont les plages se chevauchent conservent leur position source, avec la clé technique comme départage stable ; les dates non comparables arrivent après les dates classables.
 - Les sections familiales suivent d’abord l’ordre des générations et des occurrences de branche, puis l’ordre source des unions dans les listes Gramps du partenaire ou de l’enfant concerné. L’identifiant familial ne sert que de départage déterministe.
 - Chaque section familiale a un identifiant stable, référence les occurrences de ses partenaires et enfants dans le périmètre, et expose les liens parent-enfant avec la valeur du type de filiation normalisée depuis Gramps pour chaque parent, lorsqu’elle est disponible. Chaque occurrence conserve les identifiants de ses sections ; génération, branche, chemin et ancre de fiche fournissent les données du repère.
 
 ## Limites avant la sortie de L4
 
-- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX : couple central en tête de l’ascendance, renvois depuis la descendance et contexte des autres unions, types de filiation, fiche unique et renvois, collatéraux, événements familiaux, familles monoparentales et profondeur frontière.
+- `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX : couple central en tête de l’ascendance, renvois depuis la descendance et contexte des autres unions, types de filiation, fiche unique et renvois, collatéraux, événements familiaux, familles monoparentales, profondeur frontière et plages de naissance approximatives qui se chevauchent.
+- `tests/test_date_ranges.py` vérifie les groupes transitifs de plages chevauchantes, le maintien de l’ordre source pour la chronologie d’événements, l’usage des bornes malgré des valeurs scalaires contradictoires et le placement final des dates textuelles/non comparables. Le 4 octobre, la suite complète passe : 53 tests.
 - Le rendu LaTeX consomme le modèle `genealogy` et dispose maintenant d’assertions de contrat pour ces scénarios. Le rendu HTML complet reste planifié en L7 ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
 - Le modèle éditorial fournit déjà profils, notices familiales, index et cibles de navigation au rendu LaTeX. La validation porte ici sur leur structure textuelle, pas sur la composition paginée finale.
 - Les six notes éditoriales de F0 et leurs conventions Gramps 6 restent à valider séparément.

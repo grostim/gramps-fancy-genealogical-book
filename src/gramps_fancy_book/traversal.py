@@ -6,6 +6,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field, replace
 from typing import Iterable
 
+from .date_ranges import DateRange, comparable_date_range, stable_order_by_date_range
 from .domain import (
     Diagnostic,
     Family,
@@ -727,16 +728,30 @@ def _ordered_occurrences(
     result: list[PersonOccurrence] = []
     path_positions: dict[tuple[str, ...], int] = {}
     for generation in generations:
-        items = sorted(
-            grouped[generation],
-            key=lambda item: (
+        grouped_by_branch: dict[
+            tuple[int, tuple[int, int], str], list[_Occurrence]
+        ] = defaultdict(list)
+        for item in grouped[generation]:
+            prefix = (
                 0 if "central" in item.roles else 1,
                 _branch_hierarchy_key(item, part, people, root_order, path_positions),
                 item.family_handle or "",
-                _birth_sort_key(people[item.person_handle], events),
-                _identity_sort_key(people[item.person_handle]),
-            ),
-        )
+            )
+            grouped_by_branch[prefix].append(item)
+
+        items: list[_Occurrence] = []
+        for prefix in sorted(grouped_by_branch):
+            branch_items = grouped_by_branch[prefix]
+            items.extend(
+                stable_order_by_date_range(
+                    (
+                        _birth_date_range(people[item.person_handle], events),
+                        (_identity_sort_key(people[item.person_handle]), position),
+                        item,
+                    )
+                    for position, item in enumerate(branch_items)
+                )
+            )
         for position, item in enumerate(items):
             for path in item.lineage_paths:
                 path_positions[path] = min(path_positions.get(path, position), position)
@@ -802,27 +817,16 @@ def _branch_hierarchy_key(
     return branch_position, 99
 
 
-def _birth_sort_key(person: Person, events: dict) -> tuple[int, int, int, int]:
-    exact_birth_dates = set()
+def _birth_date_range(person: Person, events: dict) -> DateRange | None:
+    birth_dates: set[DateRange] = set()
     for reference in person.links.events:
         event = events.get(reference.event_handle)
         if event is None or event.type.strip().casefold() != "birth":
             continue
-        date = event.date
-        if date is None or date.modifier not in (None, 0) or date.quality not in (None, 0):
-            continue
-        if date.ymd is None or len(date.ymd) != 3:
-            continue
-        year, month, day = date.ymd
-        if year == 0 or not (1 <= month <= 12 and 1 <= day <= 31):
-            continue
-        if date.stop_ymd not in (None, date.ymd):
-            continue
-        exact_birth_dates.add((year, month, day))
-    if len(exact_birth_dates) == 1:
-        year, month, day = exact_birth_dates.pop()
-        return (0, year, month, day)
-    return (1, 0, 0, 0)
+        date_range = comparable_date_range(event.date)
+        if date_range is not None:
+            birth_dates.add(date_range)
+    return next(iter(birth_dates)) if len(birth_dates) == 1 else None
 
 
 def _identity_sort_key(person: Person) -> tuple[str, str]:
