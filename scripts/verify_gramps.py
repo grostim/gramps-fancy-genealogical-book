@@ -1580,6 +1580,17 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     if people is None or events is None or objects is None:
         raise AssertionError("Gramps XML export is missing people, events or media objects.")
 
+    # Gramps 6.1 pads person and family IDs to five digits; keep this synthetic
+    # fixture's IDs stable across versions before adding its native XML fields.
+    for section, element_name, prefix in (
+        (people, "person", "I"),
+        (families, "family", "F"),
+    ):
+        for item in _children(section, element_name):
+            gramps_id = item.get("id", "")
+            if gramps_id.startswith(prefix) and gramps_id[len(prefix) :].isdigit():
+                item.set("id", f"{prefix}{int(gramps_id[len(prefix) :]):04d}")
+
     person = next(
         (
             item
