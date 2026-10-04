@@ -21,10 +21,10 @@ Compte rendu actualisé le 4 octobre 2026. L4 reste en cours ; les scénarios AC
 ## Limites avant la sortie de L4
 
 - `tests/test_genealogy_acceptance.py` qualifie AC-01 et AC-03 à AC-09 sur des graphes fictifs et vérifie aussi leur traduction en sorties LaTeX : couple central en tête de l’ascendance, renvois depuis la descendance et contexte des autres unions, types de filiation, fiche unique et renvois, collatéraux, événements familiaux, familles monoparentales, profondeur frontière et plages de naissance approximatives qui se chevauchent.
-- `tests/test_date_ranges.py` vérifie les groupes transitifs de plages chevauchantes, le maintien de l’ordre source pour la chronologie d’événements, l’usage des bornes malgré des valeurs scalaires contradictoires et le placement final des dates textuelles/non comparables. Le 4 octobre, la suite complète passe : 53 tests.
-- Le rendu LaTeX consomme le modèle `genealogy` et dispose maintenant d’assertions de contrat pour ces scénarios. Le rendu HTML complet reste planifié en L7 ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
+- `tests/test_date_ranges.py` vérifie les groupes transitifs de plages chevauchantes, le maintien de l’ordre source pour la chronologie d’événements, l’usage des bornes malgré des valeurs scalaires contradictoires et le placement final des dates textuelles/non comparables. Le 4 octobre, la suite complète passe : 54 tests.
+- Les rendus LaTeX et HTML consomment le modèle `genealogy`. Leurs contrats sont couverts à des degrés différents ; la pagination, les renvois multipasses et l’apparence du PDF restent à contrôler visuellement en L6.
 - Le modèle éditorial fournit déjà profils, notices familiales, index et cibles de navigation au rendu LaTeX. La validation porte ici sur leur structure textuelle, pas sur la composition paginée finale.
-- Les six notes éditoriales de F0 et leurs conventions Gramps 6 restent à valider séparément.
+- Les six rôles éditoriaux de F0 et les diagnostics de sélection sont vérifiés sur une fixture Gramps CLI native. La saisie dans l’interface Gramps 6 et l’acceptation visuelle PDF restent ouvertes ; voir la [décision sur les notes F0](decisions/004-f0-editorial-notes.md).
 
 Le détail des tâches et critères de sortie figure dans le [plan d’action](action-plan.fr.md#l4--parcours-généalogiques-et-sélection) et dans les [exigences](requirements.fr.md).
 

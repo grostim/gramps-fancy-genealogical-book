@@ -21,10 +21,10 @@ Updated on 4 October 2026. L4 remains in progress; scenarios AC-01 and AC-03 to 
 ## Remaining before L4 exit
 
 - `tests/test_genealogy_acceptance.py` qualifies AC-01 and AC-03 to AC-09 with synthetic graphs and also checks their LaTeX output: central couple first in ancestry, cross-references from descent, and other-union context, parentage labels, one profile with cross-references, collateral relatives, family events, single-parent families, depth boundaries, and overlapping approximate birth ranges.
-- `tests/test_date_ranges.py` checks transitive overlap groups, source-order preservation for event timelines, use of bounds when scalar sort values disagree, and final placement of textual/uncomparable dates. On 4 October, the complete suite passes: 53 tests.
-- The LaTeX renderer consumes the `genealogy` model, with contract assertions for these scenarios. The full HTML renderer remains planned for L7; pagination, multipass references, and the final PDF appearance still need visual review in L6.
+- `tests/test_date_ranges.py` checks transitive overlap groups, source-order preservation for event timelines, use of bounds when scalar sort values disagree, and final placement of textual/uncomparable dates. On 4 October, the complete suite passes: 54 tests.
+- The LaTeX and HTML renderers consume the `genealogy` model. Their contracts are covered to different degrees; pagination, multipass references, and final PDF appearance still need visual review in L6.
 - The editorial model already provides profiles, family notices, an index, and navigation targets to the LaTeX renderer. These checks cover their textual structure, not the final paginated composition.
-- The six central-family editorial notes and their Gramps 6 conventions still need separate validation.
+- The six F0 editorial roles and their publication/diagnostic rules now have native Gramps CLI integration coverage. The Gramps 6 interface workflow and visual acceptance remain open; see [decision 004](decisions/004-f0-editorial-notes.md).
 
 See the [action plan](action-plan.fr.md#l4--parcours-généalogiques-et-sélection) and [requirements](requirements.fr.md) for the full tasks and exit criteria.
 

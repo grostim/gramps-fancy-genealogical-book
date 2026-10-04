@@ -323,10 +323,10 @@ def _render_front_matter(model) -> str:
         item.role: model.notes.get(item.note_handle)
         for item in model.editorial_book.front_matter_notes
     }
-    for role, note in notes.items():
+    for role in ("BOOK_DEDICATION", "BOOK_INTRODUCTION"):
+        note = notes.get(role)
         if (
             note is None
-            or role in _FRONT_MATTER_COVER_ROLES
             or not (note.text or "").strip()
         ):
             continue

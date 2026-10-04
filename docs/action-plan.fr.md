@@ -213,7 +213,7 @@ Les données de test seront fictives et versionnées. Les comparaisons de JSON p
 
 ## 6. Décisions et prototypes restant à mener
 
-Les règles fonctionnelles sont établies par la v1.1 et résumées dans la matrice. Les points T-01 à T-10 du § 17 restent à résoudre par essais : sorties personnalisées Desktop/Web ; six notes éditoriales F0 ; dates et tri stable ; rôles et filiations « aucun » ; médias et PDF ; Markdown et notes riches ; lisibilité A4 ; convergence pagination/index ; matrice des environnements ; export LaTeX futur facultatif.
+Les règles fonctionnelles sont établies par la v1.1 et résumées dans la matrice. T-02 a maintenant une décision, un guide bilingue et une recette CLI Gramps native ; seul le parcours de saisie dans l’interface reste à qualifier. Les autres points T-01 et T-04 à T-10 du § 17 se résolvent par essais : sorties personnalisées Desktop/Web ; rôles et filiations « aucun » ; médias et PDF ; Markdown et notes riches ; lisibilité A4 ; convergence pagination/index ; matrice des environnements ; export LaTeX futur facultatif.
 
 Gramps Web est requis pour la version cible, avec preuve d’intégration avant annonce. LuaLaTeX est l’hypothèse technique de départ. La licence et le passage éventuel du dépôt privé au public doivent être fixés avant distribution. Le traitement des régions de médias mentionné dans la discussion reste à rapprocher de la déduplication prescrite par la v1.1.
 
@@ -312,6 +312,8 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 ### Prochaines actions
 
 **T-03 — tri chronologique, 4 octobre 2026 :** les chronologies d’événements et les naissances utilisent maintenant les bornes Gramps comparables. Les plages disjointes sont triées par date ; les chevauchements suivent les règles distinctes des §5.4 et §9.2 de la spécification (position source pour les événements, identifiant/handle pour les personnes). Les dates non comparables restent en fin de groupe. Les 53 tests, Ruff et toute la CI ont réussi ; la PR #227 est fusionnée.
+
+**T-02 — notes éditoriales F0, 4 octobre 2026 :** l’intégration Gramps 6.0.8 exerce les six rôles, leur rattachement direct à la famille centrale, la condition `BOOK_PUBLICATION`, et les diagnostics pour rôle dupliqué, multiple, non publiable ou vide. Cette recette a révélé que le HTML suivait l’ordre interne des tags et plaçait l’introduction avant la dédicace ; le rendu HTML impose maintenant l’ordre prescrit, identique au PDF. Les 54 tests et Ruff sur `src/`, `tests/` et `scripts/` passent. LuaHBTeX produit un PDF français A4 balisé de dix pages ; les pages 1 à 4 ont été relues visuellement. Voir l’[aperçu T-02](../output/pdf/gramps-fancy-book-t02-f0-editorial-fr-20261004.pdf). Le guide FR/EN décrit la convention. La saisie dans Gramps Desktop et la revue visuelle des autres pages restent à effectuer.
 
 **AC-25 — mois et jour structurés, 4 octobre 2026 :** le rapport Gramps 6.0.8 en ligne de commande affiche `vers 14 mars 1900` en français et `about March 14, 1900` en anglais, avec `date-format=2` dans les profils de test isolés. Les deux exports conservent les mêmes données brutes, bornes et composantes de date. Le PDF français de neuf pages a été contrôlé visuellement à la page 7. L’essai de cette fixture par la boîte de dialogue GUI reste à faire.
 

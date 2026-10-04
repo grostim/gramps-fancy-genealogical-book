@@ -127,6 +127,44 @@ def test_empty_front_matter_is_omitted_from_contents_and_book():
     assert "Pour nos familles." in filled_front_matter
 
 
+def test_front_matter_orders_dedication_before_introduction():
+    parts = (
+        EditorialPart("front-matter", "front_matter"),
+    )
+    model = SimpleNamespace(
+        metadata={"BOOK_LANGUAGE": "fr"},
+        editorial_book=SimpleNamespace(
+            parts=parts,
+            front_matter_notes=(
+                EditorialFrontMatterNote("BOOK_INTRODUCTION", "introduction"),
+                EditorialFrontMatterNote("BOOK_DEDICATION", "dedication"),
+            ),
+        ),
+        notes={
+            "dedication": Note(handle="dedication", text="T02_DEDICATION_ORDER"),
+            "introduction": Note(handle="introduction", text="T02_INTRODUCTION_ORDER"),
+        },
+    )
+
+    rendered = _render_part(
+        parts[0],
+        model,
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+    )
+
+    assert rendered.index("T02_DEDICATION_ORDER") < rendered.index(
+        "T02_INTRODUCTION_ORDER"
+    )
+
+
 def test_renders_shared_parts_with_stable_navigation_and_escaped_text():
     p0 = Person("p0", "Ada & <img src=x onerror=alert(1)>")
     p1 = Person("p1", "Benoît Exemple")
