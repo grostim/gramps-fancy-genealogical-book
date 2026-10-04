@@ -66,7 +66,7 @@ Les résultats attendus exacts sont conservés au § 15 de S4. « À réaliser �
 | AC-02 | Refus du couple incomplet | L1.3–L1.7 | Validé en CLI Gramps 6.0.8 ; CI 36288791405 |
 | AC-03 | Descendants des autres unions | L4.3–L4.4 | Qualifié sur graphe, contrat LaTeX et fixture Gramps CLI 6.0.8 : enfant en génération 1, section F0003 et profil unique en HTML/PDF ; saisie GUI restante |
 | AC-04 | Filiations explicites multiples | L3.1, L4.4 | Types `Adopted` et `Foster` et lien `None` préservés/interprétés dans une fixture Gramps CLI native 6.0.8 ; les autres types, la saisie GUI et la recette complète restent à qualifier |
-| AC-05 | Implexes, fiche unique et cycles | L4.4–L4.5 | Occurrences et fiches uniques implémentées, qualifiées sur graphe (PR #43) ; recette complète restante |
+| AC-05 | Implexes, fiche unique et cycles | L4.4–L4.5 | Qualifié sur graphe et fixture Gramps CLI 6.0.8 : ancêtre sur les deux branches, une fiche et une entrée d’index, boucle diagnostiquée et bornée ; HTML/PDF produits, saisie GUI restante |
 | AC-06 | Collatéral documenté sans expansion | L4.1, L4.5 | Expansion des collatéraux bornée, qualifiée sur graphe (PR #43) ; recette complète restante |
 | AC-07 | Éligibilité et BOOK_PROFILE=YES | L3.3, L4.5 | Règle d’éligibilité et BOOK_PROFILE=YES implémentés, qualifiés sur graphe (PR #43) ; recette Gramps restante |
 | AC-08 | Événement familial et fiche | L3.2, L5.2 | Événements familiaux et fiches présents et qualifiés sur graphe (PR #43) ; recette complète restante |
