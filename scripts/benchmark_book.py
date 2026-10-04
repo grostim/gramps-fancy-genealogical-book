@@ -18,8 +18,14 @@ from collections import deque
 from dataclasses import replace
 from pathlib import Path
 
-from gramps_fancy_book.conventions import BOOK_PROFILE
-from gramps_fancy_book.domain import (
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "src"
+# Benchmark the checkout being measured even when the virtualenv contains an
+# older, non-editable installation of the package.
+sys.path.insert(0, str(SOURCE))
+
+from gramps_fancy_book.conventions import BOOK_PROFILE  # noqa: E402
+from gramps_fancy_book.domain import (  # noqa: E402
     Attribute,
     ChildRelationship,
     Citation,
@@ -40,10 +46,10 @@ from gramps_fancy_book.domain import (
     Source,
     Url,
 )
-from gramps_fancy_book.normalization import build_book_model
-from gramps_fancy_book.renderers.html import render_html
-from gramps_fancy_book.renderers.html_archive import write_html_archive
-from gramps_fancy_book.renderers.latex import render_latex
+from gramps_fancy_book.normalization import build_book_model  # noqa: E402
+from gramps_fancy_book.renderers.html import render_html  # noqa: E402
+from gramps_fancy_book.renderers.html_archive import write_html_archive  # noqa: E402
+from gramps_fancy_book.renderers.latex import render_latex  # noqa: E402
 
 _MEDIA_INTERVAL = 10
 _DEFAULT_PORTRAIT_SIZE = (96, 72)
