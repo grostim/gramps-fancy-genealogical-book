@@ -1917,6 +1917,26 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     return fixture
 
 
+def _profile_directory_name(executable: str, env: dict[str, str], work: Path) -> str:
+    """Return Gramps' major/minor profile directory for this executable."""
+    result = subprocess.run(
+        [executable, "--version"],
+        env=env,
+        cwd=work,
+        text=True,
+        capture_output=True,
+        timeout=30,
+    )
+    output = result.stdout + result.stderr
+    match = re.search(r"(?mi)^\s*gramps\s*:\s*(\d+)\.(\d+)\b", output)
+    if result.returncode or match is None:
+        raise AssertionError(
+            "Could not determine Gramps' profile directory from --version output: "
+            f"{output[-2000:]}"
+        )
+    return f"gramps{match.group(1)}{match.group(2)}"
+
+
 def verify(
     executable: str,
     *,
@@ -1928,7 +1948,9 @@ def verify(
         work = Path(directory)
         env = os.environ.copy()
         env.update(GRAMPSHOME=str(work), XDG_CACHE_HOME=str(work / "cache"), LANGUAGE="en")
-        preferences = work / "gramps" / "gramps60" / "gramps.ini"
+        profile_dir_name = _profile_directory_name(executable, env, work)
+        profile_directory = work / "gramps" / profile_dir_name
+        preferences = profile_directory / "gramps.ini"
         preferences.parent.mkdir(parents=True, exist_ok=True)
         preferences.write_text("[preferences]\ndate-format=2\n", encoding="utf-8")
         if lualatex is not None:
@@ -1938,8 +1960,8 @@ def verify(
             env["PATH"] = f"{compiler.absolute().parent}{os.pathsep}{env.get('PATH', '')}"
         # Install the add-on and declared dependency in this profile, never from a source PYTHONPATH.
         env.pop("PYTHONPATH", None)
-        plugins = work / "gramps" / "gramps60" / "plugins"
-        plugins.mkdir(parents=True)
+        plugins = profile_directory / "plugins"
+        plugins.mkdir(parents=True, exist_ok=True)
         archive_path = (
             Path(addon_archive).expanduser()
             if addon_archive is not None
