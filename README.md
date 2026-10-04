@@ -20,7 +20,24 @@ An experimental Gramps 6 add-on for a family genealogical book. The Gramps repor
 
 ## F0 editorial notes
 
-To customize the front matter, create one Gramps note per role and attach the native `BOOK_PUBLICATION` tag plus exactly one role tag: `BOOK_TITLE`, `BOOK_SUBTITLE`, `BOOK_INTRODUCTION`, `BOOK_DEDICATION`, `BOOK_AUTHOR` or `BOOK_PUBLICATION_DATE`. Link each note directly to the selected family. Duplicate roles use the note order in Gramps; a note with multiple role tags is omitted with a diagnostic. The Gramps 6 interface workflow and visual PDF compilation still need validation.
+To customize the cover and front matter:
+
+1. In Gramps, create or reuse the native tags `BOOK_PUBLICATION` and the six role tags below. These identify notes; they are not built-in Gramps note types.
+2. Create one note per role, add its text, and assign both `BOOK_PUBLICATION` and exactly one role tag.
+3. In the editor for the selected F0 family, open the **Notes** tab and link each note directly to that family. Matching tags on notes linked to another family do not apply.
+
+| Tag | Content |
+| --- | --- |
+| `BOOK_TITLE` | Cover title; replaces the default title |
+| `BOOK_SUBTITLE` | Cover subtitle; the couple’s names remain visible |
+| `BOOK_AUTHOR` | Author on the cover |
+| `BOOK_PUBLICATION_DATE` | Publication date on the cover, entered as note text |
+| `BOOK_DEDICATION` | Dedication in the front matter |
+| `BOOK_INTRODUCTION` | Introduction, after the dedication |
+
+A role note without `BOOK_PUBLICATION`, without text, or with multiple role tags is omitted with a diagnostic. If multiple valid notes supply the same role, the first in F0’s note-link order is kept and later ones are reported. F0 role notes are not repeated in its family notice. The title and publication text are never inferred from genealogical data.
+
+The integration recipe now uses native Gramps notes for all six roles and covers a missing publication tag, ambiguous roles, empty text, and duplicate roles in CLI export. Entry through the Gramps 6 interface and visual PDF acceptance remain to be qualified. See the [F0 notes decision](docs/decisions/004-f0-editorial-notes.md) and the [Gramps 6 manual for note and family editing](https://gramps-project.org/wiki/index.php/Gramps_6.0_Wiki_Manual).
 
 Traversal follows recorded parent-child links. Unions, partners and siblings are included as context without automatically expanding their own lineages. The LaTeX renderer is experimental; final typography, a converged PDF and visual acceptance remain outstanding. See the [L3 validation record](docs/validation-l3.md), the [L4 progress note](docs/validation-l4.md), [note markup policy](docs/decisions/003-note-markup.md), and [requirement tracking](docs/requirements.fr.md).
 

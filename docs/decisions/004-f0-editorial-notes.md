@@ -14,4 +14,4 @@ The title and subtitle notes replace the cover’s fallback text. The couple’s
 
 ## Validation status
 
-The selector and LaTeX rendering are implemented in L6.2. The interactive Gramps 6 workflow for creating/linking tags and notes, and visual acceptance of the compiled PDF, still require manual validation.
+The selector and both renderers use the six role notes. The Gramps 6 native CLI integration fixture exercises all roles, verifies the family-link scope, and checks the duplicate, ambiguous, unpublished and empty-note diagnostics. It checks that each valid role is rendered (the HTML document title also repeats the cover title), that dedication precedes introduction, and that role notes do not reappear in F0's ordinary family notice. These checks do not exercise data entry in the Gramps interface or constitute visual acceptance of the compiled PDF; both remain to be qualified manually.

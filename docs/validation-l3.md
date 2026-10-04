@@ -29,5 +29,5 @@ Unit tests additionally cover media crop rectangles, multiple tags, publishable 
 
 - The snapshot is not the complete genealogy graph. Ancestry/descendant traversal and depth rules belong to L4.
 - The real Gramps fixture does not yet carry a custom `BOOK_PUBLICATION` tag or a crop rectangle; these rules are covered with synthetic adapter records.
-- The six editorial notes for F0 still need testing and role selection on Gramps 6.
-- The warning before distributing a book that contains private data, Gramps Web integration, and PDF/HTML rendering remain future work.
+- The native Gramps CLI fixture now tests all six F0 note roles, their direct family association, publication gate, and missing/duplicate/malformed diagnostics; role values are checked in JSON, HTML, and PDF when PDF compilation is enabled. Manual entry in the Gramps 6 interface and visual PDF acceptance remain to be qualified.
+- The privacy confirmation is implemented and partly validated on Desktop. Gramps Web remains unqualified; PDF and HTML/ZIP generation are delivered in L6–L7 with partial recipes.

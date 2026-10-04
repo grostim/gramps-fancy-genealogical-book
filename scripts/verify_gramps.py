@@ -35,6 +35,19 @@ AC18_SOURCE_TITLE = "AC18SOURCEWITHOUTREPOSITORY"
 AC18_SOURCE_AUTHOR = "AC18AUTHORDETAIL"
 AC18_SOURCE_PUBLICATION = "AC18PUBLICATIONDETAIL"
 AC18_CITATION_PAGE = "AC18PAGE"
+F0_EDITORIAL_ROLE_TEXT = {
+    "BOOK_TITLE": "T02_TITLE_F0_MARKER",
+    "BOOK_SUBTITLE": "T02_SUBTITLE_F0_MARKER",
+    "BOOK_INTRODUCTION": "T02_INTRODUCTION_F0_MARKER",
+    "BOOK_DEDICATION": "T02_DEDICATION_F0_MARKER",
+    "BOOK_AUTHOR": "T02_AUTHOR_F0_MARKER",
+    "BOOK_PUBLICATION_DATE": "T02_PUBLICATION_DATE_F0_MARKER",
+}
+F0_EDITORIAL_INVALID_TEXT = {
+    "duplicate": "T02_IGNORED_DUPLICATE_TITLE",
+    "ambiguous": "T02_IGNORED_AMBIGUOUS_ROLES",
+    "unpublished": "T02_IGNORED_UNPUBLISHED_ROLE",
+}
 
 
 def _qualified_name(root: ET.Element, name: str) -> str:
@@ -555,6 +568,89 @@ def _add_ac13_excluded_featured_media(
     )
 
 
+def _add_f0_editorial_notes(
+    root: ET.Element,
+    family: ET.Element,
+    notes: ET.Element,
+    tags: ET.Element,
+    publication_tag_handle: str,
+) -> None:
+    """Add native notes that cover every F0 role and malformed-note diagnostics."""
+    role_tags: dict[str, str] = {}
+    for role in F0_EDITORIAL_ROLE_TEXT:
+        handle = f"_{uuid.uuid4().hex}"
+        ET.SubElement(
+            tags,
+            _qualified_name(root, "tag"),
+            {
+                "handle": handle,
+                "change": "0",
+                "name": role,
+                "color": "#000000000000",
+                "priority": "0",
+            },
+        )
+        role_tags[role] = handle
+
+    existing_ids = {item.get("id") for item in _children(notes, "note")}
+
+    def add_note(
+        text: str,
+        roles: tuple[str, ...],
+        *,
+        publishable: bool = True,
+    ) -> str:
+        number = 1
+        while f"N{number:04d}" in existing_ids:
+            number += 1
+        note_id = f"N{number:04d}"
+        existing_ids.add(note_id)
+        handle = f"_{uuid.uuid4().hex}"
+        note = ET.SubElement(
+            notes,
+            _qualified_name(root, "note"),
+            {
+                "handle": handle,
+                "change": "0",
+                "id": note_id,
+                "type": "General",
+            },
+        )
+        ET.SubElement(note, _qualified_name(root, "text")).text = text
+        if publishable:
+            ET.SubElement(
+                note,
+                _qualified_name(root, "tagref"),
+                {"hlink": publication_tag_handle},
+            )
+        for role in roles:
+            ET.SubElement(
+                note,
+                _qualified_name(root, "tagref"),
+                {"hlink": role_tags[role]},
+            )
+        ET.SubElement(family, _qualified_name(root, "noteref"), {"hlink": handle})
+        return handle
+
+    for role, text in F0_EDITORIAL_ROLE_TEXT.items():
+        add_note(text, (role,))
+
+    add_note(
+        F0_EDITORIAL_INVALID_TEXT["duplicate"],
+        ("BOOK_TITLE",),
+    )
+    add_note(
+        F0_EDITORIAL_INVALID_TEXT["ambiguous"],
+        ("BOOK_DEDICATION", "BOOK_INTRODUCTION"),
+    )
+    add_note(
+        F0_EDITORIAL_INVALID_TEXT["unpublished"],
+        ("BOOK_AUTHOR",),
+        publishable=False,
+    )
+    add_note("   ", ("BOOK_SUBTITLE",))
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -890,6 +986,8 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     ET.SubElement(person, _qualified_name(root, "noteref"), {"hlink": note_handle})
     ET.SubElement(family, _qualified_name(root, "noteref"), {"hlink": note_handle})
 
+    _add_f0_editorial_notes(root, family, notes, tags, tag_handle)
+
     updated = ET.tostring(root, encoding="utf-8", xml_declaration=True)
     fixture.write_bytes(gzip.compress(updated, mtime=0) if compressed else updated)
     return fixture
@@ -1183,6 +1281,32 @@ def verify(
         )
         assert uncited_marriage_reference["citations"] == []
         assert family_notice["citation_call_ids"] == []
+        f0_role_notes = editorial_book["front_matter_notes"]
+        expected_f0_roles = tuple(F0_EDITORIAL_ROLE_TEXT)
+        assert tuple(item["role"] for item in f0_role_notes) == expected_f0_roles
+        f0_note_handles = {item["note_handle"] for item in f0_role_notes}
+        assert all(handle in model["notes"] for handle in f0_note_handles)
+        f0_text_by_role = {
+            item["role"]: model["notes"][item["note_handle"]]["text"]
+            for item in f0_role_notes
+        }
+        assert f0_text_by_role == F0_EDITORIAL_ROLE_TEXT
+        assert not f0_note_handles.intersection(family_notice["note_handles"])
+        f0_diagnostic_codes = {
+            item["code"]
+            for item in model["diagnostics"]
+            if item["code"].startswith("F0_EDITORIAL_NOTE_")
+        }
+        assert f0_diagnostic_codes == {
+            "F0_EDITORIAL_NOTE_DUPLICATE_ROLE",
+            "F0_EDITORIAL_NOTE_AMBIGUOUS_ROLE",
+            "F0_EDITORIAL_NOTE_NOT_PUBLISHABLE",
+            "F0_EDITORIAL_NOTE_EMPTY",
+        }, model["diagnostics"]
+        print(
+            "PASS: T-02 native F0 notes select all six roles and diagnose "
+            "duplicate, ambiguous, unpublished and empty notes"
+        )
         print(
             "PASS: AC-18 native model publishes a Marriage without citations and "
             "keeps a detailed citation whose source has no repository"
@@ -1390,6 +1514,18 @@ def verify(
         assert len(
             [name for name in archive_names if name.startswith("media/")]
         ) == 2, archive_names
+        for role, marker in F0_EDITORIAL_ROLE_TEXT.items():
+            expected_count = 2 if role == "BOOK_TITLE" else 1
+            assert html.count(marker) == expected_count, (
+                marker,
+                html.count(marker),
+            )
+        assert all(
+            marker not in html for marker in F0_EDITORIAL_INVALID_TEXT.values()
+        )
+        assert html.index(F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]) < html.index(
+            F0_EDITORIAL_ROLE_TEXT["BOOK_INTRODUCTION"]
+        )
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -1489,6 +1625,17 @@ def verify(
             assert rendered_pdf_text.count(AC18_SOURCE_AUTHOR) == 1
             assert rendered_pdf_text.count(AC18_SOURCE_PUBLICATION) == 1
             assert rendered_pdf_text.count(AC18_CITATION_PAGE) == 1
+            for marker in F0_EDITORIAL_ROLE_TEXT.values():
+                assert rendered_pdf_text.count(marker) == 1, marker
+            assert all(
+                marker not in rendered_pdf_text
+                for marker in F0_EDITORIAL_INVALID_TEXT.values()
+            )
+            assert rendered_pdf_text.index(
+                F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
+            ) < rendered_pdf_text.index(
+                F0_EDITORIAL_ROLE_TEXT["BOOK_INTRODUCTION"]
+            )
             ac18_pdf_entry = _pdf_citation_entry(
                 rendered_pdf_text, AC18_CITATION_PAGE
             )

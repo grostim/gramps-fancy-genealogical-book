@@ -20,7 +20,24 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 
 ## Notes éditoriales de la famille F0
 
-Pour personnaliser les préliminaires, créez une note Gramps par rôle et associez-lui l’étiquette native `BOOK_PUBLICATION` ainsi qu’une seule étiquette de rôle : `BOOK_TITLE`, `BOOK_SUBTITLE`, `BOOK_INTRODUCTION`, `BOOK_DEDICATION`, `BOOK_AUTHOR` ou `BOOK_PUBLICATION_DATE`. Rattachez chaque note directement à la famille sélectionnée. Les doublons sont départagés selon l’ordre des notes dans Gramps ; une note portant plusieurs rôles est ignorée avec un diagnostic. Le parcours dans l’interface Gramps 6 et la compilation visuelle du PDF restent à valider.
+Pour personnaliser la couverture et les préliminaires du livre :
+
+1. Dans Gramps, créez ou réutilisez les étiquettes natives `BOOK_PUBLICATION` et les six étiquettes de rôle ci-dessous. Elles servent à identifier les notes ; ce ne sont pas des types de note intégrés à Gramps.
+2. Créez une note par rôle, avec son texte, puis attribuez-lui `BOOK_PUBLICATION` et exactement une étiquette de rôle.
+3. Dans l’éditeur de la famille choisie comme F0, onglet **Notes**, rattachez directement ces notes à cette famille. Des étiquettes identiques apposées à des notes d’une autre famille ne sont pas prises en compte.
+
+| Étiquette | Contenu affiché |
+| --- | --- |
+| `BOOK_TITLE` | Titre de couverture ; remplace le titre par défaut |
+| `BOOK_SUBTITLE` | Sous-titre de couverture ; les noms du couple restent affichés |
+| `BOOK_AUTHOR` | Auteur sur la couverture |
+| `BOOK_PUBLICATION_DATE` | Date de publication sur la couverture, saisie comme texte de la note |
+| `BOOK_DEDICATION` | Dédicace dans les préliminaires |
+| `BOOK_INTRODUCTION` | Introduction, après la dédicace |
+
+Une note de rôle sans `BOOK_PUBLICATION`, sans texte ou portant plusieurs étiquettes de rôle est omise avec un diagnostic. Si plusieurs notes valides portent le même rôle, la première dans l’ordre des notes rattachées à F0 est retenue ; les suivantes sont signalées. Les notes de rôle ne sont pas répétées dans la notice familiale de F0. Les titres et le texte de publication ne sont pas déduits d’autres données généalogiques.
+
+La recette d’intégration utilise désormais des notes Gramps natives pour les six rôles et couvre l’absence du tag de publication, les rôles ambigus, le texte vide et les doublons dans l’export CLI. La saisie dans l’interface Gramps 6 et la revue visuelle du résultat PDF restent à qualifier. Voir la [décision sur les notes F0](docs/decisions/004-f0-editorial-notes.md) et le [manuel Gramps 6 sur l’édition des notes et des familles](https://gramps-project.org/wiki/index.php/Gramps_6.0_Wiki_Manual).
 
 Le parcours suit les filiations parent–enfant explicitement enregistrées. Les unions, partenaires et fratries sont ajoutés comme contexte sans étendre automatiquement leur propre lignée. Le rendu LaTeX reste expérimental : typographie définitive, convergence PDF et recette visuelle restent à réaliser. Voir le [suivi L3](docs/validation-l3.fr.md), le [démarrage L4](docs/validation-l4.fr.md), la [règle de rendu des notes](docs/decisions/003-note-markup.md) et le [suivi des exigences](docs/requirements.fr.md).
 
