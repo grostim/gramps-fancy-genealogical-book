@@ -78,6 +78,26 @@ def _qualified_name(root: ET.Element, name: str) -> str:
     return f"{{{namespace}}}{name}" if namespace else name
 
 
+def _format_native_id(value: str, width: int) -> str:
+    match = re.fullmatch(r"([A-Z]+)(\d+)", value)
+    if match is None:
+        return value
+    return f"{match.group(1)}{int(match.group(2)):0{width}d}"
+
+
+def _canonicalize_snapshot_ids(value):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key == "gramps_id" and isinstance(child, str):
+                value[key] = _format_native_id(child, 4)
+            else:
+                _canonicalize_snapshot_ids(child)
+    elif isinstance(value, list):
+        for child in value:
+            _canonicalize_snapshot_ids(child)
+    return value
+
+
 def _children(element: ET.Element, name: str) -> list[ET.Element]:
     return [child for child in element if child.tag.rsplit("}", 1)[-1] == name]
 
@@ -1540,7 +1560,9 @@ def _set_birth_month_day(root: ET.Element, events: ET.Element) -> None:
     )
 
 
-def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
+def _native_fixture(
+    executable: str, env: dict[str, str], work: Path
+) -> tuple[Path, int]:
     """Round-trip GEDCOM through Gramps, then add native Gramps XML fields."""
     gedcom = work / "reference-family.ged"
     gedcom.write_bytes((ROOT / "tests/fixtures/reference-family.ged").read_bytes())
@@ -1579,6 +1601,33 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     tags = _section(root, "tags")
     if people is None or events is None or objects is None:
         raise AssertionError("Gramps XML export is missing people, events or media objects.")
+
+    # Gramps 6.1 pads native object IDs to five digits; keep this synthetic
+    # fixture's IDs stable across versions before adding native XML fields.
+    fixture_entities = {
+        "person",
+        "family",
+        "event",
+        "citation",
+        "source",
+        "repository",
+        "object",
+        "note",
+    }
+    native_id_width = max(
+        (
+            len(match.group(2))
+            for item in root.iter()
+            if item.tag.rsplit("}", 1)[-1] in fixture_entities
+            if (match := re.fullmatch(r"([A-Z]+)(\d+)", item.get("id", "")))
+        ),
+        default=4,
+    )
+    for item in root.iter():
+        if item.tag.rsplit("}", 1)[-1] not in fixture_entities:
+            continue
+        gramps_id = item.get("id", "")
+        item.set("id", _format_native_id(gramps_id, 4))
 
     person = next(
         (
@@ -1646,8 +1695,10 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         or media is None
     ):
         raise AssertionError(
-            "Gramps XML export is missing fixture people I0001/I0002/I0003/I0004, "
-            "families F0001/F0002 or media M0001."
+            "Gramps XML export is missing expected fixture objects. "
+            f"People IDs: {[item.get('id') for item in _children(people, 'person')]}; "
+            f"family IDs: {[item.get('id') for item in _children(families, 'family')]}; "
+            f"media IDs: {[item.get('id') for item in _children(objects, 'object')]}"
         )
 
     _set_t04_parentage_case(family, child)
@@ -1890,9 +1941,32 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
 
     _add_f0_editorial_notes(root, family, notes, tags, tag_handle)
 
+    for item in root.iter():
+        if item.tag.rsplit("}", 1)[-1] in fixture_entities and item.get("id"):
+            item.set("id", _format_native_id(item.get("id", ""), native_id_width))
     updated = ET.tostring(root, encoding="utf-8", xml_declaration=True)
     fixture.write_bytes(gzip.compress(updated, mtime=0) if compressed else updated)
-    return fixture
+    return fixture, native_id_width
+
+
+def _profile_directory_name(executable: str, env: dict[str, str], work: Path) -> str:
+    """Return Gramps' major/minor profile directory for this executable."""
+    result = subprocess.run(
+        [executable, "--version"],
+        env=env,
+        cwd=work,
+        text=True,
+        capture_output=True,
+        timeout=30,
+    )
+    output = result.stdout + result.stderr
+    match = re.search(r"(?mi)^\s*gramps\s*:\s*(\d+)\.(\d+)\b", output)
+    if result.returncode or match is None:
+        raise AssertionError(
+            "Could not determine Gramps' profile directory from --version output: "
+            f"{output[-2000:]}"
+        )
+    return f"gramps{match.group(1)}{match.group(2)}"
 
 
 def verify(
@@ -1906,7 +1980,9 @@ def verify(
         work = Path(directory)
         env = os.environ.copy()
         env.update(GRAMPSHOME=str(work), XDG_CACHE_HOME=str(work / "cache"), LANGUAGE="en")
-        preferences = work / "gramps" / "gramps60" / "gramps.ini"
+        profile_dir_name = _profile_directory_name(executable, env, work)
+        profile_directory = work / "gramps" / profile_dir_name
+        preferences = profile_directory / "gramps.ini"
         preferences.parent.mkdir(parents=True, exist_ok=True)
         preferences.write_text("[preferences]\ndate-format=2\n", encoding="utf-8")
         if lualatex is not None:
@@ -1916,8 +1992,8 @@ def verify(
             env["PATH"] = f"{compiler.absolute().parent}{os.pathsep}{env.get('PATH', '')}"
         # Install the add-on and declared dependency in this profile, never from a source PYTHONPATH.
         env.pop("PYTHONPATH", None)
-        plugins = work / "gramps" / "gramps60" / "plugins"
-        plugins.mkdir(parents=True)
+        plugins = profile_directory / "plugins"
+        plugins.mkdir(parents=True, exist_ok=True)
         archive_path = (
             Path(addon_archive).expanduser()
             if addon_archive is not None
@@ -1929,7 +2005,7 @@ def verify(
         _install_optional_media_dependencies(plugins)
 
         _create_media_fixture(work)
-        native_fixture = _native_fixture(executable, env, work)
+        native_fixture, native_id_width = _native_fixture(executable, env, work)
 
         def report(
             family: str,
@@ -1939,8 +2015,9 @@ def verify(
             book_language: str | None = None,
             overwrite=False,
         ) -> str:
+            selected_family_id = _format_native_id(family, native_id_width)
             options = (
-                f"name={PLUGIN_ID},reference_family={family},"
+                f"name={PLUGIN_ID},reference_family={selected_family_id},"
                 f"output_format={output_format},privacy_acknowledged=True"
             )
             if output is not None:
@@ -1971,11 +2048,21 @@ def verify(
                 raise AssertionError(log)
             return log
 
+        def read_model(path: Path) -> dict:
+            snapshot = json.loads(path.read_text(encoding="utf-8"))
+            expected_family_id = _format_native_id("F0001", native_id_width)
+            actual_family_id = snapshot["reference_family"]["gramps_id"]
+            assert actual_family_id == expected_family_id, (
+                actual_family_id,
+                expected_family_id,
+            )
+            return _canonicalize_snapshot_ids(snapshot)
+
         output = work / "family.json"
         log = report("F0001", output)
         if not output.exists():
             raise AssertionError(log)
-        model = json.loads(output.read_text(encoding="utf-8"))
+        model = read_model(output)
 
         localized_models = {}
         for language in ("en", "fr"):
@@ -1983,9 +2070,7 @@ def verify(
             log = report("F0001", localized_output, book_language=language)
             if not localized_output.exists():
                 raise AssertionError(log)
-            localized_models[language] = json.loads(
-                localized_output.read_text(encoding="utf-8")
-            )
+            localized_models[language] = read_model(localized_output)
         localized_birth_dates = {}
         for language, localized_model in localized_models.items():
             birth = next(
@@ -2025,7 +2110,9 @@ def verify(
         consistency_path = output.with_name("family_consistency.json")
         if not consistency_path.is_file():
             raise AssertionError("The export is missing its consistency companion JSON.")
-        consistency = json.loads(consistency_path.read_text(encoding="utf-8"))
+        consistency = _canonicalize_snapshot_ids(
+            json.loads(consistency_path.read_text(encoding="utf-8"))
+        )
         birth_events = [
             event for event in model["events"].values() if event["type"] == "Birth"
         ]
@@ -3231,7 +3318,7 @@ def verify(
         stale_asset.write_text("old media output", encoding="utf-8")
         output.write_text("previous export", encoding="utf-8")
         log = report("F0001", output, overwrite=True)
-        assert json.loads(output.read_text())["reference_family"]["gramps_id"] == "F0001", log
+        assert read_model(output)["reference_family"]["gramps_id"] == "F0001", log
         assert media_output.is_dir()
         assert not stale_asset.exists()
         assert len(list(media_output.glob("*.png"))) == 2
