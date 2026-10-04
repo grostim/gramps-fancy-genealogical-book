@@ -423,3 +423,15 @@ Deux variantes temporaires ont remplacé `\pageref*` dans `\gfbpagelink` : une m
 Sur le jeu ramifié N=100 sans médias (202 personnes, 101 familles et 303 citations), la compilation complète de référence prend 62,130 s ; la variante avec cache prend 62,178 s. Le texte extrait est identique. Les deux PDF balisés ont 112 pages, 2 980 annotations dont 1 758 liens internes, et 3 491 destinations nommées ; leur taille diffère de quatre octets. Avec un seul run par variante, l’écart de durée ne montre pas de gain. La variante directe `refcount` prend 61,450 s lors d’un seul run ; son PDF conserve ces mêmes nombres de pages, annotations, liens internes et destinations. Sur N=10, une comparaison directe référence / `refcount` confirme aussi l’identité du texte extrait, des 17 pages, des 334 annotations, des 411 destinations et du balisage. Le helper de production converge dans chaque essai.
 
 Une source N=1 000 sans médias contient 17 283 appels à `\gfbpagelink` pour 9 009 cibles ; 13 279 appels visent les 5 005 cibles répétées. Ce nombre rend la piste du cache plausible à grande taille, mais la mesure N=100 ne démontre aucun gain et le délai de compilation demeure dominé par la composition des sections. Les deux variantes sont donc rejetées faute de bénéfice mesuré ; le renderer garde `\pageref*` et ses diagnostics natifs. Le [relevé brut des essais](validation-latex-page-reference-20261004.json) consigne les limites de ces mesures uniques.
+
+### Banc actuel avec code source explicite — 4 octobre 2026
+
+Après correction du chemin d’import, le banc a été lancé directement depuis `.venv` sans `PYTHONPATH`, sur le jeu ramifié avec 2, 20 et 200 portraits synthétiques de 96 × 72 pixels. Chaque taille n’a été exécutée qu’une fois ; aucun PDF n’a été compilé dans ce relevé.
+
+| N | Modèle (s) | Préparation médias (s) | JSON (s / octets) | HTML (s / octets) | LaTeX (s / octets) | ZIP HTML (s / octets) | Pic Python total (Mo) | Espace temporaire échantillonné (Mo) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10 | 0,017 | 0,005 | 0,039 / 186 329 | 0,013 / 67 437 | 0,011 / 47 830 | 0,007 / 34 662 | 4,68 | 0,063 |
+| 100 | 0,144 | 0,011 | 0,337 / 1 639 117 | 0,040 / 591 563 | 0,099 / 410 168 | 0,050 / 334 234 | 9,48 | 0,628 |
+| 1 000 | 1,419 | 0,099 | 3,313 / 16 265 394 | 0,396 / 5 842 609 | 0,985 / 4 037 337 | 0,510 / 3 328 646 | 78,86 | 6,297 |
+
+Ces valeurs constituent un point de contrôle reproductible du renderer Python courant, pas des médianes ni une nouvelle qualification PDF. Le pic Python exclut les allocations natives ; l’espace temporaire est échantillonné toutes les 100 ms. Les détails et les autres durées de fixture figurent dans les [données brutes](validation-benchmark-current-source-20261004.json).
