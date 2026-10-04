@@ -2582,9 +2582,31 @@ def verify(
         assert html.count(
             f'<section class="person-profile" id="{ac07_forced_profile["profile_id"]}">'
         ) == 1
+        for family_id, spouse_marker in (
+            ("F0009", AC07_UNFORCED_SPOUSE),
+            ("F0010", AC07_FORCED_SPOUSE),
+        ):
+            family = next(
+                family
+                for family in model["families"].values()
+                if family["gramps_id"] == family_id
+            )
+            notice = next(
+                notice
+                for notice in editorial_book["family_notices"]
+                if notice["family_handle"] == family["handle"]
+            )
+            notice_match = re.search(
+                rf'<article class="family-notice" id="{re.escape(notice["notice_id"])}">'
+                r"(.*?)</article>",
+                html,
+                flags=re.DOTALL,
+            )
+            assert notice_match is not None
+            assert f"Synthetic, {spouse_marker}" in notice_match.group(1)
         print(
-            "PASS: AC-07 native HTML mentions both spouses and creates only the "
-            "BOOK_PROFILE=YES profile"
+            "PASS: AC-07 native HTML family notices mention each spouse and only "
+            "BOOK_PROFILE=YES creates a profile"
         )
         rendered_note_nodes = [
             (target, body)
@@ -2716,12 +2738,21 @@ def verify(
             pdf_profiles = _pdf_section_between_headings(
                 rendered_pdf_text, "Fiches individuelles", "Annexe documentaire"
             )
+            pdf_family_connections = _pdf_section_between_headings(
+                rendered_pdf_text, "Liens familiaux", "Notices familiales"
+            )
             assert pdf_profiles.count(f"Synthetic, {AC06_SIBLING}") == 1
             assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" not in pdf_profiles
             assert pdf_profiles.count(f"Synthetic, {AC07_FORCED_SPOUSE}") == 1
             assert pdf_profiles.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 1
+            for spouse_marker in (AC07_UNFORCED_SPOUSE, AC07_FORCED_SPOUSE):
+                assert re.search(
+                    rf"(?m)^\s*— [^\n]*Synthetic, {re.escape(spouse_marker)}"
+                    rf"[^\n]*\(descendance, génération 0\)\s*$",
+                    pdf_family_connections,
+                )
             assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" in rendered_pdf_text
             assert f"Synthetic, {AC07_FORCED_SPOUSE}" in rendered_pdf_text
             pdf_person_index = _pdf_section_between_headings(
@@ -2737,8 +2768,8 @@ def verify(
                 "profile/index entry, without the sibling's child"
             )
             print(
-                "PASS: AC-07 native PDF mentions both spouses and includes a "
-                "single profile only for BOOK_PROFILE=YES"
+                "PASS: AC-07 native PDF family connections mention each spouse; "
+                "only BOOK_PROFILE=YES receives one profile"
             )
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
