@@ -1,0 +1,83 @@
+{
+  "title": "Experiment to omit page labels for destinations without page-number links",
+  "measured_on": "2026-10-04",
+  "environment": {
+    "python": "3.13.7",
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "pillow": "12.3.0",
+    "mistune": "3.3.4",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "base_commit": "88f0560",
+  "renderer_code_commit": "a7f5bc9",
+  "command": "python scripts/benchmark_book.py --shape branching --descendant-couples 100 --with-media --compile-pdf-for 100 --repeat 3",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "media": 20,
+    "portrait_size": "96x72"
+  },
+  "candidate_change": "Keep every named PDF destination. Emit a LaTeX label only for anchor targets referenced by the page-link macro; direct destinations without page-number links retain their clickable hypertarget.",
+  "n1000_source_counts": {
+    "unique_destination_anchors": 14498,
+    "unique_page_reference_targets": 9049,
+    "destinations_without_page_reference_labels": 5449,
+    "unresolved_page_reference_targets": 0
+  },
+  "baseline": {
+    "source_bytes": 410168,
+    "compile_seconds": [
+      62.268945,
+      62.773225,
+      62.772188
+    ],
+    "compile_median_seconds": 62.772188,
+    "pdf_bytes": [
+      1318780,
+      1318771,
+      1318772
+    ],
+    "pdf_median_bytes": 1318772,
+    "source": "docs/validation-pdf-current-source-n100-20261004.json",
+    "source_revision": "a7f5bc9"
+  },
+  "candidate": {
+    "source_bytes": 416613,
+    "compile_statuses": [
+      "compiled",
+      "compiled",
+      "compiled"
+    ],
+    "compile_seconds": [
+      62.630125,
+      64.428818,
+      64.387956
+    ],
+    "compile_median_seconds": 64.387956,
+    "pdf_bytes": [
+      1319101,
+      1319101,
+      1319101
+    ],
+    "pdf_median_bytes": 1319101,
+    "pdf_structure_review": "Not performed; the production helper completed all three compilations and its convergence and layout-log checks."
+  },
+  "comparison": {
+    "source_bytes_delta": 6445,
+    "source_bytes_delta_percent": 1.57,
+    "compile_median_seconds_delta": 1.615768,
+    "compile_median_seconds_delta_percent": 2.574,
+    "pdf_median_bytes_delta": 329,
+    "pdf_median_bytes_delta_percent": 0.025,
+    "decision": "Reject: the candidate is slower in these runs and produces a larger LaTeX source. The measurements do not establish a performance benefit."
+  },
+  "limitations": [
+    "Baseline and candidate runs were each repeated three times on the same environment, but were not interleaved.",
+    "N=1000 was used only to count destinations and page-reference targets; no N=1000 PDF was compiled with this candidate.",
+    "The benchmark fixture uses synthetic data and 96x72 pixel portraits."
+  ]
+}
