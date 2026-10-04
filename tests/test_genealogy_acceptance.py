@@ -257,9 +257,17 @@ def test_other_union_descendant_uses_both_family_contexts_but_one_person_entry()
     assert person_index.count("shared-child") == 1
 
 
-def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
+def test_explicit_parentage_preserves_gramps_types_and_excludes_none_links():
     p0 = _person(
-        "p0", parent_family_handles=("f-adoptive", "f-foster", "f-step")
+        "p0",
+        parent_family_handles=(
+            "f-adoptive",
+            "f-foster",
+            "f-step",
+            "f-sponsored",
+            "f-unknown",
+            "f-custom",
+        ),
     )
     p1 = _person("p1")
     adoptive_father = _person("adoptive-father", family_handles=("f-adoptive",))
@@ -267,6 +275,9 @@ def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
     foster_father = _person("foster-father", family_handles=("f-foster",))
     foster_mother = _person("foster-mother", family_handles=("f-foster",))
     step_parent = _person("step-parent", family_handles=("f-step",))
+    sponsored_parent = _person("sponsored-parent", family_handles=("f-sponsored",))
+    unknown_parent = _person("unknown-parent", family_handles=("f-unknown",))
+    custom_parent = _person("custom-parent", family_handles=("f-custom",))
     central = _family("f0", p0, p1)
     adoptive = _family(
         "f-adoptive",
@@ -289,10 +300,39 @@ def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
         (p0,),
         relations={"p0": ("Stepchild", None)},
     )
+    sponsored_family = _family(
+        "f-sponsored",
+        sponsored_parent,
+        None,
+        (p0,),
+        relations={"p0": ("Sponsored", None)},
+    )
+    unknown_family = _family(
+        "f-unknown",
+        unknown_parent,
+        None,
+        (p0,),
+        relations={"p0": ("Unknown", None)},
+    )
+    custom_family = _family(
+        "f-custom",
+        custom_parent,
+        None,
+        (p0,),
+        relations={"p0": ("Other", None)},
+    )
     model = build_book_model(
         _snapshot(
             central,
-            (central, adoptive, foster, step_family),
+            (
+                central,
+                adoptive,
+                foster,
+                step_family,
+                sponsored_family,
+                unknown_family,
+                custom_family,
+            ),
             (
                 p0,
                 p1,
@@ -301,6 +341,9 @@ def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
                 foster_father,
                 foster_mother,
                 step_parent,
+                sponsored_parent,
+                unknown_parent,
+                custom_parent,
             ),
         )
     )
@@ -314,6 +357,9 @@ def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
         "adoptive-father",
         "foster-father",
         "step-parent",
+        "sponsored-parent",
+        "unknown-parent",
+        "custom-parent",
     }
 
     occurrences_by_id = {
@@ -324,6 +370,9 @@ def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
         ("f-adoptive", "adoptive-father", "Adopted"),
         ("f-foster", "foster-father", "Foster"),
         ("f-step", "step-parent", "Stepchild"),
+        ("f-sponsored", "sponsored-parent", "Sponsored"),
+        ("f-unknown", "unknown-parent", "Unknown"),
+        ("f-custom", "custom-parent", "Other"),
     ):
         section = next(
             section
@@ -342,6 +391,9 @@ def test_explicit_parentage_keeps_adoptive_foster_stepchild_and_none_distinct():
     assert "(Adopted)" in rendered
     assert "(Foster)" in rendered
     assert "(Stepchild)" in rendered
+    assert "(Sponsored)" in rendered
+    assert "(Unknown)" in rendered
+    assert "(Other)" in rendered
     assert "(None)" not in rendered
 
 
