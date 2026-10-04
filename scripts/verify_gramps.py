@@ -33,6 +33,11 @@ AC04_ADDITIONAL_PARENTAGE = (
     ("I0020", "F0014", "AC04_UNKNOWN_PARENT", "Unknown"),
     ("I0021", "F0015", "AC04_CUSTOM_OTHER_PARENT", "Other"),
 )
+AC04_PARENTAGE_LABELS_FR = {
+    "Sponsored": "Parrainé",
+    "Unknown": "Inconnu",
+    "Other": "Other",
+}
 AC05_SHARED_ANCESTOR = "AC05_ANC"
 AC05_PARENT_PARTNER = "AC05_P1"
 AC05_OTHER_PARTNER = "AC05_P2"
@@ -2860,11 +2865,12 @@ def verify(
             assert f'href="#{target}"' in occurrence_html
         assert f"Synthetic, {AC04_STEP_PARENT} : Enfant du conjoint" in html
         for _, _, parent_name, relationship_type in AC04_ADDITIONAL_PARENTAGE:
+            expected_label = AC04_PARENTAGE_LABELS_FR[relationship_type]
             assert re.search(
-                rf"Synthetic, {re.escape(parent_name)}\s*:\s*[^<]+</span>",
+                rf"Synthetic, {re.escape(parent_name)}\s*:\s*"
+                rf"{re.escape(expected_label)}</span>",
                 html,
             ), (parent_name, relationship_type)
-        assert f"Synthetic, {AC04_ADDITIONAL_PARENTAGE[-1][2]} : Other" in html
         print(
             "PASS: AC-01 native HTML starts with both central partners and "
             "links their descent mentions back"
@@ -3334,16 +3340,13 @@ def verify(
                 pdf_family_connections,
             ), pdf_family_connections
             for _, _, parent_name, relationship_type in AC04_ADDITIONAL_PARENTAGE:
+                expected_label = AC04_PARENTAGE_LABELS_FR[relationship_type]
                 assert re.search(
                     rf"Synthetic, {re.escape(parent_name)}\s+"
-                    rf"(?:\(p\.\s*\d+\)\s+)?\([^)]*\)",
+                    rf"(?:\(p\.\s*\d+\)\s+)?"
+                    rf"\({re.escape(expected_label)}\)",
                     pdf_family_connections,
                 ), (parent_name, relationship_type, pdf_family_connections)
-            assert re.search(
-                rf"Synthetic, {re.escape(AC04_ADDITIONAL_PARENTAGE[-1][2])}\s+"
-                rf"(?:\(p\.\s*\d+\)\s+)?\(Other\)",
-                pdf_family_connections,
-            ), pdf_family_connections
             pdf_pages = _pdf_page_texts(destination)
             descent_generation_zero_pages = [
                 page_index
