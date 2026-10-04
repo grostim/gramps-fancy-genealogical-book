@@ -17,6 +17,7 @@ Updated on 4 October 2026. L4 remains in progress; scenarios AC-01 and AC-03 to 
 - Event timelines use Gramps' comparable bounds instead of its scalar sort value. Events with overlapping ranges retain source position, with the technical key as a stable tie-breaker; uncomparable dates follow classifiable dates.
 - Family sections follow generation and branch-occurrence order, then the source order of unions in the relevant Gramps partner or child family list. The family identifier is only a deterministic tie-breaker.
 - Each family section has a stable ID, references its in-scope partner and child occurrences, and exposes parent-child links with the Gramps-normalized relationship type for each parent when available. Each occurrence links back to its sections; generation, branch, path, and profile anchor provide the genealogy-marker data.
+- The native T-04 recipe imports and rereads a child-father `Adopted` link and a child-mother `None` link through Gramps 6.0.8: the model retains both values, while the genealogy graph creates only the adopted parent-child link and preserves its type. The same fixture confirms that a Marriage event associated with F0 retains Gramps' `Family` role. Entering these values in the Gramps interface and trying the other relationship types remain open.
 
 ## Remaining before L4 exit
 

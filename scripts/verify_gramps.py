@@ -651,6 +651,31 @@ def _add_f0_editorial_notes(
     add_note("   ", ("BOOK_SUBTITLE",))
 
 
+def _set_t04_parentage_case(
+    family: ET.Element,
+    child: ET.Element,
+) -> None:
+    """Exercise a typed parent link and an explicit None link in native Gramps XML."""
+    child_handle = child.get("handle")
+    if not child_handle:
+        raise AssertionError("Native T-04 fixture child has no Gramps handle.")
+    child_ref = next(
+        (
+            item
+            for item in _children(family, "childref")
+            if item.get("hlink") == child_handle
+        ),
+        None,
+    )
+    if child_ref is None:
+        raise AssertionError("Native T-04 fixture family has no reference to its child.")
+
+    # F0001 is imported from the small GEDCOM fixture: frel is I0001's link,
+    # and mrel is I0002's. Reimport through Gramps below to exercise its API.
+    child_ref.set("frel", "Adopted")
+    child_ref.set("mrel", "None")
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -757,6 +782,14 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
+    child = next(
+        (
+            item
+            for item in _children(people, "person")
+            if item.get("id") == "I0003"
+        ),
+        None,
+    )
     family = next(
         (
             item
@@ -773,11 +806,12 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
-    if person is None or family is None or media is None:
+    if person is None or child is None or family is None or media is None:
         raise AssertionError(
-            "Gramps XML export is missing fixture person I0001, family F0001 or media M0001."
+            "Gramps XML export is missing fixture person I0001, child I0003, family F0001 or media M0001."
         )
 
+    _set_t04_parentage_case(family, child)
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1177,8 +1211,41 @@ def verify(
         assert model["reference_family"]["handle"] != "F0001"
         assert model["metadata"]["BOOK_SCHEMA_VERSION"] == "0.8"
         assert model["reference_family"]["handle"] in model["families"]
-        assert model["reference_family"]["child_relationships"][0]["father_relation"] == "Birth"
-        assert model["reference_family"]["child_relationships"][0]["mother_relation"] == "Birth"
+        reference_family = model["reference_family"]
+        child_relationship = reference_family["child_relationships"][0]
+        assert child_relationship["father_relation"] == "Adopted"
+        assert child_relationship["mother_relation"] == "None"
+        family_sections = model["genealogy"]["family_sections"]
+        central_section = next(
+            section
+            for section in family_sections
+            if section["family_handle"] == reference_family["handle"]
+            and section["part"] == "ancestry"
+            and "central" in section["roles"]
+        )
+        occurrences_by_id = {}
+        for part in ("ancestry", "descent"):
+            for generation in model["genealogy"][part]["generations"]:
+                occurrences_by_id.update(
+                    (item["occurrence_id"], item)
+                    for item in generation["occurrences"]
+                )
+        parent_child_links = central_section["parent_child_links"]
+        assert len(parent_child_links) == 1, parent_child_links
+        parent_child_link = parent_child_links[0]
+        assert parent_child_link["relationship_type"] == "Adopted"
+        assert (
+            occurrences_by_id[parent_child_link["parent_occurrence_id"]]["person_handle"]
+            == reference_family["father"]["handle"]
+        )
+        assert (
+            occurrences_by_id[parent_child_link["child_occurrence_id"]]["person_handle"]
+            == child_relationship["person_handle"]
+        )
+        print(
+            "PASS: T-04 native Gramps child links preserve Adopted/None and "
+            "traverse only the explicit parent"
+        )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
         }
@@ -1196,6 +1263,7 @@ def verify(
         marriage_ref = model["reference_family"]["links"]["events"][0]
         assert marriage_ref["role"] == "Family"
         assert model["events"][marriage_ref["event_handle"]]["type"] == "Marriage"
+        print("PASS: T-04 F0 Marriage association retains the Family event role")
         assert len(model["citations"]) == 4
         assert len(model["sources"]) == 3
         source = next(iter(model["sources"].values()))
@@ -1448,6 +1516,8 @@ def verify(
             )
         ), "The HTML archive does not contain the native citation PDF references."
         assert "https://example.org/ac16-citation" in html
+        assert any(label in html for label in ("Adopted", "Adopté"))
+        assert "(None)" not in html
         assert AC13_MEDIA_DESCRIPTION not in html
         assert AC13_CITATION_PAGE not in html
         html_citation_numbers = _html_citation_numbers(html)
@@ -1620,6 +1690,8 @@ def verify(
             if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
                 raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
             rendered_pdf_text = _pdf_text(destination)
+            assert any(label in rendered_pdf_text for label in ("Adopted", "Adopté"))
+            assert "(None)" not in rendered_pdf_text
             assert rendered_pdf_text.count(AC18_UNCITED_EVENT) == 1
             assert rendered_pdf_text.count(AC18_SOURCE_TITLE) == 1
             assert rendered_pdf_text.count(AC18_SOURCE_AUTHOR) == 1
