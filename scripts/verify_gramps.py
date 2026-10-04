@@ -2747,12 +2747,23 @@ def verify(
             assert pdf_profiles.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 1
+            ac07_reference_parent_name = next(
+                person["name"]
+                for person in model["people"]
+                if person["handle"] == reference_family["father"]["handle"]
+            )
+            ac07_pdf_union_entries = {}
             for spouse_marker in (AC07_UNFORCED_SPOUSE, AC07_FORCED_SPOUSE):
-                assert re.search(
-                    rf"(?m)^\s*— [^\n]*Synthetic, {re.escape(spouse_marker)}"
-                    rf"[^\n]*\(descendance, génération 0\)\s*$",
-                    pdf_family_connections,
-                )
+                entries = [
+                    line.strip()
+                    for line in pdf_family_connections.splitlines()
+                    if spouse_marker in line
+                    and re.search(r"\(descendance, génération 0\)", line)
+                ]
+                assert len(entries) == 1, (spouse_marker, entries)
+                assert ac07_reference_parent_name in entries[0], entries[0]
+                ac07_pdf_union_entries[spouse_marker] = entries[0]
+            assert len(set(ac07_pdf_union_entries.values())) == 2
             assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" in rendered_pdf_text
             assert f"Synthetic, {AC07_FORCED_SPOUSE}" in rendered_pdf_text
             pdf_person_index = _pdf_section_between_headings(
