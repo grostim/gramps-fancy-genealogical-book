@@ -2292,11 +2292,42 @@ def verify(
         assert len(birth_fact_events) == 2, birth_fact_events
         assert {event["date"]["ymd"][0] for event in birth_fact_events} == {1900, 2000}
         assert len({event["place_handle"] for event in birth_fact_events}) == 2
-        assert consistency["scope"]["compared_groups"] == 1
+        assert consistency["scope"] == {
+            "grouping_attribute": "BOOK_FACT_ID",
+            "compared_groups": 1,
+            "declared_groups": 1,
+        }
         assert consistency["groups"][0]["book_fact_id"] == "AC19-birth-of-I0001"
         assert set(consistency["groups"][0]["event_handles"]) == {
             event["handle"] for event in birth_fact_events
         }
+        assert consistency["diagnostics"] == []
+        consistency_events = {
+            event["handle"]: event for event in consistency["groups"][0]["events"]
+        }
+        assert set(consistency_events) == {
+            event["handle"] for event in birth_fact_events
+        }
+        expected_date_values = {}
+        expected_place_values = {}
+        for event in birth_fact_events:
+            summary = consistency_events[event["handle"]]
+            date = event["date"]
+            assert summary["date"] == date["display"]
+            assert summary["date_range"] == date["range"]
+            assert summary["place_handle"] == event["place_handle"]
+            place_handle = event["place_handle"]
+            place = model["places"][place_handle]
+            place_display = place["name"] or place["title"]
+            assert summary["place"] == place_display
+            expected_date_values[event["handle"]] = (
+                date["display"],
+                date["range"],
+            )
+            expected_place_values.setdefault(
+                place_handle,
+                {"display": place_display, "event_handles": set()},
+            )["event_handles"].add(event["handle"])
         actual_findings = {
             (finding["field"], finding["classification"])
             for finding in consistency["findings"]
@@ -2310,6 +2341,27 @@ def verify(
             "groups": consistency["groups"],
             "findings": consistency["findings"],
         }
+        date_finding = next(
+            finding
+            for finding in consistency["findings"]
+            if finding["field"] == "date"
+        )
+        assert {
+            value["event_handle"]: (value["display"], value["range"])
+            for value in date_finding["values"]
+        } == expected_date_values
+        place_finding = next(
+            finding
+            for finding in consistency["findings"]
+            if finding["field"] == "place"
+        )
+        assert {
+            value["place_handle"]: {
+                "display": value["display"],
+                "event_handles": set(value["event_handles"]),
+            }
+            for value in place_finding["values"]
+        } == expected_place_values
         book_conflict_codes = {
             "disjoint_event_date_ranges",
             "different_event_place_references",
