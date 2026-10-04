@@ -5,6 +5,7 @@ from dataclasses import dataclass, fields, is_dataclass, replace
 from unicodedata import combining, normalize
 
 from .conventions import BOOK_F0_EDITORIAL_ROLES
+from .date_ranges import comparable_date_range, stable_order_by_date_range
 from .domain import (
     Citation,
     Diagnostic,
@@ -678,27 +679,14 @@ def _primary_portrait(
 def _chronological_event_refs(
     event_refs: tuple[EventReference, ...], events_by_handle: dict[str, Event]
 ) -> tuple[EventReference, ...]:
-    def event_key(
-        item: tuple[int, EventReference]
-    ) -> tuple[bool, int, int, int, str]:
-        original_index, reference = item
+    ordered_items = []
+    for original_index, reference in enumerate(event_refs):
         event = events_by_handle.get(reference.event_handle)
-        sort_value = (
-            event.date.sort_value
-            if event is not None and event.date is not None
-            else None
+        date_range = comparable_date_range(event.date if event is not None else None)
+        ordered_items.append(
+            (date_range, (original_index, reference.event_handle), reference)
         )
-        return (
-            sort_value is None,
-            sort_value if sort_value is not None else 0,
-            reference.order,
-            original_index,
-            reference.event_handle,
-        )
-
-    return tuple(
-        reference for _, reference in sorted(enumerate(event_refs), key=event_key)
-    )
+    return stable_order_by_date_range(ordered_items)
 
 
 def _build_citation_entries(

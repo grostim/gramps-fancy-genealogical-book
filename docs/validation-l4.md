@@ -1,6 +1,6 @@
 # L4 progress — genealogy traversal
 
-Updated on 28 September 2026. L4 remains in progress; scenarios AC-01 and AC-03 to AC-09 are exercised against both the model and the textual LaTeX renderer contract. Visual PDF pagination remains to be validated in L6.
+Updated on 4 October 2026. L4 remains in progress; scenarios AC-01 and AC-03 to AC-09 are exercised against both the model and the textual LaTeX renderer contract. Visual PDF pagination remains to be validated in L6.
 
 ## Available traversal
 
@@ -13,13 +13,15 @@ Updated on 28 September 2026. L4 remains in progress; scenarios AC-01 and AC-03 
 - A path that revisits a person is kept as a visible occurrence, reported as a diagnostic, and stopped before the loop is expanded again.
 - Profile eligibility follows `BOOK_PROFILE = YES` or a substantive individual/family event other than birth or death.
 - Each occurrence carries `primary_occurrence_id` pointing to the person’s first appearance, even when no full profile exists. For an eligible person, `profile_anchor` and `is_primary_profile` still identify the single profile and its primary occurrence.
-- Generation order is deterministic. Complete exact birth dates sort chronologically; absent or uncertain dates use a stable identifier as their tie-breaker.
+- Within a generation, branch, and family group, comparable disjoint birth ranges sort chronologically. Overlapping ranges, equal dates, and uncomparable dates use a stable Gramps ID/handle tie-breaker; missing or uncomparable dates remain at the end of the group. No precise birth order is inferred from an ambiguous range.
+- Event timelines use Gramps' comparable bounds instead of its scalar sort value. Events with overlapping ranges retain source position, with the technical key as a stable tie-breaker; uncomparable dates follow classifiable dates.
 - Family sections follow generation and branch-occurrence order, then the source order of unions in the relevant Gramps partner or child family list. The family identifier is only a deterministic tie-breaker.
 - Each family section has a stable ID, references its in-scope partner and child occurrences, and exposes parent-child links with the Gramps-normalized relationship type for each parent when available. Each occurrence links back to its sections; generation, branch, path, and profile anchor provide the genealogy-marker data.
 
 ## Remaining before L4 exit
 
-- `tests/test_genealogy_acceptance.py` qualifies AC-01 and AC-03 to AC-09 with synthetic graphs and also checks their LaTeX output: central couple first in ancestry, cross-references from descent, and other-union context, parentage labels, one profile with cross-references, collateral relatives, family events, single-parent families, and depth boundaries.
+- `tests/test_genealogy_acceptance.py` qualifies AC-01 and AC-03 to AC-09 with synthetic graphs and also checks their LaTeX output: central couple first in ancestry, cross-references from descent, and other-union context, parentage labels, one profile with cross-references, collateral relatives, family events, single-parent families, depth boundaries, and overlapping approximate birth ranges.
+- `tests/test_date_ranges.py` checks transitive overlap groups, source-order preservation for event timelines, use of bounds when scalar sort values disagree, and final placement of textual/uncomparable dates. On 4 October, the complete suite passes: 53 tests.
 - The LaTeX renderer consumes the `genealogy` model, with contract assertions for these scenarios. The full HTML renderer remains planned for L7; pagination, multipass references, and the final PDF appearance still need visual review in L6.
 - The editorial model already provides profiles, family notices, an index, and navigation targets to the LaTeX renderer. These checks cover their textual structure, not the final paginated composition.
 - The six central-family editorial notes and their Gramps 6 conventions still need separate validation.

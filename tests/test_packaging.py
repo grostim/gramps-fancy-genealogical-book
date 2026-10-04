@@ -20,6 +20,7 @@ def test_archive_is_reproducible_and_contains_only_runtime_files(tmp_path):
         catalog_magic = catalog_member.read(4)
     assert "GrampsFancyBook/GrampsFancyBook.gpr.py" in names
     assert "GrampsFancyBook/gramps_fancy_book/export.py" in names
+    assert "GrampsFancyBook/gramps_fancy_book/date_ranges.py" in names
     catalog = "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
     assert catalog in names
     assert all(
