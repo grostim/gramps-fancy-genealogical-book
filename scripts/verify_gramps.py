@@ -48,6 +48,8 @@ AC07_UNFORCED_SPOUSE = "AC07_UNFORCED_SPOUSE"
 AC07_FORCED_SPOUSE = "AC07_FORCED_SPOUSE"
 AC08_FAMILY_EVENT_PARTNER = "AC08_FAMILY_EVENT_PARTNER"
 AC08_FAMILY_EVENT_DETAIL = "AC08_FAMILY_EVENT_DETAIL"
+AC11_UNPUBLISHED_NOTE_ID = "N9999"
+AC11_UNPUBLISHED_NOTE_MARKER = "AC11_UNPUBLISHED_NOTE_MARKER"
 AC12_FEATURED_FILENAME = "ac12-featured-shared.png"
 AC12_FEATURED_DESCRIPTION = "AC12_FEATURED_SHARED_MARKER"
 AC12_PARTNER_PORTRAIT_FILENAME = "ac12-partner-portrait.png"
@@ -870,6 +872,36 @@ def _add_f0_editorial_notes(
         publishable=False,
     )
     add_note("   ", ("BOOK_SUBTITLE",))
+
+
+def _add_ac11_unpublished_note(
+    root: ET.Element,
+    person: ET.Element,
+    family: ET.Element,
+    notes: ET.Element,
+) -> None:
+    """Add a working note shared by the central person and family, with no tag."""
+    if any(
+        item.get("id") == AC11_UNPUBLISHED_NOTE_ID
+        for item in _children(notes, "note")
+    ):
+        raise AssertionError("AC-11 fixture note ID is already in use.")
+    handle = f"_{uuid.uuid4().hex}"
+    note = ET.SubElement(
+        notes,
+        _qualified_name(root, "note"),
+        {
+            "handle": handle,
+            "change": "0",
+            "id": AC11_UNPUBLISHED_NOTE_ID,
+            "type": "General",
+        },
+    )
+    ET.SubElement(note, _qualified_name(root, "text")).text = (
+        AC11_UNPUBLISHED_NOTE_MARKER
+    )
+    for owner in (person, family):
+        ET.SubElement(owner, _qualified_name(root, "noteref"), {"hlink": handle})
 
 
 def _set_t04_parentage_case(
@@ -2070,6 +2102,7 @@ def _native_fixture(
     ET.SubElement(family, _qualified_name(root, "noteref"), {"hlink": note_handle})
 
     _add_f0_editorial_notes(root, family, notes, tags, tag_handle)
+    _add_ac11_unpublished_note(root, person, family, notes)
 
     for item in root.iter():
         if item.tag.rsplit("}", 1)[-1] in fixture_entities and item.get("id"):
@@ -2952,6 +2985,33 @@ def verify(
         note_handle = publishable_note["handle"]
         assert note_handle in model["people"][0]["links"]["notes"]
         assert note_handle in model["reference_family"]["links"]["notes"]
+        ac11_note = next(
+            note
+            for note in model["notes"].values()
+            if note["gramps_id"] == AC11_UNPUBLISHED_NOTE_ID
+        )
+        assert ac11_note["is_publishable"] is False, ac11_note
+        assert ac11_note["text"] is None, ac11_note
+        assert not ac11_note["links"]["tag_handles"], ac11_note
+        assert ac11_note["handle"] in model["people"][0]["links"]["notes"]
+        assert ac11_note["handle"] in model["reference_family"]["links"]["notes"]
+        editorial_note_handles = {
+            handle
+            for profile in model["editorial_book"]["profiles"]
+            for handle in profile["note_handles"]
+        } | {
+            handle
+            for notice in model["editorial_book"]["family_notices"]
+            for handle in notice["note_handles"]
+        } | {
+            item["note_handle"]
+            for item in model["editorial_book"]["front_matter_notes"]
+        }
+        assert ac11_note["handle"] not in editorial_note_handles
+        print(
+            "PASS: AC-11 native Gramps working note keeps its tag-free source link "
+            "but no text or editorial placement"
+        )
 
         media_by_name = {
             Path(item["path"]).name: item for item in model["media"].values()
@@ -3256,6 +3316,7 @@ def verify(
         assert all(
             marker not in html for marker in F0_EDITORIAL_INVALID_TEXT.values()
         )
+        assert AC11_UNPUBLISHED_NOTE_MARKER not in html
         assert html.index(F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]) < html.index(
             F0_EDITORIAL_ROLE_TEXT["BOOK_INTRODUCTION"]
         )
@@ -3558,6 +3619,8 @@ def verify(
                 marker not in rendered_pdf_text
                 for marker in F0_EDITORIAL_INVALID_TEXT.values()
             )
+            assert AC11_UNPUBLISHED_NOTE_MARKER not in rendered_pdf_text
+            print("PASS: AC-11 native PDF omits untagged working-note text")
             assert AC03_OTHER_PARTNER in rendered_pdf_text
             assert AC03_OTHER_CHILD in rendered_pdf_text
             pdf_ancestry = _pdf_section_between_headings(
