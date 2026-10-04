@@ -50,10 +50,10 @@
     "citation_entries_found": 3003,
     "citation_range": [1, 3003],
     "appendix_physical_pages": [784, 1181],
-    "index_physical_page": 1239,
+    "index_physical_pages": [1182, 1239],
     "figures": 400,
     "figures_missing_alt_text": 0,
-    "visual_sample_pages": [1, 500, 784, 966, 1181, 1239]
+    "visual_sample_pages": [1, 500, 784, 966, 1181, 1182, 1239]
   },
   "preview": "output/pdf/gramps-fancy-book-n1000-compact-annex-20261005.pdf",
   "comparison": {
@@ -68,7 +68,7 @@
     "Extended diagnostic limits were required; standard production limits of 120 seconds per pass and 180 seconds overall remain exceeded.",
     "The provisional 60-second PDF target remains unmet.",
     "The synthetic model was compiled directly, not through Gramps Desktop.",
-    "Six representative pages were visually inspected; the complete 1,239-page layout was not reviewed page by page.",
+    "Seven representative pages were visually inspected; the complete 1,239-page layout was not reviewed page by page.",
     "The visual sample had no observed clipping or overlap."
   ]
 }
