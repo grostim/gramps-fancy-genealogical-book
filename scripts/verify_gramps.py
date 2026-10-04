@@ -35,6 +35,8 @@ AC06_PARTNER = "AC06_MAT"
 AC06_UNEXPANDED_CHILD = "AC06_COUS"
 AC07_UNFORCED_SPOUSE = "AC07_UNFORCED_SPOUSE"
 AC07_FORCED_SPOUSE = "AC07_FORCED_SPOUSE"
+AC08_FAMILY_EVENT_PARTNER = "AC08_FAMILY_EVENT_PARTNER"
+AC08_FAMILY_EVENT_DETAIL = "AC08_FAMILY_EVENT_DETAIL"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
@@ -1263,6 +1265,133 @@ def _add_ac07_spouse_eligibility(
     families.extend(added_families)
 
 
+def _add_ac08_family_event_eligibility(
+    root: ET.Element,
+    people: ET.Element,
+    families: ET.Element,
+    events: ET.Element,
+    reference_parent: ET.Element,
+) -> None:
+    """Add a spouse qualified only by a marriage recorded on the family."""
+    if any(item.get("id") == "I0017" for item in _children(people, "person")):
+        raise AssertionError("Native AC-08 fixture person ID I0017 already exists.")
+    if any(item.get("id") == "F0011" for item in _children(families, "family")):
+        raise AssertionError("Native AC-08 fixture family ID F0011 already exists.")
+
+    def event_type(event: ET.Element) -> str:
+        return _text_content(next(iter(_children(event, "type")), None))
+
+    templates = {
+        event_type(event): event
+        for event in _children(events, "event")
+        if event_type(event) in {"Birth", "Death", "Marriage"}
+    }
+    if "Birth" not in templates or "Marriage" not in templates:
+        raise AssertionError("Native AC-08 fixture requires Birth and Marriage templates.")
+    if "Death" not in templates:
+        death_template = copy.deepcopy(templates["Birth"])
+        death_type = next(iter(_children(death_template, "type")), None)
+        if death_type is None:
+            raise AssertionError("Native AC-08 Birth event template has no type.")
+        death_type.text = "Death"
+        templates["Death"] = death_template
+
+    used_event_ids = {
+        item.get("id")
+        for item in _children(events, "event")
+        if item.get("id")
+    }
+    next_event_number = max(
+        (
+            int(event_id[1:])
+            for event_id in used_event_ids
+            if event_id.startswith("E") and event_id[1:].isdigit()
+        ),
+        default=0,
+    ) + 1
+
+    def allocate_event(kind: str) -> ET.Element:
+        nonlocal next_event_number
+        cloned = copy.deepcopy(templates[kind])
+        handle = f"_{uuid.uuid4().hex}"
+        event_id = f"E{next_event_number:04d}"
+        while event_id in used_event_ids:
+            next_event_number += 1
+            event_id = f"E{next_event_number:04d}"
+        next_event_number += 1
+        used_event_ids.add(event_id)
+        cloned.set("handle", handle)
+        cloned.set("id", event_id)
+        cloned.set("change", "0")
+        type_node = next(iter(_children(cloned, "type")), None)
+        if type_node is None:
+            raise AssertionError(f"Native AC-08 {kind} event template has no type.")
+        for child in list(cloned):
+            if child is not type_node:
+                cloned.remove(child)
+        if kind == "Marriage":
+            ET.SubElement(cloned, _qualified_name(root, "description")).text = (
+                AC08_FAMILY_EVENT_DETAIL
+            )
+        else:
+            date = next(
+                (
+                    child
+                    for child in templates[kind]
+                    if child.tag.rsplit("}", 1)[-1]
+                    in {"dateval", "daterange", "datespan", "datestr"}
+                ),
+                None,
+            )
+            if date is not None:
+                cloned.insert(list(cloned).index(type_node) + 1, copy.deepcopy(date))
+        events.append(cloned)
+        return cloned
+
+    parent_handle = reference_parent.get("handle")
+    if not parent_handle:
+        raise AssertionError("Native AC-08 reference parent has no Gramps handle.")
+
+    partner_handle = f"_{uuid.uuid4().hex}"
+    family_handle = f"_{uuid.uuid4().hex}"
+    partner = ET.Element(
+        _qualified_name(root, "person"),
+        {"handle": partner_handle, "change": "0", "id": "I0017"},
+    )
+    ET.SubElement(partner, _qualified_name(root, "gender")).text = "U"
+    name = ET.SubElement(
+        partner,
+        _qualified_name(root, "name"),
+        {"type": "Birth Name"},
+    )
+    ET.SubElement(name, _qualified_name(root, "first")).text = AC08_FAMILY_EVENT_PARTNER
+    ET.SubElement(name, _qualified_name(root, "surname")).text = "Synthetic"
+    for kind in ("Birth", "Death"):
+        life_event = allocate_event(kind)
+        ET.SubElement(
+            partner,
+            _qualified_name(root, "eventref"),
+            {"hlink": life_event.get("handle", ""), "role": "Primary"},
+        )
+    _add_person_family_ref(root, partner, "parentin", family_handle)
+    _add_person_family_ref(root, reference_parent, "parentin", family_handle)
+
+    family = ET.Element(
+        _qualified_name(root, "family"),
+        {"handle": family_handle, "change": "0", "id": "F0011"},
+    )
+    ET.SubElement(family, _qualified_name(root, "father"), {"hlink": parent_handle})
+    ET.SubElement(family, _qualified_name(root, "mother"), {"hlink": partner_handle})
+    marriage = allocate_event("Marriage")
+    ET.SubElement(
+        family,
+        _qualified_name(root, "eventref"),
+        {"hlink": marriage.get("handle", ""), "role": "Family"},
+    )
+    people.append(partner)
+    families.append(family)
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -1439,6 +1568,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     )
     _add_ac06_sibling_without_descendants(root, people, families)
     _add_ac07_spouse_eligibility(root, people, families, events, person)
+    _add_ac08_family_event_eligibility(root, people, families, events, person)
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1850,6 +1980,7 @@ def verify(
             "I0014",
             "I0015",
             "I0016",
+            "I0017",
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -2129,6 +2260,48 @@ def verify(
                 in section["partner_occurrence_ids"]
             )
             assert not section["child_occurrence_ids"]
+        ac08_partner = next(
+            person for person in model["people"] if person["gramps_id"] == "I0017"
+        )
+        ac08_event_types = {
+            model["events"][reference["event_handle"]]["type"]
+            for reference in ac08_partner["links"]["events"]
+        }
+        assert ac08_event_types == {"Birth", "Death"}, ac08_event_types
+        assert not any(
+            attribute["type"] == "BOOK_PROFILE"
+            for attribute in ac08_partner["links"]["attributes"]
+        )
+        ac08_family = next(
+            family
+            for family in model["families"].values()
+            if family["gramps_id"] == "F0011"
+        )
+        assert len(ac08_family["links"]["events"]) == 1
+        ac08_marriage_ref = ac08_family["links"]["events"][0]
+        assert ac08_marriage_ref["role"] == "Family"
+        ac08_marriage = model["events"][ac08_marriage_ref["event_handle"]]
+        assert ac08_marriage["type"] == "Marriage"
+        assert ac08_marriage["description"] == AC08_FAMILY_EVENT_DETAIL
+        assert ac08_partner["handle"] in model["genealogy"]["profile_handles"]
+        ac08_profiles = [
+            profile
+            for profile in model["editorial_book"]["profiles"]
+            if profile["person_handle"] == ac08_partner["handle"]
+        ]
+        assert len(ac08_profiles) == 1
+        assert all(
+            reference["event_handle"] != ac08_marriage_ref["event_handle"]
+            for reference in ac08_profiles[0]["event_refs"]
+        )
+        ac08_family_notice = next(
+            notice
+            for notice in model["editorial_book"]["family_notices"]
+            if notice["family_handle"] == ac08_family["handle"]
+        )
+        assert [
+            reference["event_handle"] for reference in ac08_family_notice["event_refs"]
+        ] == [ac08_marriage_ref["event_handle"]]
         print(
             "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
             "keeps only recorded parent links and the single-parent family"
@@ -2148,6 +2321,10 @@ def verify(
         print(
             "PASS: AC-07 native spouse with only Birth/Death stays mention-only; "
             "BOOK_PROFILE=YES creates one profile"
+        )
+        print(
+            "PASS: AC-08 native Marriage family event qualifies its spouse; "
+            "event detail remains in the family notice"
         )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
@@ -2608,6 +2785,30 @@ def verify(
             "PASS: AC-07 native HTML family notices mention each spouse and only "
             "BOOK_PROFILE=YES creates a profile"
         )
+        ac08_profile = ac08_profiles[0]
+        ac08_profile_html = (
+            f'<section class="person-profile" id="{ac08_profile["profile_id"]}">'
+        )
+        assert html.count(ac08_profile_html) == 1
+        ac08_profile_start = html.index(ac08_profile_html)
+        ac08_profile_end = html.index("</section>", ac08_profile_start)
+        assert AC08_FAMILY_EVENT_DETAIL not in html[
+            ac08_profile_start:ac08_profile_end
+        ]
+        ac08_notice_match = re.search(
+            rf'<article class="family-notice" id="{re.escape(ac08_family_notice["notice_id"])}">'
+            r"(.*?)</article>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert ac08_notice_match is not None
+        assert f"Synthetic, {AC08_FAMILY_EVENT_PARTNER}" in ac08_notice_match.group(1)
+        assert ac08_notice_match.group(1).count(AC08_FAMILY_EVENT_DETAIL) == 1
+        assert html.count(AC08_FAMILY_EVENT_DETAIL) == 1
+        print(
+            "PASS: AC-08 native HTML creates one spouse profile and renders the "
+            "Marriage detail only in its family notice"
+        )
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -2741,9 +2942,19 @@ def verify(
             pdf_family_connections = _pdf_section_between_headings(
                 rendered_pdf_text, "Liens familiaux", "Notices familiales"
             )
+            pdf_family_notices = _pdf_section_between_headings(
+                rendered_pdf_text, "Notices familiales", "Fiches individuelles"
+            )
             assert pdf_profiles.count(f"Synthetic, {AC06_SIBLING}") == 1
             assert f"Synthetic, {AC07_UNFORCED_SPOUSE}" not in pdf_profiles
             assert pdf_profiles.count(f"Synthetic, {AC07_FORCED_SPOUSE}") == 1
+            assert pdf_profiles.count(
+                f"Synthetic, {AC08_FAMILY_EVENT_PARTNER}"
+            ) == 1
+            assert AC08_FAMILY_EVENT_DETAIL not in pdf_profiles
+            assert pdf_family_notices.count(AC08_FAMILY_EVENT_DETAIL) == 1
+            assert f"Synthetic, {AC08_FAMILY_EVENT_PARTNER}" in pdf_family_notices
+            assert rendered_pdf_text.count(AC08_FAMILY_EVENT_DETAIL) == 1
             assert pdf_profiles.count(
                 f"Synthetic, {AC05_SHARED_ANCESTOR}"
             ) == 1
@@ -2781,6 +2992,10 @@ def verify(
             print(
                 "PASS: AC-07 native PDF family connections mention each spouse; "
                 "only BOOK_PROFILE=YES receives one profile"
+            )
+            print(
+                "PASS: AC-08 native PDF creates one profile for the spouse; "
+                "Marriage detail appears only in family notices"
             )
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
