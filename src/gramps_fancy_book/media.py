@@ -14,6 +14,7 @@ from urllib.parse import urlsplit
 from .domain import (
     BookModel,
     Diagnostic,
+    EditorialBook,
     EditorialMediaArtifact,
     EditorialMediaUse,
     Media,
@@ -380,6 +381,14 @@ def prepare_editorial_media(
             continue
         if media.is_excluded:
             continue
+        if media.is_featured:
+            primary_rectangle = _featured_primary_rectangle(
+                model.editorial_book, media_handle
+            )
+            if primary_rectangle in uses_by_region:
+                uses_by_region = {
+                    primary_rectangle: uses_by_region[primary_rectangle]
+                }
 
         external_url_available = any(
             _citation_has_url(model, citation_handle)
@@ -495,6 +504,35 @@ def prepare_editorial_media(
 
 def _media_contexts(uses: list[EditorialMediaUse]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(f"{use.context_type}:{use.context_id}" for use in uses))
+
+
+def _featured_primary_rectangle(
+    editorial_book: EditorialBook | None, media_handle: str
+) -> tuple[int | float, ...] | None:
+    if editorial_book is None:
+        return None
+    placement = next(
+        (
+            item
+            for item in editorial_book.media_placements
+            if item.media_handle == media_handle
+        ),
+        None,
+    )
+    if placement is None:
+        return None
+    for context_type in ("family_notice", "profile"):
+        use = next(
+            (
+                candidate
+                for candidate in placement.uses
+                if candidate.context_type == context_type
+            ),
+            None,
+        )
+        if use is not None:
+            return use.media_ref.rectangle
+    return placement.uses[0].media_ref.rectangle if placement.uses else None
 
 
 def _media_citations(uses: list[EditorialMediaUse]) -> tuple[str, ...]:

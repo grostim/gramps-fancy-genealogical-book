@@ -48,6 +48,9 @@ AC07_UNFORCED_SPOUSE = "AC07_UNFORCED_SPOUSE"
 AC07_FORCED_SPOUSE = "AC07_FORCED_SPOUSE"
 AC08_FAMILY_EVENT_PARTNER = "AC08_FAMILY_EVENT_PARTNER"
 AC08_FAMILY_EVENT_DETAIL = "AC08_FAMILY_EVENT_DETAIL"
+AC12_FEATURED_FILENAME = "ac12-featured-shared.png"
+AC12_FEATURED_DESCRIPTION = "AC12_FEATURED_SHARED_MARKER"
+AC12_PARTNER_PORTRAIT_FILENAME = "ac12-partner-portrait.png"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
@@ -509,11 +512,24 @@ def _section(root: ET.Element, name: str) -> ET.Element:
 
 def _create_media_fixture(work: Path) -> None:
     """Write the synthetic portrait referenced by the GEDCOM fixture."""
-    from PIL import Image
+    from PIL import Image, ImageDraw
 
     media_path = work / "media" / "portrait.jpg"
     media_path.parent.mkdir(parents=True, exist_ok=True)
     Image.new("RGB", (10, 10), color=(90, 130, 170)).save(media_path, format="JPEG")
+    featured = Image.new("RGB", (900, 600), color=(245, 245, 245))
+    draw = ImageDraw.Draw(featured)
+    draw.rectangle((0, 0, 299, 599), fill=(190, 48, 58))
+    draw.rectangle((300, 0, 599, 599), fill=(61, 142, 82))
+    draw.rectangle((600, 0, 899, 599), fill=(56, 94, 168))
+    featured.save(media_path.parent / AC12_FEATURED_FILENAME, format="PNG")
+    partner_portrait = Image.new("RGB", (300, 400), color=(226, 195, 154))
+    partner_draw = ImageDraw.Draw(partner_portrait)
+    partner_draw.ellipse((75, 35, 225, 185), fill=(115, 79, 60))
+    partner_draw.rectangle((40, 200, 260, 400), fill=(70, 107, 143))
+    partner_portrait.save(
+        media_path.parent / AC12_PARTNER_PORTRAIT_FILENAME, format="PNG"
+    )
     Image.new("RGB", (16, 12), color=(210, 40, 90)).save(
         media_path.parent / AC13_MEDIA_FILENAME, format="PNG"
     )
@@ -557,6 +573,111 @@ def _blank_pdf(page_count: int) -> bytes:
         f"startxref\n{xref_offset}\n%%EOF\n".encode()
     )
     return bytes(document)
+
+
+def _add_ac12_featured_media(
+    root: ET.Element,
+    person: ET.Element,
+    partner: ET.Element,
+    family: ET.Element,
+    objects: ET.Element,
+    tags: ET.Element,
+    work: Path,
+) -> None:
+    """Share a featured photo across a profile and family notice with two crops."""
+    featured_tag = next(
+        (
+            item
+            for item in _children(tags, "tag")
+            if item.get("name") == "BOOK_FEATURED"
+        ),
+        None,
+    )
+    if featured_tag is None:
+        tag_handle = f"_{uuid.uuid4().hex}"
+        featured_tag = ET.SubElement(
+            tags,
+            _qualified_name(root, "tag"),
+            {
+                "handle": tag_handle,
+                "change": "0",
+                "name": "BOOK_FEATURED",
+                "color": "#000000000000",
+                "priority": "0",
+            },
+        )
+    else:
+        tag_handle = featured_tag.get("handle", "")
+    if not tag_handle:
+        raise AssertionError("Native Gramps BOOK_FEATURED tag has no handle.")
+
+    existing_media_ids = {item.get("id") for item in _children(objects, "object")}
+    featured_id = "M0006"
+    partner_portrait_id = "M0007"
+    if {featured_id, partner_portrait_id} & existing_media_ids:
+        raise AssertionError("AC-12 fixture media IDs are already in use.")
+
+    featured_handle = f"_{uuid.uuid4().hex}"
+    featured_media = ET.SubElement(
+        objects,
+        _qualified_name(root, "object"),
+        {"handle": featured_handle, "change": "0", "id": featured_id},
+    )
+    ET.SubElement(
+        featured_media,
+        _qualified_name(root, "file"),
+        {
+            "src": str((work / "media" / AC12_FEATURED_FILENAME).resolve()),
+            "mime": "image/png",
+            "description": AC12_FEATURED_DESCRIPTION,
+        },
+    )
+    ET.SubElement(
+        featured_media,
+        _qualified_name(root, "tagref"),
+        {"hlink": tag_handle},
+    )
+    for owner, rectangle in (
+        (family, (0, 0, 60, 100)),
+        (person, (40, 0, 100, 100)),
+    ):
+        media_reference = ET.SubElement(
+            owner,
+            _qualified_name(root, "objref"),
+            {"hlink": featured_handle},
+        )
+        left, top, right, bottom = rectangle
+        ET.SubElement(
+            media_reference,
+            _qualified_name(root, "region"),
+            {
+                "corner1_x": str(left),
+                "corner1_y": str(top),
+                "corner2_x": str(right),
+                "corner2_y": str(bottom),
+            },
+        )
+
+    partner_handle = f"_{uuid.uuid4().hex}"
+    partner_media = ET.SubElement(
+        objects,
+        _qualified_name(root, "object"),
+        {"handle": partner_handle, "change": "0", "id": partner_portrait_id},
+    )
+    ET.SubElement(
+        partner_media,
+        _qualified_name(root, "file"),
+        {
+            "src": str((work / "media" / AC12_PARTNER_PORTRAIT_FILENAME).resolve()),
+            "mime": "image/png",
+            "description": "AC12 fictional partner portrait",
+        },
+    )
+    ET.SubElement(
+        partner,
+        _qualified_name(root, "objref"),
+        {"hlink": partner_handle},
+    )
 
 
 def _add_ac13_excluded_featured_media(
@@ -1883,6 +2004,15 @@ def _native_fixture(
             {"hlink": pdf_handle},
         )
 
+    _add_ac12_featured_media(
+        root,
+        person,
+        reference_partner,
+        family,
+        objects,
+        tags,
+        work,
+    )
     _add_ac13_excluded_featured_media(
         root,
         person,
@@ -2682,7 +2812,7 @@ def verify(
         source = next(iter(model["sources"].values()))
         assert len(source["repository_refs"]) == 1
         assert len(model["repositories"]) == 2
-        assert len(model["media"]) == 6
+        assert len(model["media"]) == 8
         ac14_citations_by_page = {
             citation["page"]: citation
             for citation in model["citations"].values()
@@ -2835,7 +2965,42 @@ def verify(
         artifacts_by_handle = {
             artifact["media_handle"]: artifact for artifact in model["media_artifacts"]
         }
-        assert len(artifacts_by_handle) == 5, model["media_artifacts"]
+        assert len(artifacts_by_handle) == 7, model["media_artifacts"]
+        ac12_media = media_by_name[AC12_FEATURED_FILENAME]
+        assert ac12_media["is_featured"] is True
+        ac12_placement = next(
+            placement
+            for placement in model["editorial_book"]["media_placements"]
+            if placement["media_handle"] == ac12_media["handle"]
+        )
+        ac12_uses = ac12_placement["uses"]
+        assert {use["context_type"] for use in ac12_uses} == {
+            "family_notice",
+            "profile",
+        }, ac12_uses
+        assert {
+            tuple(use["media_ref"]["rectangle"]) for use in ac12_uses
+        } == {(0, 0, 60, 100), (40, 0, 100, 100)}, ac12_uses
+        ac12_artifacts = [
+            artifact
+            for artifact in model["media_artifacts"]
+            if artifact["media_handle"] == ac12_media["handle"]
+        ]
+        assert len(ac12_artifacts) == 1, ac12_artifacts
+        ac12_artifact = ac12_artifacts[0]
+        assert ac12_artifact["action"] == "reproduce", ac12_artifact
+        assert ac12_artifact["rectangle"] == [0, 0, 60, 100], ac12_artifact
+        assert ac12_artifact["width"] == 540, ac12_artifact
+        assert ac12_artifact["height"] == 600, ac12_artifact
+        assert ac12_artifact["asset_path"].startswith("family_media/")
+        assert {
+            portrait["person_handle"]
+            for portrait in model["editorial_book"]["cover_portraits"]
+        } == set(central_partner_handles)
+        print(
+            "PASS: AC-12 native Gramps media keeps both couple portraits and "
+            "one featured crop for the family-first reproduction"
+        )
         ac13_media = media_by_name[AC13_MEDIA_FILENAME]
         assert ac13_media["is_excluded"] is True
         assert ac13_media["is_featured"] is True
@@ -2920,6 +3085,40 @@ def verify(
                 raise AssertionError("Gramps produced an invalid shared-note HTML archive.")
             html = archive.read("index.html").decode("utf-8")
             archive_names = set(archive.namelist())
+        ac12_placement_id = ac12_placement["placement_id"]
+        ac12_figure = (
+            f'<figure id="{ac12_placement_id}" '
+            'class="media-item featured-media">'
+        )
+        assert html.count(ac12_figure) == 1
+        assert f'href="#{ac12_placement_id}"' in html
+        assert f"media/{ac12_artifact['cache_key']}.png" in archive_names
+        family_use = next(
+            use for use in ac12_uses if use["context_type"] == "family_notice"
+        )
+        family_notice_match = re.search(
+            rf'<article class="family-notice" '
+            rf'id="{re.escape(family_use["context_id"])}">(.*?)</article>',
+            html,
+            flags=re.DOTALL,
+        )
+        assert family_notice_match is not None
+        assert ac12_figure in family_notice_match.group(1)
+        profile_use = next(
+            use for use in ac12_uses if use["context_type"] == "profile"
+        )
+        profile_use_match = re.search(
+            rf'<section class="person-profile" '
+            rf'id="{re.escape(profile_use["context_id"])}">(.*?)</section>',
+            html,
+            flags=re.DOTALL,
+        )
+        assert profile_use_match is not None
+        assert f'href="#{ac12_placement_id}"' in profile_use_match.group(1)
+        print(
+            "PASS: AC-12 native HTML renders one primary crop in the family "
+            "notice and links the profile occurrence to it"
+        )
         assert '<section class="generation" id="generation:ancestry:0">' in html
         assert '<section class="generation" id="generation:descent:0">' in html
         html_people_by_handle = {
@@ -3047,7 +3246,7 @@ def verify(
         assert 'class="citation-number"' not in family_notice_html
         assert len(
             [name for name in archive_names if name.startswith("media/")]
-        ) == 2, archive_names
+        ) == 4, archive_names
         for role, marker in F0_EDITORIAL_ROLE_TEXT.items():
             expected_count = 2 if role == "BOOK_TITLE" else 1
             assert html.count(marker) == expected_count, (
@@ -3321,7 +3520,7 @@ def verify(
         assert read_model(output)["reference_family"]["gramps_id"] == "F0001", log
         assert media_output.is_dir()
         assert not stale_asset.exists()
-        assert len(list(media_output.glob("*.png"))) == 2
+        assert len(list(media_output.glob("*.png"))) == 4
         print("PASS: explicit replacement of JSON and media assets")
 
         for destination in (None, work / "missing" / "file.json", work / "not-json.pdf"):
@@ -3445,15 +3644,24 @@ def verify(
             assert len(descent_generation_zero_pages) == 1, (
                 descent_generation_zero_pages
             )
-            central_profile_pages = [
+            profile_section_pages = [
                 page_index
                 for page_index, page_text in enumerate(pdf_pages)
                 if re.search(r"(?m)^Fiches individuelles\s*$", page_text)
-                and all(name in page_text for name in central_partner_names)
             ]
-            assert central_profile_pages, "central profiles are not located in the PDF"
+            assert profile_section_pages, "profile section is not located in the PDF"
+            profile_section_page = profile_section_pages[0]
+            central_profile_pages = {}
+            for name in central_partner_names:
+                matching_pages = [
+                    page_index
+                    for page_index, page_text in enumerate(pdf_pages)
+                    if page_index >= profile_section_page
+                    and re.search(rf"(?m)^{re.escape(name)}\s*$", page_text)
+                ]
+                assert matching_pages, f"profile for {name} is not located in the PDF"
+                central_profile_pages[name] = matching_pages[0]
             descent_page_index = descent_generation_zero_pages[0]
-            profile_page_index = central_profile_pages[0]
             descent_link_destinations = [
                 target_page
                 for source_page, target_page in _pdf_internal_link_destinations(
@@ -3461,9 +3669,12 @@ def verify(
                 )
                 if source_page == descent_page_index
             ]
-            assert descent_link_destinations.count(profile_page_index) >= 2, (
+            assert all(
+                page_index in descent_link_destinations
+                for page_index in central_profile_pages.values()
+            ), (
                 descent_page_index,
-                profile_page_index,
+                central_profile_pages,
                 descent_link_destinations,
             )
             print(
