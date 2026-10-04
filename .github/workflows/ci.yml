@@ -140,6 +140,21 @@ jobs:
           cat /etc/os-release
           .venv-gramps-prerelease/bin/python -VV
           .venv-gramps-prerelease/bin/python -m pip freeze
+      - name: Retarget the disposable add-on for the 6.1 API probe
+        run: |
+          .venv-gramps-prerelease/bin/python - <<'PY'
+          from pathlib import Path
+
+          manifest = Path("gramps60/GrampsFancyBook/GrampsFancyBook.gpr.py")
+          text = manifest.read_text(encoding="utf-8")
+          old = 'gramps_target_version="6.0"'
+          if text.count(old) != 1:
+              raise SystemExit("Expected one stable 6.0 target in the add-on manifest.")
+          manifest.write_text(
+              text.replace(old, 'gramps_target_version="6.1"', 1),
+              encoding="utf-8",
+          )
+          PY
       - run: .venv-gramps-prerelease/bin/python build_addon.py
       - run: .venv-gramps-prerelease/bin/python scripts/verify_gramps.py --gramps "$PWD/.venv-gramps-prerelease/bin/gramps"
 
