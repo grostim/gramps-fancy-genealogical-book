@@ -95,7 +95,11 @@ def _occurrences_in(genealogy, part):
 
 
 def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
-    p0 = _person("p0", family_handles=("f0",))
+    p0 = _person(
+        "p0",
+        family_handles=("f0",),
+        attributes=(Attribute(BOOK_PROFILE, "YES"),),
+    )
     p1 = _person("p1", family_handles=("f0",))
     child = _person("child", parent_family_handles=("f0",))
     central = _family("f0", p0, p1, (child,))
@@ -172,6 +176,17 @@ def test_central_couple_starts_ancestry_and_descent_links_back_to_it():
     assert any(
         r"\gfbanchor{" in line and "child" in line
         for line in descent_text.splitlines()
+    )
+    descent_zero_text = descent_text.split(
+        r"\subsection*{Generation 0}", 1
+    )[1].split(r"\end{itemize}", 1)[0]
+    assert (
+        f"\\gfbpagelink{{{_latex_target('person:p0')}}}{{p0}}"
+        in descent_zero_text
+    )
+    assert (
+        f"\\gfbpagelink{{{_latex_target(ancestry_ids['p1'])}}}{{p1}}"
+        in descent_zero_text
     )
     connection_text = rendered[connections_start:]
     parentage_blocks = [

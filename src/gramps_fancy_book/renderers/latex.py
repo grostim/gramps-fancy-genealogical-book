@@ -597,7 +597,20 @@ def _render_genealogy_part(
             target_id = occurrence.occurrence_id
             if target_id and target_id not in emitted_targets:
                 output.append(_latex_anchor(target_id, emitted_targets))
-            output.append(f"{escape_latex_text(name)}\n")
+            link_target = None
+            if occurrence.profile_anchor and not occurrence.is_primary_profile:
+                link_target = occurrence.profile_anchor
+            elif (
+                occurrence.primary_occurrence_id
+                and occurrence.primary_occurrence_id != target_id
+                and occurrence.primary_occurrence_id in emitted_targets
+            ):
+                link_target = occurrence.primary_occurrence_id
+            if link_target:
+                output.append(_latex_page_link(link_target, name))
+            else:
+                output.append(escape_latex_text(name))
+            output.append("\n")
         output.append("\\end{itemize}\n")
     return "".join(output)
 
