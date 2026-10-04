@@ -1,6 +1,6 @@
 """Exercise the built add-on with real Gramps and an isolated, synthetic database.
 
-Usage: python scripts/verify_gramps.py --gramps /path/to/gramps
+Usage: python scripts/verify_gramps.py --gramps /path/to/gramps [--addon-archive /path/to/addon.tgz]
 """
 
 from __future__ import annotations
@@ -585,6 +585,34 @@ def _install_optional_media_dependencies(plugins: Path) -> None:
         )
 
 
+def _set_birth_month_day(root: ET.Element, events: ET.Element) -> None:
+    """Give the fixture a structured date that exercises localized month names."""
+    birth = next(
+        (item for item in _children(events, "event") if item.get("id") == "E0000"),
+        None,
+    )
+    if birth is None:
+        raise AssertionError("Gramps XML export is missing the fixture birth event E0000.")
+    date_elements = [
+        item
+        for item in birth
+        if item.tag.rsplit("}", 1)[-1]
+        in {"daterange", "datespan", "dateval", "datestr"}
+    ]
+    if not date_elements:
+        raise AssertionError("Fixture birth event E0000 has no Gramps date element.")
+    date_index = list(birth).index(date_elements[0])
+    for item in date_elements:
+        birth.remove(item)
+    birth.insert(
+        date_index,
+        ET.Element(
+            _qualified_name(root, "dateval"),
+            {"val": "1900-03-14", "type": "about"},
+        ),
+    )
+
+
 def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
     """Round-trip GEDCOM through Gramps, then add native Gramps XML fields."""
     gedcom = work / "reference-family.ged"
@@ -654,6 +682,7 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
             "Gramps XML export is missing fixture person I0001, family F0001 or media M0001."
         )
 
+    _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
 
@@ -871,11 +900,15 @@ def verify(
     *,
     pdf_output: str | Path | None = None,
     lualatex: str | Path | None = None,
+    addon_archive: str | Path | None = None,
 ) -> None:
     with tempfile.TemporaryDirectory(prefix="fancy-book-integration-") as directory:
         work = Path(directory)
         env = os.environ.copy()
         env.update(GRAMPSHOME=str(work), XDG_CACHE_HOME=str(work / "cache"), LANGUAGE="en")
+        preferences = work / "gramps" / "gramps60" / "gramps.ini"
+        preferences.parent.mkdir(parents=True, exist_ok=True)
+        preferences.write_text("[preferences]\ndate-format=2\n", encoding="utf-8")
         if lualatex is not None:
             compiler = Path(lualatex).expanduser()
             if not compiler.is_file():
@@ -885,7 +918,12 @@ def verify(
         env.pop("PYTHONPATH", None)
         plugins = work / "gramps" / "gramps60" / "plugins"
         plugins.mkdir(parents=True)
-        with tarfile.open(ROOT / "gramps60/download/GrampsFancyBook.addon.tgz") as archive:
+        archive_path = (
+            Path(addon_archive).expanduser()
+            if addon_archive is not None
+            else ROOT / "gramps60/download/GrampsFancyBook.addon.tgz"
+        )
+        with tarfile.open(archive_path) as archive:
             archive.extractall(plugins, filter="data")
         _install_mistune_dependency(plugins)
         _install_optional_media_dependencies(plugins)
@@ -953,20 +991,18 @@ def verify(
             birth = next(
                 event
                 for event in localized_model["events"].values()
-                if event["type"] == "Birth"
+                if event["gramps_id"] == "E0000"
             )
             localized_birth_dates[language] = birth["date"]
             assert localized_model["metadata"]["BOOK_LANGUAGE"] == language
         english_date = localized_birth_dates["en"]
         french_date = localized_birth_dates["fr"]
-        assert "1900" in english_date["display"]
-        assert "1900" in french_date["display"]
-        assert english_date["display"] != french_date["display"], {
-            "english": english_date["display"],
-            "french": french_date["display"],
-        }
+        assert "march" in english_date["display"].casefold(), english_date
+        assert "mars" in french_date["display"].casefold(), french_date
+        assert english_date["ymd"] == [1900, 3, 14]
+        assert french_date["ymd"] == [1900, 3, 14]
         assert english_date["raw"] == french_date["raw"]
-        assert english_date["ymd"] == french_date["ymd"]
+        assert english_date["range"] == french_date["range"]
 
         localized_marriage_dates = {}
         for language, localized_model in localized_models.items():
@@ -983,7 +1019,7 @@ def verify(
         assert french_marriage_date["display"] == expected_free_text_date
         assert english_marriage_date["raw"] == french_marriage_date["raw"]
         print(
-            "PASS: structured Gramps dates follow the book language and free-text dates stay unchanged"
+            "PASS: month names in structured dates follow the book language; raw dates and free text stay unchanged"
         )
 
         consistency_path = output.with_name("family_consistency.json")
@@ -1517,5 +1553,15 @@ if __name__ == "__main__":
         type=Path,
         help="Optional LuaLaTeX executable; its directory is prepended to PATH.",
     )
+    parser.add_argument(
+        "--addon-archive",
+        type=Path,
+        help="Optional add-on archive; defaults to the built project archive.",
+    )
     arguments = parser.parse_args()
-    verify(arguments.gramps, pdf_output=arguments.pdf_output, lualatex=arguments.lualatex)
+    verify(
+        arguments.gramps,
+        pdf_output=arguments.pdf_output,
+        lualatex=arguments.lualatex,
+        addon_archive=arguments.addon_archive,
+    )

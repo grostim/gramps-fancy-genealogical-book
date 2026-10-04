@@ -1,6 +1,6 @@
 # Book language validation
 
-Recorded 29 September 2026. This check covers the language option added in PR #100 and uses only a synthetic Gramps database.
+Updated on 4 October 2026. This check covers the language option added in PR #100 and uses only synthetic Gramps databases.
 
 ## Environment
 
@@ -38,6 +38,17 @@ The fixture’s entered event description remains intact. The French PDF has 10 
 ## Date display follows the book language — 30 September 2026
 
 The native Gramps 6.0.8 integration check exports the same events with the book set to English and French while the Gramps profile locale stays English. For `Birth`, both displayed values include 1900 and differ according to the selected language; the raw and normalized values remain identical. The marriage’s entered free-text date, “Entre l’hiver 1924 et le printemps 1925,” remains unchanged in both languages, with the same raw value.
+
+## AC-25 structured day and month — 4 October 2026
+
+The fictional native AC-25 fixture was imported and exported by the Gramps Desktop 6.0.8 report in CLI mode with isolated profiles. The test profiles set `preferences.date-format` to `2` to display full month names; the ISO default (`0`) keeps the month numeric and only exercises translation of the qualifier.
+
+| Book language | Displayed date | Normalized date |
+| --- | --- | --- |
+| French | `vers 14 mars 1900` | `[1900, 3, 14]` |
+| English | `about March 14, 1900` | `[1900, 3, 14]` |
+
+Both exports have identical `raw` data, comparison bounds, and structured day; only the display string changes language. The [French AC-25 PDF](../output/pdf/gramps-fancy-book-ac25-month-day-fr-20261004.pdf), generated through the same report, has nine tagged A4 pages. Page 7 was inspected: “vers 14 mars 1900” is legible in the profile and does not overflow. This CLI check does not yet qualify the GUI language selector with this fixture.
 
 ## Desktop dialog selection — 2 October 2026
 
