@@ -27,6 +27,9 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_ID = "gramps_fancy_genealogical_book"
 AC03_OTHER_PARTNER = "AC03_OTHER_UNION_PARTNER"
 AC03_OTHER_CHILD = "AC03_OTHER_UNION_CHILD"
+AC05_SHARED_ANCESTOR = "AC05_ANC"
+AC05_PARENT_PARTNER = "AC05_P1"
+AC05_OTHER_PARTNER = "AC05_P2"
 AC13_MEDIA_FILENAME = "ac13-excluded-featured.png"
 AC13_MEDIA_DESCRIPTION = "AC13_EXCLUDED_FEATURED_MARKER"
 AC13_CITATION_PAGE = "AC13_EXCLUDED_CITATION_MARKER"
@@ -853,6 +856,114 @@ def _add_ac03_other_union(
     families.append(family)
 
 
+def _add_ac05_implex_and_cycle(
+    root: ET.Element,
+    people: ET.Element,
+    families: ET.Element,
+    reference_parent: ET.Element,
+    reference_partner: ET.Element,
+) -> None:
+    """Add a shared ancestor on both central branches and a bounded ancestry cycle."""
+    existing_person_ids = {item.get("id") for item in _children(people, "person")}
+    existing_family_ids = {
+        item.get("id") for item in _children(families, "family")
+    }
+    person_ids = {"I0007", "I0008", "I0009"}
+    family_ids = {"F0004", "F0005", "F0006"}
+    if person_ids.intersection(existing_person_ids):
+        raise AssertionError("Native AC-05 fixture person IDs I0007/I0008/I0009 already exist.")
+    if family_ids.intersection(existing_family_ids):
+        raise AssertionError("Native AC-05 fixture family IDs F0004/F0005/F0006 already exist.")
+
+    handles = {gramps_id: f"_{uuid.uuid4().hex}" for gramps_id in person_ids}
+    names = {
+        "I0007": (AC05_SHARED_ANCESTOR, "U", True),
+        "I0008": (AC05_PARENT_PARTNER, "U", False),
+        "I0009": (AC05_OTHER_PARTNER, "U", False),
+    }
+    added_people = {}
+    for gramps_id in ("I0007", "I0008", "I0009"):
+        first_name, gender, profile_eligible = names[gramps_id]
+        person = ET.Element(
+            _qualified_name(root, "person"),
+            {"handle": handles[gramps_id], "change": "0", "id": gramps_id},
+        )
+        ET.SubElement(person, _qualified_name(root, "gender")).text = gender
+        name = ET.SubElement(
+            person,
+            _qualified_name(root, "name"),
+            {"type": "Birth Name"},
+        )
+        ET.SubElement(name, _qualified_name(root, "first")).text = first_name
+        ET.SubElement(name, _qualified_name(root, "surname")).text = "Synthetic"
+        if profile_eligible:
+            ET.SubElement(
+                person,
+                _qualified_name(root, "attribute"),
+                {"type": "BOOK_PROFILE", "value": "YES"},
+            )
+        added_people[gramps_id] = person
+
+    reference_parent_handle = reference_parent.get("handle")
+    reference_partner_handle = reference_partner.get("handle")
+    shared_ancestor_handle = handles["I0007"]
+    parent_partner_handle = handles["I0008"]
+    other_partner_handle = handles["I0009"]
+    if not reference_parent_handle or not reference_partner_handle:
+        raise AssertionError("Native AC-05 central couple is missing a Gramps handle.")
+    people_by_handle = {
+        person.get("handle"): person
+        for person in (*_children(people, "person"), *added_people.values())
+        if person.get("handle")
+    }
+    if (
+        people_by_handle.get(reference_parent_handle) is not reference_parent
+        or people_by_handle.get(reference_partner_handle) is not reference_partner
+    ):
+        raise AssertionError("Native AC-05 central couple is absent from the fixture.")
+
+    family_specs = (
+        ("F0004", shared_ancestor_handle, parent_partner_handle, reference_parent_handle),
+        ("F0005", shared_ancestor_handle, other_partner_handle, reference_partner_handle),
+        ("F0006", reference_parent_handle, parent_partner_handle, shared_ancestor_handle),
+    )
+    added_families = []
+    for gramps_id, father_handle, mother_handle, child_handle in family_specs:
+        family_handle = f"_{uuid.uuid4().hex}"
+        family = ET.Element(
+            _qualified_name(root, "family"),
+            {"handle": family_handle, "change": "0", "id": gramps_id},
+        )
+        ET.SubElement(
+            family,
+            _qualified_name(root, "father"),
+            {"hlink": father_handle},
+        )
+        ET.SubElement(
+            family,
+            _qualified_name(root, "mother"),
+            {"hlink": mother_handle},
+        )
+        ET.SubElement(
+            family,
+            _qualified_name(root, "childref"),
+            {"hlink": child_handle, "frel": "Birth", "mrel": "Birth"},
+        )
+        _add_person_family_ref(
+            root, people_by_handle[father_handle], "parentin", family_handle
+        )
+        _add_person_family_ref(
+            root, people_by_handle[mother_handle], "parentin", family_handle
+        )
+        _add_person_family_ref(
+            root, people_by_handle[child_handle], "childof", family_handle
+        )
+        added_families.append(family)
+
+    people.extend(added_people.values())
+    families.extend(added_families)
+
+
 def _install_mistune_dependency(plugins: Path) -> None:
     """Install the runner's Mistune copy into this isolated Gramps profile."""
     spec = importlib.util.find_spec("mistune")
@@ -975,6 +1086,14 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         ),
         None,
     )
+    reference_partner = next(
+        (
+            item
+            for item in _children(people, "person")
+            if item.get("id") == "I0002"
+        ),
+        None,
+    )
     family = next(
         (
             item
@@ -1003,18 +1122,22 @@ def _native_fixture(executable: str, env: dict[str, str], work: Path) -> Path:
         person is None
         or child is None
         or single_parent is None
+        or reference_partner is None
         or family is None
         or single_parent_family is None
         or media is None
     ):
         raise AssertionError(
-            "Gramps XML export is missing fixture people I0001/I0003/I0004, "
+            "Gramps XML export is missing fixture people I0001/I0002/I0003/I0004, "
             "families F0001/F0002 or media M0001."
         )
 
     _set_t04_parentage_case(family, child)
     _add_t04_foster_parent_family(root, single_parent_family, person, single_parent)
     _add_ac03_other_union(root, people, families, person)
+    _add_ac05_implex_and_cycle(
+        root, people, families, person, reference_partner
+    )
     _set_birth_month_day(root, events)
     _add_same_fact_birth_version(root, events, person)
     _apply_ac14_shared_citation(root, events)
@@ -1416,6 +1539,9 @@ def verify(
             "I0004",
             "I0005",
             "I0006",
+            "I0007",
+            "I0008",
+            "I0009",
         }
         assert "Émile" in model["people"][0]["name"]
         assert model["reference_family"]["handle"] != "F0001"
@@ -1515,6 +1641,59 @@ def verify(
             profile["person_handle"] == other_union_child_handle
             for profile in model["editorial_book"]["profiles"]
         ) == 1
+        shared_ancestor = next(
+            person for person in model["people"]
+            if person["gramps_id"] == "I0007"
+        )
+        shared_ancestor_handle = shared_ancestor["handle"]
+        shared_ancestor_occurrences = [
+            occurrence
+            for generation in model["genealogy"]["ancestry"]["generations"]
+            for occurrence in generation["occurrences"]
+            if occurrence["person_handle"] == shared_ancestor_handle
+        ]
+        shared_ancestor_branch_occurrences = [
+            occurrence
+            for occurrence in shared_ancestor_occurrences
+            if occurrence["generation"] == -1
+        ]
+        assert {
+            occurrence["branch_handles"][0]
+            for occurrence in shared_ancestor_branch_occurrences
+        } == {reference_family["father"]["handle"], reference_family["mother"]["handle"]}
+        assert len(shared_ancestor_branch_occurrences) == 2
+        assert model["genealogy"]["profile_handles"].count(
+            shared_ancestor_handle
+        ) == 1
+        shared_ancestor_profiles = [
+            profile
+            for profile in model["editorial_book"]["profiles"]
+            if profile["person_handle"] == shared_ancestor_handle
+        ]
+        assert len(shared_ancestor_profiles) == 1
+        assert sum(
+            occurrence["is_primary_profile"]
+            for occurrence in shared_ancestor_occurrences
+        ) == 1
+        shared_ancestor_index_entries = [
+            entry
+            for entry in model["editorial_book"]["person_index"]
+            if entry["person_handle"] == shared_ancestor_handle
+        ]
+        assert len(shared_ancestor_index_entries) == 1
+        assert len(shared_ancestor_index_entries[0]["occurrence_ids"]) >= 2
+        assert any(
+            diagnostic["code"] == "genealogy_cycle"
+            and diagnostic["handle"] == reference_family["father"]["handle"]
+            for diagnostic in model["diagnostics"]
+        )
+        ancestry_paths = [
+            path
+            for generation in model["genealogy"]["ancestry"]["generations"]
+            for occurrence in generation["occurrences"]
+            for path in occurrence["lineage_paths"]
+        ]
+        assert max(map(len, ancestry_paths)) == 4
         print(
             "PASS: T-04 native Gramps preserves Adopted/Foster/None; traversal "
             "keeps only recorded parent links and the single-parent family"
@@ -1522,6 +1701,10 @@ def verify(
         print(
             "PASS: AC-03 native other-union child is in descent generation 1, "
             "with a family section and one profile"
+        )
+        print(
+            "PASS: AC-05 native Gramps preserves both shared-ancestor branches, "
+            "one profile/index entry, and stops the ancestry cycle"
         )
         assert {event["type"] for event in model["events"].values()} >= {
             "Birth", "Profession", "Marriage"
@@ -1900,6 +2083,21 @@ def verify(
         assert html.count(
             f'<section class="person-profile" id="{ac03_profile["profile_id"]}">'
         ) == 1
+        shared_ancestor_profile = shared_ancestor_profiles[0]
+        assert html.count(
+            f'<section class="person-profile" id="{shared_ancestor_profile["profile_id"]}">'
+        ) == 1
+        for occurrence in shared_ancestor_branch_occurrences:
+            assert (
+                f'<li id="{occurrence["occurrence_id"]}">'
+                f"<span>Synthetic, {AC05_SHARED_ANCESTOR}</span>"
+            ) in html
+        shared_ancestor_index = shared_ancestor_index_entries[0]
+        assert (
+            f'<li id="{shared_ancestor_index["entry_id"]}">'
+            f'<a href="#{shared_ancestor_profile["profile_id"]}">'
+            f"Synthetic, {AC05_SHARED_ANCESTOR}</a></li>"
+        ) in html
         rendered_note_nodes = [
             (target, body)
             for target, body in re.findall(
@@ -2009,6 +2207,7 @@ def verify(
             )
             assert AC03_OTHER_PARTNER in rendered_pdf_text
             assert AC03_OTHER_CHILD in rendered_pdf_text
+            assert AC05_SHARED_ANCESTOR in rendered_pdf_text
             assert rendered_pdf_text.index(
                 F0_EDITORIAL_ROLE_TEXT["BOOK_DEDICATION"]
             ) < rendered_pdf_text.index(
