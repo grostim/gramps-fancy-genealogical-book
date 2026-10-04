@@ -4,7 +4,7 @@
 
 ## Context
 
-Gramps Fancy Genealogical Book registers as a `CATEGORY_WEB` report and generates PDF or HTML ZIP files itself. The static audit of Gramps Web API 3.22.3 found that this report category is filtered out, ZIP is not an accepted result type, and the add-on's custom `destination` option is independent of the server-managed path under `REPORT_DIR`. See the [compatibility audit](validation-gramps-web.md).
+Gramps Fancy Genealogical Book registers as a `CATEGORY_WEB` report and generates PDF or HTML ZIP files itself. The audit of Gramps Web API 3.23.0 confirms that this report category is filtered out, ZIP is not an accepted result type, and the add-on's custom `destination` option is independent of the server-managed path under `REPORT_DIR`. See the [compatibility audit](validation-gramps-web.md).
 
 The add-on needs to keep its Desktop flow. Gramps Web must provide a supported, safe server contract for installed reports that produce their own files.
 

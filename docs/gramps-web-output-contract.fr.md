@@ -4,7 +4,7 @@
 
 ## Contexte
 
-Gramps Fancy Genealogical Book s’enregistre comme rapport `CATEGORY_WEB` et génère lui-même des fichiers PDF ou HTML ZIP. L’audit statique de Gramps Web API 3.22.3 a montré que cette catégorie est filtrée, que ZIP n’est pas un type de résultat accepté et que l’option personnalisée `destination` de l’extension est distincte du chemin contrôlé par le serveur sous `REPORT_DIR`. Voir l’[audit de compatibilité](validation-gramps-web.fr.md).
+Gramps Fancy Genealogical Book s’enregistre comme rapport `CATEGORY_WEB` et génère lui-même des fichiers PDF ou HTML ZIP. L’audit de Gramps Web API 3.23.0 confirme que cette catégorie est filtrée, que ZIP n’est pas un type de résultat accepté et que l’option personnalisée `destination` de l’extension est distincte du chemin contrôlé par le serveur sous `REPORT_DIR`. Voir l’[audit de compatibilité](validation-gramps-web.fr.md).
 
 L’extension doit conserver son parcours Desktop. Gramps Web doit fournir un contrat serveur pris en charge et sûr pour les rapports installés qui produisent leurs propres fichiers.
 
