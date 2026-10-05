@@ -1,0 +1,94 @@
+{
+  "title": "Diagnostic estimate of tagged-PDF compilation cost",
+  "date": "2026-10-05",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "media": 0,
+    "source_bytes": {
+      "tagging_on": 398735,
+      "tagging_off": 398736
+    }
+  },
+  "method": {
+    "passes": 1,
+    "fresh_temporary_directory_per_variant": true,
+    "compile_flags": [
+      "-no-shell-escape",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-file-line-error"
+    ],
+    "run_order": [
+      "tagging_on",
+      "tagging_off",
+      "tagging_off",
+      "tagging_on",
+      "tagging_on",
+      "tagging_off"
+    ],
+    "only_source_setting_changed": "\\DocumentMetadata tagging=on versus tagging=off",
+    "production_source_or_settings_changed": false,
+    "runs_per_variant": 3
+  },
+  "results": {
+    "tagging_on": {
+      "runs_seconds": [
+        19.459,
+        19.623,
+        20.072
+      ],
+      "median_seconds": 19.623,
+      "mean_seconds": 19.718,
+      "runs_pdf_bytes": [
+        986897,
+        986892,
+        986900
+      ],
+      "median_pdf_bytes": 986897,
+      "pages": 105,
+      "tagpdf_structure_objects_from_log": 12022,
+      "tagpdf_mc_leaf_nodes_from_log": 9644,
+      "cross_references_converged": false
+    },
+    "tagging_off_diagnostic": {
+      "runs_seconds": [
+        9.603,
+        9.148,
+        9.625
+      ],
+      "median_seconds": 9.603,
+      "mean_seconds": 9.459,
+      "runs_pdf_bytes": [
+        444034,
+        444034,
+        444034
+      ],
+      "median_pdf_bytes": 444034,
+      "pages": 105,
+      "cross_references_converged": false,
+      "use_as_production_output": false
+    }
+  },
+  "comparison": {
+    "median_wall_seconds_delta": -10.02,
+    "median_wall_time_reduction_percent": 51.06,
+    "median_pdf_bytes_delta": -542863,
+    "median_pdf_size_reduction_percent": 55.01,
+    "page_count_delta": 0,
+    "tagged_to_untagged_median_time_ratio": 2.043
+  },
+  "interpretation": "Across three direct passes per variant, the median wall time is 51.06% lower with tagging disabled. This suggests a substantial cost associated with tagging/structure finalization on this fixture and warrants targeted profiling while preserving structure; it does not justify disabling tagging.",
+  "limitations": [
+    "Three runs per variant in a fixed, only partially counterbalanced order; cache and order effects may remain.",
+    "One direct pass per run. Both variants contain unresolved page references and are diagnostic files, not final previews.",
+    "The untagged variant has no accessibility structure and is not a production candidate.",
+    "Synthetic branching fixture with no media on one macOS and TeX Live environment; no inference to all books or systems.",
+    "No PDF accessibility checker or screen-reader assessment was performed."
+  ]
+}
