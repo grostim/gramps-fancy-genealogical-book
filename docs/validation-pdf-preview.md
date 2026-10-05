@@ -152,3 +152,11 @@ A high-resolution reinspection on 30 September confirms this historical file no 
 - The tagged PDF has 169 A4 pages and is 1,409,982 bytes. It uses a fictional branching fixture with 202 people, 101 families, 303 events/citations, 101 notices, 202 profiles, and 20 portraits at 96 × 72 pixels.
 - Physical pages 29 and 31 were rendered at 130 dpi and reviewed. They include a family notice; no clipping or visible overlap was found. All 1,805 named destinations and 3,073 PDF annotations are retained from the preceding preview.
 - This preview supports a visual comparison of single-item family notices with list-based notices. Genealogical records and portraits are fictional; this is not a full page-by-page review or PDF/UA qualification.
+
+## AC-15 export through Gramps CLI with 15 mm margins — 5 October 2026
+
+- Local, untracked PDF: [`output/pdf/gramps-fancy-book-ac15-shared-media-15mm-20261005.pdf`](../output/pdf/gramps-fancy-book-ac15-shared-media-15mm-20261005.pdf), SHA-256 `20931cecc9fa69c90f619b3e94037c84920d026bcc07ea798607d9420900b600`.
+- The current add-on archive was installed in a temporary isolated Gramps profile. Gramps 6.0.8 imported the fictional AC-15 fixture and produced a French PDF with LuaHBTeX 1.24.0 / TeX Live 2026. This used the Gramps CLI report action, not the Desktop dialog.
+- The PDF has nine A4 pages (66,423 bytes), PDF 2.0 tagging, and `fr-FR` language metadata. All 81 named destinations are present; all 32 internal links resolve. The three figures have non-empty alternative text.
+- The appendix on physical page 8 (printed folio 7) displays one shared reproduction, with citation entries [2] and [3] pointing to it. Physical pages 7 and 8 were rendered at 120 dpi and reviewed; no visible overlap or clipped text was found.
+- This recipe confirms the current 15 mm margin and the Gramps report’s PDF path on the AC-15 fixture. Exporting this shared-media case through the Desktop dialog, reviewing all nine pages, real media, and screen-reader behavior remain open. No PDF/UA conformance is claimed. Measurements are in the [raw JSON record](validation-gramps-ac15-margins15-20261005.json).
