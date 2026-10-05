@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_reader": "pypdf 6.19.0 and Poppler pdftotext"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citation_entries": 303,
+    "synthetic_portraits": 20,
+    "synthetic": true,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "source": "render_latex output from scripts/benchmark_book.py synthetic_branching_snapshot",
+    "reference_macro": "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2 (p.~\\pageref*{#1})}}",
+    "candidate_macro": "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2 (p.~\\getpagerefnumber{#1})}}",
+    "temporary_source_only": true,
+    "source_bytes": {
+      "reference": 410379,
+      "candidate": 410387
+    },
+    "source_sha256": {
+      "reference": "d3e6640c350bcc40c0bef4e413905061c662293b1c5d0e76fed0f6f198e07308",
+      "candidate": "3e76027a3c2c28a94bc3c219db7be49362f4a58e0b62e0883ef3f609b76a954f"
+    },
+    "compilation": "production _compile_latex convergence helper with standard limits; fresh directory and synthetic media per run",
+    "order": [
+      "reference",
+      "candidate",
+      "candidate",
+      "reference",
+      "reference",
+      "candidate"
+    ],
+    "instrumented_source_or_renderer_changed": false,
+    "temporary_artifacts": "../tmp/pageref-profile-n100-20261006-fqgmukfk"
+  },
+  "runs": [
+    {"run": 1, "variant": "reference", "seconds": 44.180, "pdf_bytes": 1311566},
+    {"run": 2, "variant": "candidate", "seconds": 44.416, "pdf_bytes": 1311572},
+    {"run": 3, "variant": "candidate", "seconds": 44.531, "pdf_bytes": 1311572},
+    {"run": 4, "variant": "reference", "seconds": 44.773, "pdf_bytes": 1311572},
+    {"run": 5, "variant": "reference", "seconds": 44.801, "pdf_bytes": 1311572},
+    {"run": 6, "variant": "candidate", "seconds": 44.473, "pdf_bytes": 1311569}
+  ],
+  "timing_summary": {
+    "reference_median_seconds": 44.773,
+    "reference_range_seconds": 0.621,
+    "candidate_median_seconds": 44.473,
+    "candidate_range_seconds": 0.115,
+    "candidate_median_change_seconds": -0.300,
+    "candidate_median_change_percent": -0.67,
+    "conclusion": "The median difference is smaller than the reference run range; no measurable gain is established."
+  },
+  "pdf_equivalence": {
+    "pages": 127,
+    "tagged": true,
+    "named_destinations": 3526,
+    "link_annotations": {
+      "GoTo": 1762,
+      "URI": 1216
+    },
+    "objr_references": 2978,
+    "structure_role_counts_equal": true,
+    "selected_structure_roles": {
+      "Link": 2671,
+      "LI": 972,
+      "paragraph": 633,
+      "Figure": 40
+    },
+    "extracted_text_sha256_all_runs": "cc34d5bf91754e751454ea5ed9a41042a7523a816fbe116e7106a452c0b5ac97",
+    "extracted_text_identical": true,
+    "all_output_checks_equal": true
+  },
+  "decision": "Rejected. No production renderer change retained.",
+  "limits": [
+    "Three runs per variant on one machine do not establish a broad performance envelope.",
+    "The experiment measures N=100 only; it does not remeasure the 514.058-second N=1000 build.",
+    "Temporary diagnostic PDFs are not release artifacts."
+  ]
+}
