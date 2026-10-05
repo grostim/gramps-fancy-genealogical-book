@@ -25,6 +25,9 @@ _LAYOUT_WARNING = re.compile(
     r"Reference .*undefined|There were undefined references|"
     r"Label\(s\) may have changed|Overfull \\[hv]box"
 )
+_TAGGING_METADATA = re.compile(
+    r"(\\DocumentMetadata\{[^}\r\n]*?\btagging=)on(?=[,}])"
+)
 
 
 class LatexCompilerUnavailable(RuntimeError):
@@ -141,6 +144,16 @@ def _compile_latex(
         remaining_seconds = deadline - time.monotonic()
         if remaining_seconds <= 0:
             raise LatexCompilationError("timeout")
+        original_source = None
+        if _pass_number == 1:
+            source_path = work_directory / "book.tex"
+            original_source = source_path.read_text(encoding="utf-8")
+            untagged_source, replacements = _TAGGING_METADATA.subn(
+                r"\1off", original_source, count=1
+            )
+            if replacements != 1:
+                raise LatexCompilationError("missing_tagging_metadata")
+            source_path.write_text(untagged_source, encoding="utf-8")
         try:
             result = subprocess.run(
                 [
@@ -164,6 +177,9 @@ def _compile_latex(
             raise LatexCompilerUnavailable(
                 "LuaLaTeX could not be started."
             ) from error
+        finally:
+            if original_source is not None:
+                source_path.write_text(original_source, encoding="utf-8")
 
         if result.returncode:
             raise LatexCompilationError("compile")

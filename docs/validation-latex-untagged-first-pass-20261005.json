@@ -1,0 +1,101 @@
+{
+  "measured_on": "2026-10-05",
+  "method": "Compile the same generated LaTeX in fresh directories with the same auxiliary-file convergence check. The candidate changes only tagging=on to tagging=off for pass 1, restores the original tagged source before pass 2, and uses tagged source for all later passes. Each size is one baseline run followed by one candidate run; these are diagnostic measurements, not a statistical benchmark.",
+  "environment": {
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "platform": "macOS arm64"
+  },
+  "cases": [
+    {
+      "descendant_couples": 1,
+      "media": false,
+      "baseline": {
+        "passes": 3,
+        "pass_seconds": [1.679, 1.75, 1.699],
+        "elapsed_seconds": 5.128,
+        "tagged_final": true,
+        "pages": 9,
+        "bytes": 63407
+      },
+      "candidate": {
+        "passes": 3,
+        "pass_seconds": [1.443, 1.709, 1.71],
+        "elapsed_seconds": 4.862,
+        "tagged_final": true,
+        "pages": 9,
+        "bytes": 63402
+      },
+      "elapsed_delta_seconds": -0.266,
+      "elapsed_delta_percent": -5.19
+    },
+    {
+      "descendant_couples": 10,
+      "media": false,
+      "baseline": {
+        "passes": 3,
+        "pass_seconds": [3.36, 3.411, 3.422],
+        "elapsed_seconds": 10.193,
+        "tagged_final": true,
+        "pages": 17,
+        "bytes": 147372
+      },
+      "candidate": {
+        "passes": 3,
+        "pass_seconds": [2.231, 3.401, 3.415],
+        "elapsed_seconds": 9.047,
+        "tagged_final": true,
+        "pages": 17,
+        "bytes": 147372
+      },
+      "elapsed_delta_seconds": -1.146,
+      "elapsed_delta_percent": -11.24
+    },
+    {
+      "descendant_couples": 100,
+      "media": true,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "citations": 303,
+      "media_sources": 20,
+      "media_artifacts": 40,
+      "margins_mm": 15,
+      "baseline": {
+        "passes": 3,
+        "pass_seconds": [20.264, 20.65, 20.915],
+        "elapsed_seconds": 61.829,
+        "tagged_final": true,
+        "pages": 127,
+        "bytes": 1312082,
+        "layout_warning": false,
+        "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+        "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+        "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141",
+        "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054"
+      },
+      "candidate": {
+        "passes": 3,
+        "pass_seconds": [10.017, 20.81, 20.794],
+        "elapsed_seconds": 51.621,
+        "tagged_final": true,
+        "pages": 127,
+        "bytes": 1312082,
+        "layout_warning": false,
+        "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+        "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+        "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141",
+        "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054"
+      },
+      "elapsed_delta_seconds": -10.208,
+      "elapsed_delta_percent": -16.51,
+      "final_comparisons": {
+        "pages_equal": true,
+        "tagged_final_equal": true,
+        "structure_equal": true,
+        "destinations_equal": true,
+        "urls_equal": true,
+        "text_equal": true
+      }
+    }
+  ]
+}
