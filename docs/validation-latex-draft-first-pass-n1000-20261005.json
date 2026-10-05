@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-05",
+  "base_commit": "5a073b77832cb80366c6dcd3b008a11ce351a7f0",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pypdf": "6.19.0",
+    "pillow": "12.3.0",
+    "mistune": "3.3.4"
+  },
+  "experiment": {
+    "change": "Run the first LuaLaTeX pass with -draftmode for extended PDF builds; run subsequent passes normally.",
+    "retained": false,
+    "reason": "No measurable compilation gain; the draft auxiliary file differs from the converged normal-pass auxiliary file."
+  },
+  "n1000": {
+    "fixture": {
+      "shape": "branching",
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "citations": 3003,
+      "synthetic_portraits": 200,
+      "portrait_size": "96x72",
+      "media_enabled": true,
+      "page_margin_mm": 15
+    },
+    "baseline": {
+      "record": "validation-latex-margins15-n1000-20261005.json",
+      "total_compile_wall_seconds": 738.982,
+      "pdf_pages": 1214,
+      "pdf_bytes": 12587394
+    },
+    "draft_first_pass_candidate": {
+      "total_compile_wall_seconds": 741.367672,
+      "pdf_pages": 1214,
+      "pdf_bytes": 12587394,
+      "tagged": true,
+      "pdf_version": "2.0",
+      "language": "en-US",
+      "named_destinations": 34562,
+      "link_annotations": 29413,
+      "internal_links": 17341,
+      "uri_links": 12072,
+      "missing_named_destinations": 0,
+      "text_extraction_matches_baseline": true,
+      "seconds_delta": 2.385672,
+      "seconds_delta_percent": 0.323
+    },
+    "result": "No speed improvement established."
+  },
+  "n100_pass_profile": {
+    "fixture": {
+      "shape": "branching",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "citations": 303,
+      "synthetic_portraits": 20,
+      "portrait_size": "96x72",
+      "page_margin_mm": 15
+    },
+    "candidate_passes": [
+      {
+        "mode": "draft",
+        "seconds": 20.776,
+        "aux_sha256": "0de0728011667e5a995ef3073afb071b2aed1abd49216eefe323560a45a82c98"
+      },
+      {
+        "mode": "normal",
+        "seconds": 20.9,
+        "aux_sha256": "6f32b84f6e4fd361888c043b4c4f7daa2e86a1d8ecf963e82ba2fdfea0b4d471"
+      },
+      {
+        "mode": "normal",
+        "seconds": 20.909,
+        "aux_sha256": "6f32b84f6e4fd361888c043b4c4f7daa2e86a1d8ecf963e82ba2fdfea0b4d471"
+      }
+    ],
+    "total_compile_wall_seconds": 62.702534,
+    "candidate_pdf_bytes": 1312074,
+    "reference_median_seconds": 62.62237,
+    "reference_record": "validation-luatex-compression-n100-20261005.json",
+    "interpretation": "The draft pass is not a converged replacement; two normal passes still run and establish the same auxiliary fingerprint.",
+    "timing_delta_seconds_vs_reference_median": 0.080164,
+    "timing_delta_percent_vs_reference_median": 0.128
+  },
+  "limits": [
+    "One candidate N=1,000 compile and one profiled N=100 compile were measured; timing differences are not statistically conclusive.",
+    "The N=1,000 build still requires extended compilation limits and exceeds the standard 120-second per-pass and 180-second total limits.",
+    "This experiment tests compilation time and output parity, not an end-to-end Gramps Desktop export.",
+    "The temporary implementation was removed; no production code change remains."
+  ]
+}
