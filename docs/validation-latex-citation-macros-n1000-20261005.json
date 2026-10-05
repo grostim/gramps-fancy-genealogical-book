@@ -1,0 +1,136 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "7c8edfbde7f8cdf98e5c5d154cea2b12dda9b10d",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python_for_instrumentation_and_aggregation": "CPython 3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_reader": "pypdf 6.19.0 with Poppler pdftotext/pdfinfo"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citation_entries": 3003,
+    "editorial_citation_calls": 3270,
+    "citation_media_references": 200,
+    "synthetic": true,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "source": "temporary copy of prior one-pass, per-citation instrumented LaTeX source",
+    "input_source_sha256": "cf413a02d682bf048cfdbd750fa01a07d8df82c37013863f0268979b44afd6994",
+    "profiled_source_sha256": "a07dc3d8a0baab22ddfb62dfee76518ecd6243a6af7294ff5207b1a93ca3a8d5",
+    "profiled_source_bytes": 4161054,
+    "instrumented_macros": [
+      "\\includegraphics",
+      "\\gfbpagelink"
+    ],
+    "instrumentation_scope": "documentary appendix only",
+    "timer": "Lua os.clock immediately around each TeX macro invocation",
+    "compilation_passes": 1,
+    "production_sources_modified": false,
+    "marker_overhead_quantified": false,
+    "page_composition_and_shipout_attributed_to_macro_times": false
+  },
+  "macro_timings_cpu_seconds": {
+    "includegraphics": {
+      "calls": 160,
+      "total": 0.738147,
+      "mean_per_call": 0.004613
+    },
+    "gfbpagelink": {
+      "calls": 3310,
+      "editorial_calls_from_metadata": 3270,
+      "shared_media_reproduction_links": 40,
+      "total": 11.676916,
+      "mean_per_call_including_media_links": 0.003528
+    }
+  },
+  "entry_groups": {
+    "without_media_one_call": {
+      "entries": 2569,
+      "expected_call_links": 2569,
+      "measured_link_macro_calls": 2569,
+      "link_cpu_seconds": 8.378323,
+      "mean_link_cpu_seconds_per_entry": 0.003261
+    },
+    "without_media_multiple_calls": {
+      "entries": 234,
+      "expected_call_links": 468,
+      "measured_link_macro_calls": 468,
+      "link_cpu_seconds": 2.286517,
+      "mean_link_cpu_seconds_per_entry": 0.009771,
+      "mean_link_cpu_seconds_per_link": 0.004886
+    },
+    "with_media_one_call": {
+      "entries": 167,
+      "expected_call_links": 167,
+      "measured_link_macro_calls": 201,
+      "entries_with_shared_media_reproduction_link": 34,
+      "includegraphics_calls": 133,
+      "includegraphics_cpu_seconds": 0.616231,
+      "link_cpu_seconds": 0.667498
+    },
+    "with_media_multiple_calls": {
+      "entries": 33,
+      "expected_call_links": 66,
+      "measured_link_macro_calls": 72,
+      "entries_with_shared_media_reproduction_link": 6,
+      "includegraphics_calls": 27,
+      "includegraphics_cpu_seconds": 0.121916,
+      "link_cpu_seconds": 0.344578
+    }
+  },
+  "diagnostic_pdf": {
+    "path": "tmp/citation-macro-profile-n1000-20261005/book-profiled.pdf",
+    "sha256": "0a0dce6b3e4bb82051c473bb405085b97529bfa5190b029c716fab8aeb2c14b2",
+    "bytes": 12712219,
+    "pages": 1214,
+    "page_size": "A4",
+    "pdf_profile": "PDF 2.0",
+    "tagged": true,
+    "references_converged": false
+  },
+  "comparison_to_prior_one_pass_diagnostic": {
+    "prior_pdf_sha256": "953f957fd13783c93b647ccee1a140a9fec6c95fe20279582133e2329c23558a",
+    "text_extraction": {
+      "tool": "pdftotext -raw",
+      "sha256_for_both": "b9bc084b415f84dd8abd52d9c16cf02fa7168c083e55429f2c1dfaa3a7a0006f",
+      "exactly_equal": true
+    },
+    "pdf_semantics": {
+      "page_count_equal": true,
+      "link_annotations": 29406,
+      "goto_annotations": 17334,
+      "uri_annotations": 12072,
+      "named_destinations": 34562,
+      "objr_references": 29406,
+      "every_objr_matches_its_annotation_page_index_and_structparent": true,
+      "structure_role_types": 15,
+      "role_counts_equal": true,
+      "figures": 400,
+      "all_figures_have_alt_text": true,
+      "annotation_identities_and_targets_equal": true,
+      "named_destinations_equal": true,
+      "figure_alt_text_equal": true,
+      "pdf_size_delta_bytes": 6
+    }
+  },
+  "timing_data": {
+    "path": "tmp/citation-macro-profile-n1000-20261005/citation-macro-timings.csv",
+    "sha256": "92086c541b8f62aed530ae93b13e96278a32b5c7fe0436420c5728ccff7fe86f",
+    "bytes": 91237,
+    "rows": 3003
+  },
+  "interpretation": "Direct macro timings separate image inclusion and page-link work from the first profile's paragraph and page-shipout intervals. Image insertions total less than one CPU second in this diagnostic. Multiple-call entries without media invoke two page links each and take a larger per-entry sum; this is expected with twice the direct calls and does not establish a production optimization opportunity.",
+  "limits": [
+    "The single-pass PDF has unresolved references and is diagnostic only.",
+    "The comparison confirms output structure for this diagnostic pair, not a converged production PDF.",
+    "Lua timer and TeX wrapper overhead are not separately measured.",
+    "Per-macro times do not include all paragraph composition, pagination, tagging, or full-export costs.",
+    "No renderer or production code change was retained."
+  ]
+}

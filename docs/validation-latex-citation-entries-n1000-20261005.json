@@ -1,0 +1,102 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "7c8edfbde7f8cdf98e5c5d154cea2b12dda9b10d",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200,
+    "page_margins_mm": 15,
+    "synthetic": true
+  },
+  "method": {
+    "source": "temporary copy of current generated LaTeX",
+    "timing": "Lua os.clock between a marker before each citation item and the next marker",
+    "markers": 3004,
+    "entries_included": 3003,
+    "includes_paragraph_composition_and_page_shipout": true,
+    "marker_and_boundary_overhead_unmeasured": true,
+    "compilation_passes": 1,
+    "production_source_modified": false
+  },
+  "instrumented_source": {
+    "sha256": "cf413a02d682bf048cfdb750fa01a07d8df82c37013863f0268979b44afd6994",
+    "bytes": 4159897
+  },
+  "compilation": {
+    "returncode": 0,
+    "diagnostic_pdf": "tmp/citation-profile-n1000-20261005/book-profiled.pdf",
+    "pdf_sha256": "953f957fd13783c93b647ccee1a140a9fec6c95fe20279582133e2329c23558a",
+    "pdf_bytes": 12712225,
+    "pages": 1214,
+    "tagged": true,
+    "references_converged": false,
+    "pdf_profile": "PDF 2.0"
+  },
+  "entry_intervals_cpu_seconds": {
+    "count": 3003,
+    "sum": 108.350,
+    "mean": 0.036081,
+    "median": 0.020357,
+    "p90": 0.109848,
+    "max": 0.225137
+  },
+  "common_citation_fields": {
+    "all_have_author": true,
+    "all_have_publication_info": true,
+    "all_have_page": true,
+    "all_have_date": true,
+    "all_have_repository_reference": true,
+    "all_have_three_urls": true
+  },
+  "entry_groups": {
+    "without_media_one_call": {
+      "count": 2569,
+      "sum_cpu_seconds": 84.11,
+      "mean_cpu_seconds": 0.0327,
+      "median_cpu_seconds": 0.0201,
+      "p90_cpu_seconds": 0.0986
+    },
+    "without_media_multiple_calls": {
+      "count": 234,
+      "sum_cpu_seconds": 11.54,
+      "mean_cpu_seconds": 0.0493,
+      "median_cpu_seconds": 0.0329,
+      "p90_cpu_seconds": 0.1250
+    },
+    "with_media_one_call": {
+      "count": 167,
+      "sum_cpu_seconds": 10.13,
+      "mean_cpu_seconds": 0.0607,
+      "median_cpu_seconds": 0.0291,
+      "p90_cpu_seconds": 0.1269
+    },
+    "with_media_multiple_calls": {
+      "count": 33,
+      "sum_cpu_seconds": 2.56,
+      "mean_cpu_seconds": 0.0777,
+      "median_cpu_seconds": 0.0449,
+      "p90_cpu_seconds": 0.1303
+    }
+  },
+  "timing_data": {
+    "path": "tmp/citation-profile-n1000-20261005/citation-timings.csv",
+    "sha256": "be36c7201a78643d9096b002ad5228e15de7ca7d9e82dc2f5f689d504d664bbd",
+    "rows_including_initial_setup_marker": 3004
+  },
+  "interpretation": "Entries with media and multiple call targets have higher observed interval means in this single run. Intervals also include page shipout and instrumentation overhead, so this is a profiling direction rather than a causal cost breakdown. All entries share the same text metadata, repository and URL counts, so the fixture cannot compare those fields.",
+  "production_change": "none",
+  "limits": [
+    "This one-pass PDF has unresolved references and is diagnostic only.",
+    "The added per-entry markers and paragraph boundaries may change measured time.",
+    "The observed group differences are not controlled causal estimates."
+  ]
+}
