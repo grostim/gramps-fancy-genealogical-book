@@ -96,3 +96,7 @@ Les tests unitaires ne nécessitent pas Gramps. Le script d’intégration néce
 Le [compte rendu L1](docs/validation-l1.fr.md), le [suivi L3](docs/validation-l3.fr.md) et la [validation des médias](docs/validation-media.fr.md) distinguent les contrôles effectués et les limites restantes.
 
 La famille de référence doit avoir deux partenaires connus (AC-02). Exigences intégrales : [spécification originale](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), avec sa [provenance](docs/reference/README.md).
+
+## Licence
+
+Le projet est distribué sous la licence publique générale GNU, version 3 ou toute version ultérieure. Voir [LICENSE](LICENSE).

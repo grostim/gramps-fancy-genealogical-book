@@ -94,3 +94,7 @@ Unit tests do not require Gramps. The integration runner requires Python 3.12+ a
 See the [L1 validation record](docs/validation-l1.md), the [L3 validation record](docs/validation-l3.md), and the [media validation record](docs/validation-media.md) for executed checks and remaining limitations.
 
 The reference family must have two known partners (AC-02). Full source requirements: [original specification](docs/reference/Gramps_Fancy_Genealogical_Book_Specification_v1.1.md), with [provenance](docs/reference/README.md).
+
+## License
+
+Distributed under the GNU General Public License, version 3 or any later version. See [LICENSE](LICENSE).
