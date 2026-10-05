@@ -133,7 +133,7 @@ def test_renderer_escapes_model_text_and_keeps_urls_usable():
     assert r"Repository\_\&" in rendered
     assert r"R\_1\&" in rendered
     assert (
-        r"\newcommand{\bookurl}[2]{\href{#1#2}{{\useOriginalUrlSetting\nolinkurl{#1}}\nolinkurl{#2}}}"
+        r"\newcommand{\bookurl}[2]{\href{#1#2}{\useOriginalUrlSetting\nolinkurl{#1#2}}}"
         in rendered
     )
     assert (

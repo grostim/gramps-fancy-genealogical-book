@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-05",
+  "profile": "LuaHBTeX shipout-time intervals around navigation and URL macros",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "python": "3.14.0",
+  "engine": "LuaHBTeX 1.24.0 (TeX Live 2026), development id 7724",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "notes": 27,
+    "citations": 303,
+    "sources": 13,
+    "media": 0,
+    "pdf_pages": 105,
+    "source_latex_bytes": 398735,
+    "instrumented_latex_bytes": 399463
+  },
+  "measurement": {
+    "method": "A temporary source inserted paired LuaTeX latelua markers around each gfbpagelink, gfbanchor, and bookurl output. os.clock accumulated CPU intervals when pages shipped. Three direct single-pass compiles reused the same isolated output directory; no production source was modified.",
+    "limitations": [
+      "The intervals include page composition and PDF annotation work between markers; they are not pure macro-expansion timings.",
+      "The profile covers one synthetic N=100 fixture without portraits, not a full production build.",
+      "The instrumented PDF is diagnostic only and was not retained in the repository.",
+      "LateLua marker nodes can alter link fragmentation; annotation and structure counts below come from separate uninstrumented baseline/candidate PDFs."
+    ]
+  },
+  "runs": [
+    {
+      "run": 1,
+      "page_link_count": 1743,
+      "page_link_cpu_seconds": 0.03736,
+      "anchor_count": 1455,
+      "anchor_cpu_seconds": 0.014781,
+      "bookurl_count": 909,
+      "bookurl_cpu_seconds": 1.604351
+    },
+    {
+      "run": 2,
+      "page_link_count": 1743,
+      "page_link_cpu_seconds": 0.038483,
+      "anchor_count": 1455,
+      "anchor_cpu_seconds": 0.015322,
+      "bookurl_count": 909,
+      "bookurl_cpu_seconds": 1.613752
+    },
+    {
+      "run": 3,
+      "page_link_count": 1743,
+      "page_link_cpu_seconds": 0.038686,
+      "anchor_count": 1455,
+      "anchor_cpu_seconds": 0.015628,
+      "bookurl_count": 909,
+      "bookurl_cpu_seconds": 1.626405
+    }
+  ],
+  "medians": {
+    "page_link_cpu_seconds": 0.038483,
+    "anchor_cpu_seconds": 0.015322,
+    "bookurl_cpu_seconds": 1.613752
+  },
+  "single_nolinkurl_candidate": {
+    "change": "Use one nolinkurl call for the visible host+path within the existing full href target.",
+    "runs": [
+      {
+        "run": 1,
+        "wall_seconds": 19.422116,
+        "page_link_cpu_seconds": 0.038135,
+        "anchor_cpu_seconds": 0.014175,
+        "bookurl_count": 909,
+        "bookurl_cpu_seconds": 1.583121
+      },
+      {
+        "run": 2,
+        "wall_seconds": 20.115491,
+        "page_link_cpu_seconds": 0.037979,
+        "anchor_cpu_seconds": 0.014202,
+        "bookurl_count": 909,
+        "bookurl_cpu_seconds": 1.581725
+      },
+      {
+        "run": 3,
+        "wall_seconds": 20.258095,
+        "page_link_cpu_seconds": 0.037825,
+        "anchor_cpu_seconds": 0.013953,
+        "bookurl_count": 909,
+        "bookurl_cpu_seconds": 1.596966
+      }
+    ],
+    "median_bookurl_cpu_seconds": 1.583121,
+    "median_change_percent_vs_split_profile": -1.897,
+    "end_to_end_speedup_established": false,
+    "pdf": {
+      "sha256": "3a5161243e9652fc8c286c1de7f882e68175a69c212fba97013aa2eadbe09f16",
+      "passes": 3,
+      "references_converged": true,
+      "tagged": true,
+      "pages": 105,
+      "bytes": 975032,
+      "link_annotations": 2978,
+      "uri_annotations": 1220,
+      "uri_targets_sha256": "5fcfeb9831fafdadb109e80e6d1c8e51d9c9378f2aaff507221c348ed584160e",
+      "link_structure_roles": 2667,
+      "objr_references": 2978,
+      "parent_tree_number_keys": 3083,
+      "normalized_extracted_text_equal": false,
+      "text_without_running_headers_sha256": "62a79d6ea24462b50b800da75a6e9dde3adf3e90d33ac6010cf30a1a37afa066",
+      "text_difference": "The unfiltered extracted text order changes where a page header meets a wrapped URL; after removing running headers and whitespace, the content hash matches the baseline."
+    },
+    "visual_review": {
+      "pages": [
+        67,
+        70
+      ],
+      "resolution_dpi": 140,
+      "finding": "The visible URL line breaks after slash and no longer divides register between reg and ister."
+    },
+    "decision": "Retained as a URL readability change; no performance claim.",
+    "instrumented_latex_bytes": 399471,
+    "profile_runs_basis": "Instrumented marker source; counts and timing describe macro intervals, while PDF structure results are from separate uninstrumented sources."
+  },
+  "baseline_comparison": {
+    "bookurl_cpu_seconds": [
+      1.604351,
+      1.613752,
+      1.626405
+    ],
+    "median_bookurl_cpu_seconds": 1.613752,
+    "pdf": {
+      "sha256": "70e7d84cc2d84eb7dfca78d1b6f97bcc96de816df859726a34aee0fe5fb24205",
+      "passes": 3,
+      "references_converged": true,
+      "tagged": true,
+      "pages": 105,
+      "bytes": 975450,
+      "link_annotations": 2978,
+      "uri_annotations": 1220,
+      "uri_targets_sha256": "5fcfeb9831fafdadb109e80e6d1c8e51d9c9378f2aaff507221c348ed584160e",
+      "link_structure_roles": 2667,
+      "objr_references": 2978,
+      "parent_tree_number_keys": 3083,
+      "text_without_running_headers_sha256": "62a79d6ea24462b50b800da75a6e9dde3adf3e90d33ac6010cf30a1a37afa066"
+    }
+  },
+  "encoded_url_qualification": {
+    "url": "https://archives.example.test/archive%2Fdocument?folio=1&format=full#record",
+    "uri_annotation_matches_exactly": true,
+    "visible_percent_escape_present": true,
+    "visible_fragment_present": true,
+    "tagged": true,
+    "direct_passes": 1,
+    "limitation": "Escaping-only diagnostic; full-book convergence was not required for this URI check."
+  },
+  "decision": "Retained as a URL readability change; no end-to-end performance claim."
+}
