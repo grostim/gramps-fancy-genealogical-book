@@ -1,0 +1,66 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "ba47bef90320bc2ef62020f66f0fe818207aa024",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run two candidate compiles with the production helper using an experimental pass sequence: pass 1 has tagging=off and hyperref draft; pass 2 has tagging=off with hyperlinks active; later passes use the original tagged source. The initial candidate is followed by an independent rerun from the clean production source after review requested verification. Compare both with the three-run production series in validation-latex-hyperref-draft-first-pass-n100-20261005.json.",
+  "initial_candidate": {
+    "elapsed_seconds": 54.689,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_bytes": 1312081,
+    "pdf_sha256": "608e002d022abd725d71c2210e12ee16f172b33db3c7540a24572c151a7ddcf7",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "clean_production_source_rerun": {
+    "elapsed_seconds": 54.800,
+    "passes": 4,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_bytes": 1312084,
+    "pdf_sha256": "08d17f9c1b46b442bb951ce0e0c1a5398460e991758d7b9f12da7f84e61c7792",
+    "latex_source_bytes": 410393,
+    "latex_source_sha256": "fd55969b209232c1b10a09a665ca734fa44a99d66585a24faa76e2e5b66e93f0",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "baseline": {
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "delta_seconds_clean_rerun_vs_baseline_median": 9.691,
+  "delta_percent_clean_rerun_vs_baseline_median": 21.48,
+  "semantic_hashes_match": {
+    "text": true,
+    "structure": true,
+    "destinations": true,
+    "urls": true
+  },
+  "decision": "Rejected: the clean-source rerun confirms that the method takes four passes and is 21.48% slower than the previous median. All compared semantic hashes match. No production code was retained.",
+  "limitations": "Two candidate compiles on one machine. No N=1,000 compile or full visual review was performed."
+}

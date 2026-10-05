@@ -1,0 +1,53 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "f23302d5d778232e5937f14f6678e2d589a7d4a8",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper three times with the current renderer, using fresh temporary assets and extended diagnostic limits of 600 seconds per pass and 1800 seconds total. Compare with the earlier N=1,000 variants in validation-latex-hyperref-draft-first-pass-n1000-20261005.json.",
+  "runs": [
+    {
+      "elapsed_seconds": 514.058,
+      "pdf_bytes": 12587399,
+      "pdf_sha256": "38de83ca2374dcdb0c431a3750b65af5833a3a081cd0b3f16a220da7230a5d11"
+    },
+    {
+      "elapsed_seconds": 509.888,
+      "pdf_bytes": 12587395,
+      "pdf_sha256": "2014ea0dc3f6ff59c027baabfa1cc9eec66e846685a10213ee547a483aa579d5"
+    },
+    {
+      "elapsed_seconds": 534.127,
+      "pdf_bytes": 12587393,
+      "pdf_sha256": "ea40ba6ef43b143103349203b1c50c0cead4a92f8a4ff74dbdd262061a050402"
+    }
+  ],
+  "median_seconds": 514.058,
+  "range_seconds": [509.888, 534.127],
+  "run_spread_seconds": 24.239,
+  "run_spread_percent_of_median": 4.72,
+  "output_checks": {
+    "pages": 1214,
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "text_sha256": "da8f325468c5adef93da379f47b3bc9ad80513054542d16e12d07e06a3449a13",
+    "structure_sha256": "551530a4b5398cb53f6b85fe0736e9d6f94a5cdd920b8779e1c75b53a1151f71",
+    "destinations_sha256": "4896be60ef3432536faa84f41bd8ef98c19a5910f6e00a55a50391f61ebe7188",
+    "urls_sha256": "c80509e8801004eab851e97e270bc6bbde94a822a9a27c8147ee57e2cbec4178",
+    "semantic_hashes_match_all_three_runs": true
+  },
+  "limitations": "Three runs on one machine give a measured median of 514.058 seconds, with a 24.239-second range. All require extended diagnostic limits and exceed the standard 180-second total limit. Per-pass times and a full visual review were not recorded. The PDFs differ by a few bytes."
+}

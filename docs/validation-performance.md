@@ -492,4 +492,16 @@ The final PDF is tagged, has 1,214 pages, and is 12,587,399 bytes—five bytes l
 
 A variant replaced repeated source-author and publication-information strings in the appendix with a shared LaTeX macro. On the branching N=100 fixture with media, generated source fell from 410,393 to 409,857 bytes (−536). The tagged 127-page PDF took 45.042 seconds, 0.067 seconds (0.15%) below the previous 45.109-second median. The run is 0.044 seconds faster than the best of the three baseline runs, but its difference from the median is smaller than the 0.132-second width of that series; one measurement does not establish a speedup.
 
-Extracted text, named destinations, and URL links have matching hashes, but the structure-tree hash differs. The variant is rejected and no production change is retained. N=1,000 was not rebuilt and no full visual review was performed. See the [raw record](validation-latex-shared-citation-fields-n100-20261005.json).
+Extracted-text, structure-tree, named-destination, and URL hashes match the reference. The variant is still rejected: one run does not establish a measurable speedup, and no production change is retained. N=1,000 was not rebuilt and no full visual review was performed. See the [raw record](validation-latex-shared-citation-fields-n100-20261005.json).
+
+### Rejected trial — leave the second pass untagged — N=100 — October 5, 2026
+
+A second variant keeps tagging disabled for the first two passes; `hyperref` is in `draft` mode only on the first pass and is active again on the second. A clean-source rerun using the 410,393-byte production LaTeX source converged in four passes and took 54.800 seconds, 9.691 seconds (21.48%) slower than the 45.109-second baseline median. The initial run took 54.689 seconds. Both candidate timings exceed the three baseline runs (45.086–45.218 seconds).
+
+Extracted-text, structure-tree, destination, and URL hashes match the reference. The trial is rejected because this pass sequence requires a fourth pass and does not speed up the export. Its temporary code was removed. No full visual review or N=1,000 compile was performed for this variant. See the [raw record](validation-latex-defer-tagging-second-pass-n100-20261005.json).
+
+### Repeat optimized build — N=1,000 — October 5, 2026
+
+A third full compile with the current renderer took 534.127 seconds. Across the three runs (514.058, 509.888, and 534.127 seconds), the measured median is 514.058 seconds and the range is 24.239 seconds (4.72% of the median). All compiles use extended diagnostic limits and remain well above the standard 180-second total limit.
+
+All three PDFs are tagged PDF 2.0 and have 1,214 pages. They are 12,587,399, 12,587,395, and 12,587,393 bytes. Extracted-text, structure-tree, destination, and URL hashes match exactly. No full visual review was performed for the third run. See the [raw measurements](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).

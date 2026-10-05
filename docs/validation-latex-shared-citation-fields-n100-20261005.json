@@ -28,7 +28,7 @@
     "latex_source_sha256": "b28dd1b5fd0f6be1f2d2a595e8445b3846fdd855a11f16bbc908238f31e9a692",
     "shared_field_macros": 1,
     "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
-    "structure_sha256": "aa52d23f40ecc1c38d95ea12f7696d4709238dc285225f76689feeeeefb67f52",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
     "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
     "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
   },
@@ -40,10 +40,10 @@
     "baseline_latex_source_bytes": 410393,
     "latex_source_delta_bytes": -536,
     "text_matches": true,
-    "structure_matches": false,
+    "structure_matches": true,
     "destinations_match": true,
     "urls_match": true
   },
-  "decision": "Rejected: the single timing is 0.044 seconds below the fastest baseline run and 0.067 seconds below its median, but that median delta is smaller than the baseline range width of 0.132 seconds and does not establish a speedup; the PDF structure hash also differs from the reference. No production code was retained.",
+  "decision": "Rejected: the single timing is 0.044 seconds below the fastest baseline run and 0.067 seconds below its median, but that median delta is smaller than the baseline range width of 0.132 seconds and does not establish a speedup. All compared semantic hashes match; no production code was retained.",
   "limitations": "One candidate compile on one machine. No N=1,000 compile or full visual review was performed."
 }
