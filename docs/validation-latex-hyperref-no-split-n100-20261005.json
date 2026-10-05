@@ -1,0 +1,92 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "e91994da38976fe7cfa7f04b910248bb9d876314",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_structure_inspector": "pypdf 6.10.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper three times serially, with fresh media derivatives. In temporary rendered sources, remove LuaTeX's pre_shipout_filter callback named linksplit, remove tagpdf's URI and GoTo annotation hooks, and restore equivalent before/after hooks that insert StructParent and the annotation OBJR through tagpdf sockets. Inspect each written PDF directly: count Link annotations, distinct StructParent values, ParentTree number-tree pairs, Link structure elements and OBJR objects, and confirm each mapped OBJR points back to the annotation object. Compare extracted text, named destinations, URI targets and action counts with the production reference.",
+  "production_reference": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "pdf_bytes": 1312077,
+    "pdf_sha256": "9d9915e800216cdbf392055b17248aba842fcb890b15a517c56424cb0b4ffea5",
+    "link_annotations": 2978,
+    "goto_annotations": 1762,
+    "uri_annotations": 1216,
+    "named_destinations": 3526,
+    "link_structure_roles": 2671,
+    "distinct_link_structparent_values": 2978,
+    "link_parenttree_pairs": 2978,
+    "link_objr_children": 2978,
+    "parenttree_pairs_including_pages": 3105,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054"
+  },
+  "candidate": {
+    "runs": [
+      {
+        "elapsed_seconds": 44.251,
+        "pdf_bytes": 1304725,
+        "pdf_sha256": "f7a2780e0b316dcbdf20f1430bb1bf073493001102d73735a9909f05554bd83c"
+      },
+      {
+        "elapsed_seconds": 44.145,
+        "pdf_bytes": 1304728,
+        "pdf_sha256": "f4180e9fb1dccdf72a29e3ce2ca42532fb7b2920efdf73c18c9033031d14f21d"
+      },
+      {
+        "elapsed_seconds": 45.087,
+        "pdf_bytes": 1304721,
+        "pdf_sha256": "ece863f900e15b34bdc19784f9d78a48a8089545064addad9830230ccb23d770"
+      }
+    ],
+    "elapsed_median_seconds": 44.251,
+    "elapsed_range_seconds": [44.145, 45.087],
+    "run_spread_seconds": 0.942,
+    "elapsed_delta_vs_production_median_seconds": -0.858,
+    "elapsed_delta_vs_production_median_percent": -1.90,
+    "pages_by_run": [127, 127, 127],
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "link_annotations_by_run": [2978, 2978, 2978],
+    "goto_annotations_by_run": [1762, 1762, 1762],
+    "uri_annotations_by_run": [1216, 1216, 1216],
+    "named_destinations_by_run": [3526, 3526, 3526],
+    "link_structure_roles_by_run": [2671, 2671, 2671],
+    "link_structparent_values_by_run": [2978, 2978, 2978],
+    "distinct_link_structparent_values_by_run": [2671, 2671, 2671],
+    "reused_structparent_key_count_by_run": [303, 303, 303],
+    "excess_annotations_sharing_keys_by_run": [307, 307, 307],
+    "parenttree_pairs_including_pages_by_run": [2798, 2798, 2798],
+    "link_objr_children_by_run": [2671, 2671, 2671],
+    "annotation_refs_with_matching_objr_by_run": [2671, 2671, 2671],
+    "link_parenttree_pairs_expected": 2978,
+    "independent_annotation_parenttree_mappings_missing_by_run": [307, 307, 307],
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "pypdf_extracted_text_sha256_all_runs_and_reference": "5ca85536d8e0a3bdf42e24f82bc9cfa9a69b89948a2854e286f8be9f941fb5da",
+    "sorted_named_destination_names_sha256_all_runs_and_reference": "7ca2aa4e7ae05ed9c6c1568b7215482f5cc98907aab93425a46f9b5dcbe01dac",
+    "sorted_uri_target_multiset_sha256_all_runs_and_reference": "89cc1fe2ede6133ac3840527ac5aed0b7c414025d882b77f93848334ffb64f3a",
+    "named_destination_names_match_reference_all_runs": true,
+    "uri_annotation_multisets_match_reference_all_runs": true,
+    "semantic_text_matches_reference_all_runs": true
+  },
+  "decision": "Rejected. The median is 0.858 seconds (1.90%) below the production median, but the 0.942-second candidate spread is larger than the difference and does not establish a speedup. More importantly, each PDF has 2,978 Link annotations but only 2,671 distinct StructParent keys and 2,671 matching OBJR references. The 303 repeated keys collide across 307 extra annotation fragments; the ParentTree has 307 fewer annotation entries than production (2,798 total pairs instead of 3,105 including pages). Text, Link role count, destinations, URI targets and hitboxes are not sufficient evidence of a valid accessible mapping when those annotation objects lack independent ParentTree/OBJR references. No production change was retained.",
+  "limitations": "Three candidate runs on one macOS machine at N=100. N=1,000 was not compiled. No full visual inspection, screen-reader review, PDF/UA validation, or cross-engine/package-version qualification was performed. The candidate modifies the annotation mapping path and some line-split annotation rectangles; any future attempt must verify both ParentTree references and visible hitbox behavior."
+}
