@@ -1,0 +1,83 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "0b1c8e39c5e84ed4dbd2516bc85df2a066a2fa11",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper three times with fresh media derivatives. In temporary rendered sources, remove tagpdf's before/after hooks for PDF GoTo and URI links immediately after the existing tagpdf setup. Normal tagging and hyperref links remain enabled; link annotations and destinations are emitted, but tagpdf no longer associates them with Link structure elements.",
+  "production_reference": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "link_annotations": 2978,
+    "named_destinations": 3526,
+    "link_structure_roles": 2671,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8"
+  },
+  "all_draft_diagnostic": {
+    "record": "validation-latex-hyperref-all-draft-n100-20261005.json",
+    "elapsed_seconds": 33.836,
+    "runs": 1,
+    "link_annotations": 0,
+    "named_destinations": 0
+  },
+  "candidate": {
+    "runs": [
+      {
+        "elapsed_seconds": 40.092,
+        "pdf_bytes": 1114512,
+        "pdf_sha256": "4c53de777604fa6b7bb7df15956ccf64591364bf7ffe3d7927c9cff1b69da6d5"
+      },
+      {
+        "elapsed_seconds": 38.974,
+        "pdf_bytes": 1114511,
+        "pdf_sha256": "2a5595a4be43e6af95ee105965ab990ae1e79e3fb665cd7bc6e1e8203851c60a"
+      },
+      {
+        "elapsed_seconds": 39.473,
+        "pdf_bytes": 1114515,
+        "pdf_sha256": "aad45f73e6c3c6f6c4cd804c30fead738fb8f158721ee9983afd300466339c6c"
+      }
+    ],
+    "elapsed_median_seconds": 39.473,
+    "elapsed_range_seconds": [38.974, 40.092],
+    "run_spread_seconds": 1.118,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "link_annotations_by_run": [2978, 2978, 2978],
+    "uri_annotations_by_run": [1216, 1216, 1216],
+    "unique_uris": 317,
+    "named_destinations_by_run": [3526, 3526, 3526],
+    "link_structure_roles_by_run": [0, 0, 0],
+    "structure_sha256": "19808c0d5d8e528e45c70333e56c7260b29e8ad4c8e072aedaa8e8577b82c79b",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "named_destination_names_match_reference": true,
+    "uri_annotation_multisets_match_reference": true,
+    "text_matches_reference_all_runs": true
+  },
+  "elapsed_delta_vs_production_median_seconds": -5.636,
+  "elapsed_delta_vs_production_median_percent": -12.49,
+  "elapsed_delta_vs_all_draft_seconds": 5.637,
+  "interpretation": "Removing only tagpdf's link hooks lowers the median by 5.636 seconds relative to the production reference while retaining the same annotations, named destinations, external URI targets and visible text. Compared with the single all-draft run, the candidate is 5.637 seconds slower. These similar deltas suggest that annotation creation and Link-structure association each account for roughly 5.6 seconds on this fixture, but the all-draft comparison is one run and the attribution is indicative, not a controlled additive breakdown.",
+  "decision": "Rejected for production: the candidate retains PDF link behavior but removes all 2,671 Link roles from the accessibility structure. No production source change was retained.",
+  "next_step": "Profile tagpdf's GoTo and URI link hooks separately and look for a lower-cost implementation that preserves every Link structure element and annotation.",
+  "limitations": "Three candidate runs on one machine at N=100. The all-draft comparison is a single run. N=1,000 was not compiled and no full visual or screen-reader review was performed. The candidate remains a diagnostic PDF without accessible Link structure elements."
+}
