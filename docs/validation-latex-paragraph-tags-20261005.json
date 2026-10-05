@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-05",
+  "base_commit": "964bc2401d35393dd3de62b0ff186a8d6a98b76a",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pypdf": "6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "media_enabled": true
+  },
+  "method": {
+    "renderer": "current main source at 15 mm margins",
+    "compiler": "one direct LuaLaTeX pass per variant",
+    "tagging_enabled": true,
+    "cross_reference_convergence": false,
+    "visual_review": false,
+    "production_source_modified": false
+  },
+  "variants": [
+    {
+      "name": "tagging_on_reference",
+      "change": "none",
+      "status": "compiled_one_pass",
+      "wall_seconds": 20.094,
+      "pages": 127,
+      "pdf_bytes": 1323952,
+      "structure_elements": 12196,
+      "tag_counts": {
+        "/Document": 1,
+        "/Figure": 40,
+        "/LBody": 972,
+        "/LI": 972,
+        "/Lbl": 972,
+        "/Link": 2664,
+        "/Sect": 952,
+        "/TOC": 1,
+        "/itemize": 90,
+        "/paragraph": 633,
+        "/quote": 27,
+        "/section": 8,
+        "/subsection": 311,
+        "/text": 2291,
+        "/text-unit": 2262
+      }
+    },
+    {
+      "name": "paragraph_flattening",
+      "change": "\\tagpdfsetup{para/flattened=true}",
+      "status": "compiled_one_pass",
+      "wall_seconds": 20.662,
+      "pages": 127,
+      "pdf_bytes": 1323906,
+      "structure_elements": 12194,
+      "tag_counts": {
+        "/Document": 1,
+        "/Figure": 40,
+        "/LBody": 972,
+        "/LI": 972,
+        "/Lbl": 972,
+        "/Link": 2664,
+        "/Sect": 952,
+        "/TOC": 1,
+        "/itemize": 90,
+        "/paragraph": 633,
+        "/quote": 27,
+        "/section": 8,
+        "/subsection": 311,
+        "/text": 2291,
+        "/text-unit": 2260
+      },
+      "delta_from_reference": {
+        "wall_seconds": 0.568,
+        "wall_percent": 2.83,
+        "structure_elements": -2,
+        "pdf_bytes": -46,
+        "pages": 0
+      }
+    },
+    {
+      "name": "paragraph_tagging_disabled_in_appendix",
+      "change": "\\tagpdfsetup{para/tagging=false} before the citation list",
+      "status": "compile_failed",
+      "wall_seconds": 11.185,
+      "return_code": 1,
+      "diagnostic": "Illegal parent-child relations (StructTreeRoot -> LI); fatal tagpdf error: there is no open structure on the stack.",
+      "pdf_produced": false
+    }
+  ],
+  "limits": [
+    "One run per variant; the timing difference is indicative only.",
+    "The one-pass PDFs have unresolved cross references and are not final outputs.",
+    "The N=100 result does not establish performance at N=1000.",
+    "The experiments do not assess screen-reader behavior or PDF/UA conformance."
+  ],
+  "decision": "Keep production paragraph and document tagging unchanged; neither diagnostic variant establishes a safe or useful optimization."
+}
