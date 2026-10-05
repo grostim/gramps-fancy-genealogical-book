@@ -61,6 +61,7 @@ def build_addon(destination: Path = ARCHIVE) -> Path:
     with tempfile.TemporaryDirectory(prefix="gramps-fancy-book-build-") as temporary:
         files = {path.name: path for path in plugin.glob("*.py")}
         files["MANIFEST"] = plugin / "MANIFEST"
+        files["LICENSE"] = ROOT / "LICENSE"
         files.update(
             {
                 "gramps_fancy_book/" + path.relative_to(package).as_posix(): path

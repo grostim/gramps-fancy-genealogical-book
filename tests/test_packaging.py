@@ -13,6 +13,9 @@ def test_archive_is_reproducible_and_contains_only_runtime_files(tmp_path):
     assert first.read_bytes() == second.read_bytes()
     with tarfile.open(first) as archive:
         names = archive.getnames()
+        license_member = archive.extractfile("GrampsFancyBook/LICENSE")
+        assert license_member is not None
+        license_bytes = license_member.read()
         catalog_member = archive.extractfile(
             "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
         )
@@ -21,10 +24,13 @@ def test_archive_is_reproducible_and_contains_only_runtime_files(tmp_path):
     assert "GrampsFancyBook/GrampsFancyBook.gpr.py" in names
     assert "GrampsFancyBook/gramps_fancy_book/export.py" in names
     assert "GrampsFancyBook/gramps_fancy_book/date_ranges.py" in names
+    license_name = "GrampsFancyBook/LICENSE"
+    assert license_name in names
+    assert license_bytes == (Path(__file__).resolve().parents[1] / "LICENSE").read_bytes()
     catalog = "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
     assert catalog in names
     assert all(
-        name.endswith((".py", "/MANIFEST")) or name == catalog
+        name.endswith((".py", "/MANIFEST")) or name in {catalog, license_name}
         for name in names
     )
     assert catalog_magic in {b"\xde\x12\x04\x95", b"\x95\x04\x12\xde"}

@@ -69,7 +69,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 3. L0.3 — Construire une matrice « exigence → section source → tâche → scénario → résultat ». Maintenir AC-01 à AC-27 avec leurs identifiants d’origine.
 4. L0.4 — Consigner les décisions déjà prises et les seules ambiguïtés restantes. Toute nouvelle proposition indique sa justification et les fonctions affectées.
 5. L0.5 — Rétablir l’authentification GitHub, créer le dépôt avec la visibilité retenue, publier une branche de base et conserver le travail de fondation sur une branche de revue.
-6. L0.6 — Clarifier la licence de distribution, déjà déclarée GPL dans les métadonnées mais dépourvue de fichier de licence dans le squelette ; compléter les fichiers correspondants une fois le choix confirmé.
+6. **L0.6 — Licence renseignée :** `pyproject.toml` déclare `GPL-3.0-or-later` ; le dépôt inclut le texte officiel de la GPL v3 dans [`LICENSE`](../LICENSE), que `build_addon.py` place aussi dans l’archive distribuée. Les README français et anglais renvoient à ce fichier. Le choix existant des métadonnées est conservé.
 
 **Livrables :** références versionnées, matrice d’exigences, registre de décisions, backlog ordonné et dépôt GitHub.
 
