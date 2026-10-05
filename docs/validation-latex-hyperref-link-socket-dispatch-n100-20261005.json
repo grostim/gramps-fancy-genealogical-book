@@ -1,0 +1,106 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "5b4a348cd51e22675b8193ba73fb23ddfb282e66",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "tagpdf_linksplit_and_annotation_insert_profile": {
+    "method": "Use an instrumented local copy of the installed tagpdf Lua module to accumulate os.clock around each non-nil linksplit callback. In the same temporary rendered source, wrap tagpdf's __tag_struct_insert_annot_shipout:nnn macro to accumulate os.clock around its TeX body. The macro timer includes the directlua entry needed to read the clock and therefore is an upper estimate. Run the production helper once and inspect its resulting PDF.",
+    "elapsed_seconds": 43.834,
+    "source_bytes": 411291,
+    "pdf_bytes": 1312082,
+    "pdf_sha256": "671c95712803a3913e5f6f7f76f7a1cb71d7a7e0c7058c82b663c8715fe9f71d",
+    "linksplit_callback_calls": 2959,
+    "linksplit_callback_cpu_seconds": 0.018335,
+    "annotation_insert_macro_calls": 2959,
+    "annotation_insert_macro_cpu_seconds_upper_estimate": 0.482706,
+    "pdf_audit": {
+      "pages": 127,
+      "link_annotations": 2978,
+      "goto_annotations": 1762,
+      "uri_annotations": 1216,
+      "named_destinations": 3526,
+      "link_structure_roles": 2671,
+      "distinct_link_structparent_values": 2978,
+      "parenttree_pairs_including_pages": 3105,
+      "link_objr_children": 2978,
+      "annotation_refs_with_matching_objr": 2978,
+      "pypdf_extracted_text_sha256": "5ca85536d8e0a3bdf42e24f82bc9cfa9a69b89948a2854e286f8be9f941fb5da",
+      "sorted_named_destination_names_sha256": "7ca2aa4e7ae05ed9c6c1568b7215482f5cc98907aab93425a46f9b5dcbe01dac",
+      "sorted_uri_target_multiset_sha256": "89cc1fe2ede6133ac3840527ac5aed0b7c414025d882b77f93848334ffb64f3a"
+    }
+  },
+  "production_reference": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "source_bytes": 410393,
+    "pages": 127,
+    "link_annotations": 2978,
+    "goto_annotations": 1762,
+    "uri_annotations": 1216,
+    "named_destinations": 3526,
+    "link_structure_roles": 2671,
+    "distinct_link_structparent_values": 2978,
+    "parenttree_pairs_including_pages": 3105,
+    "link_objr_children": 2978,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054"
+  },
+  "fixed_arity_socket_dispatch_candidate": {
+    "method": "In temporary rendered sources, remove tagpdf's URI and GoTo before/after hooks and re-add them using tagpdf's lower-level fixed-arity \\tag_socket_use:nn calls for link/before and link/after. Keep the tagpdf active-socket check, linksplit callback, StructParent assignment, OBJR insertion and ParentTree mapping unchanged. Use fresh media derivatives and serial production-helper compiles.",
+    "source_bytes_by_run": [411004, 411004, 411004],
+    "runs": [
+      {
+        "elapsed_seconds": 43.504,
+        "pdf_bytes": 1312081,
+        "pdf_sha256": "d3be74c76323deac123cad3352f74ba567cab9bbabe159f2c952fb1f4ae59592"
+      },
+      {
+        "elapsed_seconds": 44.714,
+        "pdf_bytes": 1312077,
+        "pdf_sha256": "3c9970d6984212c5fe91602755cd47044a3f00fe13b6c5cfc2f7684292ae5d7c"
+      },
+      {
+        "elapsed_seconds": 44.709,
+        "pdf_bytes": 1312082,
+        "pdf_sha256": "594740fdb52bd0377a35676491b0336b3a2c35b6f338b243f7a03363fccc6983"
+      }
+    ],
+    "elapsed_median_seconds": 44.709,
+    "elapsed_range_seconds": [43.504, 44.714],
+    "run_spread_seconds": 1.210,
+    "source_bytes_delta": 611,
+    "elapsed_delta_vs_production_median_seconds": -0.400,
+    "elapsed_delta_vs_production_median_percent": -0.89,
+    "pages_by_run": [127, 127, 127],
+    "tagged": "yes",
+    "link_annotations_by_run": [2978, 2978, 2978],
+    "goto_annotations_by_run": [1762, 1762, 1762],
+    "uri_annotations_by_run": [1216, 1216, 1216],
+    "named_destinations_by_run": [3526, 3526, 3526],
+    "link_structure_roles_by_run": [2671, 2671, 2671],
+    "distinct_link_structparent_values_by_run": [2978, 2978, 2978],
+    "parenttree_pairs_including_pages_by_run": [3105, 3105, 3105],
+    "link_objr_children_by_run": [2978, 2978, 2978],
+    "annotation_refs_with_matching_objr_by_run": [2978, 2978, 2978],
+    "pypdf_extracted_text_sha256_all_runs_and_reference": "5ca85536d8e0a3bdf42e24f82bc9cfa9a69b89948a2854e286f8be9f941fb5da",
+    "sorted_named_destination_names_sha256_all_runs_and_reference": "7ca2aa4e7ae05ed9c6c1568b7215482f5cc98907aab93425a46f9b5dcbe01dac",
+    "sorted_uri_target_multiset_sha256_all_runs_and_reference": "89cc1fe2ede6133ac3840527ac5aed0b7c414025d882b77f93848334ffb64f3a",
+    "semantic_output_matches_reference_all_runs": true
+  },
+  "decision": "Rejected for lack of measurable improvement. The candidate median is 0.400 seconds (0.89%) below the production median, but the 1.210-second candidate spread is larger than the difference. The candidate source is 611 bytes larger. All three PDFs retain the exact audited Link annotations, ParentTree/OBJR mappings, extracted text, named destinations and URI targets. No production change was retained.",
+  "limitations": "The internal cost profile is one instrumented run; the TeX macro timing includes instrumentation overhead and is an upper estimate. The socket candidate has three runs on one machine at N=100. N=1,000, full visual review, screen-reader review, PDF/UA validation and cross-engine/package-version qualification were not performed."
+}
