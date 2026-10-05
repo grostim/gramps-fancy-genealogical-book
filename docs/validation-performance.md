@@ -493,3 +493,9 @@ The final PDF is tagged, has 1,214 pages, and is 12,587,399 bytes—five bytes l
 A variant replaced repeated source-author and publication-information strings in the appendix with a shared LaTeX macro. On the branching N=100 fixture with media, generated source fell from 410,393 to 409,857 bytes (−536). The tagged 127-page PDF took 45.042 seconds, 0.067 seconds (0.15%) below the previous 45.109-second median. The run is 0.044 seconds faster than the best of the three baseline runs, but its difference from the median is smaller than the 0.132-second width of that series; one measurement does not establish a speedup.
 
 Extracted text, named destinations, and URL links have matching hashes, but the structure-tree hash differs. The variant is rejected and no production change is retained. N=1,000 was not rebuilt and no full visual review was performed. See the [raw record](validation-latex-shared-citation-fields-n100-20261005.json).
+
+### Rejected trial — leave the second pass untagged — N=100 — October 5, 2026
+
+A second variant keeps tagging disabled for the first two passes; `hyperref` is in `draft` mode only on the first pass and is active again on the second. The production helper converged and delivered a tagged A4 PDF of 127 pages in 54.689 seconds. This is 9.580 seconds (21.24%) slower than the 45.109-second baseline median. One candidate compile does not provide a precise estimate of the difference, but shows no gain to justify this path.
+
+Extracted text, destinations, and URL links have matching hashes; the PDF structure-tree hash differs. The trial is rejected and its code was removed without an N=1,000 compile. No full visual review was performed. See the [raw record](validation-latex-defer-tagging-second-pass-n100-20261005.json).

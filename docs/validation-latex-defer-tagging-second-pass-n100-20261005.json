@@ -1,0 +1,52 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "ba47bef90320bc2ef62020f66f0fe818207aa024",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Compile once with the production helper using an experimental pass sequence: pass 1 has tagging=off and hyperref draft; pass 2 has tagging=off with hyperlinks active; later passes use the original tagged source. Compare with the three-run production series in validation-latex-hyperref-draft-first-pass-n100-20261005.json.",
+  "candidate": {
+    "elapsed_seconds": 54.689,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_bytes": 1312081,
+    "pdf_sha256": "608e002d022abd725d71c2210e12ee16f172b33db3c7540a24572c151a7ddcf7",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "aa52d23f40ecc1c38d95ea12f7696d4709238dc285225f76689feeeeefb67f52",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "baseline": {
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "delta_seconds": 9.580,
+  "delta_percent": 21.24,
+  "semantic_hashes_match": {
+    "text": true,
+    "structure": false,
+    "destinations": true,
+    "urls": true
+  },
+  "decision": "Rejected: one candidate run is 21.24% slower than the previous median and its structure-tree hash differs. No production code was retained.",
+  "limitations": "One candidate compile on one machine. No N=1,000 compile or full visual review was performed."
+}

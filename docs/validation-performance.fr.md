@@ -563,3 +563,9 @@ Le PDF final est balisé, compte 1 214 pages et pèse 12 587 399 octets, soit ci
 Une variante a remplacé les champs auteur et informations d’édition répétés de l’annexe par une macro LaTeX partagée. Sur le jeu ramifié N=100 avec médias, le source passe de 410 393 à 409 857 octets (−536). Le PDF balisé de 127 pages prend 45,042 s, soit 0,067 s (0,15 %) de moins que la médiane précédente de 45,109 s. Le run est 0,044 s plus rapide que le meilleur des trois runs de référence, mais l’écart à la médiane reste inférieur à l’étendue de 0,132 s observée dans cette série ; une seule mesure ne démontre pas de gain.
 
 Le texte extrait, les destinations nommées et les liens URL ont les mêmes empreintes, mais celle de l’arbre de structure diffère. La variante est donc écartée ; aucun changement de production n’est conservé. N=1 000 n’a pas été recompilé et aucune revue visuelle complète n’a été effectuée. Voir le [relevé brut](validation-latex-shared-citation-fields-n100-20261005.json).
+
+### Essai rejeté — deuxième passe sans balisage — N=100 — 5 octobre 2026
+
+Une seconde variante garde le balisage désactivé pendant les deux premiers passages ; `hyperref` est en mode `draft` uniquement au premier, puis redevient actif. Le helper de production converge et livre un PDF A4 balisé de 127 pages en 54,689 s. C’est 9,580 s (21,24 %) de plus que la médiane de référence de 45,109 s. Une seule compilation candidate ne permet pas d’estimer précisément l’écart, mais ne montre aucun gain justifiant la piste.
+
+Le texte, les destinations et les liens URL gardent les mêmes empreintes ; l’empreinte de l’arbre de structure PDF diffère. La variante est rejetée et le code a été retiré sans lancer de compilation N=1 000. Aucune revue visuelle complète n’a été effectuée. Voir le [relevé brut](validation-latex-defer-tagging-second-pass-n100-20261005.json).
