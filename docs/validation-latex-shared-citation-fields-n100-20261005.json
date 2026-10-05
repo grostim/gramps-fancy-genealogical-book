@@ -1,0 +1,49 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "ba47bef90320bc2ef62020f66f0fe818207aa024",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Compile the production helper once with an experimental renderer that factors repeated source-author and publication-information strings into TeX macros. Compare the timing and semantic hashes with the three-run N=100 hyperref-draft-first-pass candidate series in validation-latex-hyperref-draft-first-pass-n100-20261005.json.",
+  "candidate": {
+    "elapsed_seconds": 45.042,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_bytes": 1312082,
+    "pdf_sha256": "07e31e848ba55a8a9f2636a85f5956e4ceb9af26dc846ce56e23c5a89ce6c0f6",
+    "latex_source_bytes": 409857,
+    "latex_source_sha256": "b28dd1b5fd0f6be1f2d2a595e8445b3846fdd855a11f16bbc908238f31e9a692",
+    "shared_field_macros": 1,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "aa52d23f40ecc1c38d95ea12f7696d4709238dc285225f76689feeeeefb67f52",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "comparison": {
+    "baseline_candidate_median_seconds": 45.109,
+    "baseline_candidate_range_seconds": [45.086, 45.218],
+    "elapsed_delta_seconds": -0.067,
+    "elapsed_delta_percent": -0.15,
+    "baseline_latex_source_bytes": 410393,
+    "latex_source_delta_bytes": -536,
+    "text_matches": true,
+    "structure_matches": false,
+    "destinations_match": true,
+    "urls_match": true
+  },
+  "decision": "Rejected: the single timing is within the existing run-to-run range and does not establish a speedup; the PDF structure hash differs from the reference. No production code was retained.",
+  "limitations": "One candidate compile on one machine. No N=1,000 compile or full visual review was performed."
+}
