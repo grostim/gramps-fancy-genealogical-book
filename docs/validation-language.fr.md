@@ -50,6 +50,12 @@ La fixture native fictive AC-25 a été importée et exportée avec le rapport G
 
 Les deux exports ont le même `raw`, les mêmes bornes de comparaison et le même jour structuré ; seul le texte d’affichage change de langue. Le [PDF français AC-25](../output/pdf/gramps-fancy-book-ac25-month-day-fr-20261004.pdf), généré par le même rapport, compte neuf pages A4 balisées. La page 7 a été examinée : « vers 14 mars 1900 » est lisible dans la fiche et ne déborde pas. Cette recette CLI ne valide pas encore le sélecteur de langue par la boîte de dialogue graphique pour cette fixture.
 
+### État de la recette GUI AC-25 — 5 octobre 2026
+
+La fixture fictive est déjà importée dans l’arbre isolé `AC-25 GUI month-day`. Le profil de ce test est réglé sur `date-format=2`, valeur confirmée dans son fichier de préférences. Un premier export GUI français a toutefois été produit avant cette correction, avec la valeur `4` : `gui-fr.json` affiche `vers 14. mars 1900` alors que sa date structurée vaut `[1900, 3, 14]`. Ce fichier est conservé comme diagnostic et ne valide pas AC-25.
+
+Après correction de la préférence et redémarrage de Gramps, le formulaire de rapport a été rouvert. Le raccourci `super+a` n’a pas sélectionné tout le champ du chemin de sortie ; le nouveau chemin s’est ajouté à l’ancien. Gramps a rejeté cette destination avant d’écrire le fichier. Au dernier état observé, le formulaire est ouvert dans le profil isolé et attend la saisie d’un chemin propre. Les exports GUI français et anglais corrigés restent à produire dans `tmp/ac25-month-day/export/gui-fr-dmy.json` et `gui-en-dmy.json`. La reprise nécessite le déverrouillage manuel du Mac ; utiliser `Ctrl+A` ou le sélecteur de fichier pour remplacer entièrement le chemin, puis comparer les valeurs brutes et normalisées ainsi que les textes attendus `vers 14 mars 1900` et `about March 14, 1900`.
+
 ## Sélection dans l’interface Desktop — 2 octobre 2026
 
 La boîte de rapport de Gramps Desktop 6.0.8 a été ouverte avec l’archive de l’extension construite depuis `891a10b462ec` (SHA-256 `0260be914cf71e3e5be95794f58f7d22df492ef3036bbbe4fd12304e85e6d391`). Le profil Gramps, l’extension et la base de trois personnes fictives ont été placés sous `/tmp/gfb-gui-language-20261002`. La dépendance `mistune` 3.3.4 a été ajoutée au seul profil temporaire. La famille centrale `F0001` a été choisie dans la boîte graphique. Chaque export a reçu un consentement explicite, décoché de nouveau à l’ouverture suivante.
