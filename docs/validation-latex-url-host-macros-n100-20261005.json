@@ -1,0 +1,72 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "0b1c8e39c5e84ed4dbd2516bc85df2a066a2fa11",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper three times with a temporary rendered-source transform. A single LaTeX macro replaces the repeated URL authority https://archives.example.test in 909 bookurl commands. Each run uses fresh media derivatives and the normal production compile helper.",
+  "baseline": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "latex_source_bytes": 410393,
+    "pages": 127,
+    "tagged": "yes",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "candidate": {
+    "factored_authorities": 1,
+    "replaced_url_occurrences": 909,
+    "latex_source_bytes": 394997,
+    "source_delta_bytes": -15396,
+    "source_delta_percent": -3.75,
+    "runs": [
+      {
+        "elapsed_seconds": 45.245,
+        "pdf_bytes": 1312077,
+        "pdf_sha256": "86d4cb5b38e41ba792c70d7000b7c4a90c46062e9d1a793c1c5edbf17115dd1a"
+      },
+      {
+        "elapsed_seconds": 45.180,
+        "pdf_bytes": 1312082,
+        "pdf_sha256": "2d148799dd64f5d326d9ddb057eb66978ef47c9557e26f517fb7564d67b621d0"
+      },
+      {
+        "elapsed_seconds": 49.784,
+        "pdf_bytes": 1312084,
+        "pdf_sha256": "7cd3652f1b1bb5062776b4a3cc61bc458ba72fe2e76f778f45e44b3044cb1888"
+      }
+    ],
+    "elapsed_median_seconds": 45.245,
+    "elapsed_range_seconds": [45.180, 49.784],
+    "run_spread_seconds": 4.604,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141",
+    "semantic_hashes_match_all_runs": true
+  },
+  "elapsed_delta_vs_baseline_median_seconds": 0.136,
+  "elapsed_delta_vs_baseline_median_percent": 0.30,
+  "decision": "Rejected: despite reducing the LaTeX source by 3.75%, the candidate median is 0.136 seconds (0.30%) slower than the baseline median. The candidate run spread is 4.604 seconds, so these timings do not show a speedup. No production code was retained.",
+  "limitations": "Three candidate runs on one machine at N=100. N=1,000 was not compiled, and no full visual review was performed."
+}

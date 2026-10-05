@@ -1,0 +1,68 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "0b1c8e39c5e84ed4dbd2516bc85df2a066a2fa11",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper three times after temporarily changing only the rendered gfbpagelink macro. The candidate calls hyperref's low-level link-start/link-end commands directly for the already-safe internal target names and retains the same visible label and page reference. Each run uses fresh media derivatives.",
+  "baseline": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "candidate": {
+    "runs": [
+      {
+        "elapsed_seconds": 44.980,
+        "pdf_bytes": 1312077,
+        "pdf_sha256": "9d9915e800216cdbf392055b17248aba842fcb890b15a517c56424cb0b4ffea5"
+      },
+      {
+        "elapsed_seconds": 45.434,
+        "pdf_bytes": 1312074,
+        "pdf_sha256": "c70f6239169b1debcdd10006ad807a9924d6392ffeb2bba8f94c71ea72e8c42e"
+      },
+      {
+        "elapsed_seconds": 46.042,
+        "pdf_bytes": 1312082,
+        "pdf_sha256": "b397629eaf4065a304f5a1686c240b7df73af0ed877238b54f690411a7d1a0ab"
+      }
+    ],
+    "elapsed_median_seconds": 45.434,
+    "elapsed_range_seconds": [44.980, 46.042],
+    "run_spread_seconds": 1.062,
+    "pages": 127,
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "link_annotations_by_run": [2978, 2978, 2978],
+    "named_destinations_by_run": [3526, 3526, 3526],
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141",
+    "semantic_hashes_match_all_runs": true
+  },
+  "elapsed_delta_vs_baseline_median_seconds": 0.325,
+  "elapsed_delta_vs_baseline_median_percent": 0.72,
+  "decision": "Rejected: the direct low-level wrapper preserves all 2,978 link annotations, 3,526 destinations and the exact semantic hashes, but its 45.434-second median is 0.325 seconds (0.72%) slower than the baseline median. No production code was retained.",
+  "limitations": "Three candidate runs on one machine at N=100. N=1,000 was not compiled and no full visual review was performed."
+}
