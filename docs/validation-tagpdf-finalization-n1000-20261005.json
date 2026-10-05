@@ -1,0 +1,46 @@
+{
+  "measured_on": "2026-10-05",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_media_sources": 200,
+    "media_artifacts": 200,
+    "page_margins_mm": 15
+  },
+  "method": "Render the current production LaTeX source and enable tagpdf's built-in finalization timing hooks through l3benchmark. Compile one direct LuaLaTeX pass in a fresh temporary directory. No production source or settings are changed.",
+  "compilation": {
+    "passes": 1,
+    "references_converged": false,
+    "production_helper": false,
+    "returncode": 0,
+    "wall_seconds": 243.149,
+    "tagged": true,
+    "diagnostic_pages": 987,
+    "diagnostic_pdf_bytes": 9363322
+  },
+  "tagpdf_finalization_cpu_seconds": {
+    "ParentTree": 0.342,
+    "IDTree": 2.92,
+    "RoleMap": 0.00375,
+    "ClassMap": 0.000351,
+    "NameSpaces": 0.000824,
+    "StructElems": 17.9,
+    "Root": 0.000198
+  },
+  "tagpdf_finalization_sum_cpu_seconds": 21.167123,
+  "tagged_structure_writer_share_of_finalization_percent": 84.57,
+  "tagged_structure_writer_share_of_wall_time_percent_approx": 7.36,
+  "interpretation": "Writing structure elements is the largest measured finalization step (17.9 CPU seconds). All tagpdf finalization accounts for about 8.7% of this pass's wall time, so it does not explain the full gap to the 120-second per-pass production limit. This single diagnostic pass does not converge references or qualify the production PDF budget. Keep tagging enabled and investigate the larger book sections, especially the documentary appendix.",
+  "references": [
+    "https://github.com/latex3/tagpdf/blob/main/tagpdf-tree.dtx"
+  ]
+}
