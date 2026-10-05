@@ -545,3 +545,9 @@ La mesure confirme un gain sans changement des sorties contrôlées, mais la dur
 ### Répétitions avec le renderer courant — N=100 — 5 octobre 2026
 
 Trois compilations du jeu ramifié N=100 avec 20 portraits de 96 × 72 pixels passent par le helper de production sur le commit `c4f7b15`. Elles prennent 51,175 s, 51,643 s et 51,729 s ; la médiane est de 51,643 s. Les trois sont sous le repère provisoire de 60 s. La source LaTeX générée est identique sur les runs (410 393 octets) et les PDF font 1 312 074 ou 1 312 083 octets. Cette série actuelle confirme le seuil N=100 sur cette machine ; elle ne constitue pas une comparaison entre variantes et ne qualifie pas le livre N=1 000 pour la production. Les [données brutes](validation-latex-untagged-first-pass-n100-20261005.json) enregistrent chaque run.
+
+### Hyperliens différés à la première passe — N=100 — 5 octobre 2026
+
+Une variante temporaire ajoute l’option `draft` de `hyperref` en même temps que `tagging=off` pour la première passe seulement. Le [manuel officiel de hyperref](https://tug.ctan.org/macros/latex/contrib/hyperref/doc/hyperref-doc.pdf) indique que `draft` désactive les fonctions hypertexte ; la source originale est restaurée avant les passes suivantes. Sur trois compilations par variante, la médiane passe de 51,643 s à 45,109 s (−6,534 s, −12,65 %). Les trois PDF candidats sont balisés et comptent 127 pages ; leurs empreintes de texte, d’arbre de structure, de destinations et de liens URL égalent celles de la référence. La taille binaire diffère de quelques octets entre certains runs, sans différence dans les sorties comparées.
+
+Ce relevé N=100 est prometteur mais ne mesure pas encore l’effet sur N=1 000. Les compilations candidates sont diagnostiques jusqu’à l’intégration du changement et à sa qualification sur le grand jeu. Les [mesures brutes](validation-latex-hyperref-draft-first-pass-n100-20261005.json) détaillent chaque série.

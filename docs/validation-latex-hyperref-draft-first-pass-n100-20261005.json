@@ -1,0 +1,49 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "c4f7b1549b3619b89c38ea57dea187f7b7aa7246",
+  "environment": {
+    "python": "CPython 3.13.7",
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "media_sources": 20,
+    "media_artifacts": 20,
+    "portrait_size": "96x72"
+  },
+  "method": "Compare the current production helper with a temporary candidate on the same source and fixture. Both already disable tagging on pass 1. The candidate also adds hyperref's draft option only for pass 1, then restores the original tagged source before later passes. Run the current variant three times and the candidate three times in fresh directories; one additional paired run captures PDF text, structure, destinations, and URL hashes. The current-variant timing series is also preserved in validation-latex-untagged-first-pass-n100-20261005.json.",
+  "hyperref_manual": "https://tug.ctan.org/macros/latex/contrib/hyperref/doc/hyperref-doc.pdf",
+  "baseline": {
+    "runs_seconds": [51.1753, 51.643286, 51.72859],
+    "median_seconds": 51.643286,
+    "pages": 127,
+    "tagged": "yes",
+    "bytes_by_run": [1312074, 1312083, 1312083],
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "candidate": {
+    "runs_seconds": [45.109, 45.086, 45.218],
+    "median_seconds": 45.109,
+    "pages_by_run": [127, 127, 127],
+    "tagged_by_run": ["yes", "yes", "yes"],
+    "bytes_by_run": [1312075, 1312083, 1312082],
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8",
+    "destinations_sha256": "d6d146ae661ee88b0d24cf577b3d03b15bc128c2bf4ee355fe973ed8eac215ca",
+    "urls_sha256": "1b3b05826ebefca82a518dd9fcf4b6523bea513fe4122659444606eeec3a6141"
+  },
+  "elapsed_delta_seconds": -6.534286,
+  "elapsed_delta_percent": -12.65,
+  "semantic_outputs_match": true,
+  "binary_pdf_identical": false,
+  "limitations": "One three-run series per variant on one machine. This N=100 result does not establish the effect at N=1,000."
+}

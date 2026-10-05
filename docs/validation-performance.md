@@ -475,3 +475,9 @@ This confirms a gain without changing the checked outputs, but the duration stil
 ### Repeated builds with the current renderer — N=100 — October 5, 2026
 
 Three branching N=100 builds with 20 portraits at 96 × 72 pixels ran through the production helper on commit `c4f7b15`. They took 51.175, 51.643, and 51.729 seconds; the median is 51.643 seconds. All three are below the provisional 60-second target. Generated LaTeX source is identical across runs (410,393 bytes), and the PDFs are 1,312,074 or 1,312,083 bytes. This current series confirms the N=100 target on this machine; it is not a variant comparison and does not qualify the N=1,000 book for production. The [raw data](validation-latex-untagged-first-pass-n100-20261005.json) records every run.
+
+### Defer hyperlinks on the first pass — N=100 — October 5, 2026
+
+A temporary variant adds hyperref's `draft` option alongside `tagging=off` on the first pass only. The [official hyperref manual](https://tug.ctan.org/macros/latex/contrib/hyperref/doc/hyperref-doc.pdf) says `draft` turns off hypertext features; the original source is restored before later passes. Across three builds per variant, the median drops from 51.643 to 45.109 seconds (−6.534 seconds, −12.65%). All three candidate PDFs are tagged and have 127 pages; extracted-text, structure-tree, destination, and URL hashes match the reference. Binary file sizes vary by a few bytes between some runs, with no difference in the compared outputs.
+
+This N=100 result is promising but does not measure the effect at N=1,000. Candidate builds remain diagnostic until the change is integrated and qualified on the larger fixture. The [raw measurements](validation-latex-hyperref-draft-first-pass-n100-20261005.json) detail both series.
