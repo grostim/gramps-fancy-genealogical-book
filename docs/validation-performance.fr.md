@@ -509,3 +509,9 @@ Une fixture ramifiée N=100 avec 20 portraits a été compilée en une passe dir
 La désactivation de `para/tagging` dans l’annexe échoue : tagpdf signale des relations parent-enfant interdites entre la racine et les éléments de liste, puis `there is no open structure on the stack`. Aucun PDF n’est produit. Ni l’aplatissement, qui ne réduit presque pas la structure ni le temps, ni la désactivation, qui invalide la structure, n’est retenu. La génération de production conserve donc son balisage.
 
 Ces compilations ne sont que des passes de diagnostic ; leurs renvois ne convergent pas. Elles ne qualifient ni le délai à N=1 000 ni le comportement avec un lecteur d’écran. Le [relevé brut](validation-latex-paragraph-tags-20261005.json) enregistre les temps, tailles et comptes de balises.
+
+### Coût indicatif du balisage PDF — N=100 — 5 octobre 2026
+
+Une passe LuaLaTeX a été exécutée avec `tagging=on`, puis une autre avec `tagging=off`, sur la même source synthétique ramifiée N=100 sans médias. La première prend 19,459 s et écrit un PDF de 105 pages de 986 897 octets ; le journal compte 12 022 objets de structure et 9 644 nœuds MC. La seconde prend 9,603 s et écrit également 105 pages, pour 444 034 octets. L’écart observé est de −50,65 % sur la durée et −55,01 % sur la taille.
+
+Il s’agit d’une paire unique, exécutée dans cet ordre, avec une seule passe : les références de page ne convergent dans aucun fichier. La variante sans balisage ne possède pas de structure d’accessibilité et n’est pas une sortie acceptable. Ce résultat indicatif désigne le balisage PDF comme une piste de profilage ; il ne permet ni d’attribuer tout l’écart au seul tagpdf, ni de recommander sa désactivation. Aucun réglage de production n’a changé. Voir les [données brutes](validation-latex-tagging-cost-n100-20261005.json).
