@@ -490,6 +490,6 @@ The final PDF is tagged, has 1,214 pages, and is 12,587,399 bytes—five bytes l
 
 ### Rejected trial — factor shared source fields — N=100 — October 5, 2026
 
-A variant replaced repeated source-author and publication-information strings in the appendix with a shared LaTeX macro. On the branching N=100 fixture with media, generated source fell from 410,393 to 409,857 bytes (−536). The tagged 127-page PDF took 45.042 seconds, 0.067 seconds (0.15%) below the previous 45.109-second median; this single run falls within the observed variation and does not establish a speedup.
+A variant replaced repeated source-author and publication-information strings in the appendix with a shared LaTeX macro. On the branching N=100 fixture with media, generated source fell from 410,393 to 409,857 bytes (−536). The tagged 127-page PDF took 45.042 seconds, 0.067 seconds (0.15%) below the previous 45.109-second median. The run is 0.044 seconds faster than the best of the three baseline runs, but its difference from the median is smaller than the 0.132-second width of that series; one measurement does not establish a speedup.
 
 Extracted text, named destinations, and URL links have matching hashes, but the structure-tree hash differs. The variant is rejected and no production change is retained. N=1,000 was not rebuilt and no full visual review was performed. See the [raw record](validation-latex-shared-citation-fields-n100-20261005.json).

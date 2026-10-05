@@ -44,6 +44,6 @@
     "destinations_match": true,
     "urls_match": true
   },
-  "decision": "Rejected: the single timing is within the existing run-to-run range and does not establish a speedup; the PDF structure hash differs from the reference. No production code was retained.",
+  "decision": "Rejected: the single timing is 0.044 seconds below the fastest baseline run and 0.067 seconds below its median, but that median delta is smaller than the baseline range width of 0.132 seconds and does not establish a speedup; the PDF structure hash also differs from the reference. No production code was retained.",
   "limitations": "One candidate compile on one machine. No N=1,000 compile or full visual review was performed."
 }
