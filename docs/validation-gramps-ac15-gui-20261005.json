@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-05",
+  "source_commit": "7c8edfbde7f8cdf98e5c5d154cea2b12dda9b10d",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "gramps": "6.0.8",
+    "gramps_embedded_python": "3.13.2",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "profile": {
+    "kind": "temporary isolated Gramps Desktop profile",
+    "tree": "AC-15 GUI 15mm",
+    "bundle_identifier": "org.gramps-project.gramps.fancybook-isolated",
+    "user_tree_used": false
+  },
+  "addon_archive": {
+    "sha256": "8d66db7cfd352515e21d8c84e5a5a90ec61b505b8268fb0e7bb21f863e9dc1ad"
+  },
+  "fixture": {
+    "acceptance_case": "AC-15 shared citation media with AC-23 security strings",
+    "synthetic": true,
+    "sha256": "f48d242f7c9d2ecf355b023f8fcc6d5460b6754c774b285831af5665bef90f4b",
+    "shared_media": "M0002",
+    "citations": ["C0000", "C0001"],
+    "security_payloads_rendered_as_text": true
+  },
+  "method": {
+    "entrypoint": "Gramps Desktop report dialog",
+    "gui_dialog_used": true,
+    "output_format": "pdf (automatic from .pdf extension)",
+    "book_language": "fr",
+    "reference_family": "F0001",
+    "page_margin_mm": 15,
+    "privacy_confirmation_checked": true,
+    "extended_pdf_compilation_option_enabled": false
+  },
+  "result": {
+    "status": "exported",
+    "pdf": "output/pdf/gramps-fancy-book-ac15-shared-media-gui-15mm-20261005.pdf",
+    "pdf_sha256": "c0febd6aacece5a4a2e85320976a64d131ae74a3f88a316c732d59080abd7d8e",
+    "pdf_bytes": 66423,
+    "pages": 9,
+    "page_size": "A4",
+    "pdf_version": "2.0",
+    "tagged": true,
+    "language": "fr-FR",
+    "named_destinations": 81,
+    "link_annotations": 32,
+    "internal_links": 32,
+    "unresolved_internal_links": 0,
+    "uri_links": 0,
+    "figures": 3,
+    "figures_missing_alt_text": 0,
+    "shared_reproduction_copies_in_appendix": 1,
+    "shared_reproduction_image": {
+      "dimensions_pixels": [120, 80],
+      "physical_page": 8,
+      "printed_page_number": 7
+    },
+    "citation_references_to_shared_reproduction": [2, 3],
+    "visual_review": {
+      "rendered_dpi": 110,
+      "physical_pages_reviewed_on_contact_sheet": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "physical_pages_reviewed_separately": [7, 8],
+      "observed_clipping_or_overlap": false
+    }
+  },
+  "limits": [
+    "The fixture is fictional and combines AC-15 shared media with AC-23 security strings.",
+    "The synthetic images are flat-color placeholders and do not qualify realistic photographs.",
+    "Screen-reader behavior and PDF/UA conformance were not tested."
+  ]
+}

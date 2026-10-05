@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-05",
+  "source_commit": "7c8edfbde7f8cdf98e5c5d154cea2b12dda9b10d",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "gramps": "6.0.8"
+  },
+  "profile": {
+    "kind": "temporary isolated Gramps Desktop profile",
+    "tree": "AC-15 GUI 15mm",
+    "user_tree_used": false
+  },
+  "addon_archive_sha256": "8d66db7cfd352515e21d8c84e5a5a90ec61b505b8268fb0e7bb21f863e9dc1ad",
+  "fixture": {
+    "acceptance_case": "AC-15 shared citation media with AC-23 security strings",
+    "synthetic": true,
+    "sha256": "f48d242f7c9d2ecf355b023f8fcc6d5460b6754c774b285831af5665bef90f4b",
+    "shared_media": "M0002",
+    "citations": ["C0000", "C0001"],
+    "security_payloads_rendered_as_text": true
+  },
+  "method": {
+    "entrypoint": "Gramps Desktop report dialog",
+    "gui_dialog_used": true,
+    "output_format": "html_zip",
+    "book_language": "fr",
+    "reference_family": "F0001",
+    "privacy_confirmation_checked": true
+  },
+  "result": {
+    "status": "exported",
+    "archive": "output/html/gramps-fancy-book-ac15-shared-media-gui-15mm-20261005.zip",
+    "archive_sha256": "53d86e1f2c50d3ac3c2c66e1ffb6d156edd7d51ba3b1675dd0db40b820f2ec3d",
+    "archive_bytes": 3588,
+    "members": [
+      "index.html",
+      "media/1e394c89c88014ee4ff28102677cd4117c7e2862cc9b32f624878e90bd0039e1.png",
+      "media/19aeecc2db084027dca2597739952de318ee1f5d6f2bc42ab138ca19f223827e.png"
+    ],
+    "zip_integrity": "passed",
+    "html": {
+      "unique_ids": 33,
+      "internal_links": 32,
+      "unresolved_internal_links": 0,
+      "external_links": 0,
+      "scripts": 0,
+      "images": 2,
+      "missing_image_assets": 0,
+      "images_missing_alt_text": 0,
+      "shared_reproduction_copies_in_appendix": 1,
+      "shared_reproduction_dimensions_pixels": [120, 80],
+      "shared_media_citation_references": [1, 2],
+      "security_payloads_escaped": true
+    },
+    "browser_open": "not_verified_file_protocol_blocked"
+  },
+  "limits": [
+    "The fixture and its images are synthetic.",
+    "This GUI archive has not been interactively opened in a browser; responsive layout, keyboard navigation, and visual rendering remain unverified for this exact archive.",
+    "The session browser blocks file URLs; no alternate browser surface or protocol workaround was used."
+  ]
+}
