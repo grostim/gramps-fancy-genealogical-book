@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-05",
+  "source_commit": "dcc0f576ee7e8e799b7684a0f80aac719ceb96ec",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "page_margin_mm": 15
+  },
+  "method": {
+    "benchmark": "scripts/benchmark_book.py benchmark function and production write_latex_pdf helper",
+    "pdf_convergence": true,
+    "extended_compilation": false,
+    "variants_run_sequentially": true
+  },
+  "results": {
+    "default_settings": {
+      "runs": [61.904601, 62.62237, 62.639847],
+      "median_seconds": 62.62237,
+      "pdf_bytes": [1312082, 1312077, 1312082],
+      "median_pdf_bytes": 1312082
+    },
+    "pdf_compresslevel_1": {
+      "runs": [63.437654, 62.596279, 62.853099],
+      "median_seconds": 62.853099,
+      "pdf_bytes": [1498416, 1498389, 1498415],
+      "median_pdf_bytes": 1498415,
+      "pages": 127,
+      "tagged": true,
+      "median_time_change_percent": 0.37,
+      "median_size_change_percent": 14.2
+    },
+    "pdf_compresslevel_0": {
+      "runs": [62.519402],
+      "median_seconds": null,
+      "pdf_bytes": [6463651],
+      "pages": 127,
+      "tagged": true,
+      "size_multiple_of_default_median": 4.93
+    },
+    "pdf_objcompresslevel_1": {
+      "runs": [62.634457, 63.203151, 63.397594],
+      "median_seconds": 63.203151,
+      "pdf_bytes": [1312077, 1312082, 1312077],
+      "median_pdf_bytes": 1312077,
+      "pages": 127,
+      "tagged": true,
+      "median_time_change_percent": 0.93
+    }
+  },
+  "conclusion": "None of the tested lower compression settings reduced compile time enough to retain. compresslevel=1 increased median PDF size by 14.2%; compresslevel=0 was measured once and produced a PDF 4.93 times larger; objcompresslevel=1 had no measurable speed benefit.",
+  "limits": [
+    "The benchmark covers one N=100 synthetic fixture on one macOS machine.",
+    "Only one compresslevel=0 run was made, so it has no statistically meaningful timing median.",
+    "These measurements do not establish performance at N=1000."
+  ]
+}

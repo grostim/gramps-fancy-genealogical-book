@@ -234,3 +234,11 @@ La relecture haute résolution du 30 septembre confirme que ce fichier historiqu
 - Le PDF balisé fait 169 pages A4 et 1 409 982 octets. Il est issu de la fixture ramifiée fictive de 202 personnes, 101 familles, 303 événements/citations, 101 notices, 202 fiches et 20 portraits de 96 × 72 pixels.
 - Les pages physiques 29 et 31 ont été rendues à 130 ppp et inspectées. Elles montrent notamment une notice familiale ; aucune coupure de texte ni superposition n’a été observée. Les 1 805 destinations nommées et les 3 073 annotations PDF sont conservées par rapport à l’aperçu précédent.
 - L’aperçu permet de comparer les notices familiales à entrée unique avec les notices en listes. Les objets généalogiques et portraits sont fictifs ; cela ne constitue pas une revue intégrale de toutes les pages ni une qualification de PDF/UA.
+
+## Export AC-15 depuis Gramps CLI avec les marges à 15 mm — 5 octobre 2026
+
+- PDF local non suivi : [`output/pdf/gramps-fancy-book-ac15-shared-media-15mm-20261005.pdf`](../output/pdf/gramps-fancy-book-ac15-shared-media-15mm-20261005.pdf), SHA-256 `20931cecc9fa69c90f619b3e94037c84920d026bcc07ea798607d9420900b600`.
+- L’archive courante du module complémentaire a été installée dans un profil Gramps temporaire isolé. Le rapport Gramps 6.0.8 a importé la fixture AC-15 fictive et produit un PDF en français avec LuaHBTeX 1.24.0 / TeX Live 2026. Ce parcours utilise Gramps CLI, pas la boîte de dialogue Desktop.
+- Le PDF compte neuf pages A4 (66 423 octets), porte le balisage PDF 2.0 et la langue `fr-FR`. Les 81 destinations nommées sont présentes ; les 32 liens internes sont résolus. Les trois figures ont un texte alternatif non vide.
+- L’annexe, à la page physique 8 (folio 7), affiche une seule reproduction partagée et les entrées de citation [2] et [3] y renvoient. Les pages physiques 7 et 8 ont été rendues à 120 ppp et examinées ; aucun chevauchement ni texte coupé n’a été observé.
+- Cette recette confirme la marge actuelle de 15 mm et le chemin PDF du rapport Gramps sur la fixture AC-15. L’export depuis la fenêtre Desktop avec ce média partagé, une revue complète des neuf pages, les médias réels et le lecteur d’écran restent à faire. Aucune conformité PDF/UA n’est revendiquée. Les mesures détaillées figurent dans [le relevé JSON](validation-gramps-ac15-margins15-20261005.json).

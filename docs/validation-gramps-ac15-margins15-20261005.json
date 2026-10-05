@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-05",
+  "source_commit": "dcc0f576ee7e8e799b7684a0f80aac719ceb96ec",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "gramps": "6.0.8",
+    "gramps_embedded_python": "3.13.2",
+    "tex": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "profile": {
+    "kind": "temporary isolated Gramps profile",
+    "user_tree_used": false
+  },
+  "addon_archive": {
+    "sha256": "cb1ddec3dfe43e8f017ae48b8c79d4e6fd6c16bd4d51bcce99054f4e40e017ab"
+  },
+  "fixture": {
+    "acceptance_case": "AC-15 shared citation media",
+    "synthetic": true,
+    "sha256": "f48d242f7c9d2ecf355b023f8fcc6d5460b6754c774b285831af5665bef90f4b"
+  },
+  "method": {
+    "entrypoint": "Gramps command-line report action",
+    "gui_dialog_used": false,
+    "output_format": "pdf",
+    "book_language": "fr",
+    "reference_family": "F0001",
+    "page_margin_mm": 15
+  },
+  "result": {
+    "status": "compiled",
+    "pdf": "output/pdf/gramps-fancy-book-ac15-shared-media-15mm-20261005.pdf",
+    "pdf_sha256": "20931cecc9fa69c90f619b3e94037c84920d026bcc07ea798607d9420900b600",
+    "pdf_bytes": 66423,
+    "pages": 9,
+    "page_size": "A4",
+    "pdf_version": "2.0",
+    "tagged": true,
+    "language": "fr-FR",
+    "named_destinations": 81,
+    "link_annotations": 32,
+    "internal_links": 32,
+    "unresolved_internal_links": 0,
+    "uri_links": 0,
+    "figures": 3,
+    "figures_missing_alt_text": 0,
+    "shared_reproduction_copies_in_appendix": 1,
+    "citation_references_to_shared_reproduction": [2, 3],
+    "appendix_physical_page": 8,
+    "appendix_printed_page_number": 7,
+    "visual_review": {
+      "rendered_dpi": 120,
+      "physical_pages": [7, 8],
+      "observed_clipping_or_overlap": false
+    }
+  },
+  "limits": [
+    "The fixture contains fictional records and media.",
+    "This run exercises Gramps CLI, not its Desktop report dialog.",
+    "Two representative pages were reviewed visually; the nine-page document was not inspected page by page.",
+    "Tagged PDF structure was checked; PDF/UA conformance is not claimed."
+  ]
+}
