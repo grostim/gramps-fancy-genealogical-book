@@ -1,0 +1,115 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "221a41dc76fb4fdbb1bc4fb58732577bbf3aaa7d",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Use the production PDF helper for three compiles per variant, with fresh media derivatives and serial execution. In the temporary rendered source, remove only the before/after tagpdf hooks for either GoTo or URI annotations. Leave the other hook pair, hyperref, and ordinary tagging active.",
+  "production_reference": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "link_annotations": 2978,
+    "goto_annotations": 1762,
+    "uri_annotations": 1216,
+    "named_destinations": 3526,
+    "link_structure_roles": 2671,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8"
+  },
+  "variants": [
+    {
+      "hook_type_removed": "GoTo",
+      "runs": [
+        {
+          "elapsed_seconds": 40.933,
+          "pdf_bytes": 1190760,
+          "pdf_sha256": "3fc94bdbf186b24c459f252d0997b963f66b6ce95586b90cee8472a809e8f79e"
+        },
+        {
+          "elapsed_seconds": 41.437,
+          "pdf_bytes": 1190764,
+          "pdf_sha256": "cf7fce7cd395f9b6715a978ca56dc1dbc54c730e1b3a1a508f15a6e0c26136b1"
+        },
+        {
+          "elapsed_seconds": 41.427,
+          "pdf_bytes": 1190764,
+          "pdf_sha256": "870d00f335a8f75d2e35c4a37c545a63b5ea7a51c3c41ed64507a3e6461563b0"
+        }
+      ],
+      "elapsed_median_seconds": 41.427,
+      "elapsed_range_seconds": [40.933, 41.437],
+      "run_spread_seconds": 0.504,
+      "elapsed_delta_vs_production_seconds": -3.682,
+      "elapsed_delta_vs_production_percent": -8.16,
+      "link_annotations_by_run": [2978, 2978, 2978],
+      "named_destinations_by_run": [3526, 3526, 3526],
+      "link_structure_roles_by_run": [909, 909, 909],
+      "remaining_uri_annotations_by_run": [1216, 1216, 1216],
+      "structure_sha256": "8dab4dc9ac15bcc76c7c05db52220ca41166686063e2e0bdd8d56cba1268f299"
+    },
+    {
+      "hook_type_removed": "URI",
+      "runs": [
+        {
+          "elapsed_seconds": 43.061,
+          "pdf_bytes": 1240261,
+          "pdf_sha256": "3fae5adc603e31cc853b256e5c2827ebadd63842b16c26bc7d7e18eef37755c0"
+        },
+        {
+          "elapsed_seconds": 42.722,
+          "pdf_bytes": 1240257,
+          "pdf_sha256": "92a6a8c78a44e70cdc6798718cff1b5fd63fdaf26242f3304504f2ab3ee49517"
+        },
+        {
+          "elapsed_seconds": 42.877,
+          "pdf_bytes": 1240253,
+          "pdf_sha256": "622abc4cfd90b87ca580b6a61239a95c672ba9b325370a3f6f69fbc3d713957e"
+        }
+      ],
+      "elapsed_median_seconds": 42.877,
+      "elapsed_range_seconds": [42.722, 43.061],
+      "run_spread_seconds": 0.339,
+      "elapsed_delta_vs_production_seconds": -2.232,
+      "elapsed_delta_vs_production_percent": -4.95,
+      "link_annotations_by_run": [2978, 2978, 2978],
+      "named_destinations_by_run": [3526, 3526, 3526],
+      "link_structure_roles_by_run": [1762, 1762, 1762],
+      "remaining_goto_annotations_by_run": [1762, 1762, 1762],
+      "structure_sha256": "fa457a45ee6634c6c15a72bec474a969bb7e782a828149327aa2f34f86d64da9"
+    }
+  ],
+  "shared_candidate_output": {
+    "pages_by_run": [127, 127, 127, 127, 127, 127],
+    "tagged": "yes",
+    "pdf_version": "2.0",
+    "text_sha256_by_run": [
+      "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+      "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+      "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+      "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+      "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+      "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054"
+    ],
+    "named_destination_names_match_reference_all_runs": true,
+    "uri_annotation_multisets_match_reference_all_runs": true
+  },
+  "decision": "Neither variant is retained. Removing the GoTo hooks saves more time, but removes the Link structure roles from all internal destinations; removing URI hooks also breaks accessible structure for external links. All link annotations, named destinations, URI targets and visible text remain present.",
+  "next_step": "Focus profiling on the GoTo path and identify a production-safe reduction in per-link structure work that preserves all 2,671 Link roles.",
+  "limitations": "Three runs per variant on one machine at N=100. The comparisons are not interleaved with fresh production baselines. N=1,000 was not compiled, and no full visual or screen-reader review was performed."
+}
