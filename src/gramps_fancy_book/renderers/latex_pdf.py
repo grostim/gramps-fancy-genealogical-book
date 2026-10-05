@@ -28,6 +28,21 @@ _LAYOUT_WARNING = re.compile(
 _TAGGING_METADATA = re.compile(
     r"(\\DocumentMetadata\{[^}\r\n]*?\btagging=)on(?=[,}])"
 )
+_HYPERREF_PACKAGE = re.compile(
+    r"(?P<prefix>\\usepackage)(?:\[(?P<options>[^\]\r\n]*)\])?"
+    r"(?P<suffix>\{hyperref\})"
+)
+
+
+def _hyperref_draft_declaration(match: re.Match[str]) -> str:
+    options = [
+        option.strip()
+        for option in (match.group("options") or "").split(",")
+        if option.strip()
+        and option.split("=", 1)[0].strip().casefold() not in {"draft", "final"}
+    ]
+    option_string = ",".join(("draft", *options))
+    return f"{match.group('prefix')}[{option_string}]{match.group('suffix')}"
 
 
 class LatexCompilerUnavailable(RuntimeError):
@@ -146,6 +161,7 @@ def _compile_latex(
             raise LatexCompilationError("timeout")
         original_source = None
         if _pass_number == 1:
+            # The first PDF is discarded; defer tagging and hyperlink work to later passes.
             source_path = work_directory / "book.tex"
             original_source = source_path.read_text(encoding="utf-8")
             untagged_source, replacements = _TAGGING_METADATA.subn(
@@ -153,7 +169,12 @@ def _compile_latex(
             )
             if replacements != 1:
                 raise LatexCompilationError("missing_tagging_metadata")
-            source_path.write_text(untagged_source, encoding="utf-8")
+            first_pass_source, replacements = _HYPERREF_PACKAGE.subn(
+                _hyperref_draft_declaration, untagged_source, count=1
+            )
+            if replacements != 1:
+                raise LatexCompilationError("missing_hyperref_package")
+            source_path.write_text(first_pass_source, encoding="utf-8")
         try:
             result = subprocess.run(
                 [
