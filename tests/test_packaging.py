@@ -16,6 +16,9 @@ def test_archive_is_reproducible_and_contains_only_runtime_files(tmp_path):
         license_member = archive.extractfile("GrampsFancyBook/LICENSE")
         assert license_member is not None
         license_bytes = license_member.read()
+        manifest_member = archive.extractfile("GrampsFancyBook/MANIFEST")
+        assert manifest_member is not None
+        manifest_lines = manifest_member.read().decode("utf-8").splitlines()
         catalog_member = archive.extractfile(
             "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
         )
@@ -27,6 +30,7 @@ def test_archive_is_reproducible_and_contains_only_runtime_files(tmp_path):
     license_name = "GrampsFancyBook/LICENSE"
     assert license_name in names
     assert license_bytes == (Path(__file__).resolve().parents[1] / "LICENSE").read_bytes()
+    assert "LICENSE" in manifest_lines
     catalog = "GrampsFancyBook/locale/fr/LC_MESSAGES/addon.mo"
     assert catalog in names
     assert all(
