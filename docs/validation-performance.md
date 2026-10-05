@@ -502,6 +502,6 @@ Extracted-text, structure-tree, destination, and URL hashes match the reference.
 
 ### Repeat optimized build — N=1,000 — October 5, 2026
 
-A second full compile with the current renderer took 509.888 seconds, compared with 514.058 seconds in the first run (−4.170 seconds, −0.81%). The mean of these two runs is 511.973 seconds; two repetitions are not enough to establish a robust median. Both compiles use extended diagnostic limits and remain well above the standard 180-second total limit.
+A third full compile with the current renderer took 534.127 seconds. Across the three runs (514.058, 509.888, and 534.127 seconds), the measured median is 514.058 seconds and the range is 24.239 seconds (4.72% of the median). All compiles use extended diagnostic limits and remain well above the standard 180-second total limit.
 
-Both PDFs are tagged PDF 2.0 and have 1,214 pages. They are 12,587,399 and 12,587,395 bytes. Extracted-text, structure-tree, destination, and URL hashes match exactly. No full visual review was performed for this repeat. See the [raw measurements](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).
+All three PDFs are tagged PDF 2.0 and have 1,214 pages. They are 12,587,399, 12,587,395, and 12,587,393 bytes. Extracted-text, structure-tree, destination, and URL hashes match exactly. No full visual review was performed for the third run. See the [raw measurements](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).

@@ -572,6 +572,6 @@ Le texte, l’arbre de structure, les destinations et les liens URL ont les mêm
 
 ### Répétition du build optimisé — N=1 000 — 5 octobre 2026
 
-Une seconde compilation complète avec le renderer courant prend 509,888 s, contre 514,058 s au premier run (−4,170 s, −0,81 %). La moyenne de ces deux runs est de 511,973 s ; deux répétitions ne suffisent pas à fixer une médiane robuste. Les deux compilations utilisent les limites diagnostiques étendues et restent très au-dessus du plafond standard de 180 s au total.
+Une troisième compilation complète avec le renderer courant prend 534,127 s. Sur les trois runs (514,058, 509,888 et 534,127 s), la médiane mesurée est de 514,058 s et l’étendue de 24,239 s (4,72 % de la médiane). Les trois compilations utilisent les limites diagnostiques étendues et restent très au-dessus du plafond standard de 180 s au total.
 
-Les deux PDF sont balisés PDF 2.0 et comptent 1 214 pages. Ils font respectivement 12 587 399 et 12 587 395 octets. Les empreintes du texte, de l’arbre de structure, des destinations et des liens URL correspondent exactement. Aucune revue visuelle complète n’a été faite sur cette répétition. Voir les [mesures brutes](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).
+Les trois PDF sont balisés PDF 2.0 et comptent 1 214 pages. Ils font respectivement 12 587 399, 12 587 395 et 12 587 393 octets. Les empreintes du texte, de l’arbre de structure, des destinations et des liens URL correspondent exactement. Aucune revue visuelle complète n’a été faite sur le troisième run. Voir les [mesures brutes](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).

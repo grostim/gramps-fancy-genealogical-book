@@ -17,7 +17,7 @@
     "portrait_size": "96x72",
     "margins_mm": 15
   },
-  "method": "Compile once with the production helper using an experimental pass sequence: pass 1 has tagging=off and hyperref draft; pass 2 has tagging=off with hyperlinks active; later passes use the original tagged source. Compare with the three-run production series in validation-latex-hyperref-draft-first-pass-n100-20261005.json.",
+  "method": "Run two candidate compiles with the production helper using an experimental pass sequence: pass 1 has tagging=off and hyperref draft; pass 2 has tagging=off with hyperlinks active; later passes use the original tagged source. The initial candidate is followed by an independent rerun from the clean production source after review requested verification. Compare both with the three-run production series in validation-latex-hyperref-draft-first-pass-n100-20261005.json.",
   "initial_candidate": {
     "elapsed_seconds": 54.689,
     "pages": 127,
