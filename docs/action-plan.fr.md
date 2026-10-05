@@ -1,6 +1,6 @@
 # Plan d’action — Gramps Fancy Genealogical Book
 
-Version de travail du 26 septembre 2026, suivi actualisé le 4 octobre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
+Version de travail du 26 septembre 2026, suivi actualisé le 5 octobre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
 
 ## 1. Références et niveau de certitude
 
@@ -56,7 +56,7 @@ La compilation Python et la construction de l’archive ont été réalisées pr
 
 Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 peuvent avancer conjointement. Les deux rendus peuvent être développés indépendamment une fois le modèle éditorial stabilisé. La documentation et les contrôles accompagnent chaque lot.
 
-**État au 4 octobre 2026 :** le socle L0–L3 et le parcours L4 sont livrés ; la recette fonctionnelle L4 reste partielle. AC-01, AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 sont maintenant qualifiés avec des fixtures Gramps CLI natives jusqu’aux rendus HTML et PDF ; AC-04 dispose aussi d’une preuve native CLI. L’export GUI du paquet courant en ZIP HTML et en PDF a été validé sur macOS avec une fixture fictive ; le ZIP GUI et le ZIP synthétique AC-20 ont maintenant été ouverts directement hors ligne dans Chrome, avec quelques liens internes vérifiés. La revue visuelle complète du PDF long a été effectuée sur les 127 pages à 110 ppp ; toutes les 22 pages des maquettes privées ont été comparées à un échantillon représentatif du rendu courant. Les photos réelles de Gramps, l’accessibilité et les essais sur d’autres versions restent à faire. Les livraisons L5–L7 et la progression L8 sont détaillées au § 8.
+**État au 5 octobre 2026 :** le socle L0–L3 et le parcours L4 sont livrés ; la recette fonctionnelle L4 reste partielle. AC-01, AC-03, AC-05, AC-06, AC-07, AC-08 et AC-09 sont maintenant qualifiés avec des fixtures Gramps CLI natives jusqu’aux rendus HTML et PDF ; AC-04 dispose aussi d’une preuve native CLI. L’export GUI du paquet courant en ZIP HTML et en PDF a été validé sur macOS avec une fixture fictive ; le ZIP GUI et le ZIP synthétique AC-20 ont maintenant été ouverts directement hors ligne dans Chrome, avec quelques liens internes vérifiés. La revue visuelle complète du PDF long a été effectuée sur les 127 pages à 110 ppp ; toutes les 22 pages des maquettes privées ont été comparées à un échantillon représentatif du rendu courant. Les photos réelles de Gramps, l’accessibilité et les essais sur d’autres versions restent à faire. Le PDF AC-15 avec média partagé est qualifié par Gramps CLI avec des marges de 15 mm ; l’export GUI correspondant reste à vérifier. Le livre synthétique N=1 000 compile en 738,982 s avec les plafonds prolongés et reste hors des limites de production. La licence GPL figure maintenant aussi dans le manifeste de l’archive. Les livraisons L5–L7 et la progression L8 sont détaillées au § 8.
 
 ## 4. Lots détaillés
 
@@ -69,7 +69,7 @@ Chemin principal : L0/L1 → L2 → L3 → L4 → L5 → L6/L7 → L8. L0 et L1 
 3. L0.3 — Construire une matrice « exigence → section source → tâche → scénario → résultat ». Maintenir AC-01 à AC-27 avec leurs identifiants d’origine.
 4. L0.4 — Consigner les décisions déjà prises et les seules ambiguïtés restantes. Toute nouvelle proposition indique sa justification et les fonctions affectées.
 5. L0.5 — Rétablir l’authentification GitHub, créer le dépôt avec la visibilité retenue, publier une branche de base et conserver le travail de fondation sur une branche de revue.
-6. **L0.6 — Licence renseignée :** `pyproject.toml` déclare `GPL-3.0-or-later` ; le dépôt inclut le texte officiel de la GPL v3 dans [`LICENSE`](../LICENSE), que `build_addon.py` place aussi dans l’archive distribuée. Les README français et anglais renvoient à ce fichier. Le choix existant des métadonnées est conservé.
+6. **L0.6 — Licence renseignée :** `pyproject.toml` déclare `GPL-3.0-or-later` ; le dépôt inclut le texte officiel de la GPL v3 dans [`LICENSE`](../LICENSE), que `build_addon.py` place aussi dans l’archive distribuée et que `gramps60/GrampsFancyBook/MANIFEST` inventorie. Le contrôle de packaging vérifie les deux copies. Les README français et anglais renvoient à ce fichier. Le choix existant des métadonnées est conservé.
 
 **Livrables :** références versionnées, matrice d’exigences, registre de décisions, backlog ordonné et dépôt GitHub.
 
@@ -226,7 +226,7 @@ Les statuts de suivi seront : à préparer, prêt, en cours, à revoir, validé 
 
 Les estimations calendaires seront établies après L0 et L1 : le détail des 27 scénarios et les contraintes constatées dans Gramps peuvent modifier sensiblement la charge. Le périmètre des futurs rendus ne doit pas être chiffré à partir des seuls exemples actuels.
 
-## 8. Suivi d’exécution — 2 octobre 2026
+## 8. Suivi d’exécution — 5 octobre 2026
 
 - Le dépôt reste privé et les PR #55, #56 et #57 sont fusionnées. Elles livrent l’archive HTML ZIP, préservent la compatibilité des appels JSON historiques, puis ajoutent les améliorations d’accessibilité et d’affichage mobile.
 - **L0–L3 — socle livré.** Référentiel, schéma JSON 0.8, extraction Gramps, métadonnées `BOOK_*`, médias et rapport séparé de cohérence sont présents. Les règles restent à prouver par les scénarios de bout en bout sur les environnements cibles.
@@ -357,3 +357,7 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 **L8.3 — essais de compression LaTeX N=100, 5 octobre 2026 :** trois répétitions avec `compresslevel=1` et `objcompresslevel=1` ne montrent pas de gain de compilation ; `compresslevel=1` augmente la taille PDF de 14,2 %. Un seul essai avec `compresslevel=0` ne permet pas de conclure sur le temps et produit un fichier 4,93 fois plus volumineux. Les réglages par défaut sont conservés. Voir [validation performance](validation-performance.fr.md) et le [relevé brut](validation-luatex-compression-n100-20261005.json).
 
 **L8.3 — essai rejeté, premier passage LuaLaTeX en mode brouillon, 5 octobre 2026 :** `-draftmode` au premier passage d’un export prolongé ne réduit ni la durée N=1 000 ni le nombre de passages normaux nécessaires à la convergence des références. Le texte extrait, le nombre de pages, la structure des liens et la taille du PDF restent identiques sur cet essai unique ; le code temporaire est retiré. Les plafonds de production N=1 000 ne sont toujours pas respectés. Voir [validation performance](validation-performance.fr.md) et le [relevé brut](validation-latex-draft-first-pass-n1000-20261005.json).
+
+**L0.6 — licence dans l’archive distribuée, PR #264, 5 octobre 2026 :** le manifeste de l’extension inventorie maintenant `LICENSE`, et le contrôle de packaging compare ce fichier au texte du dépôt. La PR #264 est fusionnée après réussite de la CI ; l’archive `.addon.tgz` a été reconstruite depuis `main` et son contenu vérifié.
+
+**L8.3 — essais de balisage des paragraphes, 5 octobre 2026 :** sur une fixture ramifiée N=100, `para/flattened=true` réduit de deux éléments la structure PDF (12 196 → 12 194) sans changer les 127 pages de cette passe, mais prend 20,662 s contre 20,094 s pour la référence sur une seule mesure par variante. La désactivation du balisage automatique des paragraphes dans l’annexe échoue avec des relations parent-enfant interdites et `there is no open structure on the stack` ; aucun PDF n’est produit. Aucune variante n’est retenue. Ces essais en passe unique n’évaluent ni la convergence des renvois ni une compilation N=1 000 ; la structure balisée de production reste inchangée. Voir le [relevé brut](validation-latex-paragraph-tags-20261005.json) et [validation performance](validation-performance.fr.md).
