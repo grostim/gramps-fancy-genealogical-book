@@ -1,0 +1,51 @@
+{
+  "measured_on": "2026-10-05",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_media_sources": 200,
+    "media_artifacts": 200,
+    "page_margins_mm": 15
+  },
+  "method": "Insert Lua os.clock markers immediately after every 250th top-level citation item in a temporary copy of the current production LaTeX source. Intervals include typesetting and page shipout between markers. Compile one direct LuaLaTeX pass; no production source or settings are changed.",
+  "compilation": {
+    "passes": 1,
+    "references_converged": false,
+    "returncode": 0,
+    "wall_seconds": 244.663,
+    "tagged": true,
+    "diagnostic_pages": 987,
+    "diagnostic_pdf_bytes": 9363322
+  },
+  "group_size_citations": 250,
+  "citation_group_cpu_seconds": [
+    {"first_citation": 1, "last_citation": 250, "seconds": 6.751987},
+    {"first_citation": 251, "last_citation": 500, "seconds": 7.188088},
+    {"first_citation": 501, "last_citation": 750, "seconds": 7.207509},
+    {"first_citation": 751, "last_citation": 1000, "seconds": 7.425797},
+    {"first_citation": 1001, "last_citation": 1250, "seconds": 7.346507},
+    {"first_citation": 1251, "last_citation": 1500, "seconds": 7.799275},
+    {"first_citation": 1501, "last_citation": 1750, "seconds": 8.077925},
+    {"first_citation": 1751, "last_citation": 2000, "seconds": 7.971245},
+    {"first_citation": 2001, "last_citation": 2250, "seconds": 8.431314},
+    {"first_citation": 2251, "last_citation": 2500, "seconds": 8.893338},
+    {"first_citation": 2501, "last_citation": 2750, "seconds": 8.213195},
+    {"first_citation": 2751, "last_citation": 3000, "seconds": 8.528335},
+    {"first_citation": 3001, "last_citation": 3003, "seconds": 0.204533}
+  ],
+  "full_group_cpu_seconds_sum": 93.834515,
+  "all_group_cpu_seconds_sum": 94.039048,
+  "full_group_cpu_seconds_mean": 7.819543,
+  "full_group_cpu_seconds_range": [6.751987, 8.893338],
+  "interpretation": "The first 3,000 entries take 93.835 CPU seconds across twelve full groups, averaging 7.820 seconds per 250 citations. The per-group range is 6.752 to 8.893 seconds; no single group dominates. These are intervals of combined composition and page output, not isolated costs for individual citation fields. This single diagnostic pass does not qualify the converged production PDF or establish a statistical trend. The timing indicates that further work should reduce repeated per-entry LaTeX and tagged-structure work while preserving every citation and accessibility tag.",
+  "production_change": "none"
+}
