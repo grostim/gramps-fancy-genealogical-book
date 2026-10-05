@@ -1,0 +1,49 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "0b1c8e39c5e84ed4dbd2516bc85df2a066a2fa11",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper once with a temporary runtime override that keeps hyperref in draft mode for every pass. Tagging remains on for every pass. The source, fixture and compile helper are otherwise unchanged.",
+  "candidate": {
+    "pass_seconds": [11.267, 11.268, 11.276],
+    "passes": 3,
+    "elapsed_seconds": 33.836,
+    "pdf_bytes": 773873,
+    "pdf_sha256": "d51c8103c54712da1727efc7ea820a601beee270edffb2846bc82c337414708a",
+    "pages": 127,
+    "tagged": "yes",
+    "structure_tree_present": true,
+    "link_annotations": 0,
+    "named_destinations": 0,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054"
+  },
+  "production_reference": {
+    "record": "validation-latex-hyperref-draft-first-pass-n100-20261005.json",
+    "elapsed_median_seconds": 45.109,
+    "elapsed_range_seconds": [45.086, 45.218],
+    "pages": 127,
+    "tagged": "yes",
+    "link_annotations_present": true,
+    "text_sha256": "b3eb9b386df0901f6c15af99a199c6e7d6383dcdb9d6293b5400d57746b88054",
+    "structure_sha256": "42205f68856b52d4e47111bdfab5527d767e90813ecdca35f478e15d604a6bd8"
+  },
+  "elapsed_delta_seconds": -11.273,
+  "elapsed_delta_percent": -24.99,
+  "decision": "Diagnostic only: all-draft hyperlink mode reduces the N=100 helper time, but removes every link annotation and named destination. The result shows that active link generation is a significant cost on this fixture; the candidate does not meet the output requirements and is not retained.",
+  "next_step": "Investigate whether link generation can be made cheaper while retaining every PDF annotation, destination, Link structure element and the same visible text.",
+  "limitations": "One diagnostic run on one machine at N=100. No N=1,000 compile or full visual review was performed. The diagnostic PDF is not a usable production book because it has no hyperlinks or named destinations."
+}

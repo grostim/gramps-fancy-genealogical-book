@@ -505,3 +505,11 @@ Extracted-text, structure-tree, destination, and URL hashes match the reference.
 A third full compile with the current renderer took 534.127 seconds. Across the three runs (514.058, 509.888, and 534.127 seconds), the measured median is 514.058 seconds and the range is 24.239 seconds (4.72% of the median). All compiles use extended diagnostic limits and remain well above the standard 180-second total limit.
 
 All three PDFs are tagged PDF 2.0 and have 1,214 pages. They are 12,587,399, 12,587,395, and 12,587,393 bytes. Extracted-text, structure-tree, destination, and URL hashes match exactly. No full visual review was performed for the third run. See the [raw measurements](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).
+
+### Rejected URL authority macro — N=100 — October 5, 2026
+
+A temporary rendered-source transform replaces the authority `https://archives.example.test` in 909 `bookurl` commands with one LaTeX macro. This reduces the source from 410,393 to 394,997 bytes (−3.75%). Three candidate compiles take 45.245, 45.180, and 49.784 seconds; their median is 45.245 seconds, 0.136 seconds (0.30%) slower than the 45.109-second reference median. Extracted text, structure, destinations, and URLs match in all three candidate PDFs. The change is rejected because the smaller source does not produce a measurable speedup. No production code was retained. See the [raw measurements](validation-latex-url-host-macros-n100-20261005.json).
+
+### Link-generation cost diagnostic — N=100 — October 5, 2026
+
+A diagnostic run keeps tagging active but uses `hyperref` draft mode in all three passes. It takes 33.836 seconds, compared with the 45.109-second production median (−24.99%). The 127-page PDF remains tagged and has the same extracted text, but it contains no link annotations or named destinations. This measures link generation as a significant part of the work on this fixture, while confirming that disabling links is not a valid production change. The next investigation will look for a cheaper way to retain all annotations and Link structure elements. See the [raw profile](validation-latex-hyperref-all-draft-n100-20261005.json).

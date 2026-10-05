@@ -575,3 +575,11 @@ Le texte, l’arbre de structure, les destinations et les liens URL ont les mêm
 Une troisième compilation complète avec le renderer courant prend 534,127 s. Sur les trois runs (514,058, 509,888 et 534,127 s), la médiane mesurée est de 514,058 s et l’étendue de 24,239 s (4,72 % de la médiane). Les trois compilations utilisent les limites diagnostiques étendues et restent très au-dessus du plafond standard de 180 s au total.
 
 Les trois PDF sont balisés PDF 2.0 et comptent 1 214 pages. Ils font respectivement 12 587 399, 12 587 395 et 12 587 393 octets. Les empreintes du texte, de l’arbre de structure, des destinations et des liens URL correspondent exactement. Aucune revue visuelle complète n’a été faite sur le troisième run. Voir les [mesures brutes](validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json).
+
+### Essai rejeté — macro pour l’autorité URL — N=100 — 5 octobre 2026
+
+Une transformation temporaire du source remplace l’autorité `https://archives.example.test` de 909 commandes `bookurl` par une macro LaTeX. Le source passe de 410 393 à 394 997 octets (−3,75 %). Trois compilations prennent 45,245 s, 45,180 s et 49,784 s ; la médiane est de 45,245 s, soit 0,136 s (0,30 %) de plus que la médiane de référence de 45,109 s. Les empreintes du texte, de la structure, des destinations et des URL correspondent pour les trois PDF candidats. La variante est écartée : la réduction du source n’accélère pas la compilation de façon mesurable. Aucun changement de production n’est conservé. Voir les [mesures brutes](validation-latex-url-host-macros-n100-20261005.json).
+
+### Diagnostic du coût de génération des liens — N=100 — 5 octobre 2026
+
+Un run diagnostique garde le balisage actif, mais compile les trois passes avec `hyperref` en mode brouillon. Il prend 33,836 s contre une médiane de production de 45,109 s (−24,99 %). Le PDF balisé de 127 pages conserve le même texte extrait, mais ne contient aucune annotation de lien ni destination nommée. Ce résultat indique que la génération des liens constitue un coût important sur cette fixture ; il ne justifie pas de les désactiver en production. La prochaine investigation cherchera à réduire leur coût tout en conservant les annotations et éléments Link. Voir le [profil brut](validation-latex-hyperref-all-draft-n100-20261005.json).
