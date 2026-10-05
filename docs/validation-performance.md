@@ -513,3 +513,7 @@ A temporary rendered-source transform replaces the authority `https://archives.e
 ### Link-generation cost diagnostic — N=100 — October 5, 2026
 
 A diagnostic run keeps tagging active but uses `hyperref` draft mode in all three passes. It takes 33.836 seconds, compared with the 45.109-second production median (−24.99%). The 127-page PDF remains tagged and has the same extracted text, but it contains no link annotations or named destinations. This measures link generation as a significant part of the work on this fixture, while confirming that disabling links is not a valid production change. The next investigation will look for a cheaper way to retain all annotations and Link structure elements. See the [raw profile](validation-latex-hyperref-all-draft-n100-20261005.json).
+
+### Rejected low-level internal-link wrapper — N=100 — October 5, 2026
+
+A temporary `gfbpagelink` macro calls hyperref's low-level link-start and link-end commands directly for the renderer's safe internal target names. Three candidate compiles take 44.980, 45.434, and 46.042 seconds; the 45.434-second median is 0.325 seconds (0.72%) slower than the 45.109-second reference median. All three candidate PDFs retain the exact extracted-text, structure, destination, and URL hashes, with 2,978 link annotations and 3,526 named destinations each. The wrapper is rejected because it does not speed up compilation. See the [raw measurements](validation-latex-hyperref-link-wrapper-n100-20261005.json).

@@ -583,3 +583,7 @@ Une transformation temporaire du source remplace l’autorité `https://archives
 ### Diagnostic du coût de génération des liens — N=100 — 5 octobre 2026
 
 Un run diagnostique garde le balisage actif, mais compile les trois passes avec `hyperref` en mode brouillon. Il prend 33,836 s contre une médiane de production de 45,109 s (−24,99 %). Le PDF balisé de 127 pages conserve le même texte extrait, mais ne contient aucune annotation de lien ni destination nommée. Ce résultat indique que la génération des liens constitue un coût important sur cette fixture ; il ne justifie pas de les désactiver en production. La prochaine investigation cherchera à réduire leur coût tout en conservant les annotations et éléments Link. Voir le [profil brut](validation-latex-hyperref-all-draft-n100-20261005.json).
+
+### Essai rejeté — wrapper interne de lien — N=100 — 5 octobre 2026
+
+Une macro `gfbpagelink` temporaire appelle directement les commandes internes de début et de fin de lien de `hyperref` pour les cibles internes sûres du renderer. Trois compilations candidates prennent 44,980 s, 45,434 s et 46,042 s ; la médiane de 45,434 s dépasse de 0,325 s (0,72 %) la référence à 45,109 s. Les trois PDF candidats conservent exactement les empreintes du texte, de la structure, des destinations et des URL, avec 2 978 annotations de lien et 3 526 destinations nommées chacun. La variante est écartée, car elle n’accélère pas la compilation. Voir les [mesures brutes](validation-latex-hyperref-link-wrapper-n100-20261005.json).
