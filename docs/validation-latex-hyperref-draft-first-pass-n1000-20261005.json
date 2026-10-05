@@ -1,0 +1,61 @@
+{
+  "measured_on": "2026-10-05",
+  "source_commit": "f23302d5d778232e5937f14f6678e2d589a7d4a8",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "margins_mm": 15
+  },
+  "method": "Run the production PDF helper on each successive renderer revision, using fresh build directories and extended diagnostic limits of 600 seconds per pass and 1800 seconds total. The candidate uses tagging=off and hyperref draft on the first pass only; the original tagged source is restored before subsequent passes. Compare the final candidate against the 15 mm baseline and the preceding untagged-first-pass result.",
+  "candidate": {
+    "elapsed_seconds": 514.058,
+    "pages": 1214,
+    "tagged": "yes",
+    "bytes": 12587399,
+    "pdf_sha256": "38de83ca2374dcdb0c431a3750b65af5833a3a081cd0b3f16a220da7230a5d11",
+    "pdf_path": "../output/pdf/gramps-fancy-book-n1000-margins-15mm-hyperref-draft-first-pass-20261005.pdf",
+    "text_sha256": "da8f325468c5adef93da379f47b3bc9ad80513054542d16e12d07e06a3449a13",
+    "structure_sha256": "551530a4b5398cb53f6b85fe0736e9d6f94a5cdd920b8779e1c75b53a1151f71",
+    "destinations_sha256": "4896be60ef3432536faa84f41bd8ef98c19a5910f6e00a55a50391f61ebe7188",
+    "urls_sha256": "c80509e8801004eab851e97e270bc6bbde94a822a9a27c8147ee57e2cbec4178"
+  },
+  "comparisons": {
+    "margins_15mm_baseline": {
+      "elapsed_seconds": 738.982,
+      "pages": 1214,
+      "tagged": "yes",
+      "bytes": 12587394,
+      "delta_seconds": -224.924,
+      "delta_percent": -30.44
+    },
+    "tagging_off_first_pass": {
+      "elapsed_seconds": 576.678,
+      "pages": 1214,
+      "tagged": "yes",
+      "bytes": 12587394,
+      "delta_seconds": -62.620,
+      "delta_percent": -10.86
+    },
+    "semantic_outputs_match_both": true,
+    "binary_pdf_identical": false
+  },
+  "semantic_hashes_match": {
+    "baseline_and_tagging_off_first_pass_and_candidate": true,
+    "text": "da8f325468c5adef93da379f47b3bc9ad80513054542d16e12d07e06a3449a13",
+    "structure": "551530a4b5398cb53f6b85fe0736e9d6f94a5cdd920b8779e1c75b53a1151f71",
+    "destinations": "4896be60ef3432536faa84f41bd8ef98c19a5910f6e00a55a50391f61ebe7188",
+    "urls": "c80509e8801004eab851e97e270bc6bbde94a822a9a27c8147ee57e2cbec4178"
+  },
+  "limitations": "One run per renderer revision on one machine; values are not medians. The extended diagnostic limits exceed the standard production limits of 120 seconds per pass and 180 seconds total. Semantic hashes, page count, and tagging were checked; no full visual review was performed for this run."
+}
