@@ -18,14 +18,24 @@ GitHub marque maintenant [v3.23.0 comme dernière version publiée](https://gith
 
 La version 3.23.0 introduit notamment l’export GEDCOM 7, GOQL dans les filtres et des jetons de synchronisation, mais ne fournit toujours pas le contrat requis pour les rapports personnalisés PDF/ZIP.
 
+## Actualisation — 5 octobre 2026
+
+La version [v3.23.1](https://github.com/gramps-project/gramps-web-api/releases/tag/v3.23.1) a été publiée le 5 octobre 2026 à 16:43 UTC. Cette version corrective traite une incompatibilité entre la dernière version de SQLAlchemy et certains déploiements PostgreSQL. Le diff officiel [v3.23.0…v3.23.1](https://github.com/gramps-project/gramps-web-api/compare/v3.23.0...v3.23.1) ne touche que `.gitignore`, `ROADMAP.md`, `_version.py` et `pyproject.toml` ; les trois fichiers de l’audit restent inchangés. Le tag et `master` pointent au commit [`7e9c80912c3a17c4e672b6e705606d1cd5dc84be`](https://github.com/gramps-project/gramps-web-api/commit/7e9c80912c3a17c4e672b6e705606d1cd5dc84be). Une relecture de [`const.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/const.py), [`api/report.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/report.py) et [`api/tasks.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/tasks.py) confirme que cette publication ne résout aucun des blocages d’intégration :
+
+- `CATEGORY_WEB` reste absent de `REPORT_DEFAULTS`, `.zip` reste absent de `MIME_TYPES`, `get_reports()` filtre les autres catégories et `run_report()` refuse une catégorie non prise en charge avec HTTP 404.
+- Pour les rapports admis, le serveur impose toujours une cible `of` sous `REPORT_DIR`. Le module utilise encore son option personnalisée `destination`.
+- `generate_report` reste une tâche Celery non liée et n’envoie ni l’instance de tâche ni un callback de progression à `run_report`.
+
+Les constats qui suivent s’appliquent donc à la version publiée 3.23.1 ; la mise à jour 3.23.0 du 4 octobre reste dans l’historique du présent audit.
+
 ## Incompatibilités relevées
 
 - `REPORT_DEFAULTS` dépend des bibliothèques disponibles : avec GTK, il autorise `CATEGORY_TEXT` et `CATEGORY_DRAW`, plus `CATEGORY_GRAPHVIZ` si Graphviz est installé ; sans PyGObject, seul `CATEGORY_TEXT` est configuré. `CATEGORY_WEB` n’y figure dans aucun de ces cas. La fonction `get_reports()` filtre les rapports selon cette liste et `run_report()` refuse les catégories non prises en charge avec HTTP 404.
-- Le dictionnaire `MIME_TYPES` comprend `.html`, mais pas `.zip`. La génération de rapports vérifie ce dictionnaire avant de lancer le rapport ; l’API 3.23.0 ne peut donc pas retourner une archive ZIP par ce point d’entrée.
+- Le dictionnaire `MIME_TYPES` comprend `.html`, mais pas `.zip`. La génération de rapports vérifie ce dictionnaire avant de lancer le rapport ; l’API 3.23.1 ne peut donc pas retourner une archive ZIP par ce point d’entrée.
 - L’API crée un nom unique sous `REPORT_DIR` et le transmet au rapport dans l’option standard `of`. Le module actuel écrit à l’emplacement reçu dans son option `destination` ; il n’utilise pas cette cible fournie par le serveur.
 - `generate_report` est bien une tâche asynchrone, mais sa fonction n’est pas liée à l’instance Celery et ne transmet aucun callback de progression à `run_report`. Elle retourne les métadonnées du fichier une fois terminé. D’autres tâches de l’API savent publier un état `PROGRESS` ; cela ne signifie pas que cette progression est actuellement disponible pour les rapports.
 
-Ces écarts empêchent l’intégration actuelle de satisfaire T-01 et AC-22 dans l’API 3.23.0. Le fait que Gramps Web réutilise le moteur de rapports Desktop ne suffit pas : son API serveur filtre les catégories et les types de fichiers qu’elle expose.
+Ces écarts empêchent l’intégration actuelle de satisfaire T-01 et AC-22 dans l’API 3.23.1. Le fait que Gramps Web réutilise le moteur de rapports Desktop ne suffit pas : son API serveur filtre les catégories et les types de fichiers qu’elle expose.
 
 ## Comportement de confidentialité déjà présent dans le plugin
 

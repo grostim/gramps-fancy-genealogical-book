@@ -18,14 +18,24 @@ GitHub now marks [v3.23.0 as the latest published release](https://github.com/gr
 
 Version 3.23.0 adds, among other things, GEDCOM 7 export, GOQL in filters, and sync tokens, but still does not provide the report contract needed for custom PDF/ZIP output.
 
+## Update — October 5, 2026
+
+Version [v3.23.1](https://github.com/gramps-project/gramps-web-api/releases/tag/v3.23.1) was published on October 5, 2026 at 16:43 UTC. This patch addresses an incompatibility between the latest SQLAlchemy version and some PostgreSQL deployments. The official [v3.23.0…v3.23.1 diff](https://github.com/gramps-project/gramps-web-api/compare/v3.23.0...v3.23.1) changes only `.gitignore`, `ROADMAP.md`, `_version.py`, and `pyproject.toml`; the three audited files are unchanged. The tag and `master` point to commit [`7e9c80912c3a17c4e672b6e705606d1cd5dc84be`](https://github.com/gramps-project/gramps-web-api/commit/7e9c80912c3a17c4e672b6e705606d1cd5dc84be). Re-reading [`const.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/const.py), [`api/report.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/report.py), and [`api/tasks.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/tasks.py) confirms that this release does not resolve the integration blockers:
+
+- `CATEGORY_WEB` remains absent from `REPORT_DEFAULTS`, `.zip` remains absent from `MIME_TYPES`, `get_reports()` filters other categories, and `run_report()` rejects unsupported categories with HTTP 404.
+- For accepted reports, the server still requires an `of` target under `REPORT_DIR`. The add-on still uses its custom `destination` option.
+- `generate_report` remains an unbound Celery task and passes neither the task instance nor a progress callback to `run_report`.
+
+The findings below therefore apply to published version 3.23.1; the October 4 update for 3.23.0 remains in this audit’s history.
+
 ## Compatibility gaps found
 
 - `REPORT_DEFAULTS` depends on available libraries: with GTK it allows `CATEGORY_TEXT` and `CATEGORY_DRAW`, plus `CATEGORY_GRAPHVIZ` when Graphviz is installed; without PyGObject, only `CATEGORY_TEXT` is configured. `CATEGORY_WEB` is absent in every case. `get_reports()` filters reports against this list, and `run_report()` rejects unsupported categories with HTTP 404.
-- The `MIME_TYPES` dictionary includes `.html`, but not `.zip`. Report generation checks this dictionary before launching a report, so API 3.23.0 cannot return a ZIP archive through this endpoint.
+- The `MIME_TYPES` dictionary includes `.html`, but not `.zip`. Report generation checks this dictionary before launching a report, so API 3.23.1 cannot return a ZIP archive through this endpoint.
 - The API creates a unique path under `REPORT_DIR` and passes it to the report through the standard `of` option. The add-on currently writes to the path received through its custom `destination` option instead of using this server-provided target.
 - `generate_report` is an asynchronous task, but it is not bound to the Celery task instance and passes no progress callback to `run_report`. It returns file metadata when generation completes. Other API tasks can publish a `PROGRESS` state; that does not make such progress available for reports today.
 
-These gaps prevent the current integration from satisfying T-01 and AC-22 on API 3.23.0. Reusing the Desktop report engine does not by itself provide compatibility: the server API filters the categories and file types it exposes.
+These gaps prevent the current integration from satisfying T-01 and AC-22 on API 3.23.1. Reusing the Desktop report engine does not by itself provide compatibility: the server API filters the categories and file types it exposes.
 
 ## Privacy behavior already implemented by the add-on
 
