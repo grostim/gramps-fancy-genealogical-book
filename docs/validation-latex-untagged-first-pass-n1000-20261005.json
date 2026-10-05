@@ -1,0 +1,56 @@
+{
+  "measured_on": "2026-10-05",
+  "environment": {
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "platform": "macOS arm64"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_sources": 200,
+    "margins_mm": 15
+  },
+  "method": "Compare the full production-helper compilation before this optimization with a fresh compilation after PR #269. Both use the same synthetic branching N=1,000 fixture, 200 96x72 synthetic portraits, the same source except for the first-pass tagging behavior, and extended limits of 600 seconds per pass and 1,800 seconds total. Compare pdfinfo metadata, extracted text, pdfinfo structure, named destinations, and URL annotations. The earlier baseline run is recorded in validation-latex-margins15-n1000-20261005.json. This is one run per variant, not a statistical timing series.",
+  "baseline": {
+    "elapsed_seconds": 738.982,
+    "tagged": "yes",
+    "pages": 1214,
+    "bytes": 12587394,
+    "text_sha256": "da8f325468c5adef93da379f47b3bc9ad80513054542d16e12d07e06a3449a13",
+    "structure_sha256": "551530a4b5398cb53f6b85fe0736e9d6f94a5cdd920b8779e1c75b53a1151f71",
+    "destinations_sha256": "4896be60ef3432536faa84f41bd8ef98c19a5910f6e00a55a50391f61ebe7188",
+    "urls_sha256": "c80509e8801004eab851e97e270bc6bbde94a822a9a27c8147ee57e2cbec4178"
+  },
+  "candidate": {
+    "elapsed_seconds": 576.678,
+    "tagged": "yes",
+    "pages": 1214,
+    "bytes": 12587394,
+    "text_sha256": "da8f325468c5adef93da379f47b3bc9ad80513054542d16e12d07e06a3449a13",
+    "structure_sha256": "551530a4b5398cb53f6b85fe0736e9d6f94a5cdd920b8779e1c75b53a1151f71",
+    "destinations_sha256": "4896be60ef3432536faa84f41bd8ef98c19a5910f6e00a55a50391f61ebe7188",
+    "urls_sha256": "c80509e8801004eab851e97e270bc6bbde94a822a9a27c8147ee57e2cbec4178",
+    "pdf_path": "../output/pdf/gramps-fancy-book-n1000-margins-15mm-first-pass-untagged-20261005.pdf"
+  },
+  "elapsed_delta_seconds": -162.304,
+  "elapsed_delta_percent": -21.96,
+  "comparisons": {
+    "tagged": true,
+    "pages": true,
+    "bytes": true,
+    "text": true,
+    "structure": true,
+    "destinations": true,
+    "urls": true
+  },
+  "limits": {
+    "extended_pass_seconds": 600,
+    "extended_total_seconds": 1800,
+    "standard_total_seconds": 180,
+    "standard_production_budget_met": false
+  }
+}
