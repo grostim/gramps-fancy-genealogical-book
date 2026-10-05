@@ -1,0 +1,31 @@
+{
+  "title": "N=1000 full-book LaTeX source generation timing",
+  "measured_on": "2026-10-05",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_media": 200,
+    "portrait_size": "96x72"
+  },
+  "method": "Run scripts/benchmark_book.py three times with the current renderer, synthetic media enabled, and PDF compilation disabled. Record the benchmark's full-book latex_seconds value; it covers generation of the complete LaTeX source, not only the citation appendix.",
+  "latex_source_bytes": 4037562,
+  "latex_generation_seconds": [0.982286, 0.980427, 0.979674],
+  "latex_generation_median_seconds": 0.980427,
+  "latex_generation_range_seconds": [0.979674, 0.982286],
+  "pdf_compilation_performed": false,
+  "comparison_context": {
+    "optimized_n1000_pdf_compile_median_seconds": 514.058,
+    "latex_generation_as_percent_of_compile_median": 0.1907,
+    "compile_measurement_source": "validation-latex-hyperref-draft-first-pass-n1000-repeats-20261005.json"
+  },
+  "interpretation": "Python generation of the entire 4.04 MB LaTeX source is about 0.98 seconds, roughly 0.19% of the recent 514.058-second optimized N=1000 PDF compilation median. This is an indicative scale comparison across benchmark runs, not an isolated citation-appendix measurement. Further Python-side micro-optimization is unlikely to materially reduce PDF export time; the remaining performance work belongs in LuaLaTeX composition and page output.",
+  "production_change": "none"
+}
