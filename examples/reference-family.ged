@@ -1,0 +1,54 @@
+0 HEAD
+1 SOUR GRAMPS_FANCY_BOOK_SAMPLE
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+0 @I0001@ INDI
+1 NAME Émile /Exemple/
+1 SEX M
+1 BIRT
+2 DATE ABT 1900
+2 PLAC Lyon, France
+2 SOUR @S0001@
+3 PAGE Registre fictif, folio 12
+1 EVEN
+2 TYPE Profession
+2 DATE 1920
+2 PLAC Lyon, France
+2 SOUR @S0001@
+3 PAGE Dossier fictif, page 4
+1 FAMS @F0001@
+0 @I0002@ INDI
+1 NAME Jeanne /Fictive/
+1 SEX F
+1 FAMS @F0001@
+0 @I0003@ INDI
+1 NAME Camille /Exemple/
+1 SEX F
+1 FAMC @F0001@
+0 @I0004@ INDI
+1 NAME Parent /Isolé/
+1 SEX M
+1 FAMS @F0002@
+0 @F0001@ FAM
+1 HUSB @I0001@
+1 WIFE @I0002@
+1 CHIL @I0003@
+1 MARR
+2 DATE 1924
+2 PLAC Villeurbanne, France
+2 SOUR @S0001@
+3 PAGE Acte fictif, numéro 4
+0 @F0002@ FAM
+1 HUSB @I0004@
+0 @S0001@ SOUR
+1 TITL Registre fictif
+1 AUTH Archives fictives
+1 PUBL Collection synthétique
+1 REPO @R0001@
+2 CALN 3 E 12
+2 MEDI BOOK
+0 @R0001@ REPO
+1 NAME Dépôt municipal fictif
+0 TRLR

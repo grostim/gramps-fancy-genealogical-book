@@ -76,11 +76,11 @@ La langue du livre suit par défaut celle configurée dans Gramps. Choisissez le
 ## Exemple en ligne de commande
 
 ```sh
-gramps -i tests/fixtures/reference-family.ged -a report \
+gramps -i examples/reference-family.ged -a report \
   -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,book_language=auto,output_format=json_snapshot,privacy_acknowledged=True,destination=/chemin/absolu/famille.json"
 ```
 
-L’option `privacy_acknowledged=True` est requise pour chaque export en ligne de commande. Dans Desktop et Web, confirmer l’option de confidentialité à chaque export. Le rapport ne filtre ni n’anonymise les données accessibles. Ajouter `overwrite=True` aux options pour autoriser le remplacement. Le GEDCOM fourni ne contient que des personnes fictives. Le script ci-dessous automatise le test dans un profil Gramps temporaire et installe uniquement l’archive construite. Sur macOS, l’exécutable est `/Applications/Gramps.app/Contents/MacOS/Gramps`.
+L’option `privacy_acknowledged=True` est requise pour chaque export en ligne de commande. Dans Desktop et Web, confirmer l’option de confidentialité à chaque export. Le rapport ne filtre ni n’anonymise les données accessibles. Ajouter `overwrite=True` aux options pour autoriser le remplacement. Le fichier [GEDCOM d’exemple](examples/reference-family.ged) contient uniquement des personnes, lieux et références d’archives fictifs, sans média. Le script ci-dessous automatise le test dans un profil Gramps temporaire et importe sa propre fixture depuis `tests/fixtures/`. Sur macOS, l’exécutable est `/Applications/Gramps.app/Contents/MacOS/Gramps`.
 
 ## Développement et validation
 
