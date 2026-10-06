@@ -15,7 +15,7 @@ An experimental Gramps 6 add-on for a family genealogical book. The Gramps repor
 - Published notes are rendered in HTML and LaTeX with Mistune's AST parser; raw HTML is emitted as literal text, and native semantic Gramps styles take precedence over Markdown syntax in the same note. See the documented [normalization policy](docs/decisions/003-note-markup.md).
 - Unicode JSON, structured media-conversion diagnostics, a separate event-fact consistency report and coordinated replacement of model/report/media outputs.
 - Existing files preserved unless **Replace an existing file** is enabled.
-- PDF output uses the preliminary LaTeX renderer, which includes an automatic A4 cover with F0 editorial titles and text, couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, numbered citation references, clickable page references and the person index. Final PDF visual validation remains outstanding.
+- PDF output uses the preliminary LaTeX renderer, which includes an automatic A4 cover with F0 editorial titles and text, couple names and available circular portrait medallions, plus genealogy sections, profiles, family notices, per-call citation footnotes with abbreviated source details and links to final appendix pages, and the person index. Final PDF visual and accessibility validation remains outstanding.
 - Reproducible add-on archive, unit tests and a real Gramps CLI integration runner.
 
 ## F0 editorial notes

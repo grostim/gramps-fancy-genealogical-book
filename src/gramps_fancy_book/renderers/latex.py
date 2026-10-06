@@ -387,6 +387,13 @@ def render_latex(
         )
         for call in entry.calls
     }
+    citation_call_by_id = {
+        call.call_id: call
+        for entry in (
+            model.editorial_book.citation_entries if model.editorial_book else ()
+        )
+        for call in entry.calls
+    }
     citation_numbers = citation_number_map(model.editorial_book)
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
@@ -428,8 +435,10 @@ def render_latex(
                 _render_family_notice(
                     notice,
                     model,
+                    people_by_handle,
                     emitted_targets,
                     citation_by_call,
+                    citation_call_by_id,
                     citation_numbers,
                     gramps_type_labels,
                 )
@@ -457,6 +466,7 @@ def render_latex(
                     people_by_handle,
                     emitted_targets,
                     citation_by_call,
+                    citation_call_by_id,
                     citation_numbers,
                     gramps_type_labels,
                 )
@@ -796,6 +806,7 @@ def _render_profile(
     people_by_handle: dict[str, Person],
     emitted_targets: set[str],
     citation_by_call: dict[str, EditorialCitationEntry],
+    citation_call_by_id: dict[str, EditorialCitationCall],
     citation_numbers: dict[str, int],
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
@@ -804,6 +815,7 @@ def _render_profile(
     name = name or profile.person_handle
     language = model_book_language(model, default="en")
     output = []
+    emitted_citation_calls: set[str] = set()
     output.append(_latex_anchor(profile.profile_id, emitted_targets))
     output.append(f"\\subsection*{{{escape_latex_text(name)}}}\n")
     if profile.portrait is not None:
@@ -910,8 +922,33 @@ def _render_profile(
                     )
                 )
             suffix = f" ({'; '.join(details)})" if details else ""
+            call_path_prefixes = [
+                f"event[{index}]:{reference.order}:{reference.event_handle}"
+            ]
+            if event is not None and event.place_handle:
+                call_path_prefixes.append(
+                    f"event[{index}]:place:{event.place_handle}"
+                )
+            if person is not None:
+                call_path_prefixes.extend(
+                    f"person.links.events[{source_index}]"
+                    for source_index, source_reference in enumerate(
+                        person.links.events
+                    )
+                    if source_reference.event_handle == reference.event_handle
+                    and source_reference.order == reference.order
+                )
+            call_ids = _citation_call_ids_for_path_prefixes(
+                profile.citation_call_ids,
+                citation_call_by_id,
+                call_path_prefixes,
+            )
+            emitted_citation_calls.update(call_ids)
             event_items.append(
                 f"{anchor}{escape_latex_text(event_name)}{suffix}"
+                + _citation_footnotes(
+                    call_ids, citation_by_call, citation_numbers, model
+                )
             )
         if len(event_items) == 1:
             output.append(
@@ -943,22 +980,48 @@ def _render_profile(
                 else ""
             )
             note_text = render_latex_note(note)
+            call_ids = _citation_call_ids_for_path_prefixes(
+                profile.citation_call_ids,
+                citation_call_by_id,
+                (f"note:{index}:{handle}",),
+            )
+            emitted_citation_calls.update(call_ids)
             output.append(
                 f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
                 f"{note_text}\n"
-                "\\end{quote}\n"
+                "\\end{quote}"
+                + _citation_footnotes(
+                    call_ids, citation_by_call, citation_numbers, model
+                )
+                + "\n"
             )
 
-    citation_entries = {
-        citation_by_call[call_id].entry_id: citation_by_call[call_id]
+    remaining_call_ids = [
+        call_id
         for call_id in profile.citation_call_ids
-        if call_id in citation_by_call
-    }
-    if citation_entries:
-        citation_references = [
-            _citation_reference(entry, citation_numbers)
-            for entry in citation_entries.values()
-        ]
+        if call_id not in emitted_citation_calls
+        and call_id in citation_by_call
+        and call_id in citation_call_by_id
+    ]
+    if remaining_call_ids:
+        citation_references = []
+        for call_id in remaining_call_ids:
+            call = citation_call_by_id[call_id]
+            entry = citation_by_call[call_id]
+            call_label = _citation_call_label(
+                call,
+                {profile.profile_id: profile},
+                {},
+                people_by_handle,
+                model,
+                gramps_type_labels,
+            )
+            citation_references.append(
+                escape_latex_text(call_label)
+                + _citation_footnote(
+                    entry, citation_numbers, model
+                )
+            )
         if len(citation_references) == 1:
             output.append(
                 "\\paragraph{"
@@ -980,14 +1043,17 @@ def _render_profile(
 def _render_family_notice(
     notice: EditorialFamilyNotice,
     model: BookModel,
+    people_by_handle: dict[str, Person],
     emitted_targets: set[str],
     citation_by_call: dict[str, EditorialCitationEntry],
+    citation_call_by_id: dict[str, EditorialCitationCall],
     citation_numbers: dict[str, int],
     gramps_type_labels: dict[tuple[str, str], str] | None = None,
 ) -> str:
     language = model_book_language(model, default="en")
     family = model.families.get(notice.family_handle)
     title = _family_title(family, notice.family_handle, model)
+    emitted_citation_calls: set[str] = set()
     output = [
         _latex_anchor(notice.notice_id, emitted_targets),
         f"\\subsection*{{{escape_latex_text(title)}}}\n",
@@ -1050,8 +1116,33 @@ def _render_family_notice(
                     )
                 )
             suffix = f" ({'; '.join(details)})" if details else ""
+            call_path_prefixes = [
+                f"event[{index}]:{reference.order}:{reference.event_handle}"
+            ]
+            if event is not None and event.place_handle:
+                call_path_prefixes.append(
+                    f"event[{index}]:place:{event.place_handle}"
+                )
+            if family is not None:
+                call_path_prefixes.extend(
+                    f"family.links.events[{source_index}]"
+                    for source_index, source_reference in enumerate(
+                        family.links.events
+                    )
+                    if source_reference.event_handle == reference.event_handle
+                    and source_reference.order == reference.order
+                )
+            call_ids = _citation_call_ids_for_path_prefixes(
+                notice.citation_call_ids,
+                citation_call_by_id,
+                call_path_prefixes,
+            )
+            emitted_citation_calls.update(call_ids)
             event_items.append(
                 f"{anchor}{escape_latex_text(event_name)}{suffix}"
+                + _citation_footnotes(
+                    call_ids, citation_by_call, citation_numbers, model
+                )
             )
         if len(event_items) == 1:
             output.append(
@@ -1130,22 +1221,48 @@ def _render_family_notice(
                 else ""
             )
             note_text = render_latex_note(note)
+            call_ids = _citation_call_ids_for_path_prefixes(
+                notice.citation_call_ids,
+                citation_call_by_id,
+                (f"note:{index}:{handle}",),
+            )
+            emitted_citation_calls.update(call_ids)
             output.append(
                 f"{_latex_anchor(target_id, emitted_targets)}\\begin{{quote}}\n"
                 f"{note_text}\n"
-                "\\end{quote}\n"
+                "\\end{quote}"
+                + _citation_footnotes(
+                    call_ids, citation_by_call, citation_numbers, model
+                )
+                + "\n"
             )
 
-    citations = {
-        citation_by_call[call_id].entry_id: citation_by_call[call_id]
+    remaining_call_ids = [
+        call_id
         for call_id in notice.citation_call_ids
-        if call_id in citation_by_call
-    }
-    if citations:
-        citation_references = [
-            _citation_reference(entry, citation_numbers)
-            for entry in citations.values()
-        ]
+        if call_id not in emitted_citation_calls
+        and call_id in citation_by_call
+        and call_id in citation_call_by_id
+    ]
+    if remaining_call_ids:
+        citation_references = []
+        for call_id in remaining_call_ids:
+            call = citation_call_by_id[call_id]
+            entry = citation_by_call[call_id]
+            call_label = _citation_call_label(
+                call,
+                {},
+                {notice.notice_id: notice},
+                people_by_handle,
+                model,
+                gramps_type_labels,
+            )
+            citation_references.append(
+                escape_latex_text(call_label)
+                + _citation_footnote(
+                    entry, citation_numbers, model
+                )
+            )
         if len(citation_references) == 1:
             output.append(
                 "\\paragraph{"
@@ -1388,12 +1505,68 @@ def _render_citation_appendix(
     return "".join(output)
 
 
-def _citation_reference(
-    entry: EditorialCitationEntry, citation_numbers: dict[str, int]
+def _citation_call_ids_for_path_prefixes(
+    citation_call_ids: tuple[str, ...],
+    citation_calls_by_id: dict[str, EditorialCitationCall],
+    path_prefixes: tuple[str, ...] | list[str],
+) -> list[str]:
+    return [
+        call_id
+        for call_id in citation_call_ids
+        if (call := citation_calls_by_id.get(call_id)) is not None
+        and any(call.field_path.startswith(prefix) for prefix in path_prefixes)
+    ]
+
+
+def _citation_footnotes(
+    call_ids: list[str],
+    citation_by_call: dict[str, EditorialCitationEntry],
+    citation_numbers: dict[str, int],
+    model: BookModel,
 ) -> str:
-    number = citation_numbers.get(entry.entry_id)
-    label = f"[{number}]" if number is not None else entry.entry_id
-    return _latex_page_link(entry.entry_id, label)
+    return "".join(
+        _citation_footnote(citation_by_call[call_id], citation_numbers, model)
+        for call_id in call_ids
+        if call_id in citation_by_call
+    )
+
+
+def _citation_footnote(
+    entry: EditorialCitationEntry,
+    citation_numbers: dict[str, int],
+    model: BookModel,
+) -> str:
+    citation = model.citations.get(entry.citation_handle)
+    source_handle = entry.source_handle or (
+        citation.source_handle if citation is not None else None
+    )
+    source = model.sources.get(source_handle) if source_handle else None
+    bibliographic_details = []
+    if source is not None and source.author:
+        bibliographic_details.append(escape_latex_text(source.author))
+    title = _citation_title(entry, model)
+    if title:
+        bibliographic_details.append(escape_latex_text(title))
+    if citation is not None and citation.page:
+        bibliographic_details.append(
+            f"{escape_latex_text(label(model, 'page_abbreviation'))} "
+            f"{escape_latex_text(citation.page)}"
+        )
+
+    citation_number = citation_numbers.get(entry.entry_id)
+    number_label = (
+        f"[{citation_number}]"
+        if citation_number is not None
+        else escape_latex_text(entry.citation_handle)
+    )
+    details = [", ".join(bibliographic_details)] if bibliographic_details else []
+    details.append(
+        f"{escape_latex_text(label(model, 'citation').capitalize())} {number_label}"
+    )
+    details.append(
+        _latex_page_link(entry.entry_id, label(model, "documentary_appendix"))
+    )
+    return "\\footnote{" + "; ".join(details) + "}"
 
 
 def _citation_title(entry: EditorialCitationEntry, model: BookModel) -> str:
