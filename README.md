@@ -43,11 +43,13 @@ Traversal follows recorded parent-child links. Unions, partners and siblings are
 
 ## Build and install
 
-The archive build compiles the French Gramps report catalog from `gramps60/GrampsFancyBook/po/fr-local.po` and bundles it as `addon.mo`. GNU gettext (`msgfmt`) must be available on `PATH`; install the `gettext` package if needed (for example, `brew install gettext` on macOS).
+The archive build compiles the French Gramps report catalog from `gramps60/GrampsFancyBook/po/fr-local.po` and bundles it as `addon.mo`. It also checks that the versions in `pyproject.toml`, the Gramps registration, and the POT/PO catalogs agree. GNU gettext (`msgfmt`) must be available on `PATH`; install the `gettext` package if needed (for example, `brew install gettext` on macOS).
 
 ```sh
 python3 build_addon.py
 ```
+
+This command creates the archive locally; the file is ignored by Git and is not yet published as a GitHub release.
 
 Extract `gramps60/download/GrampsFancyBook.addon.tgz` into the Gramps 6 user plugins directory, preserving its `GrampsFancyBook/` folder, then restart Gramps. Typical locations:
 

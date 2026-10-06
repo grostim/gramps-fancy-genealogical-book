@@ -53,9 +53,60 @@ def _compile_translations(plugin: Path, build_directory: Path) -> dict[str, Path
     return compiled
 
 
+def _validate_version_consistency(plugin: Path) -> None:
+    """Keep the Python package, Gramps registration, and gettext catalogs aligned."""
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    project_section = re.search(
+        r"(?ms)^\[project\][ \t]*\n(?P<section>.*?)(?=^\[|\Z)",
+        pyproject,
+    )
+    version_matches = (
+        re.findall(
+            r'(?m)^version\s*=\s*["\']([^"\']+)["\']\s*$',
+            project_section["section"],
+        )
+        if project_section
+        else []
+    )
+    if len(version_matches) != 1:
+        raise RuntimeError("Expected one project version in pyproject.toml.")
+    project_version = version_matches[0]
+
+    registration = (plugin / "GrampsFancyBook.gpr.py").read_text(encoding="utf-8")
+    registration_versions = re.findall(
+        r'(?m)^\s*version\s*=\s*["\']([^"\']+)["\']\s*,\s*(?:#.*)?$',
+        registration,
+    )
+    if registration_versions != [project_version]:
+        raise RuntimeError(
+            "Gramps registration version must match pyproject.toml "
+            f"({project_version!r}; found {registration_versions!r})."
+        )
+
+    catalogs = sorted((plugin / "po").glob("*.po")) + sorted(
+        (plugin / "po").glob("*.pot")
+    )
+    for catalog in catalogs:
+        headers = [
+            line
+            for line in catalog.read_text(encoding="utf-8").splitlines()
+            if line.startswith('"Project-Id-Version: ')
+        ]
+        if len(headers) != 1:
+            raise RuntimeError(f"Expected one Project-Id-Version header in {catalog.name}.")
+        value = headers[0].removeprefix('"Project-Id-Version: ').removesuffix(r'\n"')
+        _, separator, catalog_version = value.rpartition(" ")
+        if not separator or catalog_version != project_version:
+            raise RuntimeError(
+                f"Translation catalog {catalog.name} must use project version "
+                f"{project_version!r}; found {catalog_version!r}."
+            )
+
+
 def build_addon(destination: Path = ARCHIVE) -> Path:
     plugin = ROOT / "gramps60" / "GrampsFancyBook"
     package = ROOT / "src" / "gramps_fancy_book"
+    _validate_version_consistency(plugin)
 
     # Build catalogs in temporary storage so generated .mo files stay out of Git.
     with tempfile.TemporaryDirectory(prefix="gramps-fancy-book-build-") as temporary:

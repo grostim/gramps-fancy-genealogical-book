@@ -27,6 +27,8 @@ This check used the CLI binary in the Desktop application bundle. It does not qu
 
 Two builds with `build_addon.py` produce the same `0.9.0` archive: SHA-256 `357ce674720f914a4788d99956680b42df5bc84991cee6b7589b85a8a362852c`, 88,346 bytes, and 29 members. It contains the PDF renderer and compiled `locale/fr/LC_MESSAGES/addon.mo`, with no Python cache files.
 
+The local archive `gramps60/download/GrampsFancyBook.addon.tgz`, ignored by Git and dated October 5 before this rebuild, is regenerated with these bytes. Two fresh local builds produce identical bytes and SHA-256. The builder now rejects version mismatches between `pyproject.toml`, the Gramps registration, and the PO/POT `Project-Id-Version` headers. The French and English README explain how to build the archive; no GitHub Release has been published.
+
 The archive was extracted into a new temporary `GRAMPSHOME` profile and used with Gramps Desktop 6.0.8 (embedded Python 3.13.2); the integration runner uses CPython 3.13.7. The checkout `PYTHONPATH` is removed. Native verification passes for the model, HTML ZIP and JSON exports, error paths, and PDF generation from the installed archive. The tagged French PDF has 18 A4 pages (159,047 bytes). One interior page was reviewed at 100 dpi; no clipping was visible, and its margins look consistent with the configured 15 mm. The [raw record](validation-gramps-clean-install-20261006.json) contains environment details and scope limits.
 
 The local run uses the CLI in a clean profile, not an install through the graphical add-on manager. French was selected for the book renderer; this invocation does not exercise the translated report UI. Full visual review, screen-reader review, other Desktop versions, and Gramps Web remain unqualified.
