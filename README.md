@@ -74,11 +74,11 @@ Book language defaults to the language configured in Gramps. Select French or En
 ## CLI example
 
 ```sh
-gramps -i tests/fixtures/reference-family.ged -a report \
+gramps -i examples/reference-family.ged -a report \
   -p "name=gramps_fancy_genealogical_book,reference_family=F0001,max_ancestor_depth=unlimited,max_descendant_depth=unlimited,book_language=auto,output_format=json_snapshot,privacy_acknowledged=True,destination=/absolute/path/family.json"
 ```
 
-The `privacy_acknowledged=True` option is required for every CLI export. In Desktop and Web, confirm the privacy option for each export. The report does not filter or anonymize readable data. Use `overwrite=True` in the option string to permit replacement. The bundled GEDCOM contains fictional people. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports only this fixture. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
+The `privacy_acknowledged=True` option is required for every CLI export. In Desktop and Web, confirm the privacy option for each export. The report does not filter or anonymize readable data. Use `overwrite=True` in the option string to permit replacement. The [sample GEDCOM](examples/reference-family.ged) contains only fictional people, places and archive references, with no media. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports its own fixture from `tests/fixtures/`. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
 
 ## Development and validation
 

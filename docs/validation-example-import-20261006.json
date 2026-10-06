@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-06",
+  "gramps_version": "Gramps-6.0.8-1",
+  "input": "examples/reference-family.ged",
+  "method": "CLI import with an isolated GRAMPSHOME",
+  "profile_isolated": true,
+  "result": "imported",
+  "tree_name": "Arbre familial 1",
+  "family_ids": [
+    "F0001",
+    "F0002"
+  ],
+  "record_counts": {
+    "people": 4,
+    "families": 2,
+    "events": 3,
+    "sources": 1,
+    "repositories": 1
+  },
+  "scope": "GEDCOM import only; this check did not run the add-on report or export a book.",
+  "process_exit": "Gramps remained active after import. After the database contents were confirmed, the isolated process was stopped with SIGTERM (exit code 143)."
+}

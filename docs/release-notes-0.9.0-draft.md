@@ -11,7 +11,7 @@
 
 ## Fictional example
 
-The [English README](../README.md#cli-example) describes importing and exporting `tests/fixtures/reference-family.ged`. Its people, places, and archival references are fictional. It supports an initial walkthrough; it is not a complete book template.
+The [English README](../README.md#cli-example) describes importing and exporting the [reference-family.ged](../examples/reference-family.ged) sample. Its people, places, and archival references are fictional; it has no media. CLI import into an isolated Gramps 6.0.8-1 profile has been confirmed; exporting the report from this example remains outstanding. See the [import record](validation-example-import-20261006.json). It is not a complete book template.
 
 ## Verification available
 
