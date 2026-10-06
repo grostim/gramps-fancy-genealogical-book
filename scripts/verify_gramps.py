@@ -2184,6 +2184,7 @@ def verify(
             output_format: str = "json_snapshot",
             book_language: str | None = None,
             overwrite=False,
+            timeout: int = 90,
         ) -> str:
             selected_family_id = _format_native_id(family, native_id_width)
             options = (
@@ -2210,7 +2211,7 @@ def verify(
                 cwd=work,
                 text=True,
                 capture_output=True,
-                timeout=90,
+                timeout=timeout,
             )
             log = result.stdout + result.stderr
             # Gramps can return 0 even when a report failed. Verify the output and logs.
@@ -3661,7 +3662,15 @@ def verify(
                     f"Refusing to validate a pre-existing PDF as fresh output: {destination}"
                 )
             destination.parent.mkdir(parents=True, exist_ok=True)
-            log = report("F0001", destination, output_format="pdf", book_language="fr")
+            # LuaLaTeX has its own 180-second production ceiling. Leave room for
+            # Gramps startup and post-render checks in slower CI containers.
+            log = report(
+                "F0001",
+                destination,
+                output_format="pdf",
+                book_language="fr",
+                timeout=240,
+            )
             if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
                 raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
             rendered_pdf_text = _pdf_text(destination)
