@@ -34,11 +34,21 @@
     "tagged": true,
     "lualatex": "LuaHBTeX 1.24.0"
   },
+  "html_zip": {
+    "path": "output/html/gramps-fancy-book-reference-family-sample-20261006.zip",
+    "sha256": "5234f042998287878b876dea7d83a186c6319b6412e174f82fcf962826390c26",
+    "bytes": 2448,
+    "members": 1,
+    "html_pages": 1,
+    "unique_ids": 28,
+    "local_links_checked": 29,
+    "unresolved_local_links": 0
+  },
   "visual_review": {
     "pages_reviewed": "all 9 pages",
     "render_resolution_dpi": 110,
     "visible_clipping_or_overlap": false,
     "margins": "The content appears consistent with the renderer's configured 15 mm margins; this was a visual review, not a coordinate measurement."
   },
-  "scope": "This CLI result uses fictional data and no media. It does not validate the GUI flow, PDF/UA conformance, screen-reader behavior, or other Gramps versions."
+  "scope": "These CLI results use fictional data and no media. The HTML ZIP received archive integrity, unique-ID, and local-link checks but was not opened interactively in a browser. The results do not validate the GUI flow, PDF/UA conformance, screen-reader behavior, or other Gramps versions."
 }
