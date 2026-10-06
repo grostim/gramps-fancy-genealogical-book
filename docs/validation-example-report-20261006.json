@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-06",
+  "gramps_version": "Gramps-6.0.8-1",
+  "python_version": "3.13.2",
+  "input": "examples/reference-family.ged",
+  "method": "Imported the GEDCOM into a fresh isolated GRAMPSHOME, exported a native Gramps file, then ran the installed add-on report from that file.",
+  "profile_isolated": true,
+  "archive_version": "0.9.0",
+  "archive_sha256": "357ce674720f914a4788d99956680b42df5bc84991cee6b7589b85a8a362852c",
+  "family_ids": [
+    "F0001",
+    "F0002"
+  ],
+  "record_counts": {
+    "people": 4,
+    "families": 2,
+    "events": 3,
+    "sources": 1,
+    "repositories": 1
+  },
+  "selected_family": "F0001",
+  "report": {
+    "format": "pdf",
+    "language": "fr",
+    "privacy_acknowledged": true,
+    "process_exit": 0
+  },
+  "output": {
+    "path": "output/pdf/gramps-fancy-book-reference-family-sample-20261006.pdf",
+    "sha256": "fe79bb02152dad0cea37078a02a68ef513cb8725c026f5cbb2ab98a3dfe8f4c4",
+    "bytes": 53128,
+    "pages": 9,
+    "page_size": "A4",
+    "tagged": true,
+    "lualatex": "LuaHBTeX 1.24.0"
+  },
+  "visual_review": {
+    "pages_reviewed": "all 9 pages",
+    "render_resolution_dpi": 110,
+    "visible_clipping_or_overlap": false,
+    "margins": "The content appears consistent with the renderer's configured 15 mm margins; this was a visual review, not a coordinate measurement."
+  },
+  "scope": "This CLI result uses fictional data and no media. It does not validate the GUI flow, PDF/UA conformance, screen-reader behavior, or other Gramps versions."
+}
