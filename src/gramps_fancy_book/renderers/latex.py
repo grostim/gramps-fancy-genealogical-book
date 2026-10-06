@@ -23,6 +23,7 @@ from ..domain import (
     EditorialMediaUse,
     EditorialPortrait,
     EditorialProfile,
+    EventReference,
     FamilySection,
     GenealogyPart,
     Media,
@@ -394,7 +395,12 @@ def render_latex(
         )
         for call in entry.calls
     }
-    citation_numbers = citation_number_map(model.editorial_book)
+    citation_numbers = citation_number_map(
+        model.editorial_book,
+        call_order=_latex_citation_call_order(
+            model, citation_call_by_id, people_by_handle
+        ),
+    )
     if model.genealogy is not None:
         for part in (model.genealogy.ancestry, model.genealogy.descent):
             document.append(
@@ -922,22 +928,13 @@ def _render_profile(
                     )
                 )
             suffix = f" ({'; '.join(details)})" if details else ""
-            call_path_prefixes = [
-                f"event[{index}]:{reference.order}:{reference.event_handle}"
-            ]
-            if event is not None and event.place_handle:
-                call_path_prefixes.append(
-                    f"event[{index}]:place:{event.place_handle}"
-                )
-            if person is not None:
-                call_path_prefixes.extend(
-                    f"person.links.events[{source_index}]"
-                    for source_index, source_reference in enumerate(
-                        person.links.events
-                    )
-                    if source_reference.event_handle == reference.event_handle
-                    and source_reference.order == reference.order
-                )
+            call_path_prefixes = _citation_path_prefixes_for_event_reference(
+                index,
+                reference,
+                event.place_handle if event is not None else None,
+                person.links.events if person is not None else (),
+                "person.links.events",
+            )
             call_ids = _citation_call_ids_for_path_prefixes(
                 profile.citation_call_ids,
                 citation_call_by_id,
@@ -1116,22 +1113,13 @@ def _render_family_notice(
                     )
                 )
             suffix = f" ({'; '.join(details)})" if details else ""
-            call_path_prefixes = [
-                f"event[{index}]:{reference.order}:{reference.event_handle}"
-            ]
-            if event is not None and event.place_handle:
-                call_path_prefixes.append(
-                    f"event[{index}]:place:{event.place_handle}"
-                )
-            if family is not None:
-                call_path_prefixes.extend(
-                    f"family.links.events[{source_index}]"
-                    for source_index, source_reference in enumerate(
-                        family.links.events
-                    )
-                    if source_reference.event_handle == reference.event_handle
-                    and source_reference.order == reference.order
-                )
+            call_path_prefixes = _citation_path_prefixes_for_event_reference(
+                index,
+                reference,
+                event.place_handle if event is not None else None,
+                family.links.events if family is not None else (),
+                "family.links.events",
+            )
             call_ids = _citation_call_ids_for_path_prefixes(
                 notice.citation_call_ids,
                 citation_call_by_id,
@@ -1516,6 +1504,108 @@ def _citation_call_ids_for_path_prefixes(
         if (call := citation_calls_by_id.get(call_id)) is not None
         and any(call.field_path.startswith(prefix) for prefix in path_prefixes)
     ]
+
+
+def _citation_path_prefixes_for_event_reference(
+    index: int,
+    reference: EventReference,
+    place_handle: str | None,
+    owner_event_refs: tuple[EventReference, ...],
+    owner_event_path: str,
+) -> tuple[str, ...]:
+    prefixes = [f"event[{index}]:{reference.order}:{reference.event_handle}"]
+    if place_handle:
+        prefixes.append(f"event[{index}]:place:{place_handle}")
+    prefixes.extend(
+        f"{owner_event_path}[{source_index}]"
+        for source_index, source_reference in enumerate(owner_event_refs)
+        if source_reference.event_handle == reference.event_handle
+        and source_reference.order == reference.order
+    )
+    return tuple(prefixes)
+
+
+def _latex_citation_call_order(
+    model: BookModel,
+    citation_calls_by_id: dict[str, EditorialCitationCall],
+    people_by_handle: dict[str, Person],
+) -> tuple[str, ...]:
+    editorial_book = model.editorial_book
+    if editorial_book is None:
+        return ()
+
+    call_order = []
+    for notice in editorial_book.family_notices:
+        family = model.families.get(notice.family_handle)
+        call_order.extend(
+            _citation_call_ids_in_render_order(
+                notice.citation_call_ids,
+                notice.event_refs,
+                notice.note_handles,
+                family.links.events if family is not None else (),
+                "family.links.events",
+                model,
+                citation_calls_by_id,
+            )
+        )
+    for profile in editorial_book.profiles:
+        person = people_by_handle.get(profile.person_handle)
+        call_order.extend(
+            _citation_call_ids_in_render_order(
+                profile.citation_call_ids,
+                profile.event_refs,
+                profile.note_handles,
+                person.links.events if person is not None else (),
+                "person.links.events",
+                model,
+                citation_calls_by_id,
+            )
+        )
+    return tuple(call_order)
+
+
+def _citation_call_ids_in_render_order(
+    citation_call_ids: tuple[str, ...],
+    event_refs: tuple[EventReference, ...],
+    note_handles: tuple[str, ...],
+    owner_event_refs: tuple[EventReference, ...],
+    owner_event_path: str,
+    model: BookModel,
+    citation_calls_by_id: dict[str, EditorialCitationCall],
+) -> list[str]:
+    ordered_call_ids = []
+    emitted_call_ids = set()
+    for index, reference in enumerate(event_refs):
+        event = model.events.get(reference.event_handle)
+        path_prefixes = _citation_path_prefixes_for_event_reference(
+            index,
+            reference,
+            event.place_handle if event is not None else None,
+            owner_event_refs,
+            owner_event_path,
+        )
+        call_ids = _citation_call_ids_for_path_prefixes(
+            citation_call_ids, citation_calls_by_id, path_prefixes
+        )
+        ordered_call_ids.extend(call_ids)
+        emitted_call_ids.update(call_ids)
+
+    for index, handle in enumerate(note_handles):
+        note = model.notes.get(handle)
+        if note is None or not note.is_publishable:
+            continue
+        call_ids = _citation_call_ids_for_path_prefixes(
+            citation_call_ids,
+            citation_calls_by_id,
+            (f"note:{index}:{handle}",),
+        )
+        ordered_call_ids.extend(call_ids)
+        emitted_call_ids.update(call_ids)
+
+    ordered_call_ids.extend(
+        call_id for call_id in citation_call_ids if call_id not in emitted_call_ids
+    )
+    return ordered_call_ids
 
 
 def _citation_footnotes(
