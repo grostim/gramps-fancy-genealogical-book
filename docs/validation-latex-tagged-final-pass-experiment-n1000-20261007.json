@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-07",
+  "source_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740",
+  "source_bytes": 4313301,
+  "sequence": [
+    {
+      "name": "pass1-untagged-draft-hyperref",
+      "wall_seconds": 20.965
+    },
+    {
+      "name": "pass2-untagged-active-hyperref",
+      "wall_seconds": 94.467
+    },
+    {
+      "name": "pass3-tagged-active-hyperref",
+      "wall_seconds": 208.248
+    }
+  ],
+  "sequence_wall_seconds": 323.68,
+  "candidate_pdf": {
+    "path": "../tmp/l8-3-tagged-final-pass-experiment-20261007/book.pdf",
+    "bytes": 13473832,
+    "sha256": "4649deb1e388ba6f33107ba32a6da7d707e1b0cebf441daaec920d4335e45b75",
+    "pages": 1140,
+    "audit_matches_reference_for": [
+      "pages",
+      "named_destinations",
+      "roles",
+      "figures",
+      "figures_without_alt",
+      "link_annotations",
+      "link_structparent_count",
+      "objr_count",
+      "link_refs_match_objr_refs",
+      "parenttree_keys",
+      "links_with_parenttree_objr_owner_match",
+      "normalized_text_sha256"
+    ]
+  },
+  "reference_pdf": {
+    "path": "../tmp/l8-3-rss-parenttree-batched-n1000-20261006/book.pdf",
+    "bytes": 13461240,
+    "sha256": "ee50970a9745faf087c3b8e58a511a385a5af08f9d32b3802ad60fa1d95a788d",
+    "pages": 1140
+  },
+  "figure_bbox_audit": {
+    "candidate_figures": 400,
+    "reference_figures": 400,
+    "candidate_figures_with_zero_origin": 400,
+    "reference_figures_with_zero_origin": 0,
+    "candidate_reference_bbox_mismatches": 400,
+    "candidate_first_bbox_points": [
+      0.0,
+      0.0,
+      382.67719,
+      288.27702
+    ],
+    "reference_first_bbox_points": [
+      106.29921,
+      378.1476,
+      488.9764,
+      666.42462
+    ]
+  },
+  "conclusion": "Rejected. One tagged pass does not have the graphic coordinates written by an earlier tagged pass; the resulting figure bounding boxes are incorrect.",
+  "production_changed": false
+}
