@@ -11,7 +11,7 @@
 
 ## Fictional example
 
-The [English README](../README.md#cli-example) describes importing and exporting the [reference-family.ged](../examples/reference-family.ged) sample. Its people, places, and archival references are fictional; it has no media. CLI import into an isolated Gramps 6.0.8-1 profile has been confirmed; exporting the report from this example remains outstanding. See the [import record](validation-example-import-20261006.json). It is not a complete book template.
+The [English README](../README.md#cli-example) describes importing and exporting the [reference-family.ged](../examples/reference-family.ged) sample. Its people, places, and archival references are fictional; it has no media. In an isolated Gramps 6.0.8-1 profile, the 0.9.0 archive generated a tagged, nine-page A4 French PDF from this sample; all nine pages were reviewed without visible clipping or overlap. See the [import record](validation-example-import-20261006.json) and [export record](validation-example-report-20261006.json). This is not a complete book template, and the GUI flow remains to be qualified.
 
 ## Verification available
 

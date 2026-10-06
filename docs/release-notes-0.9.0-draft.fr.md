@@ -11,7 +11,7 @@
 
 ## Exemple fictif
 
-Le [README français](../README.fr.md#exemple-en-ligne-de-commande) décrit l’import et l’export de l’exemple [reference-family.ged](../examples/reference-family.ged). Ses personnes, lieux et références d’archives sont fictifs ; il ne contient pas de média. Son import CLI dans un profil isolé Gramps 6.0.8-1 est vérifié ; l’export du rapport à partir de cet exemple reste à faire. Voir le [relevé d’import](validation-example-import-20261006.json). Ce n’est pas un modèle de livre complet.
+Le [README français](../README.fr.md#exemple-en-ligne-de-commande) décrit l’import et l’export de l’exemple [reference-family.ged](../examples/reference-family.ged). Ses personnes, lieux et références d’archives sont fictifs ; il ne contient pas de média. Dans un profil isolé Gramps 6.0.8-1, l’archive 0.9.0 produit depuis cet exemple un PDF français balisé de 9 pages A4 ; les neuf pages ont été examinées sans coupure ni superposition visible. Voir les [relevés d’import](validation-example-import-20261006.json) et d’[export](validation-example-report-20261006.json). Ce n’est pas un modèle de livre complet et le parcours GUI reste à qualifier.
 
 ## Vérifications déjà disponibles
 
