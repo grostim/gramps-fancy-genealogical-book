@@ -3673,7 +3673,8 @@ def verify(
             )
             if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
                 raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
-            rendered_pdf_text = _pdf_text(destination)
+            rendered_pdf_pages = _pdf_page_texts(destination)
+            rendered_pdf_text = "\n".join(rendered_pdf_pages)
             assert any(label in rendered_pdf_text for label in ("Adopted", "Adopté"))
             assert "(None)" not in rendered_pdf_text
             assert rendered_pdf_text.count(AC18_UNCITED_EVENT) == 1
@@ -3926,7 +3927,20 @@ def verify(
                 )
             ]
             assert len(profile_citation_footnotes) == 5, profile_citation_footnotes
-            assert all(page == 16 for _, page in profile_citation_footnotes)
+            appendix_page_labels = []
+            for page_text in rendered_pdf_pages:
+                if AC14_SHARED_PAGE not in page_text:
+                    continue
+                appendix_heading = re.search(
+                    r"(?m)^Annexe documentaire\s+(\d+)\s*$", page_text
+                )
+                if appendix_heading is not None:
+                    appendix_page_labels.append(int(appendix_heading.group(1)))
+            assert len(appendix_page_labels) == 1, appendix_page_labels
+            appendix_page = appendix_page_labels[0]
+            assert all(
+                page == appendix_page for _, page in profile_citation_footnotes
+            ), profile_citation_footnotes
             profile_citation_counts = {
                 number: sum(
                     footnote_number == number
