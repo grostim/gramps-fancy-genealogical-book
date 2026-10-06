@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "timer": "Lua os.clock"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citation_entries": 3003,
+    "synthetic_portraits": 200,
+    "synthetic": true,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "input_source_sha256": "b860efdff3ee3f8a964a5a315fb5ce64e84755ca7b185eb8241acb68a8b4e15a",
+    "input_source_bytes": 4037548,
+    "instrumented_source_sha256": "93ed3f1db1a7630ea3a8abebe9e45989344cf0ef3d629ea4ea76336579766dd7",
+    "instrumented_source_bytes": 4038558,
+    "instrumented_macros": [
+      "\\hyperlink",
+      "\\href"
+    ],
+    "instrumentation": "Lua timers surround the saved hyperref macro calls and count each invocation.",
+    "compilation": "One direct LuaHBTeX pass; the production convergence helper was not used.",
+    "initial_auxiliary_state": "The .aux and .toc files from the prior direct pass were copied into the workspace. The populated .toc adds seven navigation links to the output.",
+    "production_sources_changed": false,
+    "marker_overhead_quantified": false
+  },
+  "run": {
+    "returncode": 0,
+    "wall_seconds": 245.08,
+    "user_cpu_seconds": 243.83,
+    "system_cpu_seconds": 0.97,
+    "macro_timings_cpu_seconds": {
+      "hyperlink": {
+        "calls": 17334,
+        "total": 52.06328
+      },
+      "href": {
+        "calls": 9009,
+        "total": 27.386
+      },
+      "combined_instrumented_intervals": 79.44928,
+      "combined_fraction_of_user_cpu_percent": 32.5839
+    }
+  },
+  "diagnostic_pdf": {
+    "path": "../tmp/lualatex-link-macro-profile-n1000-20261006/book.pdf",
+    "sha256": "44361bf7a6631e6cc23ae1d78030754c204887a24a47c43ccee8951d695c43cf",
+    "bytes": 12583067,
+    "pages": 1214,
+    "page_size": "A4",
+    "pdf_version": "2.0",
+    "tagged": true,
+    "language": "en-US",
+    "named_destinations": 34562,
+    "link_annotations": {
+      "GoTo": 17341,
+      "URI": 12072,
+      "total": 29413,
+      "with_struct_parent": 29413
+    },
+    "structure": {
+      "Link_roles": 26350,
+      "OBJR_nodes": 29413,
+      "Figure_roles": 400
+    },
+    "unresolved_references_warning": true
+  },
+  "comparison_to_prior_first_pass": {
+    "reference_pdf": "../tmp/lualatex-tagged-sample-n1000-20261006-pqyya0x6/book.pdf",
+    "reference_pdf_sha256": "58924db13ad094a8bd347c647130d9f1ce7146ac7e1b0281b6d79c8d67af1f72",
+    "reference_text_sha256": "3492ddf4582b60f73806fea53ab0bb206de4afac6f8073cd5356b3fec445c2b8",
+    "profiled_text_sha256": "8a79ae98a414effdd8899b0bc3c060769eee6ad8d62a43c78c6422f122ae24c5",
+    "reference_link_annotations": {
+      "GoTo": 17334,
+      "URI": 12072,
+      "total": 29406
+    },
+    "reference_Link_roles": 26343,
+    "reference_OBJR_nodes": 29406,
+    "interpretation": "This is not a like-for-like semantic comparison: the reference PDF was emitted on the first pass with only the Contents heading in its table of contents and unresolved page references. The instrumented pass read the populated .toc from that run, adding seven table-of-contents GoTo links, Link roles, and OBJR nodes. Extracted text hashes therefore differ. The instrumented run also reports that labels may have changed."
+  },
+  "interpretation": {
+    "decision": "Diagnostic only; no renderer change is justified.",
+    "limits": [
+      "One instrumented run on one machine is not a statistical performance result.",
+      "Measured intervals include the hyperref macro execution and TeX processing around its content; marker overhead was not quantified.",
+      "The profile does not separate hyperref work from tagpdf work.",
+      "The PDF is a one-pass diagnostic with non-converged references, not a production export."
+    ],
+    "next_step": "Repeat with matched auxiliary-file states, quantify instrumentation overhead, then profile the internal and URI paths while auditing the converged accessibility tree."
+  }
+}
