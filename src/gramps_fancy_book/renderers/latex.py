@@ -1525,8 +1525,7 @@ def _citation_path_prefixes_for_event_reference(
     prefixes.extend(
         f"{owner_event_path}[{source_index}]"
         for source_index, source_reference in enumerate(owner_event_refs)
-        if source_reference.event_handle == reference.event_handle
-        and source_reference.order == reference.order
+        if source_reference == reference
     )
     return tuple(prefixes)
 
