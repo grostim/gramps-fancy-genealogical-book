@@ -28,6 +28,16 @@ La version [v3.23.1](https://github.com/gramps-project/gramps-web-api/releases/t
 
 Les constats qui suivent s’appliquent donc à la version publiée 3.23.1 ; la mise à jour 3.23.0 du 4 octobre reste dans l’historique du présent audit.
 
+## Actualisation — 6 octobre 2026
+
+La [liste officielle des versions](https://github.com/gramps-project/gramps-web-api/releases) marque toujours [v3.23.1](https://github.com/gramps-project/gramps-web-api/releases/tag/v3.23.1) comme dernière publication ; aucun correctif plus récent n’est listé. Cette version reste au commit [`7e9c80912c3a17c4e672b6e705606d1cd5dc84be`](https://github.com/gramps-project/gramps-web-api/commit/7e9c80912c3a17c4e672b6e705606d1cd5dc84be). Une nouvelle lecture des trois sources épinglées confirme que les blocages de l’intégration n’ont pas changé : [`const.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/const.py), [`api/report.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/report.py) et [`api/tasks.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/tasks.py).
+
+- `CATEGORY_WEB` n’est toujours pas dans `REPORT_DEFAULTS` et `.zip` n’est toujours pas dans `MIME_TYPES` ; l’API filtre donc le rapport à la découverte et refuse son exécution.
+- Pour les rapports admis, `run_report()` impose toujours le fichier de sortie contrôlé par le serveur sous `REPORT_DIR`, via l’option `of`.
+- `generate_report` reste une tâche Celery non liée ; elle n’envoie ni l’instance de tâche ni un callback de progression à `run_report()`.
+
+Cette actualisation confirme la version et les constats de l’audit, sans recette d’exécution : aucune instance Gramps Web n’a été lancée.
+
 ## Incompatibilités relevées
 
 - `REPORT_DEFAULTS` dépend des bibliothèques disponibles : avec GTK, il autorise `CATEGORY_TEXT` et `CATEGORY_DRAW`, plus `CATEGORY_GRAPHVIZ` si Graphviz est installé ; sans PyGObject, seul `CATEGORY_TEXT` est configuré. `CATEGORY_WEB` n’y figure dans aucun de ces cas. La fonction `get_reports()` filtre les rapports selon cette liste et `run_report()` refuse les catégories non prises en charge avec HTTP 404.

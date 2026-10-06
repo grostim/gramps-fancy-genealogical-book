@@ -4,11 +4,11 @@
 
 ## Context
 
-Gramps Fancy Genealogical Book registers as a `CATEGORY_WEB` report and generates PDF or HTML ZIP files itself. The audit of Gramps Web API 3.23.0 confirms that this report category is filtered out, ZIP is not an accepted result type, and the add-on's custom `destination` option is independent of the server-managed path under `REPORT_DIR`. See the [compatibility audit](validation-gramps-web.md).
+Gramps Fancy Genealogical Book registers as a `CATEGORY_WEB` report and generates PDF or HTML ZIP files itself. The audit of Gramps Web API 3.23.1 confirms that this report category is filtered out, ZIP is not an accepted result type, and the add-on's custom `destination` option is independent of the server-managed path under `REPORT_DIR`. See the [compatibility audit](validation-gramps-web.md).
 
 The add-on needs to keep its Desktop flow. Gramps Web must provide a supported, safe server contract for installed reports that produce their own files.
 
-As of October 3, 2026, v3.22.3 remains the latest published release. A [fresh pinned audit of `master`](validation-gramps-web.md) at commit `375371f` finds the same gaps, so the proposed contract remains relevant. No issue has been submitted to the maintainers.
+On October 3, 2026, v3.22.3 was still the latest published release. A [fresh pinned audit of `master`](validation-gramps-web.md) at commit `375371f` found the same gaps. On October 6, the [official release list](https://github.com/gramps-project/gramps-web-api/releases) still marks v3.23.1 as latest; the updated audit confirms the same limitations. No issue has been submitted to the maintainers.
 
 ## Minimum capability to discuss
 
@@ -16,7 +16,7 @@ As of October 3, 2026, v3.22.3 remains the latest published release. A [fresh pi
 2. **Declared output types.** A report can declare supported extensions and MIME types. The first required results are PDF (`application/pdf`) and ZIP (`application/zip`); the server returns the matching filename and content type.
 3. **Server-controlled output path.** The API creates a unique target inside `REPORT_DIR` and passes that target to the report through a documented field. A report cannot choose an arbitrary server path. The server verifies the resulting file and removes temporary output after delivery or failure.
 4. **Normal option and privacy handling.** The report's family, depth, and format options appear in the Web UI, are validated server-side, and reach the report unchanged after validation. The Gramps `privacy_acknowledged` checkbox remains unchecked by default; the Web flow presents the warning before generation and requires affirmative confirmation. The contract defines this option's input encoding and guarantees that a missing or false value is never interpreted as true. Without confirmation, generation is refused before any write.
-5. **Task status and diagnostics.** Generation uses the normal asynchronous task lifecycle. API 3.22.3 does not pass a progress callback for `generate_report`, so the contract must define either report-supported progress or a clearly presented indeterminate running state. Failures should produce actionable logs without exposing private data or server paths.
+5. **Task status and diagnostics.** Generation uses the normal asynchronous task lifecycle. API 3.23.1 does not pass a progress callback for `generate_report`, so the contract must define either report-supported progress or a clearly presented indeterminate running state. Failures should produce actionable logs without exposing private data or server paths.
 
 The exact extension point is for maintainers to choose. It could be a report capability declaration or another documented adapter; the proposal does not require globally enabling `CATEGORY_WEB` or hard-coding this add-on into the API.
 
