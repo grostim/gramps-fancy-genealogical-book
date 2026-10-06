@@ -2,7 +2,7 @@
 
 [Français](README.fr.md) · [Action plan (French)](docs/action-plan.fr.md) · [Architecture (French)](docs/architecture.fr.md) · [Architecture](docs/architecture.md) · [Contributing](CONTRIBUTING.md) · [Troubleshooting](docs/troubleshooting.md) · [L2 prototypes](prototypes/README.md) · [Media validation](docs/validation-media.md)
 
-An experimental Gramps 6 add-on for a family genealogical book. The Gramps report creates a self-contained HTML book ZIP by default, can compile a PDF with LuaLaTeX, and retains a JSON snapshot mode for diagnostics. Keyboard and small-screen improvements have been implemented; PDF generation is experimental, and manual accessibility review and final PDF layout validation remain outstanding.
+An experimental Gramps 6 add-on for a family genealogical book. The Gramps report creates a self-contained HTML book ZIP by default, can compile a PDF with LuaLaTeX, and retains a JSON snapshot mode for diagnostics. Targeted PDF reviews have used fictional fixtures with 15 mm margins. PDF output remains experimental; GUI qualification of the current package, PDF/UA conformance, and screen-reader review remain outstanding.
 
 ## What works now
 
