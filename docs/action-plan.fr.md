@@ -1,6 +1,6 @@
 # Plan d’action — Gramps Fancy Genealogical Book
 
-Version de travail du 26 septembre 2026, suivi actualisé le 6 octobre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
+Version de travail du 26 septembre 2026, suivi actualisé le 7 octobre 2026. Ce document organise le développement ; il ne remplace pas la spécification fonctionnelle.
 
 ## 1. Références et niveau de certitude
 
@@ -467,3 +467,5 @@ Les estimations calendaires seront établies après L0 et L1 : le détail des 27
 **L8.3 — essais de balisage des paragraphes et taille de lot ParentTree, 6 octobre 2026 :** `para/flattened=true` ne réduit la structure que de deux éléments `/Part` et n’améliore pas le temps au-delà du bruit ; sa réactivation après les titres produit des compteurs de paragraphe déséquilibrés. Trois paires directes ne démontrent pas de gain en passant de 128 à 512 entrées ParentTree par lot (−0,147 s de médiane appariée, −0,46 %), malgré des PDF balisés équivalents. Aucun changement de production n’est retenu ; L8.3 reste au-dessus des budgets de compilation et de mémoire. Voir [validation performance](validation-performance.fr.md) et le [relevé brut](validation-latex-para-flattening-parenttree-batch-size-n100-20261006.json).
 
 **AC-25 — synchronisation de la matrice, 6 octobre 2026 :** la recette graphique des dates avec mois et jour est maintenant qualifiée sous Gramps 6.0.8 pour les sorties française et anglaise ; la matrice des exigences référence le relevé [AC-25](validation-language.fr.md#recette-gui-ac-25--6-octobre-2026).
+
+**L8.3 — comparaison des lots ParentTree 128/512 sur N=1 000, 6 octobre 2026 :** trois paires de passes directes, avec le même source et les mêmes `.aux`/`.toc` convergés, donnent une différence médiane appariée de −0,754 s (−0,36 %). Les six PDF préservent les 1 140 pages, 38 025 destinations, 32 950 liens avec `/StructParent`, les 32 950 associations OBJR/ParentTree, les 400 textes alternatifs et le texte normalisé. La médiane de l’empreinte mémoire `time -l` ne baisse que de 4,7 Mo, et les écarts appariés varient en sens ; cette métrique n’est pas le RSS des relevés précédents. Le gain reste trop faible et ne prouve pas une amélioration de l’export multipasse ; aucun réglage de production n’est changé. Les budgets de compilation et de mémoire L8.3 restent à atteindre. Voir le [relevé comparatif détaillé](validation-latex-parenttree-batch-size-n1000-20261006.json) et [validation performance](validation-performance.fr.md).
