@@ -2,7 +2,7 @@
 
 [English](README.md) · [Plan d’action](docs/action-plan.fr.md) · [Architecture FR](docs/architecture.fr.md) · [Architecture EN](docs/architecture.md) · [Contribution](CONTRIBUTING.fr.md) · [Dépannage](docs/troubleshooting.fr.md) · [Prototypes L2](prototypes/README.md) · [Validation des médias](docs/validation-media.fr.md)
 
-Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le rapport Gramps génère par défaut un livre HTML autonome en archive ZIP, peut compiler un PDF avec LuaLaTeX et conserve un export JSON de diagnostic. Les améliorations de navigation clavier et de mise en page sur petit écran sont intégrées ; la sortie PDF reste expérimentale et sa validation visuelle ainsi que la revue manuelle d’accessibilité restent à faire.
+Module complémentaire expérimental pour Gramps 6, destiné à produire un livre généalogique familial. Le rapport Gramps génère par défaut un livre HTML autonome en archive ZIP, peut compiler un PDF avec LuaLaTeX et conserve un export JSON de diagnostic. Les PDF ont fait l’objet de revues ciblées sur des fixtures fictives avec des marges de 15 mm. Le rendu PDF reste expérimental ; la recette graphique complète du paquet courant, la conformité PDF/UA et la revue au lecteur d’écran restent à faire.
 
 ## Fonctionnement actuel
 
