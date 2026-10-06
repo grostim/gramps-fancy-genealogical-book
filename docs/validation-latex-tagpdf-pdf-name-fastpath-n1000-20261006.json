@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-06",
+  "title": "PDF-name conversion fast-path prototypes after ParentTree batching, N=1,000",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740"
+  },
+  "method": {
+    "reference_wall_seconds": 212.56,
+    "reference": "One direct tagged pass with populated .aux/.toc seeds, ParentTree batching, and the same hyperlink timers.",
+    "auxiliary_seed": {
+      "aux_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "production_sources_changed": false
+  },
+  "candidates": [
+    {
+      "name": "linear-str-case-allowlist",
+      "description": "Return direct PDF names for 21 frequently used ASCII tags; fall back to the standard Unicode-to-PDF-name converter.",
+      "instrumented_tex_bytes": 4318376,
+      "instrumented_tex_sha256": "7c51baa81f69f834a85320a12a872b7081f2f78ba6a7bde1853ac888010b1936",
+      "wall_seconds": 255.88,
+      "user_cpu_seconds": 242.64,
+      "system_cpu_seconds": 5.05,
+      "difference_from_reference_seconds": 43.32,
+      "difference_from_reference_percent": 20.38,
+      "hyperlink": {
+        "calls": 17601,
+        "cpu_seconds": 57.345889000001
+      },
+      "href": {
+        "calls": 9009,
+        "cpu_seconds": 29.279061
+      },
+      "pdf_bytes": 13461234,
+      "pdf_sha256": "cf7203ea16ea83e138c2045993c2e9781fc994752d2ef3c113d6eb4d8c9e23f2",
+      "pdf_audit": {
+        "pages": 1140,
+        "named_destinations": 38025,
+        "link_annotations": 32950,
+        "objr_count": 32950,
+        "parenttree_keys": 34090,
+        "figures_without_alt": 0,
+        "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+        "matches_converged_baseline": true
+      },
+      "decision": "Reject: semantic audit passes, but this single run is 20.38% slower than the reference."
+    },
+    {
+      "name": "control-sequence-dispatch-allowlist",
+      "description": "Dispatch known PDF names through a control-sequence table; fall back to the standard converter for unknown names.",
+      "instrumented_tex_bytes": 4318766,
+      "instrumented_tex_sha256": "63621855893fece518796891f89ca47ff2192a84b4bc958e7a42b20bb629ca46",
+      "wall_seconds": 247.58,
+      "user_cpu_seconds": 234.58,
+      "system_cpu_seconds": 8.16,
+      "difference_from_reference_seconds": 35.02,
+      "difference_from_reference_percent": 16.47,
+      "hyperlink": {
+        "calls": 17601,
+        "cpu_seconds": 61.0819
+      },
+      "href": {
+        "calls": 9009,
+        "cpu_seconds": 28.461214
+      },
+      "pdf_bytes": 13602380,
+      "pdf_sha256": "bde7a2d69cf803722dd7260c82669a49dd182a15dda9dec750941d4ad65ff092",
+      "pdf_audit": {
+        "pages": 1140,
+        "named_destinations": 38025,
+        "link_annotations": 32950,
+        "objr_count": 32950,
+        "parenttree_keys": 33050,
+        "baseline_parenttree_keys": 34090,
+        "figures_without_alt": 0,
+        "normalized_text_sha256": "d9e4901cf59f283d386ac25f1258b5b8ec446a8fe4e0ed34c5175aeb9bc9452f",
+        "baseline_normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+        "matches_converged_baseline": false
+      },
+      "decision": "Reject: slower than the reference and semantically incorrect; the audit finds 1,040 fewer ParentTree keys and a different extracted-text hash."
+    },
+    {
+      "name": "three-common-tags-str-case",
+      "description": "Check Link, text, and text-unit first with the standard converter as the fallback.",
+      "instrumented_tex_bytes": 4317848,
+      "instrumented_tex_sha256": "b5358977aba79bc9e62ed861088dd426419796b4e476ac67c01f1111cf8cf62f",
+      "wall_seconds": 217.09,
+      "user_cpu_seconds": 212.76,
+      "system_cpu_seconds": 2.08,
+      "difference_from_reference_seconds": 4.53,
+      "difference_from_reference_percent": 2.13,
+      "hyperlink": {
+        "calls": 17601,
+        "cpu_seconds": 49.022832999999
+      },
+      "href": {
+        "calls": 9009,
+        "cpu_seconds": 26.556607
+      },
+      "pdf_bytes": 13461237,
+      "pdf_sha256": "1dc7b005308f120c3b22400b3d282e87a2f650e05b7203ed5450c9b50ec14b1f",
+      "pdf_audit": {
+        "pages": 1140,
+        "named_destinations": 38025,
+        "link_annotations": 32950,
+        "objr_count": 32950,
+        "parenttree_keys": 34090,
+        "figures_without_alt": 0,
+        "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+        "matches_converged_baseline": true
+      },
+      "decision": "Reject: the PDF audit passes, but this single run is 2.13% slower than the reference and does not demonstrate a gain."
+    }
+  ],
+  "limits": [
+    "One run per prototype; timings are diagnostic, not repeated production measurements.",
+    "Both candidates used the same populated auxiliary seeds and hyperlink timing wrappers.",
+    "The three-name fast path was measured once; its 2.13% slowdown is not enough to infer a stable performance regression, but provides no basis to retain it."
+  ],
+  "overall_decision": "No production change. The 21-name linear list is slower, control-sequence dispatch is slower and semantically incorrect, and the three-name fast path shows no gain."
+}

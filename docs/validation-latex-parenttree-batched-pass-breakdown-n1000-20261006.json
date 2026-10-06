@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-06",
+  "title": "Per-pass timing of the converged ParentTree-batched PDF build",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "3.14.0",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "descendant_couples": 1000,
+    "people": 2002,
+    "events": 3003,
+    "media_artifacts": 200
+  },
+  "method": {
+    "helper": "write_latex_pdf(..., extended_compilation=True)",
+    "instrumentation": "wrap subprocess.run to time each lualatex call and record auxiliary fingerprints; helper compilation behavior unchanged",
+    "source_tex_bytes": 4313301,
+    "source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740",
+    "production_sources_changed": false
+  },
+  "result": {
+    "status": "converged",
+    "total_helper_seconds": 448.594,
+    "sum_pass_seconds": 448.33,
+    "passes": [
+      {
+        "pass": 1,
+        "wall_seconds": 22.281,
+        "returncode": 0,
+        "command": [
+          "/Library/TeX/texbin/lualatex",
+          "-no-shell-escape",
+          "-interaction=nonstopmode",
+          "-halt-on-error",
+          "-file-line-error",
+          "book.tex"
+        ],
+        "auxiliary_fingerprint_sha256": "300edc071100ddd94a2f6f20995981e1b98f8dbc67101ae7979cdd0cb2935521",
+        "auxiliary_files": {
+          "book.aux": "257cc82f823c1d9eed0a3eefc0334ca65b4c3df8cf36c0a3f6ab2f785ada8207",
+          "book.toc": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+        }
+      },
+      {
+        "pass": 2,
+        "wall_seconds": 214.949,
+        "returncode": 0,
+        "command": [
+          "/Library/TeX/texbin/lualatex",
+          "-no-shell-escape",
+          "-interaction=nonstopmode",
+          "-halt-on-error",
+          "-file-line-error",
+          "book.tex"
+        ],
+        "auxiliary_fingerprint_sha256": "116c484d617303f120c120fb779f50de9a5e9ad4f2df4d0a899df8dc71d0d531",
+        "auxiliary_files": {
+          "book.aux": "63393167d1b7ca5575be4e813854448e4c0bab80fc9044fdb9a7665cb04171da",
+          "book.toc": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+        }
+      },
+      {
+        "pass": 3,
+        "wall_seconds": 211.1,
+        "returncode": 0,
+        "command": [
+          "/Library/TeX/texbin/lualatex",
+          "-no-shell-escape",
+          "-interaction=nonstopmode",
+          "-halt-on-error",
+          "-file-line-error",
+          "book.tex"
+        ],
+        "auxiliary_fingerprint_sha256": "116c484d617303f120c120fb779f50de9a5e9ad4f2df4d0a899df8dc71d0d531",
+        "auxiliary_files": {
+          "book.aux": "63393167d1b7ca5575be4e813854448e4c0bab80fc9044fdb9a7665cb04171da",
+          "book.toc": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+        }
+      }
+    ],
+    "first_pass_seconds": 22.281,
+    "tagged_passes_seconds": [
+      214.949,
+      211.1
+    ],
+    "tagged_passes_total_seconds": 426.049,
+    "tagged_passes_share_of_total_percent": 94.97,
+    "final_pdf_bytes": 13461240,
+    "final_pdf_sha256": "612b4643bfb66065fe03a70fae75a2ec5607ef7a0a086c59e62d9a90493dd340"
+  },
+  "limits": [
+    "One converged export; this run partitions elapsed time but is not a repeated timing comparison.",
+    "The first pass has tagging disabled and hyperref in draft mode as defined by the production helper.",
+    "No process RSS was sampled."
+  ]
+}

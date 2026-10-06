@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-06",
+  "title": "Selective tagpdf Lua-mirror write prototype, N=1,000",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740"
+  },
+  "method": {
+    "compilation": "one direct tagged pass with populated .aux/.toc seeds; no .out seed",
+    "auxiliary_seed": {
+      "aux_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "candidate": "Keep TeX property and sequence updates; mirror only tag, rolemap, parentrole, and parentnum property keys to Lua; skip Lua sequence mirroring. ParentTree batching and link timers remain active.",
+    "production_sources_changed": false
+  },
+  "result": {
+    "returncode": 0,
+    "wall_seconds": 242.05,
+    "user_cpu_seconds": 232.08,
+    "system_cpu_seconds": 6.05,
+    "hyperlink": {
+      "calls": 17601,
+      "cpu_seconds": 58.63315
+    },
+    "href": {
+      "calls": 9009,
+      "cpu_seconds": 27.820896
+    },
+    "instrumented_tex_bytes": 4318264,
+    "instrumented_tex_sha256": "207923fcb7d7b06232ed5e627802fd702038805568c0ee67620699dc255a6df0",
+    "pdf_bytes": 13602389,
+    "pdf_sha256": "468097245d7caf4bddf640ed3cff6bda847da04dc8df0eec96255c1dc7f58d84",
+    "pdf_audit": {
+      "pages": 1140,
+      "named_destinations": 38025,
+      "roles_match": true,
+      "link_annotations": 32950,
+      "objr_count": 32950,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": 33050,
+      "baseline_parenttree_keys": 34090,
+      "links_with_parenttree_objr_owner_match": 32950,
+      "figures": 400,
+      "figures_without_alt": 0,
+      "normalized_text_sha256": "d9e4901cf59f283d386ac25f1258b5b8ec446a8fe4e0ed34c5175aeb9bc9452f",
+      "baseline_normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+      "matches_converged_baseline": false
+    }
+  },
+  "limits": [
+    "One run per prototype; timing is diagnostic.",
+    "The candidate changed what tagpdf.lua received from its private TeX/Lua mirrors; the source inspection was not sufficient to prove that filtering was safe."
+  ],
+  "decision": "Reject. The candidate takes 242.05 seconds (+13.87% versus the 212.56-second direct reference), produces 1,040 fewer ParentTree keys, and changes the extracted-text hash. No production change."
+}

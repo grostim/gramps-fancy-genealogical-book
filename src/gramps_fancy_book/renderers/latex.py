@@ -86,6 +86,50 @@ def _pdf_title(model: BookModel) -> str:
     return label(model, "family_history")
 
 
+def _render_tagpdf_parenttree_batching() -> str:
+    """Batch tagpdf's private ParentTree append when its current hooks exist."""
+    return r"""\ExplSyntaxOn
+\cs_if_exist:NT \__tag_parenttree_add_objr:nn
+  {
+    \cs_if_exist:NT \g__tag_parenttree_objr_tl
+      {
+        \cs_if_exist:NT \hook_gput_code:nnn
+          {
+            \tl_new:N \g__gfb_parenttree_chunk_tl
+            \seq_new:N \g__gfb_parenttree_chunks_seq
+            \int_new:N \g__gfb_parenttree_chunk_count_int
+            \cs_new_protected:Npn \g__gfb_parenttree_flush:
+              {
+                \tl_gput_right:Ne \g__tag_parenttree_objr_tl
+                  { \seq_use:Nn \g__gfb_parenttree_chunks_seq {} \g__gfb_parenttree_chunk_tl }
+                \seq_gclear:N \g__gfb_parenttree_chunks_seq
+                \tl_gclear:N \g__gfb_parenttree_chunk_tl
+                \int_gzero:N \g__gfb_parenttree_chunk_count_int
+              }
+            \cs_gset_protected:Npn \__tag_parenttree_add_objr:nn #1#2
+              {
+                \tl_gput_right:Ne \g__gfb_parenttree_chunk_tl
+                  { #1 \c_space_tl #2 ^^J }
+                \int_gincr:N \g__gfb_parenttree_chunk_count_int
+                \int_compare:nNnT { \g__gfb_parenttree_chunk_count_int } = { 128 }
+                  {
+                    \seq_gput_right:NV \g__gfb_parenttree_chunks_seq
+                      \g__gfb_parenttree_chunk_tl
+                    \tl_gclear:N \g__gfb_parenttree_chunk_tl
+                    \int_gzero:N \g__gfb_parenttree_chunk_count_int
+                  }
+              }
+            \hook_gput_code:nnn
+              {tagpdf/finish/before}
+              {gfb-parenttree-batch-flush}
+              {\g__gfb_parenttree_flush:}
+          }
+      }
+  }
+\ExplSyntaxOff
+"""
+
+
 def _render_cover(model: BookModel) -> str:
     """Render the generated cover and any available partner portrait medallions."""
     family = model.reference_family
@@ -316,6 +360,8 @@ def render_latex(
             "\\renewcommand{\\labelitemiv}{\\textemdash}\n"
         )
     # ulem draws \sout but omits its PDF TextDecorationType layout attribute.
+    # Keep tagpdf's parent-child validation, but run its Lua check once after
+    # building the tree instead of rechecking every node as it is created.
     document = [
         f"\\DocumentMetadata{{lang={pdf_language},tagging=on}}\n"
         "\\documentclass[a4paper]{article}\n"
@@ -327,7 +373,9 @@ def render_latex(
         f"\\hypersetup{{pdftitle={{{escape_latex_text(_pdf_title(model))}}},pdfdisplaydoctitle=true}}\n"
         "\\newcommand{\\bookurl}[2]{\\href{#1#2}{\\useOriginalUrlSetting\\nolinkurl{#1#2}}}\n"
         "\\usepackage[normalem]{ulem}\n\\usepackage{textcomp}\n"
-        "\\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}\n"
+        "\\tagpdfsetup{debug/parent-child-check=atend}\n"
+        + _render_tagpdf_parenttree_batching()
+        + "\\tagpdfsetup{role/new-attribute={gfb-strikethrough}{/O/Layout/TextDecorationType/LineThrough}}\n"
         "\\tagpdfsetup{role/new-tag={paragraph/H3}}\n"
         "\\NewCommandCopy{\\gfbOriginalSout}{\\sout}\n"
         "\\RenewDocumentCommand{\\sout}{m}{%\n"

@@ -50,11 +50,18 @@ La fixture native fictive AC-25 a été importée et exportée avec le rapport G
 
 Les deux exports ont le même `raw`, les mêmes bornes de comparaison et le même jour structuré ; seul le texte d’affichage change de langue. Le [PDF français AC-25](../output/pdf/gramps-fancy-book-ac25-month-day-fr-20261004.pdf), généré par le même rapport, compte neuf pages A4 balisées. La page 7 a été examinée : « vers 14 mars 1900 » est lisible dans la fiche et ne déborde pas. Cette recette CLI ne valide pas encore le sélecteur de langue par la boîte de dialogue graphique pour cette fixture.
 
-### État de la recette GUI AC-25 — 5 octobre 2026
+### Recette GUI AC-25 — 6 octobre 2026
 
-La fixture fictive est déjà importée dans l’arbre isolé `AC-25 GUI month-day`. Le profil de ce test est réglé sur `date-format=2`, valeur confirmée dans son fichier de préférences. Un premier export GUI français a toutefois été produit avant cette correction, avec la valeur `4` : `gui-fr.json` affiche `vers 14. mars 1900` alors que sa date structurée vaut `[1900, 3, 14]`. Ce fichier est conservé comme diagnostic et ne valide pas AC-25.
+La fixture fictive a été exportée depuis l’interface de Gramps Desktop 6.0.8, dans le profil isolé et l’arbre `AC-25 GUI month-day`. La préférence `date-format=2` est confirmée dans `tmp/ac15-desktop-20261005/profile/gramps/gramps60/gramps.ini`. Les deux exports ont utilisé le sélecteur de langue du rapport et le format « Instantané JSON et rapport de cohérence » :
 
-Après correction de la préférence et redémarrage de Gramps, le formulaire de rapport a été rouvert. Le raccourci `super+a` n’a pas sélectionné tout le champ du chemin de sortie ; le nouveau chemin s’est ajouté à l’ancien. Gramps a rejeté cette destination avant d’écrire le fichier. Au dernier état observé, le formulaire est ouvert dans le profil isolé et attend la saisie d’un chemin propre. Les exports GUI français et anglais corrigés restent à produire dans `tmp/ac25-month-day/export/gui-fr-dmy.json` et `gui-en-dmy.json`. La reprise nécessite le déverrouillage manuel du Mac ; utiliser `Ctrl+A` ou le sélecteur de fichier pour remplacer entièrement le chemin, puis comparer les valeurs brutes et normalisées ainsi que les textes attendus `vers 14 mars 1900` et `about March 14, 1900`.
+| Langue du livre | `BOOK_LANGUAGE` | Date affichée pour E0000 | Fichier GUI |
+| --- | --- | --- | --- |
+| Français | `fr` | `vers 14 mars 1900` | `tmp/ac25-month-day/export/gui-fr-dmy.json` |
+| Anglais | `en` | `about March 14, 1900` | `tmp/ac25-month-day/export/gui-en-dmy.json` |
+
+Les deux événements conservent exactement le même `raw` (`[0, 3, 0, [14, 3, 1900, false], "", 2415093, 0]`), `ymd` (`[1900, 3, 14]`), `stop_ymd` (`[0, 0, 0]`) et intervalle de comparaison (`[[1850, 3, 14], [1950, 3, 14]]`). Une comparaison complète ne relève aucune autre différence que `BOOK_LANGUAGE`, les chaînes de date affichées et le préfixe du chemin relatif de l’image exportée (`gui-fr-dmy_media` / `gui-en-dmy_media`). Les deux rapports de cohérence ne contiennent ni constat ni diagnostic. Les JSON et rapports de cohérence restent dans `tmp/`, ignoré par Git.
+
+L’ancien `gui-fr.json`, produit avant la correction avec `date-format=4`, reste conservé comme diagnostic (`vers 14. mars 1900`) et ne valide pas AC-25. Cette recette GUI confirme maintenant le sélecteur de langue pour les dates structurées à mois et jour ; la génération PDF/HTML et le contrôle visuel de cette combinaison restent couverts séparément par la recette CLI ci-dessus.
 
 ## Sélection dans l’interface Desktop — 2 octobre 2026
 

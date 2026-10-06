@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "compiler": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "source_bytes": 4311700,
+    "source_sha256": "f0719756a7e3d0fa353a34d84d2fc21ce6cc77412b7f550d4e007747b7e81837"
+  },
+  "method": {
+    "compilation": "one direct tagged pass with populated book.aux and book.toc; no book.out seed",
+    "auxiliary_seed": {
+      "source_dir": "tmp/l8-3-parent-child-pair2-atend-current-n1000",
+      "aux_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "instrumentation": "pdftexcmds timer around pageref* inside gfbpagelink",
+    "instrumented_source_bytes": 4312095,
+    "instrumented_source_sha256": "ff13f58ac31d3d2e426160e0094f6bfdf053aa437797d0c9a38f658dc36436bc",
+    "production_sources_changed": false,
+    "auxiliary_files_after_profile": {
+      "aux_sha256": "c2bae84aa323db39fb00c56bcd5c9c88c9b0e072b92a3a522e6e01cd32149761",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "timer_resolution_probe": {
+      "samples": 1000,
+      "zero_ticks": 997,
+      "nonzero_ticks": 3,
+      "minimum_nonzero_ticks": 1,
+      "ticks_per_second": 65536,
+      "interpretation": "The installed LuaHBTeX/pdftexcmds timer reported a one-tick minimum in this microprobe; the per-call cumulative profile remains quantized and includes timer-wrapper overhead."
+    }
+  },
+  "result": {
+    "returncode": 0,
+    "wall_seconds": 259.132,
+    "pageref_calls": 17590,
+    "pageref_cumulative_seconds": 0.509705,
+    "pdf_bytes": 13461241,
+    "pdf_audit": {
+      "pages": 1140,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "named_destinations": 38025,
+      "link_annotations": 32950,
+      "links_with_structparent": 32950,
+      "roles": {
+        "/Document": 1,
+        "/Part": 22473,
+        "/P": 23144,
+        "/Sect": 6292,
+        "/H1": 8,
+        "/TOC": 1,
+        "/TOCI": 7,
+        "/Reference": 7,
+        "/Link": 29887,
+        "/L": 783,
+        "/LI": 9555,
+        "/Lbl": 16095,
+        "/LBody": 9555,
+        "/H2": 3014,
+        "/H3": 3270,
+        "/Note": 3270,
+        "/BlockQuote": 267,
+        "/Figure": 400
+      },
+      "figures_without_alt": 0,
+      "normalized_text_sha256": "eeeecc548e2b95e498062a17736703dc81ad3d6ade909c7cecd7e06031144f25",
+      "matches_converged_baseline_text": true,
+      "roles_identical_to_converged_baseline": true
+    }
+  },
+  "limits": [
+    "Single instrumented pass; timing is a targeting profile, not a matched performance comparison.",
+    "Timer overhead was not measured separately.",
+    "The auxiliary files were generated from the equivalent deferred-check source with the same labels and populated TOC.",
+    "A direct pass is not the converged production compile.",
+    "The timer rounds each individual interval; the microprobe confirmed one-tick granularity locally, but timer-wrapper overhead was not subtracted."
+  ],
+  "decision": "The instrumented timer reports 0.509705 seconds over 17,590 page-reference calls, about 0.20% of this direct pass; this is not an overhead-corrected or repeated timing. Page-reference expansion is not a useful production optimization target. Focus the next profile on hyperlink annotation and tagpdf link-structure hooks."
+}

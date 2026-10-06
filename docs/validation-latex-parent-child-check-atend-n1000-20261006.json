@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-06",
+  "source_revision": "working tree based on 2ed2f88",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "python": "CPython 3.13.7"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72"
+  },
+  "method": {
+    "direct_compilation": "One LuaLaTeX pass per run from fresh auxiliary files; tagging and hyperref active.",
+    "paired_order": [
+      {
+        "pair": 1,
+        "order": [
+          "deferred-check",
+          "default-check"
+        ]
+      },
+      {
+        "pair": 2,
+        "order": [
+          "default-check",
+          "deferred-check"
+        ]
+      },
+      {
+        "pair": 3,
+        "order": [
+          "deferred-check",
+          "default-check"
+        ]
+      }
+    ],
+    "default_source_bytes": 4311655,
+    "default_source_sha256": "6a4ce9a30ee51ebb2e4065312db9b732010466f971a99633160aff484545eb96",
+    "direct_deferred_source_bytes": 4311700,
+    "direct_deferred_source_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb",
+    "production_renderer_source_bytes": 4311700,
+    "production_renderer_source_sha256": "f0719756a7e3d0fa353a34d84d2fc21ce6cc77412b7f550d4e007747b7e81837",
+    "setting": "\\tagpdfsetup{debug/parent-child-check=atend}",
+    "setting_semantics": "The documented LuaLaTeX mode skips inline parent-child checks and checks the structure tree in Lua at document end; it does not disable the check.",
+    "direct_source_note": "The paired diagnostic placed the setting just before \\begin{document}; the production renderer emits the same setting beside its other tagpdf setup commands in the preamble."
+  },
+  "direct_runs": {
+    "default_check": [
+      {
+        "pair": 1,
+        "wall_seconds": 280.5,
+        "user_cpu_seconds": 279.12,
+        "system_cpu_seconds": 1.04,
+        "max_rss_bytes": 1303363584
+      },
+      {
+        "pair": 2,
+        "wall_seconds": 279.85,
+        "user_cpu_seconds": 278.71,
+        "system_cpu_seconds": 1.02,
+        "max_rss_bytes": 1244758016
+      },
+      {
+        "pair": 3,
+        "wall_seconds": 280.27,
+        "user_cpu_seconds": 278.92,
+        "system_cpu_seconds": 1.04,
+        "max_rss_bytes": 1202388992
+      }
+    ],
+    "deferred_check": [
+      {
+        "pair": 1,
+        "wall_seconds": 261.69,
+        "user_cpu_seconds": 260.62,
+        "system_cpu_seconds": 0.95,
+        "max_rss_bytes": 1314684928
+      },
+      {
+        "pair": 2,
+        "wall_seconds": 261.74,
+        "user_cpu_seconds": 260.43,
+        "system_cpu_seconds": 1.02,
+        "max_rss_bytes": 1322024960
+      },
+      {
+        "pair": 3,
+        "wall_seconds": 261.52,
+        "user_cpu_seconds": 260.36,
+        "system_cpu_seconds": 1.0,
+        "max_rss_bytes": 1162526720
+      }
+    ]
+  },
+  "paired_summary": {
+    "default_wall_median_seconds": 280.27,
+    "default_wall_range_seconds": [
+      279.85,
+      280.5
+    ],
+    "deferred_wall_median_seconds": 261.69,
+    "deferred_wall_range_seconds": [
+      261.52,
+      261.74
+    ],
+    "candidate_minus_default_seconds": [
+      -18.81,
+      -18.11,
+      -18.75
+    ],
+    "median_candidate_minus_default_seconds": -18.75,
+    "median_paired_relative_percent": -6.69,
+    "max_rss_candidate_minus_default_bytes": [
+      11321344,
+      77266944,
+      -39862272
+    ],
+    "median_max_rss_difference_bytes": 11321344,
+    "max_rss_difference_range_bytes": [
+      -39862272,
+      77266944
+    ],
+    "memory_interpretation": "Three pairs do not establish a stable RSS change. Every direct run exceeds the 512 MiB PDF child-process target."
+  },
+  "direct_pdf_comparison": {
+    "audited_pairs": [
+      1,
+      2
+    ],
+    "pages": 1140,
+    "named_destinations": 38025,
+    "link_annotations": 32943,
+    "GoTo_annotations": 20871,
+    "URI_annotations": 12072,
+    "unique_struct_parent_values": 32943,
+    "OBJR_nodes": 32943,
+    "OBJR_references_matching_link_annotations": 32943,
+    "every_link_has_objr": true,
+    "structure_roles_identical": true,
+    "URI_target_sets_identical": true,
+    "GoTo_destination_sets_identical": true,
+    "missing_GoTo_destinations": 0,
+    "figures": 400,
+    "figures_without_alt": 0,
+    "normalized_text_bytes": 2526977,
+    "normalized_text_sha256": "c3688de6552d404cbc2d380ff7596b0665a85979eb314239a6c654d91638407a",
+    "normalized_text_identical": true
+  },
+  "converged_production_build": {
+    "helper": "write_latex_pdf(..., extended_compilation=True)",
+    "status": "converged",
+    "elapsed_seconds": 545.188984,
+    "passes_recorded": null,
+    "renderer_source_bytes": 4311700,
+    "renderer_source_sha256": "f0719756a7e3d0fa353a34d84d2fc21ce6cc77412b7f550d4e007747b7e81837",
+    "pdf_path": "output/pdf/gramps-fancy-book-converged-parent-child-check-atend-n1000-20261006.pdf",
+    "pdf_bytes": 13461240,
+    "pdf_sha256": "41ccb1f8d4fc8674727d0f699beeaa083addbdaa6261721c5ef27de3e6fba0b7",
+    "pdf_version": "2.0",
+    "pdf_language": "en-US",
+    "tagged": true,
+    "pages": 1140,
+    "named_destinations": 38025,
+    "link_annotations": 32950,
+    "GoTo_annotations": 20878,
+    "URI_annotations": 12072,
+    "unique_struct_parent_values": 32950,
+    "OBJR_nodes": 32950,
+    "OBJR_references_matching_link_annotations": 32950,
+    "every_link_has_objr": true,
+    "figures": 400,
+    "figures_without_alt": 0,
+    "tagged_roles_identical_to_previous_converged_pdf": true,
+    "GoTo_target_sets_identical_to_previous_converged_pdf": true,
+    "URI_target_sets_identical_to_previous_converged_pdf": true,
+    "missing_GoTo_destinations": 0,
+    "normalized_text_bytes": 2537135,
+    "normalized_text_sha256": "eeeecc548e2b95e498062a17736703dc81ad3d6ade909c7cecd7e06031144f25",
+    "normalized_text_identical_to_previous_converged_pdf": true
+  },
+  "decision": "Retain the documented deferred check in the renderer: three direct N=1000 pairs show a repeatable 6.69% median first-pass reduction, and the converged PDF matches the previous PDF's normalized text, roles, destinations, link targets, OBJR associations, and figure alt-text counts. This does not meet the 180-second total PDF compilation target; the extended production build took 545.189 seconds.",
+  "limits": [
+    "Direct paired timing covers one pass from empty auxiliary files, not the complete production compile.",
+    "The full converged build was measured once; its time is not treated as a repeated performance estimate.",
+    "The paired PDF structure audit covered pairs 1 and 2; pair 3 contributes timing and RSS only.",
+    "Measurements are from one macOS/TeX Live environment and do not qualify other supported platforms.",
+    "The candidate does not satisfy the PDF memory target; RSS differences across paired runs vary from about -38 MiB to +74 MiB."
+  ]
+}

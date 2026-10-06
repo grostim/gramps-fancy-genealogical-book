@@ -114,12 +114,40 @@ jobs:
           cat /etc/os-release
           .venv-gramps/bin/python -VV
           .venv-gramps/bin/python -m pip freeze
+      - name: Create wrapper for the pinned LuaLaTeX image
+        run: |
+          mkdir -p "$RUNNER_TEMP/lualatex-bin"
+          cat > "$RUNNER_TEMP/lualatex-bin/lualatex" <<'EOF'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          exec docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp \
+            --volume "$PWD:/work" \
+            --workdir /work \
+            --entrypoint lualatex \
+            texlive/texlive:latest@sha256:1cb66a6dc31fe153369c5bb63549aea31c2ffb351613af67b182d84c8521fe89 \
+            "$@"
+          EOF
+          chmod +x "$RUNNER_TEMP/lualatex-bin/lualatex"
       - run: .venv-gramps/bin/python build_addon.py
-      - run: .venv-gramps/bin/python scripts/verify_gramps.py --gramps "$PWD/.venv-gramps/bin/gramps"
+      - name: Verify native Gramps export including PDF
+        run: >-
+          .venv-gramps/bin/python scripts/verify_gramps.py
+          --gramps "$PWD/.venv-gramps/bin/gramps"
+          --pdf-output "$GITHUB_WORKSPACE/.work/gramps-integration-${{ matrix.gramps_version }}.pdf"
+          --lualatex "$RUNNER_TEMP/lualatex-bin/lualatex"
       - uses: actions/upload-artifact@v4
         with:
           name: GrampsFancyBook-addon-Gramps-${{ matrix.gramps_version }}
           path: gramps60/download/GrampsFancyBook.addon.tgz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: GrampsFancyBook-PDF-Gramps-${{ matrix.gramps_version }}
+          path: .work/gramps-integration-${{ matrix.gramps_version }}.pdf
+          if-no-files-found: ignore
+          retention-days: 14
 
   gramps-prerelease:
     name: Gramps prerelease canary (6.1.0-beta2)

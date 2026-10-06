@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-06",
+  "title": "Prototype for bypassing tagpdf structure-key parsing on a single tag key, N=1,000",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740"
+  },
+  "method": {
+    "compilation": "one direct tagged pass per variant from identical populated .aux/.toc seeds",
+    "variant": "For __tag/struct keys containing only one tag=<value> key, call the existing tag/struct/tag socket directly; all other key lists use the saved keys_set:nn implementation.",
+    "instrumentation": "Lua os.clock timers around tagpdf structure, marked-content and annotation routines; the instrumented runs are diagnostic and both carry equivalent timers.",
+    "production_sources_changed": false
+  },
+  "result": {
+    "reference": {
+      "wall_seconds": 212.87,
+      "user_cpu_seconds": 211.08,
+      "system_cpu_seconds": 1.36
+    },
+    "candidate": {
+      "wall_seconds": 210.59,
+      "user_cpu_seconds": 209.06,
+      "system_cpu_seconds": 1.31
+    },
+    "wall_delta_seconds": -2.28,
+    "wall_delta_percent": -1.071,
+    "tag_struct_begin_calls": 128031,
+    "single_tag_fastpath_calls": 65367,
+    "fallback_key_parser_calls": 62664,
+    "reference_struct_key_parser_seconds": 15.711469,
+    "candidate_fallback_parser_seconds": 11.299384,
+    "candidate_fastpath_socket_seconds": 2.195545,
+    "pdf_bytes": 13461241,
+    "pdf_sha256": "3b97398b7b53de5789fcfa07a9bd8391f724625bb5a11441a58d8b3e3078a370",
+    "pdf_audit": {
+      "pages": 1140,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "named_destinations": 38025,
+      "roles": {
+        "/Document": 1,
+        "/text-unit": 22473,
+        "/text": 23144,
+        "/Sect": 6292,
+        "/section": 8,
+        "/TOC": 1,
+        "/TOCI": 7,
+        "/Reference": 7,
+        "/Link": 29887,
+        "/itemize": 783,
+        "/LI": 9555,
+        "/Lbl": 9555,
+        "/LBody": 9555,
+        "/subsection": 3014,
+        "/paragraph": 3270,
+        "/footnotemark": 3270,
+        "/footnote": 3270,
+        "/footnotelabel": 3270,
+        "/quote": 267,
+        "/Figure": 400
+      },
+      "figures": 400,
+      "figures_without_alt": 0,
+      "link_annotations": 32950,
+      "link_structparent_count": 32950,
+      "unique_link_structparent_keys": true,
+      "objr_count": 32950,
+      "objr_link_ref_count": 32950,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": 34090,
+      "links_with_parenttree_objr_owner_match": 32950,
+      "links_missing_or_wrong_parenttree_objr_match": 0,
+      "nonlink_annotations": 0,
+      "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+      "normalized_text_chars": 2464400
+    },
+    "matches_converged_baseline": {
+      "pages": true,
+      "named_destinations": true,
+      "roles": true,
+      "figures": true,
+      "figures_without_alt": true,
+      "link_annotations": true,
+      "link_structparent_count": true,
+      "objr_count": true,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": true,
+      "links_with_parenttree_objr_owner_match": true,
+      "normalized_text_sha256": true
+    }
+  },
+  "limits": [
+    "One run per variant; the 2.28-second wall-time difference is not replicated and is too small to separate confidently from run-to-run variation.",
+    "Timer wrapper overhead was not separately calibrated; the direct passes are instrumented rather than production builds.",
+    "The PDF audit verifies the candidate against the converged control, not binary identity."
+  ],
+  "decision": "The candidate preserves the audited PDF semantics and routes 65,367 of 128,031 calls through the same tagpdf socket. Its one-run timing is 2.28 seconds (1.07%) lower, while the nested parser profile attributes only about 2.22 seconds net difference after the socket cost. This is not enough replicated evidence to retain a global keys_set:nn override in production; reject the prototype and continue profiling other structure-creation work."
+}
