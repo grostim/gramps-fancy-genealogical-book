@@ -28,6 +28,16 @@ Version [v3.23.1](https://github.com/gramps-project/gramps-web-api/releases/tag/
 
 The findings below therefore apply to published version 3.23.1; the October 4 update for 3.23.0 remains in this audit’s history.
 
+## Update — October 6, 2026
+
+The [official release list](https://github.com/gramps-project/gramps-web-api/releases) still marks [v3.23.1](https://github.com/gramps-project/gramps-web-api/releases/tag/v3.23.1) as the latest release; no newer patch is listed. It remains at commit [`7e9c80912c3a17c4e672b6e705606d1cd5dc84be`](https://github.com/gramps-project/gramps-web-api/commit/7e9c80912c3a17c4e672b6e705606d1cd5dc84be). Re-reading the three pinned sources confirms that the integration blockers have not changed: [`const.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/const.py), [`api/report.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/report.py), and [`api/tasks.py`](https://github.com/gramps-project/gramps-web-api/blob/v3.23.1/gramps_webapi/api/tasks.py).
+
+- `CATEGORY_WEB` is still absent from `REPORT_DEFAULTS`, and `.zip` is still absent from `MIME_TYPES`; the API filters the report during discovery and rejects its execution.
+- For accepted reports, `run_report()` still requires the server-managed output file under `REPORT_DIR`, passed through the `of` option.
+- `generate_report` remains an unbound Celery task; it passes neither the task instance nor a progress callback to `run_report()`.
+
+This update confirms the release and source findings; it is not a runtime validation because no Gramps Web instance was started.
+
 ## Compatibility gaps found
 
 - `REPORT_DEFAULTS` depends on available libraries: with GTK it allows `CATEGORY_TEXT` and `CATEGORY_DRAW`, plus `CATEGORY_GRAPHVIZ` when Graphviz is installed; without PyGObject, only `CATEGORY_TEXT` is configured. `CATEGORY_WEB` is absent in every case. `get_reports()` filters reports against this list, and `run_report()` rejects unsupported categories with HTTP 404.
