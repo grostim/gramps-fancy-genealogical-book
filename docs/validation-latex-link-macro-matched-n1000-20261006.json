@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64 (26A428)",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "wall_timer": "Python time.perf_counter",
+    "macro_timer": "Lua os.clock"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citation_entries": 3003,
+    "synthetic_portraits": 200,
+    "synthetic": true,
+    "page_margins_mm": 15,
+    "source_bytes": 4037548,
+    "source_sha256": "b860efdff3ee3f8a964a5a315fb5ce64e84755ca7b185eb8241acb68a8b4e15a"
+  },
+  "method": {
+    "instrumented_source_bytes": 4038558,
+    "instrumented_source_sha256": "93ed3f1db1a7630ea3a8abebe9e45989344cf0ef3d629ea4ea76336579766dd7",
+    "instrumented_macros": [
+      "\\hyperlink",
+      "\\href"
+    ],
+    "instrumentation": "Lua timers and call counters surround the saved hyperref macros.",
+    "compilation": "One direct LuaHBTeX pass per run; the production convergence helper was not used.",
+    "initial_auxiliary_state": {
+      "files": ["book.aux", "book.toc"],
+      "book.aux_sha256": "17c2d70bf99c09fd34583adad8a3a1b225a4b3824532288c73e40a8bf17b984b",
+      "book.toc_sha256": "d557f29e6781f2a5c22924812185bb685820b9084277d06b206a1c747df3c796",
+      "book.out": "absent",
+      "same_copies_used_for_all_six_runs": true,
+      "table_of_contents": "Populated; includes seven navigation links absent from the earlier empty-TOC first pass."
+    },
+    "order": [
+      ["reference", "instrumented"],
+      ["instrumented", "reference"],
+      ["reference", "instrumented"]
+    ],
+    "production_sources_changed": false
+  },
+  "runs": [
+    {
+      "pair": 1,
+      "variant": "reference",
+      "wall_seconds": 244.160,
+      "pdf_bytes": 12583068
+    },
+    {
+      "pair": 1,
+      "variant": "instrumented",
+      "wall_seconds": 245.818,
+      "paired_wall_difference_seconds": 1.658,
+      "pdf_bytes": 12583071,
+      "macro_timings_cpu_seconds": {
+        "hyperlink": {"calls": 17334, "total": 52.119749},
+        "href": {"calls": 9009, "total": 27.452804}
+      }
+    },
+    {
+      "pair": 2,
+      "variant": "instrumented",
+      "wall_seconds": 245.928,
+      "pdf_bytes": 12583069,
+      "macro_timings_cpu_seconds": {
+        "hyperlink": {"calls": 17334, "total": 52.193411},
+        "href": {"calls": 9009, "total": 27.486808}
+      }
+    },
+    {
+      "pair": 2,
+      "variant": "reference",
+      "wall_seconds": 245.227,
+      "paired_wall_difference_seconds": 0.701,
+      "pdf_bytes": 12583068
+    },
+    {
+      "pair": 3,
+      "variant": "reference",
+      "wall_seconds": 245.562,
+      "pdf_bytes": 12583069
+    },
+    {
+      "pair": 3,
+      "variant": "instrumented",
+      "wall_seconds": 245.614,
+      "paired_wall_difference_seconds": 0.052,
+      "pdf_bytes": 12583067,
+      "macro_timings_cpu_seconds": {
+        "hyperlink": {"calls": 17334, "total": 52.142396},
+        "href": {"calls": 9009, "total": 27.350000}
+      }
+    }
+  ],
+  "pdf_semantics": {
+    "identical_across_all_runs": true,
+    "pages": 1214,
+    "page_size": "A4",
+    "pdf_version": "2.0",
+    "tagged": true,
+    "named_destinations": 34562,
+    "link_annotations": {
+      "GoTo": 17341,
+      "URI": 12072,
+      "total": 29413,
+      "with_struct_parent": 29413,
+      "unique_struct_parent_keys": 29413
+    },
+    "structure": {
+      "Link_roles": 26350,
+      "OBJR_nodes": 29413
+    },
+    "text_sha256": "05a9ad1868e4453166a658a368888781318df33e11a173bbf5bdd35a829462b3",
+    "ordered_uri_targets_sha256": "91e2c7e6c187937f0d2d5d92b7392bc96eeb19e0969853006f6cc0f9aa618708",
+    "pdf_bytes_identical": false,
+    "pdf_sizes_bytes": [12583067, 12583068, 12583069, 12583071]
+  },
+  "summary": {
+    "reference_wall_median_seconds": 245.227,
+    "reference_wall_range_seconds": [244.160, 245.562],
+    "instrumented_wall_median_seconds": 245.818,
+    "instrumented_wall_range_seconds": [245.614, 245.928],
+    "difference_between_wall_medians_seconds": 0.591,
+    "difference_between_wall_medians_percent": 0.241,
+    "paired_wall_differences_seconds": [1.658, 0.701, 0.052],
+    "paired_difference_median_seconds": 0.701,
+    "median_hyperlink_macro_cpu_seconds": 52.142396,
+    "median_href_macro_cpu_seconds": 27.452804,
+    "all_compiles_succeeded": true,
+    "all_pdf_semantics_match": true
+  },
+  "interpretation": "The instrumented median is 0.591 seconds (0.24%) slower. Paired differences are all positive but range from 0.052 to 1.658 seconds; the 1.402-second reference range is larger than the difference between medians. Three pairs do not establish a measurable instrumentation overhead or compile-time effect. All inspected PDF semantics match, while PDF bytes vary.",
+  "limits": [
+    "Three matched pairs on one machine are diagnostic, not a performance qualification.",
+    "Each PDF is a direct one-pass output starting from the same populated auxiliary state; this is not a clean converged production build.",
+    "Macro intervals include instrumentation markers, macro expansion, and TeX processing; the markers' own cost is not isolated.",
+    "The timers do not separate hyperref work from tagpdf work.",
+    "No production renderer change is justified by this measurement."
+  ]
+}
