@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_reader": "pypdf 6.19.0",
+    "text_extractor": "pdftotext (Poppler 24.04.0)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citation_entries": 303,
+    "synthetic_portraits": 20,
+    "synthetic": true,
+    "page_margins_mm": 15
+  },
+  "source": {
+    "bytes": 410379,
+    "sha256": "d3e6640c350bcc40c0bef4e413905061c662293b1c5d0e76fed0f6f198e07308"
+  },
+  "method": {
+    "candidate": "Keep DocumentMetadata tagging=on, add hyperref draft only for the first pass, restore the production source, then compile with active tagging and links until consecutive aux/toc/out fingerprints match.",
+    "candidate_pass_seconds": [10.876, 20.799, 20.797],
+    "candidate_pass_fingerprints_sha256": [
+      "be3dc640693fd5e3da6aec031aab4f59a837a88cf87f70fa8058327a0902b123",
+      "6f32b84f6e4fd361888c043b4c4f7daa2e86a1d8ecf963e82ba2fdfea0b4d471",
+      "6f32b84f6e4fd361888c043b4c4f7daa2e86a1d8ecf963e82ba2fdfea0b4d471"
+    ],
+    "candidate_passes_until_stable": 3,
+    "candidate_compile_seconds": 52.475,
+    "reference": "Production _compile_latex helper with its normal first-pass settings and standard limits.",
+    "reference_same_source_compile_seconds": 45.096,
+    "previous_reference_runs_same_source_seconds": [44.180, 44.773, 44.801],
+    "previous_reference_median_seconds": 44.773,
+    "production_sources_changed": false,
+    "temporary_artifacts": "../tmp/lualatex-tagged-first-pass-n100-20261006"
+  },
+  "timing_comparison": {
+    "candidate_minus_same_source_reference_seconds": 7.379,
+    "candidate_change_percent_vs_same_source_reference": 16.36,
+    "candidate_minus_previous_reference_median_seconds": 7.702,
+    "candidate_change_percent_vs_previous_reference_median": 17.20,
+    "conclusion": "The candidate requires three passes and is slower in the single matched run; no improvement is established."
+  },
+  "pdf_equivalence": {
+    "reference": {
+      "bytes": 1311563,
+      "pages": 127,
+      "tagged": true,
+      "named_destinations": 3526,
+      "link_annotations": 2978,
+      "annotations_with_struct_parent": 2978,
+      "link_roles": 2671,
+      "objr_nodes": 2978,
+      "pdftotext_sha256": "cc30036e820c452189041275969a837dedb5dbfa5a0c9c6475293ff949c7a6ee"
+    },
+    "candidate": {
+      "bytes": 1311566,
+      "pages": 127,
+      "tagged": true,
+      "named_destinations": 3526,
+      "link_annotations": 2978,
+      "annotations_with_struct_parent": 2978,
+      "link_roles": 2671,
+      "objr_nodes": 2978,
+      "pdftotext_sha256": "cc30036e820c452189041275969a837dedb5dbfa5a0c9c6475293ff949c7a6ee"
+    },
+    "structure_and_text_match": true
+  },
+  "decision": "Rejected; do not change the production renderer.",
+  "limits": [
+    "One candidate compilation was measured.",
+    "The fixture is N=100 and does not establish N=1000 performance.",
+    "PDF structure counts do not replace a screen-reader or PDF/UA assessment."
+  ]
+}
