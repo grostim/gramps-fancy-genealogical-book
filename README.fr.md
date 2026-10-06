@@ -15,7 +15,7 @@ Module complémentaire expérimental pour Gramps 6, destiné à produire un livr
 - Les notes publiables sont rendues en HTML et en LaTeX depuis l’AST Mistune ; le HTML brut reste du texte littéral, et les styles sémantiques Gramps priment sur la syntaxe Markdown d’une même note. Voir la [règle de normalisation documentée](docs/decisions/003-note-markup.md).
 - JSON Unicode, diagnostics structurés de conversion média, rapport séparé de cohérence des faits et remplacement coordonné du modèle, du rapport et des médias.
 - Conservation des fichiers existants, sauf activation de **Replace an existing file**.
-- La sortie PDF utilise le rendu LaTeX préliminaire : couverture A4 automatique, titres et textes éditoriaux F0, noms du couple et médaillons circulaires pour ses portraits disponibles, puis parties généalogiques, fiches, notices familiales, appels de citations numérotés, renvois de pages cliquables et index des personnes. La validation visuelle reste à faire.
+- La sortie PDF utilise le rendu LaTeX préliminaire : couverture A4 automatique, titres et textes éditoriaux F0, noms du couple et médaillons circulaires pour ses portraits disponibles, puis parties généalogiques, fiches, notices familiales, notes de bas de page par appel de citation avec référence abrégée et lien vers la page définitive de l’annexe, et index des personnes. La validation visuelle et d’accessibilité reste à faire.
 - Archive reproductible, tests unitaires et contrôle d’intégration avec Gramps réel.
 
 ## Notes éditoriales de la famille F0

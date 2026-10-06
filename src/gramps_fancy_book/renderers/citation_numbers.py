@@ -11,26 +11,18 @@ def citation_number_map(
     editorial_book: EditorialBook | None,
     *,
     context_order: Iterable[str] | None = None,
+    call_order: Iterable[str] | None = None,
 ) -> dict[str, int]:
-    """Number citation entries by first use in the renderer's context order.
+    """Number citation entries by first use in the renderer's display order.
 
     The default preserves the LaTeX book's family-notice then profile order.
-    Renderers with another display order may pass their context IDs explicitly.
+    Renderers with another display order may pass context IDs or call IDs
+    explicitly.
     """
     if editorial_book is None:
         return {}
-
-    contexts_by_id = {
-        profile.profile_id: profile for profile in editorial_book.profiles
-    }
-    contexts_by_id.update(
-        {notice.notice_id: notice for notice in editorial_book.family_notices}
-    )
-    default_order = tuple(
-        notice.notice_id for notice in editorial_book.family_notices
-    ) + tuple(profile.profile_id for profile in editorial_book.profiles)
-    if context_order is None:
-        context_order = default_order
+    if context_order is not None and call_order is not None:
+        raise ValueError("Specify context_order or call_order, not both.")
 
     entries = editorial_book.citation_entries
     entries_by_call = {
@@ -40,22 +32,43 @@ def citation_number_map(
     }
     ordered_entry_ids = []
     seen_entry_ids = set()
-    ordered_context_ids = []
-    seen_context_ids = set()
-    for context_id in context_order:
-        if context_id in contexts_by_id and context_id not in seen_context_ids:
-            ordered_context_ids.append(context_id)
-            seen_context_ids.add(context_id)
-    ordered_context_ids.extend(
-        context_id for context_id in default_order if context_id not in seen_context_ids
-    )
-    for context_id in ordered_context_ids:
-        context = contexts_by_id[context_id]
-        for call_id in context.citation_call_ids:
+    if call_order is not None:
+        for call_id in call_order:
             entry = entries_by_call.get(call_id)
             if entry is not None and entry.entry_id not in seen_entry_ids:
                 ordered_entry_ids.append(entry.entry_id)
                 seen_entry_ids.add(entry.entry_id)
+    else:
+        contexts_by_id = {
+            profile.profile_id: profile for profile in editorial_book.profiles
+        }
+        contexts_by_id.update(
+            {notice.notice_id: notice for notice in editorial_book.family_notices}
+        )
+        default_order = tuple(
+            notice.notice_id for notice in editorial_book.family_notices
+        ) + tuple(profile.profile_id for profile in editorial_book.profiles)
+        if context_order is None:
+            context_order = default_order
+
+        ordered_context_ids = []
+        seen_context_ids = set()
+        for context_id in context_order:
+            if context_id in contexts_by_id and context_id not in seen_context_ids:
+                ordered_context_ids.append(context_id)
+                seen_context_ids.add(context_id)
+        ordered_context_ids.extend(
+            context_id
+            for context_id in default_order
+            if context_id not in seen_context_ids
+        )
+        for context_id in ordered_context_ids:
+            context = contexts_by_id[context_id]
+            for call_id in context.citation_call_ids:
+                entry = entries_by_call.get(call_id)
+                if entry is not None and entry.entry_id not in seen_entry_ids:
+                    ordered_entry_ids.append(entry.entry_id)
+                    seen_entry_ids.add(entry.entry_id)
     for entry in entries:
         if entry.entry_id not in seen_entry_ids:
             ordered_entry_ids.append(entry.entry_id)
