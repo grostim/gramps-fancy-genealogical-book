@@ -479,9 +479,15 @@ def render_latex(
             )
 
     if model.editorial_book is not None and model.editorial_book.citation_entries:
+        ordered_citation_entries = tuple(
+            sorted(
+                model.editorial_book.citation_entries,
+                key=lambda entry: citation_numbers[entry.entry_id],
+            )
+        )
         document.append(
             _render_citation_appendix(
-                model.editorial_book.citation_entries,
+                ordered_citation_entries,
                 model,
                 emitted_targets,
                 citation_numbers,
