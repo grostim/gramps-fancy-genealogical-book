@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_inspector": "pypdf 6.10.0",
+    "text_extractor": "pdftotext (Poppler 24.04.0)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citation_entries": 3003,
+    "synthetic_portraits": 200,
+    "synthetic": true,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "source": "Current render_latex output for the synthetic branching N=1000 benchmark",
+    "compilation": "One direct LuaHBTeX pass per variant in a fresh directory; production convergence helper was not used.",
+    "factorial_variables": ["tagging=on|off", "hyperref=active|draft"],
+    "new_variants_change_one_setting_from_tagged_active_source": true,
+    "repetitions_per_cell": 3,
+    "run_orders": {
+      "round_1": ["untagged_hyperref_draft", "tagged_hyperref_active", "tagged_hyperref_draft", "untagged_hyperref_active"],
+      "round_2": ["untagged_hyperref_active", "tagged_hyperref_draft", "untagged_hyperref_draft", "tagged_hyperref_active"],
+      "round_3": ["tagged_hyperref_active", "untagged_hyperref_active", "tagged_hyperref_draft", "untagged_hyperref_draft"]
+    },
+    "production_sources_changed": false,
+    "temporary_artifacts": [
+      "../tmp/lualatex-sample-n1000-20261006-0tepkqpq",
+      "../tmp/lualatex-tagged-sample-n1000-20261006-pqyya0x6",
+      "../tmp/lualatex-tagged-draft-n1000-20261006",
+      "../tmp/lualatex-untagged-active-n1000-20261006",
+      "../tmp/lualatex-factorial-repeats-n1000-20261006"
+    ]
+  },
+  "variants": {
+    "untagged_hyperref_draft": {
+      "settings": {"tagging": "off", "hyperref": "draft"},
+      "source_bytes": 4037555,
+      "source_sha256": "c4f121b0e76f3125a7f7d8008d78be3efa382bfcae223b1e068c61b03ab6df54",
+      "runs": [
+        {"round": 1, "seconds": 21.692, "returncode": 0, "pdf_bytes": 4650409},
+        {"round": 2, "seconds": 21.310, "returncode": 0, "pdf_bytes": 4650409},
+        {"round": 3, "seconds": 21.302, "returncode": 0, "pdf_bytes": 4650409}
+      ],
+      "median_seconds": 21.310,
+      "range_seconds": [21.302, 21.692],
+      "pdf": {"pages": 1214, "page_size_points": [595.276, 841.89], "tagged": false, "named_destinations": 0, "link_annotations": {"GoTo": 0, "URI": 0, "total": 0}}
+    },
+    "tagged_hyperref_active": {
+      "settings": {"tagging": "on", "hyperref": "active"},
+      "source_bytes": 4037548,
+      "source_sha256": "b860efdff3ee3f8a964a5a315fb5ce64e84755ca7b185eb8241acb68a8b4e15a",
+      "runs": [
+        {"round": 1, "seconds": 247.720, "returncode": 0, "pdf_bytes": 12712216},
+        {"round": 2, "seconds": 247.757, "returncode": 0, "pdf_bytes": 12712208},
+        {"round": 3, "seconds": 247.525, "returncode": 0, "pdf_bytes": 12712209}
+      ],
+      "median_seconds": 247.720,
+      "range_seconds": [247.525, 247.757],
+      "pdf": {"pages": 1214, "page_size_points": [595.276, 841.89], "tagged": true, "named_destinations": 34562, "link_annotations": {"GoTo": 17334, "URI": 12072, "total": 29406}}
+    },
+    "tagged_hyperref_draft": {
+      "settings": {"tagging": "on", "hyperref": "draft"},
+      "source_bytes": 4037554,
+      "source_sha256": "5bd5501b9e11cb3b63552c1f07c77c6cb3651f94e4c0c4a83fc5109f3a1b9807",
+      "runs": [
+        {"round": 1, "seconds": 106.917, "returncode": 0, "pdf_bytes": 7464482},
+        {"round": 2, "seconds": 107.447, "returncode": 0, "pdf_bytes": 7464481},
+        {"round": 3, "seconds": 106.904, "returncode": 0, "pdf_bytes": 7464481}
+      ],
+      "median_seconds": 106.917,
+      "range_seconds": [106.904, 107.447],
+      "pdf": {"pages": 1214, "page_size_points": [595.276, 841.89], "tagged": true, "named_destinations": 0, "link_annotations": {"GoTo": 0, "URI": 0, "total": 0}}
+    },
+    "untagged_hyperref_active": {
+      "settings": {"tagging": "off", "hyperref": "active"},
+      "source_bytes": 4037549,
+      "source_sha256": "9c56cefa1bf7b62925b48d7bd281618f928610de17b6d10f3df01255eecdf813",
+      "runs": [
+        {"round": 1, "seconds": 89.793, "returncode": 0, "pdf_bytes": 7258906},
+        {"round": 2, "seconds": 89.315, "returncode": 0, "pdf_bytes": 7258906},
+        {"round": 3, "seconds": 89.619, "returncode": 0, "pdf_bytes": 7258906}
+      ],
+      "median_seconds": 89.619,
+      "range_seconds": [89.315, 89.793],
+      "pdf": {"pages": 1214, "page_size_points": [595.276, 841.89], "tagged": false, "named_destinations": 34562, "link_annotations": {"GoTo": 17334, "URI": 12072, "total": 29406}}
+    }
+  },
+  "pdf_equivalence": {
+    "inspected_pdf_count": 12,
+    "all_pdfs_have_1214_a4_pages": true,
+    "all_twelve_poppler_text_sha256": "3492ddf4582b60f73806fea53ab0bb206de4afac6f8073cd5356b3fec445c2b8",
+    "extracted_text_identical_across_all_runs": true,
+    "tagging_and_link_counts_match_variant_settings": true
+  },
+  "factorial_contrasts": {
+    "tagging_increment_when_hyperref_is_draft_seconds_by_round": [85.225, 86.137, 85.602],
+    "tagging_increment_median_seconds": 85.602,
+    "tagging_increment_range_seconds": [85.225, 86.137],
+    "active_hyperref_increment_when_tagging_is_off_seconds_by_round": [68.101, 68.005, 68.317],
+    "active_hyperref_increment_median_seconds": 68.101,
+    "active_hyperref_increment_range_seconds": [68.005, 68.317],
+    "interaction_residual_formula": "both_on - tagged_draft - untagged_active + both_off, computed within each round",
+    "interaction_residual_seconds_by_round": [72.702, 72.305, 72.304],
+    "interaction_residual_median_seconds": 72.305,
+    "interaction_residual_range_seconds": [72.304, 72.702]
+  },
+  "interpretation": {
+    "conclusion": "The repeated factorial shows a stable non-additive cost when tagging and active hyperlinks are enabled together on this fixture and host. It does not identify the specific LuaTeX, tagpdf or hyperref operation responsible, nor extrapolate to a converged export.",
+    "decision": "No production change is justified by this profile."
+  },
+  "limits": [
+    "Three passes per cell on one host and one synthetic fixture do not establish an environment-wide performance envelope.",
+    "Each PDF is a single-pass diagnostic with unresolved pagination references, not a final converged export.",
+    "The draft variants intentionally omit destinations and link annotations; the untagged active variant lacks PDF accessibility tags.",
+    "These measurements do not validate the complete Gramps Desktop GUI export."
+  ]
+}
