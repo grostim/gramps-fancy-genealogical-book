@@ -966,14 +966,14 @@ def _render_profile(
             output.extend(f"\\item {item}\n" for item in event_items)
             output.append("\\end{itemize}\n")
 
-    notes: list[tuple[int, Note]] = []
+    notes: list[tuple[int, str, Note]] = []
     for index, handle in enumerate(profile.note_handles):
         note = model.notes.get(handle)
         if note is not None and note.is_publishable:
-            notes.append((index, note))
+            notes.append((index, handle, note))
     if notes:
         output.append("\\paragraph{" + escape_latex_text(label(model, "notes")) + "}\n")
-        for index, note in notes:
+        for index, handle, note in notes:
             target_id = (
                 profile.note_target_ids[index]
                 if index < len(profile.note_target_ids)
@@ -1207,14 +1207,14 @@ def _render_family_notice(
                 )
             )
 
-    notes = []
+    notes: list[tuple[int, str, Note]] = []
     for index, handle in enumerate(notice.note_handles):
         note = model.notes.get(handle)
         if note is not None and note.is_publishable:
-            notes.append((index, note))
+            notes.append((index, handle, note))
     if notes:
         output.append("\\paragraph{" + escape_latex_text(label(model, "notes")) + "}\n")
-        for index, note in notes:
+        for index, handle, note in notes:
             target_id = (
                 notice.note_target_ids[index]
                 if index < len(notice.note_target_ids)
