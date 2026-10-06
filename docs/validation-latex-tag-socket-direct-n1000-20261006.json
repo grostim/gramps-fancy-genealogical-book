@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_inspector": "pypdf 6.10.0",
+    "text_extractor": "pdftotext (Poppler 24.04.0)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citation_entries": 3003,
+    "synthetic_portraits": 200,
+    "synthetic": true,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "source": "Current render_latex output for the synthetic branching N=1000 benchmark",
+    "candidate": "In a temporary source, replace tagpdf UseTaggingSocket calls for URI and GoTo before/after hooks with fixed-arity tag_socket_use:nn dispatch under ExplSyntaxOn. The Lua linksplit callback and all other tagpdf logic remain active.",
+    "compilation": "One direct LuaHBTeX pass in a fresh directory; production convergence helper was not used.",
+    "production_sources_changed": false,
+    "temporary_artifacts": "../tmp/lualatex-tag-socket-direct-fixed-n1000-20261006"
+  },
+  "source": {
+    "reference_bytes": 4037548,
+    "reference_sha256": "b860efdff3ee3f8a964a5a315fb5ce64e84755ca7b185eb8241acb68a8b4e15a",
+    "candidate_bytes": 4038095,
+    "candidate_sha256": "014d8fd3fa3def6d418274dd8bb2a44b01299fbad216d33d9131fd1cbf616e7b",
+    "candidate_size_delta_bytes": 547
+  },
+  "timing": {
+    "reference_tagged_active_runs_seconds": [247.720, 247.757, 247.525],
+    "reference_median_seconds": 247.720,
+    "reference_range_seconds": [247.525, 247.757],
+    "candidate_runs_seconds": [247.469],
+    "candidate_delta_vs_reference_median_seconds": -0.251,
+    "candidate_delta_percent": -0.10,
+    "decision": "The single candidate run is 0.056 seconds below the reference range; the 0.251-second difference from the median does not establish a measurable gain."
+  },
+  "pdf_audit": {
+    "pages": 1214,
+    "page_size_points": [595.276, 841.89],
+    "tagged": true,
+    "named_destinations": 34562,
+    "link_annotations": {"GoTo": 17334, "URI": 12072, "total": 29406},
+    "distinct_link_structparent_values": 29406,
+    "link_roles": 26343,
+    "objr_children": 29406,
+    "annotation_references_match_objr": true,
+    "pdf_bytes_reference": 12712216,
+    "pdf_bytes_candidate": 12712205,
+    "poppler_extracted_text_sha256_reference_and_candidate": "3492ddf4582b60f73806fea53ab0bb206de4afac6f8073cd5356b3fec445c2b8",
+    "extracted_text_identical": true
+  },
+  "decision": "Rejected for lack of measurable improvement. The candidate preserves the audited link and accessibility structure in this PDF, but uses a lower-level tagpdf API and adds 547 source bytes. No production renderer change is retained.",
+  "limits": [
+    "Only one N=1000 candidate run was made; this does not provide a candidate timing distribution.",
+    "The measurements are direct one-pass diagnostics with unresolved pagination references, not final converged exports.",
+    "Validation covers LuaHBTeX 1.24.0 from TeX Live 2026 on one macOS host."
+  ]
+}
