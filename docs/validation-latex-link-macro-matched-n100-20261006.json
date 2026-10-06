@@ -1,0 +1,284 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "timer": "Lua os.clock"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic": true,
+    "media": 0,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "source_sha256": "d25a99a939497beb886d15efbb2f33bc90a36ae564292722e901374a1ce5f500",
+    "source_bytes": 398721,
+    "instrumented_source_sha256": "b1ec383de2d33424eb4fa1c4e47a06abe0491b060c60a56e566aa46421815580",
+    "instrumented_source_bytes": 399731,
+    "instrumented_macros": [
+      "\\hyperlink",
+      "\\href"
+    ],
+    "compile": "One direct LuaHBTeX pass per run; the production convergence helper was not used.",
+    "auxiliary_state": "All six run directories started with only book.tex; .aux, .toc, and .out were absent before compilation.",
+    "order": [
+      "reference",
+      "instrumented",
+      "instrumented",
+      "reference",
+      "reference",
+      "instrumented"
+    ],
+    "production_sources_changed": false,
+    "marker_overhead_isolated": false
+  },
+  "runs": [
+    {
+      "reference": {
+        "variant": "reference",
+        "returncode": 0,
+        "timing_seconds": {
+          "real": 19.99,
+          "user": 19.52,
+          "sys": 0.4
+        },
+        "pdf": {
+          "sha256": "9a0f45c1e8a9b1c824e6aa4a7cdff9ac740b0b6421cd265e9f43332ba982ca02",
+          "bytes": 986525,
+          "pages": 105,
+          "page_size": "A4",
+          "tagged": true,
+          "language": "en-US",
+          "destinations": 3484,
+          "link_annotations": {
+            "/GoTo": 1751,
+            "/URI": 1220
+          },
+          "links_with_struct_parent": 2971,
+          "link_roles": 2660,
+          "objr_nodes": 2971,
+          "figure_roles": 0,
+          "text_sha256": "bb231752a8e65b0baf3c4ede0dece795f38ec27b6e82f2d1f46ca9a566a3e3cf"
+        }
+      },
+      "instrumented": {
+        "variant": "instrumented",
+        "returncode": 0,
+        "timing_seconds": {
+          "real": 20.62,
+          "user": 20.15,
+          "sys": 0.45
+        },
+        "pdf": {
+          "sha256": "1a9519d68a47a4055bbb8a23f1210290bba34922971d36023f4213d5bcae8490",
+          "bytes": 986514,
+          "pages": 105,
+          "page_size": "A4",
+          "tagged": true,
+          "language": "en-US",
+          "destinations": 3484,
+          "link_annotations": {
+            "/GoTo": 1751,
+            "/URI": 1220
+          },
+          "links_with_struct_parent": 2971,
+          "link_roles": 2660,
+          "objr_nodes": 2971,
+          "figure_roles": 0,
+          "text_sha256": "bb231752a8e65b0baf3c4ede0dece795f38ec27b6e82f2d1f46ca9a566a3e3cf"
+        },
+        "macro_timings_cpu_seconds": {
+          "hyperlink": {
+            "calls": 1751,
+            "total": 5.564141
+          },
+          "href": {
+            "calls": 909,
+            "total": 2.710028
+          }
+        }
+      },
+      "pdf_semantics_match": true,
+      "wall_delta_instrumented_minus_reference": 0.63,
+      "pdf_bytes_identical": false
+    },
+    {
+      "reference": {
+        "variant": "reference",
+        "returncode": 0,
+        "timing_seconds": {
+          "real": 20.69,
+          "user": 20.23,
+          "sys": 0.44
+        },
+        "pdf": {
+          "sha256": "0827f042a51835fd3f3f3093695cf7c0de8ce1031c3c18dede5f35b4ec443605",
+          "bytes": 986516,
+          "pages": 105,
+          "page_size": "A4",
+          "tagged": true,
+          "language": "en-US",
+          "destinations": 3484,
+          "link_annotations": {
+            "/GoTo": 1751,
+            "/URI": 1220
+          },
+          "links_with_struct_parent": 2971,
+          "link_roles": 2660,
+          "objr_nodes": 2971,
+          "figure_roles": 0,
+          "text_sha256": "bb231752a8e65b0baf3c4ede0dece795f38ec27b6e82f2d1f46ca9a566a3e3cf"
+        }
+      },
+      "instrumented": {
+        "variant": "instrumented",
+        "returncode": 0,
+        "timing_seconds": {
+          "real": 20.61,
+          "user": 20.19,
+          "sys": 0.41
+        },
+        "pdf": {
+          "sha256": "9907be91a653cfea1bcf62bcca0e5f529ed25b8210e99d7cd2f8dcb79198f504",
+          "bytes": 986517,
+          "pages": 105,
+          "page_size": "A4",
+          "tagged": true,
+          "language": "en-US",
+          "destinations": 3484,
+          "link_annotations": {
+            "/GoTo": 1751,
+            "/URI": 1220
+          },
+          "links_with_struct_parent": 2971,
+          "link_roles": 2660,
+          "objr_nodes": 2971,
+          "figure_roles": 0,
+          "text_sha256": "bb231752a8e65b0baf3c4ede0dece795f38ec27b6e82f2d1f46ca9a566a3e3cf"
+        },
+        "macro_timings_cpu_seconds": {
+          "hyperlink": {
+            "calls": 1751,
+            "total": 5.527819
+          },
+          "href": {
+            "calls": 909,
+            "total": 2.689514
+          }
+        }
+      },
+      "pdf_semantics_match": true,
+      "wall_delta_instrumented_minus_reference": -0.08,
+      "pdf_bytes_identical": false
+    },
+    {
+      "reference": {
+        "variant": "reference",
+        "returncode": 0,
+        "timing_seconds": {
+          "real": 20.85,
+          "user": 20.42,
+          "sys": 0.42
+        },
+        "pdf": {
+          "sha256": "e1e1ac95416c89700f25356e6100e821561bba89035ac8834843d7990dffc375",
+          "bytes": 986524,
+          "pages": 105,
+          "page_size": "A4",
+          "tagged": true,
+          "language": "en-US",
+          "destinations": 3484,
+          "link_annotations": {
+            "/GoTo": 1751,
+            "/URI": 1220
+          },
+          "links_with_struct_parent": 2971,
+          "link_roles": 2660,
+          "objr_nodes": 2971,
+          "figure_roles": 0,
+          "text_sha256": "bb231752a8e65b0baf3c4ede0dece795f38ec27b6e82f2d1f46ca9a566a3e3cf"
+        }
+      },
+      "instrumented": {
+        "variant": "instrumented",
+        "returncode": 0,
+        "timing_seconds": {
+          "real": 20.84,
+          "user": 20.37,
+          "sys": 0.43
+        },
+        "pdf": {
+          "sha256": "66fc1eaf4a197b4c82f7dbff09a4869fe208e38dc0eeebb41ae419cd30522700",
+          "bytes": 986524,
+          "pages": 105,
+          "page_size": "A4",
+          "tagged": true,
+          "language": "en-US",
+          "destinations": 3484,
+          "link_annotations": {
+            "/GoTo": 1751,
+            "/URI": 1220
+          },
+          "links_with_struct_parent": 2971,
+          "link_roles": 2660,
+          "objr_nodes": 2971,
+          "figure_roles": 0,
+          "text_sha256": "bb231752a8e65b0baf3c4ede0dece795f38ec27b6e82f2d1f46ca9a566a3e3cf"
+        },
+        "macro_timings_cpu_seconds": {
+          "hyperlink": {
+            "calls": 1751,
+            "total": 5.596638
+          },
+          "href": {
+            "calls": 909,
+            "total": 2.690258
+          }
+        }
+      },
+      "pdf_semantics_match": true,
+      "wall_delta_instrumented_minus_reference": -0.01,
+      "pdf_bytes_identical": false
+    }
+  ],
+  "summary": {
+    "reference_wall_median_seconds": 20.69,
+    "reference_wall_range_seconds": [
+      19.99,
+      20.85
+    ],
+    "instrumented_wall_median_seconds": 20.62,
+    "instrumented_wall_range_seconds": [
+      20.61,
+      20.84
+    ],
+    "median_wall_difference_seconds": -0.07,
+    "paired_wall_differences_seconds": [
+      0.63,
+      -0.08,
+      -0.01
+    ],
+    "paired_difference_range_seconds": [
+      -0.08,
+      0.63
+    ],
+    "hyperlink_macro_cpu_median_seconds": 5.564141,
+    "href_macro_cpu_median_seconds": 2.690258,
+    "all_pdf_semantics_match": true,
+    "interpretation": "The median wall-time difference is smaller than the reference run-to-run range, and paired differences have both signs. This does not establish measurable instrumentation overhead or a compile-time speedup. All matched one-pass PDFs have identical inspected semantics and extracted-text hashes.",
+    "all_pdf_bytes_identical": false
+  },
+  "limits": [
+    "Three pairs on one machine are diagnostic, not a performance qualification.",
+    "The PDFs are first-pass outputs with non-converged page references.",
+    "End-to-end timing differences do not isolate marker overhead from normal run variability.",
+    "The profile does not separate hyperref work from tagpdf work.",
+    "This N=100 result does not qualify instrumentation overhead at N=1000."
+  ]
+}
