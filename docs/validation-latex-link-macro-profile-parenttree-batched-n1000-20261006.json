@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-06",
+  "title": "Hyperref macro profile after ParentTree batching, N=1,000",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "source_tex_bytes": 4313301,
+    "source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740"
+  },
+  "method": {
+    "compilation": "one direct tagged pass using the populated .aux and .toc seed; no .out seed",
+    "auxiliary_seed": {
+      "aux_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "instrumentation": "Lua os.clock around saved hyperref macros, on every call",
+    "instrumented_tex_sha256": "985e1a4ebc1013daaf76d0183b353222eace01ea94c3fc23948d56f73773ed4d",
+    "production_sources_changed": false
+  },
+  "result": {
+    "returncode": 0,
+    "wall_seconds": 212.56,
+    "hyperlink_calls": 17601,
+    "hyperlink_cpu_seconds": 49.004908999999,
+    "href_calls": 9009,
+    "href_cpu_seconds": 26.051868000001,
+    "pdf_bytes": 13461243,
+    "pdf_sha256": "97060e4ba08b33f59e278727ee32af493900f40e3824148701c8227d015e5a7e",
+    "pdf_audit": {
+      "pages": 1140,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "named_destinations": 38025,
+      "roles": {
+        "/Document": 1,
+        "/text-unit": 22473,
+        "/text": 23144,
+        "/Sect": 6292,
+        "/section": 8,
+        "/TOC": 1,
+        "/TOCI": 7,
+        "/Reference": 7,
+        "/Link": 29887,
+        "/itemize": 783,
+        "/LI": 9555,
+        "/Lbl": 9555,
+        "/LBody": 9555,
+        "/subsection": 3014,
+        "/paragraph": 3270,
+        "/footnotemark": 3270,
+        "/footnote": 3270,
+        "/footnotelabel": 3270,
+        "/quote": 267,
+        "/Figure": 400
+      },
+      "figures": 400,
+      "figures_without_alt": 0,
+      "link_annotations": 32950,
+      "link_structparent_count": 32950,
+      "unique_link_structparent_keys": true,
+      "objr_count": 32950,
+      "objr_link_ref_count": 32950,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": 34090,
+      "links_with_parenttree_objr_owner_match": 32950,
+      "links_missing_or_wrong_parenttree_objr_match": 0,
+      "nonlink_annotations": 0,
+      "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+      "normalized_text_chars": 2464400
+    },
+    "matches_converged_baseline": {
+      "pages": true,
+      "named_destinations": true,
+      "roles": true,
+      "figures": true,
+      "figures_without_alt": true,
+      "link_annotations": true,
+      "link_structparent_count": true,
+      "objr_count": true,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": true,
+      "links_with_parenttree_objr_owner_match": true,
+      "normalized_text_sha256": true
+    }
+  },
+  "limits": [
+    "One instrumented direct pass; timings are targeting data, not a matched speed comparison.",
+    "Each interval encloses the full hyperref macro call and work performed beneath it; the intervals are inclusive and should not be added as independent costs.",
+    "Timer overhead was not measured separately.",
+    "The input .aux/.toc state is seeded and the direct pass is not a converged production build."
+  ],
+  "decision": "The instrumented PDF matches the converged baseline in pages, destinations, roles, figure alt text, annotations, OBJR ownership and normalized text. No production change follows from this profile. The next diagnostic measures tagpdf structure and marked-content operations under the same batched source."
+}

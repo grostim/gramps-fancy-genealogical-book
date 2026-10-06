@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-06",
+  "title": "RSS and temporary workspace follow-up for converged ParentTree-batched PDF",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200,
+    "portrait_size": "96x72"
+  },
+  "source": {
+    "generated_tex_path": "tmp/pdfs/production-parenttree-batched-n1000-20261006/book.tex",
+    "generated_tex_bytes": 4313301,
+    "generated_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740",
+    "media_asset_count": 200
+  },
+  "measurement": {
+    "scope": "Complete converged LuaLaTeX compilation of the exact generated source with deterministic media; excludes Gramps UI and model-generation allocations.",
+    "status": "converged",
+    "passes_to_convergence": 3,
+    "pass_seconds": [26.509, 234.010, 240.461],
+    "compile_seconds": 500.995,
+    "compiler_child_ru_maxrss_bytes": 1104003072,
+    "compiler_child_ru_maxrss_mib": 1052.86,
+    "compiler_process_peak_rss_bytes_sampled_1s": 1100562432,
+    "compiler_process_peak_rss_mib_sampled_1s": 1049.58,
+    "temporary_workspace_peak_logical_bytes_sampled_1s": 22614240,
+    "temporary_workspace_peak_logical_mib_sampled_1s": 21.57,
+    "pdf_path": "tmp/l8-3-rss-parenttree-batched-n1000-20261006/book.pdf",
+    "pdf_bytes": 13461240,
+    "pdf_sha256": "ee50970a9745faf087c3b8e58a511a385a5af08f9d32b3802ad60fa1d95a788d",
+    "matches_previous_pdf_binary": false,
+    "binary_metadata_differences_observed": [
+      "CreationDate and ModDate reflect the new compile time.",
+      "The PDF trailer ID was regenerated."
+    ],
+    "byte_level_difference_localization_performed": false,
+    "layout_warnings": false
+  },
+  "audit": {
+    "matches_previous_converged_pdf_for_all_audited_metrics": true,
+    "pages": 1140,
+    "page_size_points": [595.276, 841.89],
+    "pdf_version": "%PDF-2.0",
+    "tagged": true,
+    "named_destinations": 38025,
+    "roles_match": true,
+    "figures": 400,
+    "figures_without_alt": 0,
+    "link_annotations": 32950,
+    "links_with_structparent": 32950,
+    "unique_link_structparent_keys": true,
+    "objr_count": 32950,
+    "objr_refs_match_links": true,
+    "parenttree_keys": 34090,
+    "links_with_parenttree_objr_owner_match": 32950,
+    "links_missing_or_wrong_parenttree_objr_match": 0,
+    "nonlink_annotations": 0,
+    "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+    "normalized_text_chars": 2464400
+  },
+  "comparison": {
+    "previous_converged_compile_seconds": 449.174,
+    "previous_converged_pdf_bytes": 13461234,
+    "previous_converged_pdf_sha256": "05e1d79f84d62db312dbb5a70ab7984f6683d41970f92a47490a3bc8cf62c902",
+    "elapsed_time_interpretation": "Two complete builds of the same source differ by 51.821 seconds; this single follow-up does not establish a performance regression or gain.",
+    "memory_target_mib": 512,
+    "memory_target_met": false,
+    "compile_time_target_seconds": 180,
+    "compile_time_target_met": false
+  },
+  "measurement_notes": [
+    "macOS ru_maxrss reports bytes and records the maximum resident set size among the waited child processes; LuaLaTeX is the dominant child.",
+    "The one-second ps and logical temporary-folder samplers can miss shorter peaks.",
+    "This profile measures the LuaLaTeX compilation and its temporary folder, not the whole Gramps export process."
+  ]
+}

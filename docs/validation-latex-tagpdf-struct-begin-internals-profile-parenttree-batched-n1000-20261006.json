@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-06",
+  "title": "tag_struct_begin internal operation profile after ParentTree batching, N=1,000",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "source_tex_bytes": 4313301,
+    "source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740"
+  },
+  "method": {
+    "compilation": "one direct tagged pass with populated .aux and .toc; no .out seed",
+    "auxiliary_seed": {
+      "aux_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "instrumentation": "Lua os.clock wrappers around tagpdf outer operations and subroutines in tag_struct_begin:n, with the same full hyperlink timers; ParentTree batching retained.",
+    "instrumented_tex_bytes": 4320888,
+    "instrumented_tex_sha256": "66ba228ec2f7af901597262b05f716768ce51d18f79130730ee6052760b09804",
+    "production_sources_changed": false
+  },
+  "result": {
+    "returncode": 0,
+    "wall_seconds": 223.68,
+    "user_cpu_seconds": 220.66,
+    "system_cpu_seconds": 2.19,
+    "hyperlink": {
+      "calls": 17601,
+      "cpu_seconds": 51.112076
+    },
+    "href": {
+      "calls": 9009,
+      "cpu_seconds": 27.133885999999
+    },
+    "tagpdf_operations": {
+      "struct_begin": {
+        "calls": 128031,
+        "cpu_seconds": 57.968404000002
+      },
+      "struct_end": {
+        "calls": 128029,
+        "cpu_seconds": 4.187901000003
+      },
+      "mc_end_push": {
+        "calls": 45645,
+        "cpu_seconds": 1.5114279999997
+      },
+      "mc_begin": {
+        "calls": 124747,
+        "cpu_seconds": 12.435042
+      },
+      "mc_end": {
+        "calls": 124747,
+        "cpu_seconds": 1.8220480000011
+      },
+      "mc_begin_pop": {
+        "calls": 45645,
+        "cpu_seconds": 5.2028209999988
+      },
+      "insert_annot_shipout": {
+        "calls": 32944,
+        "cpu_seconds": 1.8552330000014
+      }
+    },
+    "structure_begin_suboperations": {
+      "property_table_new": {
+        "calls": 128031,
+        "cpu_seconds": 1.5911260000023
+      },
+      "sequence_table_new": {
+        "calls": 128031,
+        "cpu_seconds": 1.4352009999984
+      },
+      "pdf_object_new": {
+        "calls": 128031,
+        "cpu_seconds": 0.65695300000101
+      },
+      "structure_key_parser": {
+        "calls": 128031,
+        "cpu_seconds": 15.882416999995
+      },
+      "tag_and_namespace_assignment": {
+        "calls": 128031,
+        "cpu_seconds": 14.486276999999
+      },
+      "has_tag_check": {
+        "calls": 128031,
+        "cpu_seconds": 1.0016849999965
+      },
+      "role_resolution": {
+        "calls": 128031,
+        "cpu_seconds": 2.7460209999967
+      },
+      "attribute_assignment": {
+        "calls": 256060,
+        "cpu_seconds": 1.7131289999983
+      },
+      "parent_child_check": {
+        "calls": 0,
+        "cpu_seconds": 0,
+        "note": "Deferred by debug/parent-child-check=atend; not executed at each structure begin."
+      },
+      "add_child_structure": {
+        "calls": 124759,
+        "cpu_seconds": 3.2142289999949
+      },
+      "sequence_append_probe": {
+        "calls": 0,
+        "cpu_seconds": 0,
+        "note": "The probe targeted :cn, while the child insertion implementation uses the :ce variant; the add_child_structure timer includes the actual append path."
+      }
+    },
+    "pdf_bytes": 13461246,
+    "pdf_sha256": "81bf1c322ddb0e44ea75269c26f7076b99ad40f919e5b50368b6b95cbab6b007",
+    "pdf_audit": {
+      "pages": 1140,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "named_destinations": 38025,
+      "link_annotations": 32950,
+      "link_structparent_count": 32950,
+      "objr_count": 32950,
+      "parenttree_keys": 34090,
+      "links_with_parenttree_objr_owner_match": 32950,
+      "figures": 400,
+      "figures_without_alt": 0,
+      "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+      "matches_converged_baseline": true
+    }
+  },
+  "limits": [
+    "One heavily instrumented direct pass; the 223.68-second wall time is not a production timing or a matched speed comparison.",
+    "Timers are nested and inclusive; do not sum suboperations as independent costs.",
+    "The deferred parent-child validation is outside the per-structure timer.",
+    "The separate sequence append probe did not hook the :ce variant; its time is included in add_child_structure."
+  ],
+  "decision": "Structure-key parsing and tag/namespace assignment are each about 15 seconds inside the structure-begin path. No production optimization is adopted from this single profile. Next isolate repeated PDF-name conversion and property insertion within tag assignment; test any candidate against the same PDF audit."
+}

@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-06",
+  "title": "Footnote macro profile with batched ParentTree enabled",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "page_margins_mm": 15
+  },
+  "method": {
+    "compilation": "one direct tagged LuaHBTeX pass with populated .aux/.toc and no .out",
+    "instrumentation": "Lua os.clock around every \\footnote call, preserving the original xparse optional argument",
+    "input_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740",
+    "instrumented_tex_sha256": "19c46475b3643eb4ecb54869816e18b4e0f35435572ff8b5354f2558a7412d29",
+    "aux_seed_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+    "toc_seed_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59",
+    "parenttree_batching": "enabled; 128-entry batches"
+  },
+  "result": {
+    "returncode": 0,
+    "wall_seconds": 215.791,
+    "footnote_calls": 3270,
+    "footnote_cumulative_cpu_seconds": 33.114603,
+    "fraction_of_wall_percent": 15.35,
+    "pdf_bytes": 13461246,
+    "pdf_sha256": "ce6ff774446c5ddb4855feaee0e3fc494cb2c3c5837be4eb19805e21aa9e7d2d"
+  },
+  "limits": [
+    "One profile pass; macro intervals include nested link and tagpdf work and are not additive with other macro profiles.",
+    "Lua os.clock timing is not overhead-corrected.",
+    "This is not a paired comparison to the previous 45.916-second profile; ParentTree batching and seed state differ.",
+    "A direct pass is not the converged production export."
+  ],
+  "decision": "Footnote processing remains measurable at 33.115 CPU seconds, about 15.4% of the direct pass. Profile the remaining link macros and avoid changing production footnote rendering until a candidate is measured and semantically audited."
+}

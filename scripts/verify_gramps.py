@@ -206,20 +206,27 @@ def _pdf_citation_number(text: str, detail_marker: str) -> int:
 
 
 def _pdf_citation_entry(text: str, detail_marker: str) -> str:
-    marker_position = text.index(detail_marker)
     headings = list(
         re.finditer(r"(?m)^\s*— \[(\d+)\] ", text)
     )
-    preceding = [heading for heading in headings if heading.start() < marker_position]
-    if not preceding:
-        raise AssertionError(f"No citation heading precedes {detail_marker} in the PDF.")
-    current = preceding[-1]
-    following = next(
-        (heading for heading in headings if heading.start() > marker_position),
-        None,
-    )
-    end = following.start() if following is not None else len(text)
-    return text[current.start() : end]
+    marker_positions = [
+        marker.start()
+        for marker in re.finditer(re.escape(detail_marker), text)
+    ]
+    for marker_position in reversed(marker_positions):
+        preceding = [
+            heading for heading in headings if heading.start() < marker_position
+        ]
+        if not preceding:
+            continue
+        current = preceding[-1]
+        following = next(
+            (heading for heading in headings if heading.start() > marker_position),
+            None,
+        )
+        end = following.start() if following is not None else len(text)
+        return text[current.start() : end]
+    raise AssertionError(f"No citation heading precedes {detail_marker} in the PDF.")
 
 
 def _insert_event_attribute(root: ET.Element, event: ET.Element, name: str, value: str) -> None:
@@ -2177,6 +2184,7 @@ def verify(
             output_format: str = "json_snapshot",
             book_language: str | None = None,
             overwrite=False,
+            timeout: int = 90,
         ) -> str:
             selected_family_id = _format_native_id(family, native_id_width)
             options = (
@@ -2203,7 +2211,7 @@ def verify(
                 cwd=work,
                 text=True,
                 capture_output=True,
-                timeout=90,
+                timeout=timeout,
             )
             log = result.stdout + result.stderr
             # Gramps can return 0 even when a report failed. Verify the output and logs.
@@ -3654,17 +3662,28 @@ def verify(
                     f"Refusing to validate a pre-existing PDF as fresh output: {destination}"
                 )
             destination.parent.mkdir(parents=True, exist_ok=True)
-            log = report("F0001", destination, output_format="pdf", book_language="fr")
+            # LuaLaTeX has its own 180-second production ceiling. Leave room for
+            # Gramps startup and post-render checks in slower CI containers.
+            log = report(
+                "F0001",
+                destination,
+                output_format="pdf",
+                book_language="fr",
+                timeout=240,
+            )
             if not destination.is_file() or not destination.read_bytes().startswith(b"%PDF-"):
                 raise AssertionError(log or "Gramps did not produce a valid PDF output file.")
-            rendered_pdf_text = _pdf_text(destination)
+            rendered_pdf_pages = _pdf_page_texts(destination)
+            rendered_pdf_text = "\n".join(rendered_pdf_pages)
             assert any(label in rendered_pdf_text for label in ("Adopted", "Adopté"))
             assert "(None)" not in rendered_pdf_text
             assert rendered_pdf_text.count(AC18_UNCITED_EVENT) == 1
-            assert rendered_pdf_text.count(AC18_SOURCE_TITLE) == 1
-            assert rendered_pdf_text.count(AC18_SOURCE_AUTHOR) == 1
+            # The new per-call footnote repeats the short author/title/page
+            # reference; the appendix contains the full publication details.
+            assert rendered_pdf_text.count(AC18_SOURCE_TITLE) == 2
+            assert rendered_pdf_text.count(AC18_SOURCE_AUTHOR) == 2
             assert rendered_pdf_text.count(AC18_SOURCE_PUBLICATION) == 1
-            assert rendered_pdf_text.count(AC18_CITATION_PAGE) == 1
+            assert rendered_pdf_text.count(AC18_CITATION_PAGE) == 2
             for marker in F0_EDITORIAL_ROLE_TEXT.values():
                 assert rendered_pdf_text.count(marker) == 1, marker
             assert all(
@@ -3885,8 +3904,10 @@ def verify(
                 marker not in ac18_pdf_entry
                 for marker in ("Dépôt municipal fictif", "R0001", "3 E 12")
             )
-            assert rendered_pdf_text.count(AC14_SHARED_PAGE) == 1
-            assert rendered_pdf_text.count(AC14_SECOND_PAGE) == 1
+            # The short citation page appears in each event footnote and once
+            # in the full appendix entry.
+            assert rendered_pdf_text.count(AC14_SHARED_PAGE) == 4
+            assert rendered_pdf_text.count(AC14_SECOND_PAGE) == 2
             shared_pdf_number = _pdf_citation_number(
                 rendered_pdf_text, AC14_SHARED_PAGE
             )
@@ -3894,19 +3915,46 @@ def verify(
                 rendered_pdf_text, AC14_SECOND_PAGE
             )
             assert shared_pdf_number != second_pdf_number
-            profile_sources_sections = list(re.finditer(
-                r"(?m)^Sources\s*\n((?:[ \t]*— \[\d+\].*\n)+)",
-                rendered_pdf_text,
-            ))
-            assert profile_sources_sections
-            profile_sources = profile_sources_sections[-1]
-            profile_source_numbers = {
-                int(number)
-                for number in re.findall(r"— \[(\d+)\]", profile_sources.group(1))
+            ac18_pdf_number = _pdf_citation_number(
+                rendered_pdf_text, AC18_CITATION_PAGE
+            )
+            profile_citation_footnotes = [
+                (int(number), int(page))
+                for number, page in re.findall(
+                    r"(?m)^\d+\.\s+.*?Citation\s+\[(\d+)\]\s*;\s*"
+                    r"Annexe documentaire\s*\(p\.\s*(\d+)\)",
+                    pdf_profiles,
+                )
+            ]
+            assert len(profile_citation_footnotes) == 5, profile_citation_footnotes
+            appendix_page_labels = []
+            for page_text in rendered_pdf_pages:
+                if AC14_SHARED_PAGE not in page_text:
+                    continue
+                appendix_heading = re.search(
+                    r"(?m)^Annexe documentaire\s+(\d+)\s*$", page_text
+                )
+                if appendix_heading is not None:
+                    appendix_page_labels.append(int(appendix_heading.group(1)))
+            assert len(appendix_page_labels) == 1, appendix_page_labels
+            appendix_page = appendix_page_labels[0]
+            assert all(
+                page == appendix_page for _, page in profile_citation_footnotes
+            ), profile_citation_footnotes
+            profile_citation_counts = {
+                number: sum(
+                    footnote_number == number
+                    for footnote_number, _ in profile_citation_footnotes
+                )
+                for number, _ in profile_citation_footnotes
             }
-            assert {shared_pdf_number, second_pdf_number} <= profile_source_numbers
-            shared_position = rendered_pdf_text.index(AC14_SHARED_PAGE)
-            second_position = rendered_pdf_text.index(AC14_SECOND_PAGE)
+            assert profile_citation_counts == {
+                shared_pdf_number: 3,
+                second_pdf_number: 1,
+                ac18_pdf_number: 1,
+            }, profile_citation_counts
+            shared_position = rendered_pdf_text.rindex(AC14_SHARED_PAGE)
+            second_position = rendered_pdf_text.rindex(AC14_SECOND_PAGE)
             assert shared_position < second_position
             shared_pdf_entry = rendered_pdf_text[shared_position:second_position]
             assert re.search(r"événement\s*:\s*Naissance", shared_pdf_entry)

@@ -22,3 +22,11 @@ The temporary profile, dependency, ZIP, and PDF were removed when the check ende
 The replacement exercised here reinstalls the same `0.9.0` version; it does not prove an upgrade between two versions. The historical `0.8.0` source at commit `a8c3797`, rebuilt for this check, fails to load under Gramps 6.0.8: its `.gpr.py` calls `get_addon_translator(__file__)`, but Gramps does not inject `__file__` into this registration context. It is therefore not a valid upgrade baseline for this matrix. There is currently no version published in GitHub Releases.
 
 This check used the CLI binary in the Desktop application bundle. It does not qualify the graphical add-on manager, an upgrade between versions, or Gramps Web. Manual steps are in [Build and install](../README.md#build-and-install).
+
+## Requalification of the current archive — October 6, 2026
+
+Two builds with `build_addon.py` produce the same `0.9.0` archive: SHA-256 `357ce674720f914a4788d99956680b42df5bc84991cee6b7589b85a8a362852c`, 88,346 bytes, and 29 members. It contains the PDF renderer and compiled `locale/fr/LC_MESSAGES/addon.mo`, with no Python cache files.
+
+The archive was extracted into a new temporary `GRAMPSHOME` profile and used with Gramps Desktop 6.0.8 (embedded Python 3.13.2); the integration runner uses CPython 3.13.7. The checkout `PYTHONPATH` is removed. Native verification passes for the model, HTML ZIP and JSON exports, error paths, and PDF generation from the installed archive. The tagged French PDF has 18 A4 pages (159,047 bytes). One interior page was reviewed at 100 dpi; no clipping was visible, and its margins look consistent with the configured 15 mm. The [raw record](validation-gramps-clean-install-20261006.json) contains environment details and scope limits.
+
+This is a CLI run in a clean profile, not an install through the graphical add-on manager. French was selected for the book renderer; this invocation does not exercise the translated report UI. Full visual review, screen-reader review, other Desktop versions, and Gramps Web remain unqualified. The CI workflow is now configured to repeat native PDF export with Gramps 6.0.7 and 6.0.8 using the pinned LuaLaTeX image; the first hosted run still needs to be observed before this path is qualified.

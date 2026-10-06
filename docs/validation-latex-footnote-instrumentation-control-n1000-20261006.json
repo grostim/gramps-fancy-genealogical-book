@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-06",
+  "source_revision": "2ed2f88",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72"
+  },
+  "method": {
+    "passes": 1,
+    "auxiliary_files": "fresh",
+    "tagging": "on",
+    "hyperref": "active",
+    "order": ["instrumented", "control"],
+    "timing": "Delta from book.tex modification to book.pdf creation time for both runs",
+    "matched_uninstrumented_source_bytes": 4311655,
+    "matched_uninstrumented_source_sha256": "6a4ce9a30ee51ebb2e4065312db9b732010466f971a99633160aff484545eb96"
+  },
+  "runs": {
+    "instrumented": {
+      "source_bytes": 4312258,
+      "source_sha256": "1d80ef1b83b40fc91a40b0c295e778b283fd9409f4643d29fe25de007f5f0055",
+      "elapsed_seconds": 350.508767,
+      "pdf_bytes": 13596831,
+      "pdf_sha256": "d6f038fb5f8fdb65df775b8f4dac64b4a7900df250f6c38941b7e25dd7bcbb6e"
+    },
+    "control": {
+      "source_bytes": 4311655,
+      "source_sha256": "6a4ce9a30ee51ebb2e4065312db9b732010466f971a99633160aff484545eb96",
+      "elapsed_seconds": 349.049244,
+      "subprocess_wall_seconds": 349.635575,
+      "pdf_bytes": 13596838,
+      "pdf_sha256": "f949e51e2489100c92c07c8a9292a44f74c080cd68051de70b651b99df40d4f1",
+      "child_max_rss_bytes": 1127153664
+    }
+  },
+  "paired_difference": {
+    "instrumented_minus_control_seconds": 1.459523,
+    "relative_percent": 0.418,
+    "footnote_macro_cumulative_cpu_seconds": 45.91648,
+    "footnote_calls": 3270
+  },
+  "comparison": {
+    "normalized_pdftotext_bytes": 2526977,
+    "normalized_pdftotext_sha256": "c3688de6552d404cbc2d380ff7596b0665a85979eb314239a6c654d91638407a",
+    "text_identical": true,
+    "pages": 1140,
+    "named_destinations": 38025,
+    "link_annotations": 32943,
+    "GoTo": 20871,
+    "URI": 12072,
+    "distinct_struct_parent_values": 32943,
+    "OBJR_nodes": 32943,
+    "OBJR_references_matching_annotations": 32943,
+    "roles_identical": true,
+    "note_roles": 3270,
+    "figure_roles": 400,
+    "figures_without_alt": 0
+  },
+  "decision": "This one pair does not establish a measurable instrumentation overhead or gain. The 1.460 s (0.42%) difference is too small to support an optimization claim without repeated pairs. Instrumentation preserves the normalized text and audited PDF structure in this run.",
+  "limits": [
+    "Only one pair was run; there are no repeated-pair estimates.",
+    "Direct one-pass PDFs have unresolved cross-reference pagination by design.",
+    "The timing uses file timestamp deltas; the control subprocess timer differs by 0.586 s from its matching file-timestamp interval."
+  ]
+}

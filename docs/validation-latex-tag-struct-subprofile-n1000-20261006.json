@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-06",
+  "source_revision": "2ed2f88",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72"
+  },
+  "method": {
+    "compilation": "One direct LuaLaTeX pass from fresh auxiliary files; tagging and hyperref active; references intentionally not converged.",
+    "base_source_bytes": 4311655,
+    "base_source_sha256": "6a4ce9a30ee51ebb2e4065312db9b732010466f971a99633160aff484545eb96",
+    "instrumented_source_bytes": 4313841,
+    "instrumented_source_sha256": "9a255eadd3303f8d0203b80211203d62c9c24b42d71590eec06b8b747f4ccf7a",
+    "instrumentation": {
+      "sample_interval_calls": 128,
+      "sampling": "CPU time around each 128th call; estimated total is sampled CPU seconds multiplied by 128.",
+      "functions": {
+        "tagpdf.__tag_struct_fill_kid_key:n": {
+          "calls": 128011,
+          "samples": 1000,
+          "sampled_cpu_seconds": 0.059768,
+          "scaled_cpu_seconds_estimate": 7.650304
+        },
+        "tagpdf.__tag_struct_get_dict_content:nN": {
+          "calls": 128011,
+          "samples": 1000,
+          "sampled_cpu_seconds": 0.04056,
+          "scaled_cpu_seconds_estimate": 5.19168
+        }
+      },
+      "classification": "Diagnostic instrumentation only; no renderer or tagpdf production code changed."
+    }
+  },
+  "compilation": {
+    "returncode": 0,
+    "wall_seconds": 280.79,
+    "user_cpu_seconds": 279.5,
+    "system_cpu_seconds": 1.03,
+    "max_rss_bytes": 1317011456,
+    "references_converged": false
+  },
+  "pdf": {
+    "path": "tmp/l8-3-tag-struct-subprofile-current-n1000/book.pdf",
+    "bytes": 13596838,
+    "sha256": "a7706d8732fb753ff604575a793bb6c7eba6aa81b457d9ec413bc32fa7014a0b",
+    "pages": 1140,
+    "page_size": "A4",
+    "version": "2.0",
+    "tagged": true,
+    "language": "en-US",
+    "named_destinations": 38025,
+    "link_annotations": {
+      "total": 32943,
+      "actions": {
+        "GoTo": 20871,
+        "URI": 12072
+      },
+      "unique_URI_targets": 3125,
+      "unique_GoTo_destinations": 12330,
+      "missing_GoTo_destinations": 0
+    },
+    "unique_struct_parent_values": 32943,
+    "OBJR_nodes": 32943,
+    "OBJR_references_matching_link_annotations": 32943,
+    "roles": {
+      "/Document": 1,
+      "/Figure": 400,
+      "/LBody": 9555,
+      "/LI": 9555,
+      "/Lbl": 9555,
+      "/Link": 29880,
+      "/Sect": 6292,
+      "/TOC": 1,
+      "/footnote": 3270,
+      "/footnotelabel": 3270,
+      "/footnotemark": 3270,
+      "/itemize": 783,
+      "/paragraph": 3270,
+      "/quote": 267,
+      "/section": 8,
+      "/subsection": 3014,
+      "/text": 23144,
+      "/text-unit": 22473
+    },
+    "figures_without_alt": 0
+  },
+  "comparison": {
+    "control_record": "validation-latex-footnote-instrumentation-control-n1000-20261006.json",
+    "control_pdf_bytes": 13596838,
+    "control_pdf_sha256": "f949e51e2489100c92c07c8a9292a44f74c080cd68051de70b651b99df40d4f1",
+    "normalized_pdftotext_bytes": 2526977,
+    "normalized_pdftotext_sha256": "c3688de6552d404cbc2d380ff7596b0665a85979eb314239a6c654d91638407a",
+    "normalized_text_identical": true,
+    "pdf_bytes_identical": false,
+    "structure_roles_identical": true,
+    "annotation_objr_mapping_valid_for_all_links": true,
+    "note_roles": 3270,
+    "figure_roles": 400,
+    "figures_without_alt": 0,
+    "URI_target_sets_identical": true,
+    "unique_URI_targets": 3125,
+    "GoTo_destination_sets_identical": true,
+    "unique_GoTo_destinations": 12330,
+    "missing_GoTo_destinations": 0
+  },
+  "decision": "The sample estimates 7.650 seconds in kid-key processing and 5.192 seconds in structure dictionary serialization across 128,011 calls each. This single diagnostic profile does not establish an optimization or a production change. The direct run is not a converged export.",
+  "limits": [
+    "Sampled aggregate times are estimates from every 128th call, not full deterministic timings or repeated-run medians.",
+    "The comparison PDF was compiled earlier from the identical uninstrumented source; the 280.79-second timing must not be compared with its earlier 349.05-second timing as a speedup claim.",
+    "Only normalized extracted text and audited tree/link semantics are compared; PDF bytes differ, as expected for diagnostic output.",
+    "This direct pass starts with empty auxiliary files, so cross references and the table of contents are not converged."
+  ]
+}

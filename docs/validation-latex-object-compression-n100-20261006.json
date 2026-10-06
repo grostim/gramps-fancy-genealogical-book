@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "compiler": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "synthetic_portraits": 20,
+    "portrait_size": "96x72",
+    "source_bytes": 438064,
+    "source_sha256": "282386870e4e721ed81fc08b6fc030408d7c87c1003e78914a596a9790b8b578"
+  },
+  "method": {
+    "direct_compilation": "one tagged LuaHBTeX pass from empty auxiliary state per run",
+    "object_compression": "engine default level 1 vs \\pdfvariable objcompresslevel=0",
+    "pair_order": [
+      [
+        "default",
+        "off"
+      ],
+      [
+        "off",
+        "default"
+      ],
+      [
+        "default",
+        "off"
+      ]
+    ],
+    "production_sources_changed": false
+  },
+  "runs": [
+    {
+      "pair": 1,
+      "variant": "default",
+      "wall_seconds": 21.367,
+      "pdf_bytes": 1413831,
+      "pdf_sha256": "ebf331cd234526c82f84e90ee395516c2215556ba9dd723076cc90d84e6dcf47",
+      "pages": 121,
+      "tagged": true,
+      "named_destinations": 3877,
+      "link_annotations": 3328,
+      "links_with_structparent": 3328,
+      "normalized_text_sha256": "fb2c494918beef5be6b0ab858f8c2ef517f5a99e8491d074158c3625cd24dcf6"
+    },
+    {
+      "pair": 1,
+      "variant": "off",
+      "wall_seconds": 21.248,
+      "pdf_bytes": 5701725,
+      "pdf_sha256": "95ada0c2a8369e4e7992ca1daa2f11cab794a204927715619e760c8b7fbc9fc4",
+      "pages": 121,
+      "tagged": true,
+      "named_destinations": 3877,
+      "link_annotations": 3328,
+      "links_with_structparent": 3328,
+      "normalized_text_sha256": "fb2c494918beef5be6b0ab858f8c2ef517f5a99e8491d074158c3625cd24dcf6"
+    },
+    {
+      "pair": 2,
+      "variant": "off",
+      "wall_seconds": 21.268,
+      "pdf_bytes": 5701725,
+      "pdf_sha256": "90c25adf0362094d04232b63768075cfd5a58cc0fab8d0ccdc271a12d1685e57",
+      "pages": 121,
+      "tagged": true,
+      "named_destinations": 3877,
+      "link_annotations": 3328,
+      "links_with_structparent": 3328,
+      "normalized_text_sha256": "fb2c494918beef5be6b0ab858f8c2ef517f5a99e8491d074158c3625cd24dcf6"
+    },
+    {
+      "pair": 2,
+      "variant": "default",
+      "wall_seconds": 21.481,
+      "pdf_bytes": 1413835,
+      "pdf_sha256": "39da61988a20f25b468f4fa3cd5852234415fbb3068f4822d1212c5be3edd364",
+      "pages": 121,
+      "tagged": true,
+      "named_destinations": 3877,
+      "link_annotations": 3328,
+      "links_with_structparent": 3328,
+      "normalized_text_sha256": "fb2c494918beef5be6b0ab858f8c2ef517f5a99e8491d074158c3625cd24dcf6"
+    },
+    {
+      "pair": 3,
+      "variant": "default",
+      "wall_seconds": 21.431,
+      "pdf_bytes": 1413830,
+      "pdf_sha256": "0508c0c64c0896654b19b48e8609b3ead4c5d55fe8972624d08e007f946244ad",
+      "pages": 121,
+      "tagged": true,
+      "named_destinations": 3877,
+      "link_annotations": 3328,
+      "links_with_structparent": 3328,
+      "normalized_text_sha256": "fb2c494918beef5be6b0ab858f8c2ef517f5a99e8491d074158c3625cd24dcf6"
+    },
+    {
+      "pair": 3,
+      "variant": "off",
+      "wall_seconds": 21.429,
+      "pdf_bytes": 5701724,
+      "pdf_sha256": "73b197986b3ec1359c7c10cfb8d8f8a2c3dd2ece809bf2f2829749314f76e7ae",
+      "pages": 121,
+      "tagged": true,
+      "named_destinations": 3877,
+      "link_annotations": 3328,
+      "links_with_structparent": 3328,
+      "normalized_text_sha256": "fb2c494918beef5be6b0ab858f8c2ef517f5a99e8491d074158c3625cd24dcf6"
+    }
+  ],
+  "summary": {
+    "default_median_seconds": 21.431,
+    "default_range_seconds": [
+      21.367,
+      21.481
+    ],
+    "objcompresslevel0_median_seconds": 21.268,
+    "objcompresslevel0_range_seconds": [
+      21.248,
+      21.429
+    ],
+    "paired_differences_level0_minus_default_seconds": [
+      -0.119,
+      -0.213,
+      -0.002
+    ],
+    "candidate_relative_to_default_median_percent": -0.76,
+    "median_pdf_bytes_default": 1413831,
+    "median_pdf_bytes_level0": 5701725,
+    "audited_fields_match": true
+  },
+  "limits": [
+    "The audit compared page count, tagging, named destination count, link annotation count, link /StructParent presence, and normalized extracted text; it did not compare every structure role or link-to-OBJR mapping."
+  ]
+}

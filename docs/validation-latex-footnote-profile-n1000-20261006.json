@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-06",
+  "source_revision": "2ed2f88",
+  "environment": {
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "platform": "macOS 27.0 arm64"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72"
+  },
+  "method": {
+    "compilation": "One direct LuaLaTeX pass with tags and links active, starting without auxiliary files.",
+    "instrumentation": "Temporary xparse wrapper around every footnote; os.clock CPU-time deltas were accumulated around the original macro.",
+    "instrumented_source_bytes": 4312258,
+    "instrumented_source_sha256": "1d80ef1b83b40fc91a40b0c295e778b283fd9409f4643d29fe25de007f5f0055",
+    "instrumentation_overhead": "One matched pair differed by 1.459523 seconds (0.418%); one pair is insufficient for a reliable estimate.",
+    "converged_build_comparison": false
+  },
+  "footnote_profile": {
+    "calls": 3270,
+    "cumulative_macro_cpu_seconds": 45.91648,
+    "mean_macro_cpu_seconds": 0.01404143,
+    "interpretation": "Intervals include footnote typesetting and work executed inside the original footnote macro. They do not isolate hyperref, tagpdf, page shipping, or marker overhead."
+  },
+  "pdf": {
+    "bytes": 13596831,
+    "sha256": "d6f038fb5f8fdb65df775b8f4dac64b4a7900df250f6c38941b7e25dd7bcbb6e",
+    "pages": 1140,
+    "version": "2.0",
+    "tagged": true,
+    "language": "en-US",
+    "named_destinations": 38025,
+    "link_annotations": {
+      "total": 32943,
+      "GoTo": 20871,
+      "URI": 12072
+    },
+    "unique_struct_parent_values": 32943,
+    "OBJR_nodes": 32943,
+    "OBJR_references_matching_link_annotations": 32943,
+    "structure_roles": {
+      "/Note": 3270,
+      "/Link": 29880,
+      "/Figure": 400
+    },
+    "figures_without_alt": 0
+  },
+  "comparison": {
+    "converged_record": "validation-latex-converged-current-source-n1000-20261006.json",
+    "converged_source_bytes": 4311655,
+    "converged_source_sha256": "6a4ce9a30ee51ebb2e4065312db9b732010466f971a99633160aff484545eb96",
+    "profile_source_bytes": 4311655,
+    "profile_source_sha256": "6a4ce9a30ee51ebb2e4065312db9b732010466f971a99633160aff484545eb96",
+    "matched_source": true,
+    "note": "The source hash recorded in the initial convergence metrics was measured before media derivative preparation; write_latex_pdf renders the compiler source again after preparation. The profile's uninstrumented source hash matches that post-preparation compiler source. The timing still does not isolate the notes' cost across all converged passes."
+  },
+  "limits": [
+    "One direct pass; auxiliary references are not converged.",
+    "The seven missing table-of-contents links relative to the converged PDF are expected for a first pass without a populated TOC.",
+    "No comparison with the same source compiled without instrumentation was made.",
+    "Only one matched pair measured the instrumentation overhead, so no reliable estimate is available.",
+    "The timing is diagnostic and does not justify a production change."
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-06",
+  "title": "Matched N=1000 timing and PDF audit for batched tagpdf ParentTree entries",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)",
+    "pdf_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "source_sha256": "f0719756a7e3d0fa353a34d84d2fc21ce6cc77412b7f550d4e007747b7e81837",
+    "tex_bytes": 4311700,
+    "tex_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb"
+  },
+  "method": {
+    "compilation": "six direct tagged first passes with populated, byte-identical .aux/.toc seeds and no .out; three paired comparisons",
+    "aux_seed_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+    "toc_seed_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59",
+    "pair_order": [
+      "candidate-reference",
+      "reference-candidate",
+      "candidate-reference"
+    ],
+    "candidate": "buffer ParentTree entries in 128-entry batches; append the concatenated chunks once from tagpdf/finish/before",
+    "candidate_tex_sha256": "b19094c867ac5bd8a0dfaefa14bb59392bab9c91850063dd7743eb58304cb472",
+    "reference_tex_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb",
+    "production_sources_changed": false,
+    "runs": [
+      {
+        "pair": "pair-1",
+        "variant": "reference",
+        "returncode": 0,
+        "wall_seconds": 265.362,
+        "pdf_bytes": 13461240,
+        "pdf_sha256": "057c5abfb3c915e47f244923061e6bc6b0c54b0d0cdef747b45d39230f3519f0",
+        "source_tex_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb"
+      },
+      {
+        "pair": "pair-1",
+        "variant": "candidate",
+        "base_tex_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb",
+        "candidate_tex_sha256": "b19094c867ac5bd8a0dfaefa14bb59392bab9c91850063dd7743eb58304cb472",
+        "returncode": 0,
+        "wall_seconds": 210.104,
+        "pdf_bytes": 13461246
+      },
+      {
+        "pair": "pair-2",
+        "variant": "reference",
+        "returncode": 0,
+        "wall_seconds": 264.75,
+        "pdf_bytes": 13461243,
+        "pdf_sha256": "7e7807a757c28ded4ba198c98267f7cc35aefcf5cee2d7b6e7d9d32a34f31439",
+        "source_tex_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb"
+      },
+      {
+        "pair": "pair-2",
+        "variant": "candidate",
+        "returncode": 0,
+        "wall_seconds": 205.418,
+        "pdf_bytes": 13461237,
+        "pdf_sha256": "74839d5a89926c25db3059974301456afa8cf0f680ef9f17ccd39d649fa39952",
+        "source_tex_sha256": "b19094c867ac5bd8a0dfaefa14bb59392bab9c91850063dd7743eb58304cb472"
+      },
+      {
+        "pair": "pair-3",
+        "variant": "candidate",
+        "returncode": 0,
+        "wall_seconds": 214.062,
+        "pdf_bytes": 13461237,
+        "pdf_sha256": "6d3900b390b25f999b2db8eb27cf4909b1669e22af46014df6ed6b5f28ee15b5",
+        "source_tex_sha256": "b19094c867ac5bd8a0dfaefa14bb59392bab9c91850063dd7743eb58304cb472"
+      },
+      {
+        "pair": "pair-3",
+        "variant": "reference",
+        "returncode": 0,
+        "wall_seconds": 267.194,
+        "pdf_bytes": 13461237,
+        "pdf_sha256": "5d0baef50842d1ec932dd1de60b5bbe97761d844b1baeba09aa443bad5f243e6",
+        "source_tex_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb"
+      }
+    ]
+  },
+  "result": {
+    "reference_median_seconds": 265.362,
+    "candidate_median_seconds": 210.104,
+    "paired_deltas_seconds": [
+      -55.25800000000001,
+      -59.331999999999994,
+      -53.132000000000005
+    ],
+    "median_paired_delta_seconds": -55.25800000000001,
+    "median_paired_delta_percent": -20.82362960785644,
+    "reference_median_pdf_bytes": 13461240,
+    "candidate_median_pdf_bytes": 13461237,
+    "pdf_audit": {
+      "pages": 1140,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "named_destinations": 38025,
+      "roles": {
+        "/Document": 1,
+        "/text-unit": 22473,
+        "/text": 23144,
+        "/Sect": 6292,
+        "/section": 8,
+        "/TOC": 1,
+        "/TOCI": 7,
+        "/Reference": 7,
+        "/Link": 29887,
+        "/itemize": 783,
+        "/LI": 9555,
+        "/Lbl": 9555,
+        "/LBody": 9555,
+        "/subsection": 3014,
+        "/paragraph": 3270,
+        "/footnotemark": 3270,
+        "/footnote": 3270,
+        "/footnotelabel": 3270,
+        "/quote": 267,
+        "/Figure": 400
+      },
+      "figures": 400,
+      "figures_without_alt": 0,
+      "link_annotations": 32950,
+      "link_structparent_count": 32950,
+      "unique_link_structparent_keys": true,
+      "objr_count": 32950,
+      "objr_link_ref_count": 32950,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": 34090,
+      "links_with_parenttree_objr_owner_match": 32950,
+      "links_missing_or_wrong_parenttree_objr_match": 0,
+      "nonlink_annotations": 0,
+      "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+      "normalized_text_chars": 2464400
+    },
+    "candidates_match_baseline": {
+      "pair1_candidate": {
+        "pages": true,
+        "named_destinations": true,
+        "roles": true,
+        "figures": true,
+        "figures_without_alt": true,
+        "link_annotations": true,
+        "link_structparent_count": true,
+        "objr_count": true,
+        "link_refs_match_objr_refs": true,
+        "parenttree_keys": true,
+        "links_with_parenttree_objr_owner_match": true,
+        "normalized_text_sha256": true
+      },
+      "pair2_candidate": {
+        "pages": true,
+        "named_destinations": true,
+        "roles": true,
+        "figures": true,
+        "figures_without_alt": true,
+        "link_annotations": true,
+        "link_structparent_count": true,
+        "objr_count": true,
+        "link_refs_match_objr_refs": true,
+        "parenttree_keys": true,
+        "links_with_parenttree_objr_owner_match": true,
+        "normalized_text_sha256": true
+      },
+      "pair3_candidate": {
+        "pages": true,
+        "named_destinations": true,
+        "roles": true,
+        "figures": true,
+        "figures_without_alt": true,
+        "link_annotations": true,
+        "link_structparent_count": true,
+        "objr_count": true,
+        "link_refs_match_objr_refs": true,
+        "parenttree_keys": true,
+        "links_with_parenttree_objr_owner_match": true,
+        "normalized_text_sha256": true
+      }
+    },
+    "candidates_match_each_other": {
+      "pair2_candidate": {
+        "pages": true,
+        "named_destinations": true,
+        "roles": true,
+        "figures": true,
+        "figures_without_alt": true,
+        "link_annotations": true,
+        "link_structparent_count": true,
+        "objr_count": true,
+        "link_refs_match_objr_refs": true,
+        "parenttree_keys": true,
+        "links_with_parenttree_objr_owner_match": true,
+        "normalized_text_sha256": true
+      },
+      "pair3_candidate": {
+        "pages": true,
+        "named_destinations": true,
+        "roles": true,
+        "figures": true,
+        "figures_without_alt": true,
+        "link_annotations": true,
+        "link_structparent_count": true,
+        "objr_count": true,
+        "link_refs_match_objr_refs": true,
+        "parenttree_keys": true,
+        "links_with_parenttree_objr_owner_match": true,
+        "normalized_text_sha256": true
+      }
+    }
+  },
+  "decision": "The 128-entry batching prototype reduces direct first-pass median time by 55.258 seconds (20.82%) across three matched pairs. All three candidate PDFs match the converged baseline and each other for pages, destinations, roles, link annotations, StructParent keys, OBJR references, ParentTree ownership, figure alt text, and normalized extracted text. Integrate the guarded optimization into the renderer, then compile and inspect a converged export; private tagpdf internals remain a compatibility risk.",
+  "limits": [
+    "The runs are direct first passes using a populated auxiliary seed, not full converged production timings.",
+    "The optimization depends on private tagpdf macro and token-list names. Runtime feature detection leaves the package default untouched when these names or the finish hook are unavailable.",
+    "Three timing pairs reduce run-to-run noise but do not cover all TeX Live/tagpdf versions.",
+    "No package-version compatibility matrix or accessibility-validator review is included in this timing record."
+  ]
+}

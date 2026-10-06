@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-06",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "source_sha256": "f0719756a7e3d0fa353a34d84d2fc21ce6cc77412b7f550d4e007747b7e81837",
+    "tex_source_bytes": 4311700,
+    "tex_source_sha256": "7da966b00053182ba8c3b1b221c41cb46a33523654bc0e19436839b6b306f7fb"
+  },
+  "method": {
+    "compilation": "one direct tagged pass with populated .aux/.toc and no .out seed",
+    "auxiliary_source": "tmp/l8-3-parent-child-pair2-atend-current-n1000",
+    "aux_seed_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+    "toc_seed_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59",
+    "instrumentation": "sample every 128th call separately around tagpdf OBJR kid insertion and ParentTree token-list append using pdftexcmds timer",
+    "sample_interval": 128,
+    "instrumented_tex_sha256": "4d484f57ac711b2bf8cedc1b46847524fc27dfdcb1d49ce512bbe23db5e086ab",
+    "production_sources_changed": false
+  },
+  "result": {
+    "returncode": 0,
+    "wall_seconds": 270.563,
+    "pdf_bytes": 13461244,
+    "pdf_sha256": "dfaf58d10d38572752e5e2347b9f36226361a98a275525d22e1513ba28d15fe6",
+    "kid_objr": {
+      "calls": 32944,
+      "samples": 257,
+      "sampled_cumulative_seconds": 0.01007080078125,
+      "estimated_total_seconds": 1.2890625,
+      "timer_ticks": 660
+    },
+    "parenttree_append": {
+      "calls": 32944,
+      "samples": 257,
+      "sampled_cumulative_seconds": 0.437469482421875,
+      "estimated_total_seconds": 55.99609375,
+      "timer_ticks": 28670
+    },
+    "combined_estimated_seconds": 57.28515625,
+    "pdf_audit": {
+      "pages": 1140,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "named_destinations": 38025,
+      "roles": {
+        "/Document": 1,
+        "/text-unit": 22473,
+        "/text": 23144,
+        "/Sect": 6292,
+        "/section": 8,
+        "/TOC": 1,
+        "/TOCI": 7,
+        "/Reference": 7,
+        "/Link": 29887,
+        "/itemize": 783,
+        "/LI": 9555,
+        "/Lbl": 9555,
+        "/LBody": 9555,
+        "/subsection": 3014,
+        "/paragraph": 3270,
+        "/footnotemark": 3270,
+        "/footnote": 3270,
+        "/footnotelabel": 3270,
+        "/quote": 267,
+        "/Figure": 400
+      },
+      "figures": 400,
+      "figures_without_alt": 0,
+      "link_annotations": 32950,
+      "link_structparent_count": 32950,
+      "unique_link_structparent_keys": true,
+      "objr_count": 32950,
+      "objr_link_ref_count": 32950,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": 34090,
+      "links_with_parenttree_objr_owner_match": 32950,
+      "links_missing_or_wrong_parenttree_objr_match": 0,
+      "nonlink_annotations": 0,
+      "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+      "normalized_text_chars": 2464400
+    },
+    "matches_converged_baseline": {
+      "pages": true,
+      "named_destinations": true,
+      "roles": true,
+      "figures": true,
+      "figures_without_alt": true,
+      "link_annotations": true,
+      "link_structparent_count": true,
+      "objr_count": true,
+      "link_refs_match_objr_refs": true,
+      "parenttree_keys": true,
+      "links_with_parenttree_objr_owner_match": true,
+      "normalized_text_sha256": true
+    }
+  },
+  "limits": [
+    "Single instrumented pass; sampled estimates are a profiling signal, not a matched production timing.",
+    "Timer resolution is 1/65536 second locally; each sampled interval is quantized.",
+    "Timer wrapper overhead and per-call sampling check cost are not subtracted.",
+    "The direct pass is not the converged production export.",
+    "The observed l3kernel tl_gput_right implementation expands the existing token list and concatenated value on each append; the profile measures the tagpdf append macro as a whole."
+  ],
+  "decision": "The sampled estimates attribute about 56.0 seconds to ParentTree append and about 1.29 seconds to OBJR kid insertion (57.3 seconds combined, about 21.2% of this pass). Prototype buffered batching in an isolated source; retain no production change unless matched timings and full PDF structure checks confirm a material gain."
+}

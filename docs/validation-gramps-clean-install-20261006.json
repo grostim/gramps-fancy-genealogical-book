@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-06",
+  "title": "Clean-profile installation and PDF export from the reproducible add-on archive",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "gramps_desktop": "6.0.8",
+    "gramps_embedded_python": "3.13.2",
+    "integration_runner_python": "CPython 3.13.7",
+    "mistune": "3.3.4",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "archive": {
+    "addon_version": "0.9.0",
+    "builds": 2,
+    "sha256": "357ce674720f914a4788d99956680b42df5bc84991cee6b7589b85a8a362852c",
+    "reproducible": true,
+    "bytes": 88346,
+    "member_count": 29,
+    "includes_pdf_renderer": true,
+    "includes_compiled_french_catalog": true,
+    "contains_python_cache_files": false
+  },
+  "installation": {
+    "method": "Extracted the built add-on archive into a new temporary GRAMPSHOME profile and ran Gramps CLI integration against it.",
+    "installed_from_archive": true,
+    "source_checkout_on_pythonpath": false,
+    "mistune_installed_in_temporary_profile": true,
+    "integration_exit_code": 0,
+    "checks_passed": [
+      "Native Gramps data import and model extraction",
+      "AC-01 through AC-19 cases exercised by scripts/verify_gramps.py",
+      "HTML ZIP generation and contents",
+      "JSON generation and consistency report",
+      "Invalid selection, invalid destination, existing-file protection, replacement and temporary-file cleanup",
+      "PDF generation from the installed archive, including ancestry, descent, citation numbering, notes, family links and source details"
+    ],
+    "temporary_gramps_profile_removed_after_run": true,
+    "gui_addon_manager_exercised": false,
+    "french_gui_catalog_runtime_exercised": false
+  },
+  "pdf": {
+    "path": "tmp/l8-4-clean-qualification-20261006/clean-install-book-qualified.pdf",
+    "bytes": 159047,
+    "pages": 18,
+    "pdf_version": "%PDF-2.0",
+    "tagged": true,
+    "page_size_points": [595.276, 841.89],
+    "book_language": "fr",
+    "visual_review": "One interior page was rendered at 100 dpi: no clipping was visible and the text block has even margins consistent with the configured 15 mm layout. This is a sample-page check, not a review of every page."
+  },
+  "scope_limits": [
+    "This run uses Gramps CLI in a new profile; it does not repeat installation through the graphical add-on manager.",
+    "The generated book is a synthetic fixture with test labels and is not a family-history example for publication.",
+    "Other Gramps Desktop versions, Gramps Web, a full-document visual review, and screen-reader review remain outside this run."
+  ]
+}

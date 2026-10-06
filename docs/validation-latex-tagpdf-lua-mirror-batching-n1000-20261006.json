@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-06",
+  "title": "Rejected batching prototypes for the tagpdf Lua mirror, N=1,000",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "synthetic_portraits": 200,
+    "portrait_size": "96x72",
+    "production_source_tex_sha256": "b40c13e878c66c70423ca1ebeca5e6c295392c8381ef803fb611104688abb740"
+  },
+  "method": {
+    "reference": "One direct tagged pass with the same populated auxiliary seeds and hyperlink timing wrappers; 212.560 seconds.",
+    "auxiliary_seed": {
+      "aux_sha256": "8b82f713217f76480fc4406e6c5125bc014e8b7c8fa05db7173015f797e14831",
+      "toc_sha256": "0f5c266f4566d42d3abab031a807bf2b2b2632882fc2a6c479ec54aaaae84d59"
+    },
+    "instrumentation": "Both candidates retain the same hyperlink/href timers and ParentTree batching. Candidate 1 flushes every 128 updates; candidate 2 accumulates chunks and flushes at shipout/background and tagpdf/finish/before.",
+    "production_sources_changed": false
+  },
+  "candidates": [
+    {
+      "name": "chunked-directlua",
+      "instrumented_tex_bytes": 4315473,
+      "instrumented_tex_sha256": "34754f9adfc2445dbfc1e2b669b0089cc1fa58945f947ac7651f65242d700f72",
+      "wall_seconds": 300.26,
+      "user_cpu_seconds": 284.66,
+      "system_cpu_seconds": 3.61,
+      "hyperlink": {
+        "calls": 17601,
+        "cpu_seconds": 62.195577000002
+      },
+      "href": {
+        "calls": 9009,
+        "cpu_seconds": 32.049708
+      },
+      "pdf_bytes": 13461243,
+      "pdf_sha256": "5a49f0bb216ce15cee8a0123803af733ae6034c736331e8fb75b719dfd16dc75"
+    },
+    {
+      "name": "flush-at-shipout",
+      "instrumented_tex_bytes": 4315980,
+      "instrumented_tex_sha256": "7115203ac02c67d033e0b3c6da147d1679c910df3df3e0f1c8c281bef764ce34",
+      "wall_seconds": 364.93,
+      "user_cpu_seconds": 353.69,
+      "system_cpu_seconds": 3.65,
+      "hyperlink": {
+        "calls": 17601,
+        "cpu_seconds": 63.524869000001
+      },
+      "href": {
+        "calls": 9009,
+        "cpu_seconds": 31.844148
+      },
+      "pdf_bytes": 13461244,
+      "pdf_sha256": "c02117dc1359781b5585ee18c6ec24508afc843da26eaa0bd1f21ec05deb8be2",
+      "pdf_audit": {
+        "pages": 1140,
+        "named_destinations": 38025,
+        "link_annotations": 32950,
+        "links_with_unique_structparent": 32950,
+        "objr_references": 32950,
+        "links_matching_parenttree_owner": 32950,
+        "parenttree_keys": 34090,
+        "figures": 400,
+        "figures_without_alt": 0,
+        "normalized_text_sha256": "971d641bd6b6746cefc8d9b608ec93adc312e9f9166d9db37dc9cab593dca889",
+        "matches_converged_baseline": true
+      }
+    }
+  ],
+  "limits": [
+    "One run per candidate; timings are diagnostic and include hyperlink marker overhead.",
+    "The PDF is a direct pass from populated auxiliary state, not a separately converged export.",
+    "The candidate audit compared all listed semantic and link-structure fields to the converged ParentTree-batched baseline."
+  ],
+  "decision": "Reject both prototypes: they take 41.2% and 71.7% longer, respectively, than the direct instrumented reference. Their audited PDF semantics match the converged baseline; no production code change is warranted."
+}
