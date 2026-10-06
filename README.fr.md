@@ -82,6 +82,8 @@ gramps -i examples/reference-family.ged -a report \
 
 L’option `privacy_acknowledged=True` est requise pour chaque export en ligne de commande. Dans Desktop et Web, confirmer l’option de confidentialité à chaque export. Le rapport ne filtre ni n’anonymise les données accessibles. Ajouter `overwrite=True` aux options pour autoriser le remplacement. Le fichier [GEDCOM d’exemple](examples/reference-family.ged) contient uniquement des personnes, lieux et références d’archives fictifs, sans média. Le script ci-dessous automatise le test dans un profil Gramps temporaire et importe sa propre fixture depuis `tests/fixtures/`. Sur macOS, l’exécutable est `/Applications/Gramps.app/Contents/MacOS/Gramps`.
 
+Pour essayer le livre lui-même, reprenez la commande ci-dessus avec `output_format=pdf` et une destination finissant par `.pdf`, ou `output_format=html_zip` et une destination finissant par `.zip`. LuaLaTeX doit être accessible à Gramps pour générer le PDF.
+
 ## Développement et validation
 
 ```sh

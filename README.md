@@ -80,6 +80,8 @@ gramps -i examples/reference-family.ged -a report \
 
 The `privacy_acknowledged=True` option is required for every CLI export. In Desktop and Web, confirm the privacy option for each export. The report does not filter or anonymize readable data. Use `overwrite=True` in the option string to permit replacement. The [sample GEDCOM](examples/reference-family.ged) contains only fictional people, places and archive references, with no media. For isolated, automated testing use the runner below, which installs the archive into a temporary Gramps profile and imports its own fixture from `tests/fixtures/`. On macOS the executable is `/Applications/Gramps.app/Contents/MacOS/Gramps`.
 
+To try the book output, use the command above with `output_format=pdf` and a `.pdf` destination, or `output_format=html_zip` and a `.zip` destination. Gramps must be able to find LuaLaTeX to generate the PDF.
+
 ## Development and validation
 
 ```sh
