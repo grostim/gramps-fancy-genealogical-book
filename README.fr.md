@@ -43,11 +43,13 @@ Le parcours suit les filiations parent–enfant explicitement enregistrées. Les
 
 ## Construction et installation
 
-La construction compile le catalogue français du rapport depuis `gramps60/GrampsFancyBook/po/fr-local.po` et l’inclut dans l’archive sous forme de `addon.mo`. GNU gettext (`msgfmt`) doit être disponible dans le `PATH` ; installez le paquet `gettext` si nécessaire (par exemple `brew install gettext` sur macOS).
+La construction compile le catalogue français du rapport depuis `gramps60/GrampsFancyBook/po/fr-local.po` et l’inclut dans l’archive sous forme de `addon.mo`. Elle vérifie aussi que la version de `pyproject.toml`, de l’enregistrement Gramps et des catalogues POT/PO est cohérente. GNU gettext (`msgfmt`) doit être disponible dans le `PATH` ; installez le paquet `gettext` si nécessaire (par exemple `brew install gettext` sur macOS).
 
 ```sh
 python3 build_addon.py
 ```
+
+Cette commande génère l’archive localement ; le fichier est ignoré par Git et n’est pas encore publié comme version GitHub.
 
 Extraire `gramps60/download/GrampsFancyBook.addon.tgz` dans le dossier des extensions utilisateur de Gramps 6, en conservant le répertoire `GrampsFancyBook/`, puis redémarrer Gramps. Emplacements habituels :
 
