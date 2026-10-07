@@ -368,6 +368,7 @@ def render_latex(
         "\\usepackage[margin=15mm,includehead,headheight=30pt,headsep=12pt]{geometry}\n"
         f"\\usepackage[{babel_language}]{{babel}}\n"
         "\\usepackage{xurl}\n\\usepackage[hidelinks]{hyperref}\n\\usepackage{graphicx}\n"
+        "\\newcommand{\\gfbpagelink}[2]{\\hyperlink{#1}{#2 (p.~\\pageref*{#1})}}\n"
         # Generated page targets are ASCII-safe; skip Hyperref's expensive PDF
         # string purification only while it builds this plugin-owned GoTo link.
         # The private hook is guarded so other Hyperref versions keep defaults.
