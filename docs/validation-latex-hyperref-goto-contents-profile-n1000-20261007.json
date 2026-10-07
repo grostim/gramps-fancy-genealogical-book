@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-07",
+  "title": "Active Hyperref GoTo link Contents and PDF-string subprofiles on the URL-deduplicated N=1,000 source",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200
+  },
+  "inputs": {
+    "source_revision": "2a14b4fb278d085092b5ea7d82091f5e06c9754c",
+    "reference_tex_sha256": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "reference_tex_bytes": 4025413,
+    "aux_seed_sha256": "cc026874de761f9dd8b3b00b3bcd84ee40256f9524ef12ebf54c4dd4387eaa33",
+    "toc_seed_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+    "out_seed": false,
+    "compile": "One direct tagged LuaLaTeX pass from the same populated .aux and .toc seeds; no production convergence helper."
+  },
+  "pdf_audit": {
+    "method": "pypdf page-order text extraction; NFC normalization; link signature counter over page index, rectangle, action and action target, and Contents; ParentTree entry matched to StructElem owning the OBJR for each Link annotation.",
+    "pages": 1096,
+    "pdf_version": "%PDF-2.0",
+    "tagged": true,
+    "link_annotations": 24126,
+    "uri_annotations": 3248,
+    "unique_uri_targets": 3125,
+    "internal_go_to_links": 20878,
+    "parenttree_objr_owner_matches": 24126,
+    "parenttree_mismatches": 0,
+    "figures": 400,
+    "figures_with_nonempty_alt": 400,
+    "nfc_extracted_text_sha256": "a57082e11451ffd0dc3687ac10e9a9132ce56a56f7f3bcee457f7791735d722f",
+    "nfc_extracted_text_chars": 2243028,
+    "link_signatures_sha256": "f151e9e9f5b8a74e24a4d8221d66917d5d92672c2873cb755f7063adeaf61fa0",
+    "matches_reference": true,
+    "pdf_bytes": 12556074,
+    "second_profile_pdf_bytes": 12556080
+  },
+  "decision": "Diagnostic only. Both profiles preserve all audited PDF semantics. The inner profile narrows the largest timed work to text purification and UTF-16 hex conversion. No renderer optimization is justified from one instrumented pass; any prototype must preserve accessible link Contents and be checked with repeated performance and structural audits.",
+  "profiles": [
+    {
+      "method": "A temporary TeX copy wraps the tag-aware hyp/link/GoTo/Contents socket, the internal PDF-string conversion macro, and link/GoTo Contents dictionary insertion. Lua os.clock accumulates inclusive CPU time around each operation.",
+      "production_sources_changed": false,
+      "wall_seconds": 206.09,
+      "user_seconds": 202.85,
+      "system_seconds": 1.96,
+      "socket": {
+        "calls": 20878,
+        "cpu_seconds": 24.511434
+      },
+      "goto_contents_pdfstring": {
+        "calls": 20878,
+        "cpu_seconds": 22.28984
+      },
+      "destination_name_pdfstring": {
+        "calls": 20878,
+        "cpu_seconds": 12.290599
+      },
+      "goto_contents_dictionary_insert": {
+        "calls": 20878,
+        "cpu_seconds": 1.341432
+      },
+      "interpretation": "The GoTo Contents conversion and dictionary insertion occur inside the socket; destination-name conversion occurs earlier in link creation. Timers are diagnostic and include macro work inside each call; profiler wrapper overhead is not separately calibrated. Single instrumented pass; wall time is not comparable to uninstrumented build timings."
+    },
+    {
+      "name": "PDF-string encoder internals",
+      "method": "A second temporary TeX copy wraps the current GoTo Contents PDF-string macro and its purification, string conversion, hex delimiters, and string assignments. Lua os.clock accumulates inclusive CPU time around each operation.",
+      "wall_seconds": 199.05,
+      "user_seconds": 196.42,
+      "system_seconds": 1.32,
+      "calls": 20878,
+      "pdfstring": {
+        "cpu_seconds": 23.433031
+      },
+      "text_purification": {
+        "macro": "__hyp_text_purify:nN",
+        "cpu_seconds": 16.517608
+      },
+      "utf16_hex_string_conversion": {
+        "macro": "str_set_convert:Nnnn",
+        "cpu_seconds": 5.336113
+      },
+      "hex_delimiter_prefix": {
+        "macro": "str_put_left:Nn",
+        "cpu_seconds": 0.108973
+      },
+      "hex_delimiter_suffix": {
+        "macro": "str_put_right:Nn",
+        "cpu_seconds": 0.115092
+      },
+      "global_string_assignment": {
+        "macro": "str_gset_eq:NN",
+        "cpu_seconds": 0.082393
+      },
+      "output_string_assignment": {
+        "macro": "str_set_eq:NN",
+        "cpu_seconds": 0.0876
+      },
+      "interpretation": "Purification and UTF-16 hex conversion account for most of the timed PDF-string operation in this single instrumented run. Suboperation timers do not include their own wrapper overhead; enclosing timers do. The measurements are diagnostic, not paired performance results. Prefix and suffix timings are nested inside the string-conversion interval and must not be added to it.",
+      "pdf_bytes": 12556080,
+      "semantic_pdf_audit_matches_reference": true
+    }
+  ]
+}
