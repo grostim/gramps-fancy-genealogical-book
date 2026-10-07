@@ -738,3 +738,9 @@ Three paired direct tagged LuaLaTeX passes used identical populated `.aux` and `
 | Mean | 165.126 | 163.249 | 1.877 | 1.14% |
 
 Each PDF pair matches in all audited semantic fields and exact link signatures: 1,096 tagged PDF 2.0 pages; 24,126 links (20,878 GoTo and 3,248 URI); 3,125 URI targets; 24,126 matching OBJR/ParentTree owners with no mismatches; 400 figures with alternative text; and identical NFC text hashes. This is a modest, repeatable per-pass saving. It does not measure a complete export or establish a full-build gain. See the [raw paired profile and audit](validation-latex-hyperref-target-identity-fastpath-n1000-20261008.json) and temporary [candidate PDFs](../tmp/l83-hyperref-target-identity-paired-20261008/).
+
+### Complete converged build after the destination identity fast path — N=1,000 — October 8, 2026
+
+One production `write_latex_pdf` build with extended convergence took 347.43 seconds. The timed scope includes LaTeX rendering, copying prepared media, and all LuaLaTeX passes; synthetic fixture, model, and media preparation happened before timing. The 1,096-page tagged PDF is 12,556,077 bytes. One-second process sampling captured a peak of 1,173,584 KiB (1,146.08 MiB) across 336 samples.
+
+The semantic audit matches the paired per-pass profile exactly: 24,126 link annotations (20,878 GoTo and 3,248 URI), 3,125 URI targets, 24,126 matching OBJR/ParentTree owners with no mismatches, 400 figures with non-empty alternative text, and identical normalized-text and ordered-link-signature hashes. The 180-second and 512 MiB budgets remain unmet. This is one merged-code build, so it does not attribute a full-build speed change to the destination identity fast path. See the [raw build and audit record](validation-latex-hyperref-target-identity-full-build-n1000-20261008.json) and the retained [demonstration PDF](../output/pdf/gramps-fancy-book-destination-identity-demo-n1000-20261008.pdf).
