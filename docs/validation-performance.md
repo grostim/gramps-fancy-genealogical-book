@@ -744,3 +744,22 @@ Each PDF pair matches in all audited semantic fields and exact link signatures: 
 One production `write_latex_pdf` build with extended convergence took 347.43 seconds. The timed scope includes LaTeX rendering, copying prepared media, and all LuaLaTeX passes; synthetic fixture, model, and media preparation happened before timing. The 1,096-page tagged PDF is 12,556,077 bytes. One-second process sampling captured a peak of 1,173,584 KiB (1,146.08 MiB) across 336 samples.
 
 The semantic audit matches the paired per-pass profile exactly: 24,126 link annotations (20,878 GoTo and 3,248 URI), 3,125 URI targets, 24,126 matching OBJR/ParentTree owners with no mismatches, 400 figures with non-empty alternative text, and identical normalized-text and ordered-link-signature hashes. The 180-second and 512 MiB budgets remain unmet. This is one merged-code build, so it does not attribute a full-build speed change to the destination identity fast path. See the [raw build and audit record](validation-latex-hyperref-target-identity-full-build-n1000-20261008.json) and the retained [demonstration PDF](../output/pdf/gramps-fancy-book-destination-identity-demo-n1000-20261008.pdf).
+
+### Cache for accessible GoTo contents — N=1,000 — October 8, 2026
+
+Three counterbalanced pairs of direct tagged LuaLaTeX passes use identical source and populated `.aux`/`.toc` seeds. The candidate caches Hyperref's `utf16/hex` `/Contents` string by generated destination, only while the renderer creates page links. Other GoTo links keep Hyperref's default path.
+
+| Pair | Reference (s) | Candidate (s) | Saved (s) | Saved (%) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 163.603 | 161.381 | 2.222 | 1.358% |
+| 2 | 163.355 | 160.718 | 2.637 | 1.614% |
+| 3 | 163.403 | 161.654 | 1.749 | 1.070% |
+| Mean | 163.454 | 161.251 | 2.203 | 1.348% |
+
+The candidate records 8,541 cache hits and 9,049 misses per pass. All three PDF audits match their paired references for every semantic field and ordered link signature: 1,096 tagged PDF 2.0 pages, 24,126 links (20,878 GoTo and 3,248 URI), 24,126 valid OBJR/ParentTree associations, 400 figures with alternative text, and the normalized-text hash. The renderer integrates the cache with guards for the Hyperref socket, plug assignment, encoder, and annotation dictionary writer; if those APIs are unavailable, Hyperref keeps its default behavior. See the [raw paired profile and audits](validation-latex-hyperref-goto-contents-cache-fastpath-n1000-20261008.json).
+
+### Converged build with the GoTo cache — N=1,000 — October 8, 2026
+
+One production `write_latex_pdf` build with extended convergence takes 344.58 seconds. The tagged PDF has 1,096 pages and is 12,556,080 bytes. One-second LuaLaTeX RSS sampling captures a maximum of 1,167,088 KiB (1,139.73 MiB) across 333 samples. The audit confirms 24,126 annotations and OBJR/ParentTree associations with no mismatch, 400 accessible figures, and the same normalized-text and link-signature hashes as the per-pass profile.
+
+This single build verifies the integrated renderer but does not attribute a complete-build speedup to the cache; the 180-second and 512 MiB budgets remain unmet. See the [raw build record](validation-latex-hyperref-goto-contents-cache-full-build-n1000-20261008.json) and retained [demonstration PDF](../output/pdf/gramps-fancy-book-goto-contents-cache-demo-n1000-20261008.pdf).

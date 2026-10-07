@@ -1,0 +1,255 @@
+{
+  "date": "2026-10-08",
+  "fixture": "N=1,000 branching; direct tagged LuaLaTeX pass",
+  "source_seed_sha256": {
+    "aux": "bd787feeb37b8e474d6acab93154550373fea65406d715871350dd617e4ce0ef",
+    "toc": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5"
+  },
+  "method": {
+    "repetitions": 3,
+    "ordering": [
+      "reference,candidate",
+      "candidate,reference",
+      "reference,candidate"
+    ],
+    "timing": "One lualatex process per variant from identical populated .aux/.toc seeds.",
+    "candidate": "Reuse the UTF-16/hex GoTo Contents string by generated destination through a temporary socket plug; all other links use Hyperref's default plug."
+  },
+  "runs": [
+    {
+      "pair": "pair-1",
+      "variant": "reference",
+      "wall_seconds": 163.603,
+      "pdf_bytes": 12556080,
+      "cache_metrics": null,
+      "pdf_path": "tmp/l83-goto-contents-csname-paired-20261008/pair-1/reference/book.pdf"
+    },
+    {
+      "pair": "pair-1",
+      "variant": "candidate",
+      "wall_seconds": 161.381,
+      "pdf_bytes": 12556083,
+      "cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      },
+      "pdf_path": "tmp/l83-goto-contents-csname-paired-20261008/pair-1/candidate/book.pdf"
+    },
+    {
+      "pair": "pair-2",
+      "variant": "candidate",
+      "wall_seconds": 160.718,
+      "pdf_bytes": 12556080,
+      "cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      },
+      "pdf_path": "tmp/l83-goto-contents-csname-paired-20261008/pair-2/candidate/book.pdf"
+    },
+    {
+      "pair": "pair-2",
+      "variant": "reference",
+      "wall_seconds": 163.355,
+      "pdf_bytes": 12556070,
+      "cache_metrics": null,
+      "pdf_path": "tmp/l83-goto-contents-csname-paired-20261008/pair-2/reference/book.pdf"
+    },
+    {
+      "pair": "pair-3",
+      "variant": "reference",
+      "wall_seconds": 163.403,
+      "pdf_bytes": 12556080,
+      "cache_metrics": null,
+      "pdf_path": "tmp/l83-goto-contents-csname-paired-20261008/pair-3/reference/book.pdf"
+    },
+    {
+      "pair": "pair-3",
+      "variant": "candidate",
+      "wall_seconds": 161.654,
+      "pdf_bytes": 12556080,
+      "cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      },
+      "pdf_path": "tmp/l83-goto-contents-csname-paired-20261008/pair-3/candidate/book.pdf"
+    }
+  ],
+  "pairs": [
+    {
+      "pair": "pair-1",
+      "order": [
+        "reference",
+        "candidate"
+      ],
+      "reference_seconds": 163.603,
+      "candidate_seconds": 161.381,
+      "saved_seconds": 2.222,
+      "saved_percent": 1.358,
+      "pdf_audit": {
+        "semantic_fields_equal": true,
+        "ordered_link_signatures_equal": true,
+        "reference": {
+          "pages": 1096,
+          "pdf_version": "%PDF-2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "action_counts": {
+            "/GoTo": 20878,
+            "/URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signature_count": 24126,
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        },
+        "candidate": {
+          "pages": 1096,
+          "pdf_version": "%PDF-2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "action_counts": {
+            "/GoTo": 20878,
+            "/URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signature_count": 24126,
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        }
+      }
+    },
+    {
+      "pair": "pair-2",
+      "order": [
+        "candidate",
+        "reference"
+      ],
+      "reference_seconds": 163.355,
+      "candidate_seconds": 160.718,
+      "saved_seconds": 2.637,
+      "saved_percent": 1.614,
+      "pdf_audit": {
+        "semantic_fields_equal": true,
+        "ordered_link_signatures_equal": true,
+        "reference": {
+          "pages": 1096,
+          "pdf_version": "%PDF-2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "action_counts": {
+            "/GoTo": 20878,
+            "/URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signature_count": 24126,
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        },
+        "candidate": {
+          "pages": 1096,
+          "pdf_version": "%PDF-2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "action_counts": {
+            "/GoTo": 20878,
+            "/URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signature_count": 24126,
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        }
+      }
+    },
+    {
+      "pair": "pair-3",
+      "order": [
+        "reference",
+        "candidate"
+      ],
+      "reference_seconds": 163.403,
+      "candidate_seconds": 161.654,
+      "saved_seconds": 1.749,
+      "saved_percent": 1.07,
+      "pdf_audit": {
+        "semantic_fields_equal": true,
+        "ordered_link_signatures_equal": true,
+        "reference": {
+          "pages": 1096,
+          "pdf_version": "%PDF-2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "action_counts": {
+            "/GoTo": 20878,
+            "/URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signature_count": 24126,
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        },
+        "candidate": {
+          "pages": 1096,
+          "pdf_version": "%PDF-2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "action_counts": {
+            "/GoTo": 20878,
+            "/URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signature_count": 24126,
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        }
+      }
+    }
+  ],
+  "paired_summary": {
+    "reference_mean_seconds": 163.454,
+    "candidate_mean_seconds": 161.251,
+    "mean_paired_savings_seconds": 2.203,
+    "relative_to_reference_mean_percent": 1.348,
+    "all_pairs_semantically_equal": true,
+    "all_pairs_link_signatures_equal": true
+  },
+  "base_revision": "333f05671fa4cab5f929fed1e9a126d5ffd29690",
+  "renderer_source_sha256": "d23d2bb8ce74e749142d42109137ee09dd2ffe22da327c839949a8cdc1d63b17",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "audit_library": "pypdf 6.19.0"
+  },
+  "production_equivalent": "The measured temporary socket plug is integrated in the renderer with guards for the socket, assignment API, Hyperref encoder, annotation dictionary writer, and token lists. It caches only while the renderer page-link flag is active; all other GoTo links use Hyperref PDF-string generation."
+}
