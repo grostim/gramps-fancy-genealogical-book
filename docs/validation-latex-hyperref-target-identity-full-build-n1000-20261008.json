@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "03bcda1dd9676c5ff66dd805bcc6f135aadf1d58",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media": 200,
+    "media_artifacts": 200
+  },
+  "method": {
+    "renderer": "Production write_latex_pdf with extended convergent compilation",
+    "timed_scope": "write_latex_pdf call, including LaTeX rendering, prepared-media copying, and convergent LuaLaTeX compilation; synthetic data/model/media preparation excluded",
+    "rss_sampling": "One-second ps samples of LuaLaTeX/LuaHBTeX processes running book.tex during the timed call",
+    "full_build_budget_seconds": 180,
+    "peak_rss_budget_mib": 512,
+    "comparison": "One merged-code build; not a paired reference/candidate comparison"
+  },
+  "run": {
+    "elapsed_seconds": 347.43,
+    "pdf_bytes": 12556077,
+    "pdf_path": "output/pdf/gramps-fancy-book-destination-identity-demo-n1000-20261008.pdf",
+    "lualatex_rss_sampling": {
+      "interval_seconds": 1,
+      "process_samples": 336,
+      "max_kib": 1173584,
+      "max_mib": 1146.08
+    },
+    "semantic_audit": {
+      "pages": 1096,
+      "pdf_version": "2.0",
+      "tagged": true,
+      "link_annotations": 24126,
+      "actions": {
+        "GoTo": 20878,
+        "URI": 3248
+      },
+      "unique_uri_targets": 3125,
+      "parenttree_objr_owner_matches": 24126,
+      "parenttree_mismatches": 0,
+      "figures": 400,
+      "figures_with_nonempty_alt": 400,
+      "nfc_text_chars": 2244123,
+      "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+      "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+    },
+    "matches_per_pass_profile_semantics": true
+  },
+  "derived": {
+    "budgets_met": false,
+    "full_build_speedup_attributable": false,
+    "semantic_audit_passed": true
+  }
+}
