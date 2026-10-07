@@ -835,3 +835,31 @@ Les six sorties sont balisées et correspondent au témoin sur 1 140 pages, 38 0
 Une séquence exploratoire compile le livre sans balisage avec `hyperref` en brouillon (20,965 s), sans balisage avec liens actifs (94,467 s), puis une seule fois avec balisage et liens actifs (208,248 s). Cette troisième passe produit un PDF de 1 140 pages dont les rôles, destinations, liens accessibles, associations OBJR/ParentTree, textes alternatifs et texte extrait correspondent aux témoins contrôlés. Cette parité ne suffit toutefois pas à valider les attributs géométriques des figures.
 
 L’inspection des 400 attributs `/BBox` trouve une origine `(0, 0)` pour chacune des figures candidates, alors que les 400 boîtes du PDF convergé témoin ont leur position réelle ; les 400 valeurs diffèrent. Dans TeX Live 2026, le code de balisage des graphiques lit les propriétés `xpos` et `ypos` depuis les fichiers auxiliaires pour construire ces boîtes, propriétés qui ne sont enregistrées qu’en mode balisé. Le PDF de l’essai est donc invalide pour cette optimisation : une passe balisée précédente est nécessaire avant celle qui écrit les boîtes correctes. Aucun changement de production n’est retenu. La prochaine piste L8.3 doit accélérer le travail des passes balisées sans en supprimer une ni altérer les positions accessibles des figures. Le [relevé brut](validation-latex-tagged-final-pass-experiment-n1000-20261007.json) détaille les mesures et comparaisons.
+
+### Dédoublonnage des URL partagées de l’annexe — N=100 — 7 octobre 2026
+
+Le renderer imprime toujours les URL propres à chaque citation. Pour les champs partagés, il ne garde qu’une occurrence des URL de chaque source et dépôt dans l’annexe documentaire. Le titre, les détails de source et de dépôt, chaque citation et ses renvois restent présents. Toutes les 317 destinations URI restent accessibles, dont les 303 destinations propres aux citations.
+
+Trois builds convergés du même livre ramifié synthétique N=100, chacun dans un répertoire neuf avec le helper de compilation de production, donnent les résultats suivants :
+
+| Variante | Durées (s) | Médiane (s) | PDF médian (octets) | Pages | Macros bookurl | Annotations de lien | Annotations URI |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Référence | 45,346 ; 45,563 ; 45,471 | 45,471 | 1 402 062 | 121 | 909 | 3 335 | 1 216 |
+| URL partagées dédoublonnées | 41,161 ; 41,116 ; 41,131 | 41,131 | 1 312 919 | 117 | 317 | 2 449 | 330 |
+
+La médiane de compilation baisse de 4,340 s (9,54 %) et le PDF de 89 143 octets (6,36 %). Les 2 119 liens internes sont conservés et résolvent tous leur cible. Les 40 balises de figure gardent un texte alternatif non vide et une boîte /BBox de largeur et hauteur positives ; les positions de certaines figures de l’annexe changent avec le reflow. Le ParentTree associe chaque annotation restante à son propriétaire. Les pages 77, 78 et 87 ont été examinées visuellement : les URL conservées sont complètes et les images n’empiètent pas sur le texte.
+
+Ce contrôle porte sur N=100 et un fixture synthétique ; il ne démontre pas encore l’atteinte du budget PDF N=1 000. Le validateur spécifique à la recette barrée ne s’applique pas à ce fixture, qui ne contient pas le passage requis ; le contrôle repose donc sur l’audit de structure PDF et la revue visuelle des pages citées. Le PDF témoin passe de 121 à 117 pages ; les seules destinations nommées supprimées sont page.117 à page.120, sans lien interne qui les cible. Les durées, empreintes LaTeX et détails d’audit figurent dans le [relevé brut](validation-latex-citation-url-dedup-n100-20261007.json).
+
+### Confirmation à N=1 000 — 7 octobre 2026
+
+Un build convergé du candidat N=1 000 est comparé au témoin de production convergé construit le 6 octobre. Cette comparaison n’a qu’un build candidat et un témoin historique ; elle indique la direction du gain mais ne remplace pas des répétitions appariées.
+
+| Variante | Compilation (s) | PDF (octets) | Pages | Macros bookurl | Annotations de lien | Annotations URI |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Témoin convergé | 449,174 | 13 461 234 | 1 140 | 9 009 | 32 950 | 12 072 |
+| URL partagées dédoublonnées | 423,847 | 12 556 083 | 1 096 | 3 125 | 24 126 | 3 248 |
+
+Le candidat gagne 25,327 s (5,64 %) et 905 151 octets (6,72 %). Les 3 125 cibles URI uniques sont inchangées, dont les 3 003 cibles de citation ; les 20 878 liens internes résolvent tous leur destination. Les 44 destinations de page finales qui disparaissent ne sont ciblées par aucun lien. Les 400 figures conservent un texte alternatif non vide et une boîte /BBox valide dans la page ; leurs positions ont été recalculées pour le reflow de l’annexe. Les 24 126 liens restants ont tous un propriétaire ParentTree correspondant. Les pages 702, 794 et 795 ont été examinées visuellement.
+
+La compilation reste à 423,847 s, au-dessus du budget de 180 s. Le candidat n’a pas fait l’objet d’une répétition N=1 000 et son RSS de pointe n’a pas été enregistré ; ces deux limites restent à traiter pendant la poursuite de L8.3. Le [relevé brut](validation-latex-citation-url-dedup-n1000-20261007.json) consigne les empreintes, le PDF témoin et l’audit comparatif.
