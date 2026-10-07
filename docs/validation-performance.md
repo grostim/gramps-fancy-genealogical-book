@@ -706,3 +706,20 @@ Two separate direct tagged LuaLaTeX passes use the same URL-deduplicated source 
 A second pass divides the PDF-string operation: `__hyp_text_purify:nN` takes 16.518 seconds and `str_set_convert:Nnnn` takes 5.336 seconds across 20,878 labels. The prefix/suffix intervals are nested inside the conversion interval and each is under 0.12 seconds; the two string assignments are also each under 0.12 seconds. These figures come from different single instrumented runs and do not form a paired comparison. Wrapper overhead is uncalibrated, and nested intervals must not be added together.
 
 Both diagnostic PDFs are tagged PDF 2.0, have 1,096 pages, and preserve identical link signatures. All 24,126 Link annotations match their ParentTree OBJR owners; all 400 figures retain nonempty alternative text; the NFC-normalized extracted text matches. The two instrumented PDFs differ in size by six bytes. This profile makes no production change. Further work can explore text purification or UTF-16 hex conversion while keeping the accessible link text intact; any candidate needs repeated timings and the same PDF audit. The N=1,000 budgets of 180 seconds and 512 MiB remain unmet. See the [raw profiles](validation-latex-hyperref-goto-contents-profile-n1000-20261007.json) and the [diagnostic PDF](../tmp/l83-hyperref-goto-encoder-profile-20261007/book.pdf).
+
+### Guarded PDF-string fast path for generated page links — N=1,000 — October 7, 2026
+
+A temporary candidate bypasses Hyperref's private `\__hyp_text_purify:nN` only while `\gfbpagelink` creates a renderer-generated page link. The destination labels use `target-` plus a 96-bit BLAKE2s digest encoded with URL-safe Base64. The override checks that the private hook exists; otherwise Hyperref's normal purification remains active.
+
+Three counterbalanced pairs use the same source, media, and populated `.aux` and `.toc` seeds. Each duration is one direct tagged LuaLaTeX pass, not a complete multi-pass export:
+
+| Pair | Reference (s) | Candidate (s) | Saved (s) | Saved (%) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 210.04 | 181.38 | 28.66 | 13.65% |
+| 2 | 195.99 | 182.60 | 13.39 | 6.83% |
+| 3 | 196.23 | 175.61 | 20.62 | 10.51% |
+| Mean | 200.75 | 179.86 | 20.89 | 10.41% |
+
+All three candidate PDFs match their paired references for page count, link annotation rectangles, link signatures and destinations, annotation contents, ParentTree/OBJR ownership, figure alternative text, and NFC-normalized extracted text. Each PDF is tagged PDF 2.0 with 1,096 pages, 24,126 link annotations (20,878 GoTo and 3,248 URI across 3,125 targets), 24,126 matching OBJR owners, and 400 figures with non-empty alternative text.
+
+This repeated per-pass result supports the narrowly scoped renderer fast path. Two complete builds through the production renderer were also timed at 380.82 and 349.17 seconds. The first produced the audited 1,096-page tagged PDF; the second measured 1,180,112 KiB (1,152.45 MiB) peak LuaLaTeX RSS from 338 one-second samples. The 31.65-second spread is not evidence that the fast path caused a full-build speedup, and the repeat PDF was not retained for a second semantic audit. Both full-build durations exceed 180 seconds, and the sampled RSS exceeds 512 MiB. See the [raw paired profile and audit](validation-latex-hyperref-purify-fastpath-n1000-20261007.json), the [full-build timing and RSS record](validation-latex-hyperref-purify-fastpath-full-build-n1000-20261007.json), and the temporary [candidate PDF](../tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-1/candidate/book.pdf).
