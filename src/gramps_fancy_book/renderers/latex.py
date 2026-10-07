@@ -1371,6 +1371,9 @@ def _render_citation_appendix(
     }
     people_by_handle = {person.handle: person for person in model.people}
     ordered_entries = sorted(entries, key=lambda entry: citation_numbers.get(entry.entry_id, 0))
+    # Keep citation URLs per entry; suppress only duplicate shared-record URLs.
+    seen_source_handles: set[str] = set()
+    seen_repository_handles: set[str] = set()
     for entry in ordered_entries:
         citation = model.citations.get(entry.citation_handle)
         source_handle = entry.source_handle or (
@@ -1402,8 +1405,10 @@ def _render_citation_appendix(
         urls: list[Url] = []
         if citation is not None:
             urls.extend(citation.urls)
-        if source is not None:
+        if source is not None and source_handle not in seen_source_handles:
             urls.extend(source.urls)
+        if source_handle is not None:
+            seen_source_handles.add(source_handle)
         repositories = []
         for reference in entry.repository_refs:
             repository = model.repositories.get(reference.repository_handle)
@@ -1413,8 +1418,12 @@ def _render_citation_appendix(
                 else ""
             ) or reference.repository_handle
             repositories.append((repository_name, reference))
-            if repository is not None:
+            if (
+                repository is not None
+                and reference.repository_handle not in seen_repository_handles
+            ):
                 urls.extend(repository.urls)
+                seen_repository_handles.add(reference.repository_handle)
         if repositories:
             metadata_lines.append(
                 escape_latex_text(label(model, "repositories"))

@@ -624,3 +624,31 @@ A temporary prototype keeps TeX property and sequence updates but sends only `ta
 A complete recompile of the exact generated LaTeX source (SHA-256 `b40c13e8…`) converges in three passes: 26.509, 234.010, and 240.461 seconds, for 500.995 seconds total. macOS `ru_maxrss` records a peak of **1,104,003,072 bytes (1,052.86 MiB)** among child processes, primarily LuaLaTeX; the 512 MiB reference is exceeded. The temporary workspace peaks at 22,614,240 logical bytes (21.57 MiB). This covers compilation and its working directory, not allocations in the full Gramps export process.
 
 The rebuilt PDF retains all audited properties of the previous converged PDF: 1,140 A4 pages, 38,025 destinations, matching structure roles, 400 figures with alt text, 32,950 link annotations with correct OBJR/ParentTree ownership, and the same normalized-text hash. Its binary hash differs; `/CreationDate`, `/ModDate`, and the trailer ID also changed. A byte-level diff was not performed. The two full builds took 449.174 and 500.995 seconds; this pair does not attribute the elapsed-time difference. The 180-second compilation target also remains unmet. See the [RSS and audit record](validation-latex-parenttree-batched-rss-n1000-20261006.json), the [initial converged-build record](validation-latex-parenttree-batched-converged-n1000-20261006.json), and the [recompiled PDF](../tmp/l8-3-rss-parenttree-batched-n1000-20261006/book.pdf).
+
+### Deduplicating shared appendix URLs — N=100 — October 7, 2026
+
+The renderer continues to print every citation's own URLs. In the documentary appendix, it now prints each source and repository URL only at that shared record's first occurrence. Source and repository details, every citation, and its internal references remain in place. All 317 unique URI targets remain accessible, including all 303 citation-specific targets.
+
+Three converged production-helper builds of the same synthetic branching N=100 book, each in a fresh directory, produced these results:
+
+| Variant | Durations (s) | Median (s) | Median PDF (bytes) | Pages | bookurl macros | Link annotations | URI annotations |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Reference | 45.346; 45.563; 45.471 | 45.471 | 1,402,062 | 121 | 909 | 3,335 | 1,216 |
+| Deduplicated shared URLs | 41.161; 41.116; 41.131 | 41.131 | 1,312,919 | 117 | 317 | 2,449 | 330 |
+
+Median compile time falls by 4.340 seconds (9.54%), and the median PDF shrinks by 89,143 bytes (6.36%). All 2,119 internal links remain and resolve to their targets. All 40 figure tags retain non-empty alternative text and a /BBox with positive width and height; some appendix figures move as the shorter text reflows. Every remaining link annotation has the correct ParentTree owner. Pages 77, 78, and 87 were visually inspected; retained URLs are complete and the images do not overlap the text.
+
+This check covers N=100 on a synthetic fixture and does not yet establish whether the N=1,000 PDF budget is met. The dedicated strikethrough recipe validator does not apply to this fixture because it lacks the required passage; the audit therefore used PDF structure checks and visual review of the listed pages. The control has four fewer pages (121 to 117); the only missing named destinations are page.117 through page.120, and no internal link targets them. Timings, LaTeX hashes, and the detailed audit are in the [raw record](validation-latex-citation-url-dedup-n100-20261007.json).
+
+### N=1,000 confirmation — October 7, 2026
+
+One converged N=1,000 candidate build is compared with the converged production control built on October 6. There is only one candidate build and one historical control, so this indicates the direction of the gain without replacing paired repetitions.
+
+| Variant | Compile (s) | PDF (bytes) | Pages | bookurl macros | Link annotations | URI annotations |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Converged control | 449.174 | 13,461,234 | 1,140 | 9,009 | 32,950 | 12,072 |
+| Deduplicated shared URLs | 423.847 | 12,556,083 | 1,096 | 3,125 | 24,126 | 3,248 |
+
+The candidate saves 25.327 seconds (5.64%) and 905,151 bytes (6.72%). All 3,125 unique URI targets remain, including all 3,003 citation-specific targets; all 20,878 internal links resolve. None of the 44 removed trailing page destinations is targeted by an internal link. All 400 figures retain non-empty alternative text and a valid /BBox on their page; their positions were recalculated for the appendix reflow. All 24,126 remaining links have matching ParentTree owners. Candidate pages 702, 794, and 795 were visually inspected.
+
+Compilation still takes 423.847 seconds, above the 180-second target. The N=1,000 candidate has not been repeated and its peak RSS was not recorded; both remain open items in L8.3. The [raw record](validation-latex-citation-url-dedup-n1000-20261007.json) includes hashes, the control PDF, and the comparison audit.

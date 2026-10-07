@@ -1,0 +1,145 @@
+{
+  "date": "2026-10-07",
+  "purpose": "Measure deduplication of repeated source and repository URLs in the tagged documentary appendix.",
+  "environment": {
+    "os": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "compile_helper": "src/gramps_fancy_book/renderers/latex_pdf.py::_compile_latex"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "people": 202,
+    "families": 101,
+    "events": 303,
+    "citations": 303,
+    "source_records": 13,
+    "repositories": 1,
+    "synthetic_media": 20,
+    "portrait_size": "96x72",
+    "source_revision": "c1ae834",
+    "reference_latex_sha256": "81b47cad1e939245577bf57c0d265c15e2df0b589563f57aa3dee431ffc7a09f",
+    "candidate_latex_sha256": "a06ebea76512dd954b9671a9ffcb04303d65d5ff1fb660a5cee114dc32a7adc4"
+  },
+  "method": {
+    "repetitions_per_variant": 3,
+    "compilation": "Each variant was compiled to convergence through the production helper in a fresh work directory. The initial baseline/candidate builds were followed by two additional runs per variant; every compile completed without a layout-warning failure.",
+    "runs_in_execution_order": [
+      "reference-0",
+      "candidate-0",
+      "reference-1",
+      "candidate-1",
+      "candidate-2",
+      "reference-2"
+    ],
+    "measurement_scope": "Complete LuaLaTeX production-helper time, including all converged passes; excludes fixture generation."
+  },
+  "runs": {
+    "reference": [
+      {
+        "seconds": 45.346087,
+        "pdf_bytes": 1402062,
+        "pdf_sha256": "337dfa97646d87d685103e1d48a4534af0ca52471d528b2671000e757bd8c0c8"
+      },
+      {
+        "seconds": 45.563,
+        "pdf_bytes": 1402060,
+        "pdf_sha256": "369084b07b9fc48e47e8951785de3ad3fe7cd8df55fec0a64d20e9b78f1ae54d"
+      },
+      {
+        "seconds": 45.471,
+        "pdf_bytes": 1402065,
+        "pdf_sha256": "ef316f75f86b8c699e74c5df0f8638a1a5d4d3c7e46aa7f23cf1d5faf0ab03d1"
+      }
+    ],
+    "candidate": [
+      {
+        "seconds": 41.161221,
+        "pdf_bytes": 1312918,
+        "pdf_sha256": "0f4376cc53b20ccc956c8dee3e434d4c6a7573b90ddf7d2c880a44965f54d78a"
+      },
+      {
+        "seconds": 41.116,
+        "pdf_bytes": 1312919,
+        "pdf_sha256": "9fd89e4f7f8f7003e6f5e397e71a0b72da602ee9413453e9d5046d1595327358"
+      },
+      {
+        "seconds": 41.131,
+        "pdf_bytes": 1312919,
+        "pdf_sha256": "e9413670cc62f6a40a0fb0c7ca8a99987858eff44d1e68f05b885b74e889a5db"
+      }
+    ]
+  },
+  "summary": {
+    "reference_median_seconds": 45.471,
+    "candidate_median_seconds": 41.131,
+    "median_seconds_saved": 4.34,
+    "median_compile_reduction_percent": 9.544,
+    "reference_median_pdf_bytes": 1402062,
+    "candidate_median_pdf_bytes": 1312919,
+    "median_pdf_bytes_saved": 89143,
+    "median_pdf_reduction_percent": 6.357,
+    "reference_latex_bytes": 439665,
+    "candidate_latex_bytes": 410944,
+    "bookurl_macro_count": {
+      "reference": 909,
+      "candidate": 317
+    },
+    "pdf_pages": {
+      "reference": 121,
+      "candidate": 117
+    },
+    "link_annotations": {
+      "reference": 3335,
+      "candidate": 2449
+    },
+    "uri_annotations": {
+      "reference": 1216,
+      "candidate": 330
+    },
+    "unique_uri_targets": 317
+  },
+  "audit": {
+    "citation_specific_uri_targets": 303,
+    "citation_specific_uri_counts_unchanged": true,
+    "unique_uri_target_set_unchanged": true,
+    "internal_go_to_links": {
+      "reference": 2119,
+      "candidate": 2119,
+      "all_candidate_targets_resolve": true
+    },
+    "figure_tags": {
+      "reference": 40,
+      "candidate": 40,
+      "candidate_nonempty_alt": 40,
+      "candidate_valid_bbox": 40,
+      "valid_bbox_definition": "Four numeric coordinates with positive width and height.",
+      "note": "Some appendix figure positions changed as URL lines were removed and the document reflowed; candidate boxes were read from the converged tagged PDF."
+    },
+    "parenttree": {
+      "all_reference_link_annotations_have_matching_parenttree_owners": true,
+      "all_candidate_link_annotations_have_matching_parenttree_owners": true
+    },
+    "named_destinations": {
+      "reference": 3877,
+      "candidate": 3873,
+      "removed": [
+        "page.117",
+        "page.118",
+        "page.119",
+        "page.120"
+      ],
+      "internal_links_to_removed_destinations": 0
+    },
+    "visual_reviewed_candidate_pdf_pages": [
+      77,
+      78,
+      87
+    ],
+    "dedicated_strikethrough_recipe_validator": {
+      "status": "not_applicable",
+      "reason": "The N=100 synthetic fixture does not contain the validator's required strikethrough test passage; PDF structure was audited separately."
+    }
+  },
+  "interpretation": "The renderer retains each citation-specific URL and the complete set of unique URI targets, while shared source and repository URLs are emitted once at their first citation occurrence. Three N=100 builds show a repeatable reduction in compile time and PDF size. N=1,000 performance remains to be measured; the synthetic fixture and single-machine timings do not establish performance on larger real Gramps databases."
+}
