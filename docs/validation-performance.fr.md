@@ -917,3 +917,20 @@ Deux passes LuaLaTeX directes et balisées, exécutées séparément, utilisent 
 Une seconde passe décompose la génération de la chaîne PDF : `__hyp_text_purify:nN` prend 16,518 s et `str_set_convert:Nnnn` 5,336 s sur 20 878 libellés. Les intervalles des préfixes et suffixes sont inclus dans celui de la conversion et durent chacun moins de 0,12 s ; les deux affectations de chaîne durent elles aussi chacune moins de 0,12 s. Ces chiffres proviennent de deux runs instrumentés isolés, sans comparaison appariée. Le surcoût des wrappers n’est pas calibré et les intervalles imbriqués ne doivent pas être additionnés.
 
 Les deux PDF diagnostiques sont balisés en PDF 2.0 et comptent 1 096 pages ; leurs signatures de liens sont identiques. Les 24 126 annotations Link correspondent toutes à leur propriétaire OBJR dans le ParentTree ; les 400 figures gardent un texte alternatif non vide ; le texte extrait normalisé en NFC correspond. Les deux PDF instrumentés diffèrent de six octets. Aucun changement de production n’est apporté par ce profil. La suite peut examiner la purification du texte ou sa conversion UTF-16 hexadécimale en conservant le contenu lisible des liens accessibles ; tout candidat devra être mesuré plusieurs fois et subir le même audit PDF. Les budgets N=1 000 de 180 s et 512 Mio restent dépassés. Voir les [profils bruts](validation-latex-hyperref-goto-contents-profile-n1000-20261007.json) et le [PDF diagnostique](../tmp/l83-hyperref-goto-encoder-profile-20261007/book.pdf).
+
+### Raccourci protégé de purification PDF pour les liens de page — N=1 000 — 7 octobre 2026
+
+Un candidat temporaire contourne la macro privée Hyperref `\__hyp_text_purify:nN` uniquement pendant la création d’un lien de page généré par `\gfbpagelink`. Les destinations du renderer commencent par `target-` et utilisent un condensat BLAKE2s de 96 bits encodé en Base64 compatible URL. Le remplacement vérifie que la macro privée existe ; sinon, Hyperref conserve sa purification normale.
+
+Trois paires en ordre alterné utilisent le même source, les mêmes médias et les mêmes fichiers `.aux` et `.toc` peuplés. Chaque durée correspond à une passe LuaLaTeX balisée directe, pas à un export complet en plusieurs passes :
+
+| Paire | Témoin (s) | Candidat (s) | Gain (s) | Gain (%) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 210,04 | 181,38 | 28,66 | 13,65 % |
+| 2 | 195,99 | 182,60 | 13,39 | 6,83 % |
+| 3 | 196,23 | 175,61 | 20,62 | 10,51 % |
+| Moyenne | 200,75 | 179,86 | 20,89 | 10,41 % |
+
+Les trois PDFs candidats correspondent à leurs témoins pour le nombre de pages, les rectangles des annotations de lien, les signatures et destinations des liens, leur contenu, les propriétaires OBJR/ParentTree, les textes alternatifs des figures et le texte extrait normalisé en NFC. Chaque PDF est balisé en version 2.0 et compte 1 096 pages, 24 126 annotations de lien (20 878 GoTo et 3 248 URI sur 3 125 cibles), 24 126 propriétaires OBJR correspondants et 400 figures avec un texte alternatif non vide.
+
+Cette mesure répétée par passe justifie le raccourci limité dans le renderer. Elle ne détermine pas la durée ni la mémoire d’un build complet convergé ; les objectifs de 180 s par build complet et 512 Mio restent à vérifier. Voir le [relevé apparié et son audit](validation-latex-hyperref-purify-fastpath-n1000-20261007.json) et le [PDF candidat temporaire](../tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-1/candidate/book.pdf).

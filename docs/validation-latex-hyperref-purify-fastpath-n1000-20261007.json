@@ -1,0 +1,158 @@
+{
+  "profile_id": "l83-hyperref-purify-page-links-n1000-20261007",
+  "date": "2026-10-07",
+  "scope": "one direct tagged LuaLaTeX pass per run; not a converged multi-pass book build",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events_and_citations": 3003,
+    "media": 200,
+    "pages": 1096
+  },
+  "environment": {
+    "os": "macOS 27.0",
+    "architecture": "arm64",
+    "python": "3.14.0",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)"
+  },
+  "inputs": {
+    "reference_tex_sha256": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "candidate_tex_sha256": "cf24d865f9771654ec37c94f370a0b193c62cf79d3cbdc444d2ca2ac4adc544d",
+    "aux_seed_sha256": "cc026874de761f9dd8b3b00b3bcd84ee40256f9524ef12ebf54c4dd4387eaa33",
+    "toc_seed_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+    "media": "same 200 media files for every run"
+  },
+  "candidate": {
+    "description": "Skip Hyperref PDF-string purification only while the generated plugin page-link macro runs. Generated destinations use target- plus a 96-bit BLAKE2s digest encoded with URL-safe Base64. The private Hyperref hook is existence-guarded; when unavailable, default purification remains active.",
+    "renderer_changed_after_measurement": true
+  },
+  "method": {
+    "repetitions": 3,
+    "ordering": [
+      "reference,candidate",
+      "candidate,reference",
+      "reference,candidate"
+    ],
+    "auxiliary_files": "The same populated .aux and .toc seeds were copied for every run.",
+    "timing": "One direct LuaLaTeX pass; /usr/bin/time -p wall, user and system durations.",
+    "notes": "Runs are paired and counterbalanced. No RSS measurement or complete multi-pass build is included."
+  },
+  "runs": [
+    {
+      "pair": "pair-1",
+      "variant": "reference",
+      "wall_seconds": 210.04,
+      "user_seconds": 202.04,
+      "system_seconds": 2.13,
+      "pdf_bytes": 12556080,
+      "pdf_path": "tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-1/reference/book.pdf"
+    },
+    {
+      "pair": "pair-1",
+      "variant": "candidate",
+      "wall_seconds": 181.38,
+      "user_seconds": 174.94,
+      "system_seconds": 1.64,
+      "pdf_bytes": 12556079,
+      "pdf_path": "tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-1/candidate/book.pdf"
+    },
+    {
+      "pair": "pair-2",
+      "variant": "candidate",
+      "wall_seconds": 182.6,
+      "user_seconds": 177.66,
+      "system_seconds": 1.75,
+      "pdf_bytes": 12556073,
+      "pdf_path": "tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-2/candidate/book.pdf"
+    },
+    {
+      "pair": "pair-2",
+      "variant": "reference",
+      "wall_seconds": 195.99,
+      "user_seconds": 193.52,
+      "system_seconds": 1.32,
+      "pdf_bytes": 12556077,
+      "pdf_path": "tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-2/reference/book.pdf"
+    },
+    {
+      "pair": "pair-3",
+      "variant": "reference",
+      "wall_seconds": 196.23,
+      "user_seconds": 193.94,
+      "system_seconds": 1.28,
+      "pdf_bytes": 12556074,
+      "pdf_path": "tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-3/reference/book.pdf"
+    },
+    {
+      "pair": "pair-3",
+      "variant": "candidate",
+      "wall_seconds": 175.61,
+      "user_seconds": 172.49,
+      "system_seconds": 1.36,
+      "pdf_bytes": 12556077,
+      "pdf_path": "tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-3/candidate/book.pdf"
+    }
+  ],
+  "paired_summary": {
+    "pairs": [
+      {
+        "pair": "pair-1",
+        "reference_seconds": 210.04,
+        "candidate_seconds": 181.38,
+        "saved_seconds": 28.66,
+        "saved_percent": 13.65
+      },
+      {
+        "pair": "pair-2",
+        "reference_seconds": 195.99,
+        "candidate_seconds": 182.6,
+        "saved_seconds": 13.39,
+        "saved_percent": 6.83
+      },
+      {
+        "pair": "pair-3",
+        "reference_seconds": 196.23,
+        "candidate_seconds": 175.61,
+        "saved_seconds": 20.62,
+        "saved_percent": 10.51
+      }
+    ],
+    "reference_mean_seconds": 200.75,
+    "candidate_mean_seconds": 179.86,
+    "mean_paired_savings_seconds": 20.89,
+    "relative_to_reference_mean_percent": 10.41,
+    "arithmetic_mean_of_pair_percentages": 10.33,
+    "median_reference_seconds": 196.23,
+    "median_candidate_seconds": 181.38
+  },
+  "pdf_audit": {
+    "all_three_pairs_semantically_equal": true,
+    "pages": 1096,
+    "pdf_version": "2.0",
+    "tagged": true,
+    "link_annotations": 24126,
+    "actions": {
+      "GoTo": 20878,
+      "URI": 3248
+    },
+    "unique_uri_targets": 3125,
+    "parenttree_objr_owner_matches": 24126,
+    "parenttree_mismatches": 0,
+    "figures": 400,
+    "figures_with_nonempty_alt": 400,
+    "nfc_text_chars": 2244123,
+    "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+    "link_signatures": "Compared page, rectangle, action, destination and annotation Contents in order; exact match within each pair.",
+    "text_extraction": {
+      "tool": "pypdf 6.19.0",
+      "procedure": "Extract each page with extract_text(), join pages with LF, normalize to Unicode NFC.",
+      "characters": 2244123,
+      "sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+      "result": "Exact match within each pair."
+    }
+  },
+  "conclusion": "The targeted fast path has a repeatable 10.41% mean reduction for a single tagged pass on this N=1000 fixture and preserves the audited PDF semantics. This does not establish the gain for the full converged export or memory use; the 180-second complete-build and 512-MiB targets remain unverified.",
+  "implementation_status": "The renderer fast path is committed as 39edc7c on the follow-up branch. The benchmark candidate was the matching temporary TeX preamble prototype."
+}
