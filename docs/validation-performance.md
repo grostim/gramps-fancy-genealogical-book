@@ -676,3 +676,11 @@ The converged build takes 423.158 seconds; the two tagged passes total 397.531 s
 The profiled run's `ru_maxrss` is 74,596,352 bytes (71.14 MiB) above the previous unprofiled repeat. This pair cannot attribute the difference to profiling or run-to-run variation; peak RSS still needs repeated measurements.
 
 The next measurement targets internal page-link cost in the tagged passes using this deduplicated source; any prototype must preserve every Link role, annotation, and ParentTree association. The [raw per-pass profile](validation-latex-citation-url-dedup-pass-profile-n1000-20261007.json) includes timings, RSS peaks, hashes, and the PDF audit.
+
+### Hyperref macro profile on the deduplicated source — N=1,000 — October 7, 2026
+
+One direct tagged pass was instrumented around the complete `\hyperlink` and `\href` macros, using the candidate's converged `.aux` and `.toc` files. It takes 200.481 seconds. The Lua timer records 17,601 `\hyperlink` calls with 50.906 seconds of inclusive CPU time, and 3,125 `\href` calls with 9.896 seconds.
+
+The earlier profile of the source before URL deduplication also recorded 17,601 `\hyperlink` calls (49.005 seconds), but 9,009 `\href` calls (26.052 seconds). The candidate removes 5,884 external-link calls and about 62% of their inclusive time. The small increase in `\hyperlink` time (1.901 seconds) is not a paired comparison and does not establish a slowdown. These intervals overlap with tagpdf work and should not be added to compiler durations.
+
+The diagnostic tagged PDF has 1,096 pages and retains 24,126 links with matching OBJR/ParentTree owners, 3,125 URI targets, 20,878 internal links, all 400 accessible figures, and the same normalized extracted-text hash. This profile makes no production code change. The next investigation can examine the internal hyperlink path while preserving all accessible structure. See the [raw hyperref profile](validation-latex-citation-url-dedup-link-profile-n1000-20261007.json), the [earlier profile](validation-latex-link-macro-profile-parenttree-batched-n1000-20261006.json), and the [diagnostic PDF](../tmp/l83-shared-source-url-dedup-20261007/n1000/hyperlink-profile/instrumented/book.pdf).

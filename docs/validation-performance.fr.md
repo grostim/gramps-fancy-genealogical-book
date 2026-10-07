@@ -887,3 +887,11 @@ Le total du build convergé est de 423,158 s ; les deux passes balisées cumulen
 Le `ru_maxrss` du run profilé dépasse de 74 596 352 octets (71,14 Mio) celui de la répétition sans profilage. Cette paire ne permet pas d’attribuer l’écart au profilage ou à la variabilité des exécutions ; le RSS de pointe reste à caractériser par répétitions.
 
 La prochaine mesure porte sur le coût des liens de page internes dans les passes balisées, à partir de ce source dédoublonné ; les essais doivent garder chaque rôle Link, annotation et association ParentTree. Le [relevé brut du profil par passe](validation-latex-citation-url-dedup-pass-profile-n1000-20261007.json) contient les temps, pics RSS, hashes et audit du PDF.
+
+### Profil des macros hyperref sur le source dédoublonné — N=1 000 — 7 octobre 2026
+
+Une passe directe balisée est instrumentée autour des macros complètes `\hyperlink` et `\href`, à partir des fichiers `.aux` et `.toc` convergés du candidat. Elle dure 200,481 s. Le timer Lua compte 17 601 appels `\hyperlink` pour 50,906 s de temps CPU inclusif, et 3 125 appels `\href` pour 9,896 s.
+
+Le profil antérieur du source avant dédoublonnage comptait également 17 601 appels `\hyperlink` (49,005 s), mais 9 009 appels `\href` (26,052 s). Le candidat retire donc 5 884 appels externes et environ 62 % de leur temps inclusif. La légère hausse du temps `\hyperlink` (1,901 s) n’est pas une comparaison appariée et ne prouve aucun ralentissement. Ces intervalles se recouvrent avec le travail tagpdf et ne s’additionnent pas aux durées du compilateur.
+
+Le PDF diagnostique balisé de 1 096 pages conserve 24 126 liens avec leur propriétaire OBJR/ParentTree, 3 125 cibles URI, 20 878 liens internes, les 400 figures accessibles et le même hash de texte extrait normalisé. Aucun code de production n’est changé par ce profil. La suite peut examiner le chemin des hyperliens internes en conservant toute la structure accessible. Voir le [relevé brut du profil hyperref](validation-latex-citation-url-dedup-link-profile-n1000-20261007.json), le [profil antérieur](validation-latex-link-macro-profile-parenttree-batched-n1000-20261006.json) et le [PDF diagnostique](../tmp/l83-shared-source-url-dedup-20261007/n1000/hyperlink-profile/instrumented/book.pdf).
