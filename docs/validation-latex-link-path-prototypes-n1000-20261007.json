@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-07",
+  "title": "Internal link path prototypes on the URL-deduplicated N=1,000 source",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200
+  },
+  "source_and_seeds": {
+    "source_revision": "2a14b4fb278d085092b5ea7d82091f5e06c9754c",
+    "reference_tex_sha256": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "reference_tex_bytes": 4025413,
+    "aux_seed_sha256": "cc026874de761f9dd8b3b00b3bcd84ee40256f9524ef12ebf54c4dd4387eaa33",
+    "toc_seed_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+    "out_seed": false
+  },
+  "method": {
+    "compilation": "One direct tagged LuaLaTeX pass per source, using the same populated .aux and .toc seeds; no production convergence helper or .out seed.",
+    "production_sources_changed": false,
+    "reference": "The ordinary production \u005cgfbpagelink and \u005chyperlink definitions.",
+    "audit": "Compare page count, PDF tagging, link action/rectangle/contents signatures, ParentTree OBJR owners, figure alt text, and normalized extracted text."
+  },
+  "reference": {
+    "pdf_path": "tmp/l83-shared-source-url-dedup-20261007/n1000/hyperlink-internal-reference/reference/book.pdf",
+    "wall_seconds": 196.452,
+    "child_ru_maxrss_bytes": 876478464,
+    "pdf_bytes": 12556074,
+    "pdf_audit": {
+      "pages": 1096,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "link_annotations": 24126,
+      "uri_annotations": 3248,
+      "unique_uri_targets": 3125,
+      "internal_go_to_links": 20878,
+      "parenttree_objr_owner_matches": 24126,
+      "parenttree_mismatches": 0,
+      "figures": 400,
+      "figures_with_nonempty_alt": 400,
+      "normalized_text_sha256": "ceace3ce36f801c17292fdb861dbce8a3bdc87a2e917afccc94c16f7963b0be6",
+      "normalized_text_chars": 2242841
+    }
+  },
+  "candidates": [
+    {
+      "name": "direct_hyper_at_link",
+      "change": "Replace the public \u005chyperlink call inside the page-link macro with the private \u005chyper@link{link}{target}{text} macro.",
+      "pdf_path": "tmp/l83-shared-source-url-dedup-20261007/n1000/hyperlink-internal-prototype-fixed/direct-hyper-link/book.pdf",
+      "tex_sha256": "4a2e190212a047614287ed2efc0a50438d31638571218c14b35b35e663f859f0",
+      "wall_seconds": 209.819,
+      "delta_vs_reference_seconds": 13.367,
+      "delta_vs_reference_percent": 6.80,
+      "child_ru_maxrss_bytes": 860160000,
+      "pdf_bytes": 12556074,
+      "pdf_audit_matches_reference": true,
+      "decision": "Reject: the single pass is slower; the lower single-run RSS does not establish a memory improvement."
+    },
+    {
+      "name": "direct_hyper_at_linkstart_end",
+      "change": "Replace the public link with private \u005chyper@linkstart and \u005chyper@linkend calls, retaining \u005cHy@xspace@end.",
+      "pdf_path": "tmp/l83-hyperlink-start-end-20261007/book.pdf",
+      "tex_sha256": "a09511de670ad8f75c3bc424848c17715d8108b2a387f9003561b592adad8e6f",
+      "wall_seconds": 205.696,
+      "delta_vs_reference_seconds": 9.244,
+      "delta_vs_reference_percent": 4.71,
+      "child_ru_maxrss_bytes": 1131544576,
+      "pdf_bytes": 12556073,
+      "pdf_audit_matches_reference": true,
+      "link_annotation_signature_counter_matches_reference": true,
+      "decision": "Reject: this private entry point is slower in the single pass and offers no performance basis for production use."
+    },
+    {
+      "name": "getpagerefnumber",
+      "change": "Replace \u005cpageref*{target} with \u005cgetpagerefnumber{target}; retain the ordinary public \u005chyperlink macro.",
+      "pdf_path": "tmp/l83-pageref-getnumber-20261007/book.pdf",
+      "tex_sha256": "f2c668b4817c151fcaedca92cee725484815505aeaea7ccbc753ef436deb8d50",
+      "wall_seconds": 196.830,
+      "delta_vs_reference_seconds": 0.378,
+      "delta_vs_reference_percent": 0.19,
+      "child_ru_maxrss_bytes": 1148321792,
+      "pdf_bytes": 12556083,
+      "pdf_audit_matches_reference": true,
+      "link_annotation_signature_counter_matches_reference": true,
+      "decision": "Reject: the single-pass difference is negligible and in the slower direction."
+    }
+  ],
+  "audit_shared_by_all_candidates": {
+    "pages": 1096,
+    "tagged": true,
+    "link_annotations": 24126,
+    "uri_annotations": 3248,
+    "unique_uri_targets": 3125,
+    "internal_go_to_links": 20878,
+    "parenttree_objr_owner_matches": 24126,
+    "parenttree_mismatches": 0,
+    "figures": 400,
+    "figures_with_nonempty_alt": 400,
+    "normalized_text_sha256": "ceace3ce36f801c17292fdb861dbce8a3bdc87a2e917afccc94c16f7963b0be6",
+    "normalized_text_chars": 2242841,
+    "all_link_page_rect_action_and_contents_signatures_match_reference": true
+  },
+  "legacy_macro_probe": {
+    "attempted_wrappers": ["\\find@pdflink", "\\close@pdflink"],
+    "observed_call_counts": {"find@pdflink": 0, "close@pdflink": 0},
+    "interpretation": "The current tagged hyperref route does not expose the legacy pdfTeX/LuaTeX find/close macros at document start; these zero-call wrappers are not timing results. Instrument the active tagged kernel API only as a diagnostic."
+  },
+  "limitations": [
+    "Each candidate was compiled once on one machine; these are unpaired diagnostic passes, not complete converged export comparisons.",
+    "The private hyperref entry points are implementation details and were not evaluated across package versions.",
+    "ru_maxrss values are one-run child-process readings with substantial observed variation; they do not establish memory changes.",
+    "The prior pageref profile measured 0.509705 seconds over 17,590 calls, about 0.20% of a direct pass; page-number resolution is not a useful optimization target."
+  ],
+  "decision": "No candidate is retained. The direct private link variants are slower, and replacing pageref* with getpagerefnumber does not measurably improve time. All three PDFs preserve the reference link annotations, their exact ParentTree OBJR owners, figure alt text, and normalized text. The N=1,000 targets of 180 seconds and 512 MiB remain unmet; further work should focus on measured tagged-link structure cost, not page-reference expansion or unprofiled legacy macros."
+}
