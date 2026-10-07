@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-08",
+  "title": "Generated destination identity conversion fast path after guarded Hyperref page-link purification",
+  "source_revision": "7e02043500d841edaf238fbccaf0fdc9b3d9a238",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200
+  },
+  "inputs": {
+    "aux_seed_sha256": "fe6f064731a40ea30972f173769961c97edcffb1809be305f86ec8e8b4ffa217",
+    "toc_seed_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+    "out_seed": false,
+    "compile": "One direct tagged LuaLaTeX pass per run from identical populated .aux and .toc seeds; no production convergence helper."
+  },
+  "candidate": {
+    "scope": "Skip only Hyperref utf8/string-raw conversion while the plugin-owned page-link boolean is active.",
+    "input_invariant": "The page-link renderer receives target-* labels made from URL-safe ASCII characters.",
+    "other_encodings": "Unchanged; utf16/hex accessible link Contents and all non-page-link conversion paths keep the original Hyperref converter.",
+    "implementation": "A temporary TeX preamble wrapper guarded by the existence of the purification and Unicode conversion hooks.",
+    "renderer_changed_after_measurement": true
+  },
+  "method": {
+    "repetitions": 3,
+    "ordering": [
+      "reference,candidate",
+      "candidate,reference",
+      "reference,candidate"
+    ],
+    "timing": "Wall time from Python time.perf_counter around one lualatex process; /usr/bin/time was not used in the paired series.",
+    "notes": "The candidate differs by the destination identity bypass only. Every run starts from the same .aux and .toc seeds."
+  },
+  "runs": [
+    {
+      "pair": "pair-1",
+      "variant": "reference",
+      "wall_seconds": 164.84,
+      "pdf_bytes": 12556083,
+      "pdf_path": "tmp/l83-hyperref-target-identity-paired-20261008/pair-1/reference/book.pdf"
+    },
+    {
+      "pair": "pair-1",
+      "variant": "candidate",
+      "wall_seconds": 163.508,
+      "pdf_bytes": 12556074,
+      "pdf_path": "tmp/l83-hyperref-target-identity-paired-20261008/pair-1/candidate/book.pdf"
+    },
+    {
+      "pair": "pair-2",
+      "variant": "candidate",
+      "wall_seconds": 163.222,
+      "pdf_bytes": 12556083,
+      "pdf_path": "tmp/l83-hyperref-target-identity-paired-20261008/pair-2/candidate/book.pdf"
+    },
+    {
+      "pair": "pair-2",
+      "variant": "reference",
+      "wall_seconds": 165.537,
+      "pdf_bytes": 12556080,
+      "pdf_path": "tmp/l83-hyperref-target-identity-paired-20261008/pair-2/reference/book.pdf"
+    },
+    {
+      "pair": "pair-3",
+      "variant": "reference",
+      "wall_seconds": 165.002,
+      "pdf_bytes": 12556074,
+      "pdf_path": "tmp/l83-hyperref-target-identity-paired-20261008/pair-3/reference/book.pdf"
+    },
+    {
+      "pair": "pair-3",
+      "variant": "candidate",
+      "wall_seconds": 163.018,
+      "pdf_bytes": 12556074,
+      "pdf_path": "tmp/l83-hyperref-target-identity-paired-20261008/pair-3/candidate/book.pdf"
+    }
+  ],
+  "paired_summary": {
+    "pairs": [
+      {
+        "pair": "pair-1",
+        "reference_seconds": 164.84,
+        "candidate_seconds": 163.508,
+        "saved_seconds": 1.332,
+        "saved_percent": 0.81
+      },
+      {
+        "pair": "pair-2",
+        "reference_seconds": 165.537,
+        "candidate_seconds": 163.222,
+        "saved_seconds": 2.315,
+        "saved_percent": 1.4
+      },
+      {
+        "pair": "pair-3",
+        "reference_seconds": 165.002,
+        "candidate_seconds": 163.018,
+        "saved_seconds": 1.984,
+        "saved_percent": 1.2
+      }
+    ],
+    "reference_mean_seconds": 165.126,
+    "candidate_mean_seconds": 163.249,
+    "mean_paired_savings_seconds": 1.877,
+    "relative_to_reference_mean_percent": 1.14
+  },
+  "pdf_audit": {
+    "all_three_pairs_semantically_equal": true,
+    "all_three_pairs_link_signatures_equal": true,
+    "pages": 1096,
+    "pdf_version": "2.0",
+    "tagged": true,
+    "link_annotations": 24126,
+    "actions": {
+      "GoTo": 20878,
+      "URI": 3248
+    },
+    "unique_uri_targets": 3125,
+    "parenttree_objr_owner_matches": 24126,
+    "parenttree_mismatches": 0,
+    "figures": 400,
+    "figures_with_nonempty_alt": 400,
+    "nfc_text_chars": 2244123,
+    "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+    "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374",
+    "comparison": "Exact semantic-field equality and ordered link-signature equality within each pair; no byte-for-byte equality claim."
+  },
+  "conclusion": "The guarded destination identity bypass saves 1.877 seconds (1.14%) per direct tagged pass on this fixture across three counterbalanced pairs while preserving audited PDF semantics. This does not establish a complete-build time or RSS improvement."
+}
