@@ -651,4 +651,14 @@ One converged N=1,000 candidate build is compared with the converged production 
 
 The candidate saves 25.327 seconds (5.64%) and 905,151 bytes (6.72%). All 3,125 unique URI targets remain, including all 3,003 citation-specific targets; all 20,878 internal links resolve. None of the 44 removed trailing page destinations is targeted by an internal link. All 400 figures retain non-empty alternative text and a valid /BBox on their page; their positions were recalculated for the appendix reflow. All 24,126 remaining links have matching ParentTree owners. Candidate pages 702, 794, and 795 were visually inspected.
 
-Compilation still takes 423.847 seconds, above the 180-second target. The N=1,000 candidate has not been repeated and its peak RSS was not recorded; both remain open items in L8.3. The [raw record](validation-latex-citation-url-dedup-n1000-20261007.json) includes hashes, the control PDF, and the comparison audit.
+Compilation still takes 423.847 seconds, above the 180-second target. A repeat and RSS measurement are documented in the following section; both results still need more paired repetitions. The [initial raw record](validation-latex-citation-url-dedup-n1000-20261007.json) includes hashes, the control PDF, and the comparison audit.
+
+### Converged repeat and RSS — N=1,000 — October 7, 2026
+
+The same candidate source (SHA-256 `63d01782…`) and its 200 media assets were recompiled in a fresh directory. The build converged in 407.011 seconds. The earlier build of the same source took 423.847 seconds; the median of the two measurements is 415.429 seconds, with a 16.836-second range (4.05% of the median). Two measurements are not enough to characterize the variation precisely.
+
+On macOS, `ru_maxrss` reports 1,069,842,432 bytes (1,020.28 MiB) for child processes, primarily LuaLaTeX. A one-second `ps` sample peaks at 1,067,237,376 bytes (1,017.8 MiB), and the temporary workspace peaks at 21,417,167 logical bytes (20.43 MiB), sampled every 100 ms. RSS is 34,160,640 bytes below the historical October 6 record, but that record used the earlier source without URL deduplication; this comparison does not demonstrate a stable memory improvement. The 512 MiB reference and 180-second compile target remain unmet.
+
+The repeated PDF is tagged, PDF 2.0, and has 1,096 pages. It retains 24,126 link annotations, 3,248 URI annotations across 3,125 targets, 20,878 internal GoTo links, and all 400 figures with alternative text and valid /BBox values. Every link annotation has a matching OBJR owner in the ParentTree; the normalized extracted-text hash exactly matches the first candidate PDF. The binary hash differs because date metadata and the trailer ID are regenerated on each compile. Per-pass durations were not captured for this repeat. See the [raw repeat and RSS record](validation-latex-citation-url-dedup-repeat-rss-n1000-20261007.json) and the [recompiled PDF](../tmp/l83-shared-source-url-dedup-20261007/n1000/repeat-rss/book.pdf).
+
+The next L8.3 step is to measure the candidate's tagged passes separately and profile their remaining cost, without dropping a pass or degrading accessible figure geometry.

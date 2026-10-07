@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-07",
+  "title": "Repeated converged build and RSS after shared citation URL deduplication",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200,
+    "portrait_size": "96x72"
+  },
+  "source": {
+    "source_revision": "2a14b4fb278d085092b5ea7d82091f5e06c9754c",
+    "generated_tex_sha256": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "generated_tex_bytes": 4025413,
+    "media_asset_count": 200
+  },
+  "measurement": {
+    "scope": "Complete converged LuaLaTeX compilation of the exact retained candidate source and media in a fresh directory; excludes Gramps UI and model-generation allocations.",
+    "status": "converged",
+    "passes_to_convergence": null,
+    "compile_seconds": 407.011,
+    "compiler_child_ru_maxrss_bytes": 1069842432,
+    "compiler_child_ru_maxrss_mib": 1020.28,
+    "compiler_process_peak_rss_bytes_sampled_1s": 1067237376,
+    "compiler_process_peak_rss_mib_sampled_1s": 1017.8,
+    "compiler_process_rss_sample_count": 395,
+    "temporary_workspace_peak_logical_bytes_sampled_100ms": 21417167,
+    "temporary_workspace_peak_logical_mib_sampled_100ms": 20.43,
+    "pdf_path": "tmp/l83-shared-source-url-dedup-20261007/n1000/repeat-rss/book.pdf",
+    "pdf_bytes": 12556074,
+    "pdf_sha256": "7013301710fc825c9e353425490761300a32a51bb4d8df1c5fbf2a020b420b37",
+    "generated_tex_sha256_after_compile": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "binary_metadata_differences_observed": [
+      "The PDF trailer ID and creation/modification metadata vary between converged builds."
+    ]
+  },
+  "audit": {
+    "matches_previous_candidate_for_audited_metrics": true,
+    "pages": 1096,
+    "pdf_version": "%PDF-2.0",
+    "tagged": true,
+    "link_annotations": 24126,
+    "uri_annotations": 3248,
+    "unique_uri_targets": 3125,
+    "internal_go_to_links": 20878,
+    "links_with_matching_parenttree_objr_owner": 24126,
+    "links_missing_or_wrong_parenttree_objr_owner": 0,
+    "figures": 400,
+    "figures_with_nonempty_alt_and_valid_a4_bbox": 400,
+    "normalized_text_sha256": "ceace3ce36f801c17292fdb861dbce8a3bdc87a2e917afccc94c16f7963b0be6",
+    "normalized_text_chars": 2242841
+  },
+  "comparison": {
+    "previous_candidate_compile_seconds": 423.847,
+    "candidate_compile_seconds": [423.847, 407.011],
+    "candidate_median_seconds": 415.429,
+    "candidate_range_seconds": 16.836,
+    "candidate_range_percent_of_median": 4.05,
+    "historical_control_compile_seconds": 449.174,
+    "historical_control_ru_maxrss_bytes": 1104003072,
+    "repeat_ru_maxrss_bytes_below_historical_control": 34160640,
+    "target_compile_time_seconds": 180,
+    "compile_time_target_met": false,
+    "target_peak_rss_mib": 512,
+    "peak_rss_target_met": false,
+    "interpretation": "Two builds of the candidate source converge and match the audited output metrics. Their 16.836-second range is 4.05% of their median. The comparison against a single historical control is indicative only; the control was generated from a different source and does not establish a stable speed or RSS reduction."
+  },
+  "measurement_notes": [
+    "On macOS, ru_maxrss reports bytes and records the maximum resident set size among waited child processes; LuaLaTeX is the dominant child.",
+    "The ps process sampler runs every second and can miss short-lived peaks; its maximum was 1,067,237,376 bytes over 395 LuaLaTeX samples.",
+    "The temporary workspace monitor samples logical file sizes every 100 ms and can miss brief peaks.",
+    "Per-pass durations were not captured for this repeat."
+  ]
+}
