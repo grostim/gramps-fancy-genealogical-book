@@ -661,4 +661,18 @@ On macOS, `ru_maxrss` reports 1,069,842,432 bytes (1,020.28 MiB) for child proce
 
 The repeated PDF is tagged, PDF 2.0, and has 1,096 pages. It retains 24,126 link annotations, 3,248 URI annotations across 3,125 targets, 20,878 internal GoTo links, and all 400 figures with alternative text and valid /BBox values. Every link annotation has a matching OBJR owner in the ParentTree; the normalized extracted-text hash exactly matches the first candidate PDF. The binary hash differs because date metadata and the trailer ID are regenerated on each compile. Per-pass durations were not captured for this repeat. See the [raw repeat and RSS record](validation-latex-citation-url-dedup-repeat-rss-n1000-20261007.json) and the [recompiled PDF](../tmp/l83-shared-source-url-dedup-20261007/n1000/repeat-rss/book.pdf).
 
-The next L8.3 step is to measure the candidate's tagged passes separately and profile their remaining cost, without dropping a pass or degrading accessible figure geometry.
+### Detailed pass profile — N=1,000 — October 7, 2026
+
+The same candidate source was compiled in a fresh directory while measuring each LuaLaTeX process and sampling RSS once per second:
+
+| Pass | Tagging / hyperref | Duration | Sampled peak RSS |
+| --- | --- | ---: | ---: |
+| 1 | off / draft | 25.596 s | 161.22 MiB |
+| 2 | on / final | 199.001 s | 1,091.39 MiB |
+| 3 | on / final | 198.530 s | 918.95 MiB |
+
+The converged build takes 423.158 seconds; the two tagged passes total 397.531 seconds, or 93.94% of the build. They take nearly the same time. `ru_maxrss` peaks at 1,144,438,784 bytes (1,091.42 MiB) during the second pass. The PDF retains 1,096 pages, 24,126 links with matching OBJR/ParentTree owners, 3,125 URI targets, 20,878 internal links, all 400 accessible figures, and the normalized extracted-text hash. The source contains 17,591 `\gfbpagelink` calls, which must retain their accessible Link structure. The 180-second and 512 MiB targets remain unmet.
+
+The profiled run's `ru_maxrss` is 74,596,352 bytes (71.14 MiB) above the previous unprofiled repeat. This pair cannot attribute the difference to profiling or run-to-run variation; peak RSS still needs repeated measurements.
+
+The next measurement targets internal page-link cost in the tagged passes using this deduplicated source; any prototype must preserve every Link role, annotation, and ParentTree association. The [raw per-pass profile](validation-latex-citation-url-dedup-pass-profile-n1000-20261007.json) includes timings, RSS peaks, hashes, and the PDF audit.

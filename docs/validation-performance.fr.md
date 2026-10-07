@@ -872,4 +872,18 @@ Sur macOS, `ru_maxrss` rapporte 1 069 842 432 octets (1 020,28 Mio) pour les pro
 
 Le PDF répété reste balisé, en version 2.0 et sur 1 096 pages. Il conserve 24 126 annotations de lien, 3 248 annotations URI sur 3 125 cibles, 20 878 liens GoTo internes et les 400 figures avec texte alternatif et /BBox valide. Chaque annotation de lien retrouve son propriétaire OBJR dans le ParentTree ; le hash du texte extrait normalisé correspond exactement au premier PDF candidat. Le hash binaire diffère, les métadonnées de date et l’identifiant du trailer étant recréés à chaque compilation. Les durées par passe n’ont pas été mesurées pendant cette répétition. Voir le [relevé brut de la répétition et du RSS](validation-latex-citation-url-dedup-repeat-rss-n1000-20261007.json) et le [PDF recompilé](../tmp/l83-shared-source-url-dedup-20261007/n1000/repeat-rss/book.pdf).
 
-La suite L8.3 doit mesurer séparément les passes balisées du build candidat et profiler leur coût restant, sans en supprimer une ni dégrader la géométrie accessible des figures.
+### Profil détaillé des passes — N=1 000 — 7 octobre 2026
+
+Le même source candidat a été compilé dans un dossier neuf avec mesure du temps de chaque processus LuaLaTeX et échantillonnage RSS toutes les secondes :
+
+| Passe | Balisage / hyperref | Durée | Pic RSS échantillonné |
+| --- | --- | ---: | ---: |
+| 1 | désactivé / brouillon | 25,596 s | 161,22 Mio |
+| 2 | actif / final | 199,001 s | 1 091,39 Mio |
+| 3 | actif / final | 198,530 s | 918,95 Mio |
+
+Le total du build convergé est de 423,158 s ; les deux passes balisées cumulent 397,531 s, soit 93,94 % du temps. Elles durent presque autant. Le pic RSS `ru_maxrss` est de 1 144 438 784 octets (1 091,42 Mio) pendant la seconde passe. Le PDF conserve les 1 096 pages, 24 126 liens avec leur propriétaire OBJR/ParentTree, 3 125 cibles URI, 20 878 liens internes, les 400 figures accessibles et le hash du texte extrait normalisé. Les 17 591 appels `\gfbpagelink` sont présents dans le source et restent à préserver avec leur structure Link accessible. Les limites de 180 s et 512 Mio restent dépassées.
+
+Le `ru_maxrss` du run profilé dépasse de 74 596 352 octets (71,14 Mio) celui de la répétition sans profilage. Cette paire ne permet pas d’attribuer l’écart au profilage ou à la variabilité des exécutions ; le RSS de pointe reste à caractériser par répétitions.
+
+La prochaine mesure porte sur le coût des liens de page internes dans les passes balisées, à partir de ce source dédoublonné ; les essais doivent garder chaque rôle Link, annotation et association ParentTree. Le [relevé brut du profil par passe](validation-latex-citation-url-dedup-pass-profile-n1000-20261007.json) contient les temps, pics RSS, hashes et audit du PDF.

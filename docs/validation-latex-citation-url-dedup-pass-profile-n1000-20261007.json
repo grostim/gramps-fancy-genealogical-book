@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-07",
+  "title": "Per-pass timing and RSS profile after shared citation URL deduplication",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200
+  },
+  "source": {
+    "source_revision": "2a14b4fb278d085092b5ea7d82091f5e06c9754c",
+    "generated_tex_sha256": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "generated_tex_bytes": 4025413,
+    "gfbpagelink_invocations_in_source": 17591,
+    "gfbanchor_invocations_in_source": 14499
+  },
+  "measurement": {
+    "scope": "Complete converged LuaLaTeX compilation of the exact retained candidate source and media in a fresh directory, with per-process wall timing and one-second RSS sampling.",
+    "status": "converged",
+    "lualatex_pass_count": 3,
+    "compile_seconds": 423.158,
+    "lualatex_pass_seconds_sum": 423.127,
+    "python_orchestration_seconds": 0.031,
+    "passes": [
+      {
+        "pass": 1,
+        "tagging": "off",
+        "hyperref": "draft",
+        "seconds": 25.596,
+        "returncode": 0,
+        "process_peak_rss_bytes_sampled_1s": 169050112,
+        "process_peak_rss_mib_sampled_1s": 161.22,
+        "rss_samples": 24
+      },
+      {
+        "pass": 2,
+        "tagging": "on",
+        "hyperref": "final",
+        "seconds": 199.001,
+        "returncode": 0,
+        "process_peak_rss_bytes_sampled_1s": 1144406016,
+        "process_peak_rss_mib_sampled_1s": 1091.39,
+        "rss_samples": 193
+      },
+      {
+        "pass": 3,
+        "tagging": "on",
+        "hyperref": "final",
+        "seconds": 198.53,
+        "returncode": 0,
+        "process_peak_rss_bytes_sampled_1s": 963592192,
+        "process_peak_rss_mib_sampled_1s": 918.95,
+        "rss_samples": 192
+      }
+    ],
+    "compiler_child_ru_maxrss_bytes": 1144438784,
+    "compiler_child_ru_maxrss_mib": 1091.42,
+    "compiler_process_peak_rss_bytes_sampled_1s": 1144406016,
+    "compiler_process_peak_rss_mib_sampled_1s": 1091.39,
+    "temporary_workspace_peak_logical_bytes_sampled_100ms": 21417176,
+    "temporary_workspace_peak_logical_mib_sampled_100ms": 20.43,
+    "pdf_path": "tmp/l83-shared-source-url-dedup-20261007/n1000/pass-profile-isolated/compile/book.pdf",
+    "pdf_bytes": 12556083,
+    "pdf_sha256": "e70926c276b680d79f500f12aa5b4143326ad7f9d0a83b3fea1616c2ed549276",
+    "generated_tex_sha256_after_compile": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "instrumentation_probe_calls_excluded": [
+      ["uname", "-p"],
+      ["file", "-b", "/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/bin/python3.13"]
+    ]
+  },
+  "audit": {
+    "pages": 1096,
+    "pdf_version": "%PDF-2.0",
+    "tagged": true,
+    "link_annotations": 24126,
+    "uri_annotations": 3248,
+    "unique_uri_targets": 3125,
+    "internal_go_to_links": 20878,
+    "links_with_matching_parenttree_objr_owner": 24126,
+    "links_missing_or_wrong_parenttree_objr_owner": 0,
+    "figures": 400,
+    "figures_with_nonempty_alt_and_valid_a4_bbox": 400,
+    "normalized_text_sha256": "ceace3ce36f801c17292fdb861dbce8a3bdc87a2e917afccc94c16f7963b0be6",
+    "normalized_text_chars": 2242841
+  },
+  "comparison": {
+    "previous_unprofiled_repeat_ru_maxrss_bytes": 1069842432,
+    "same_source_ru_maxrss_difference_bytes": 74596352,
+    "same_source_ru_maxrss_difference_mib": 71.14,
+    "previous_unprofiled_repeat_compile_seconds": 407.011,
+    "profiled_build_compile_seconds_difference_from_previous_repeat": 16.147,
+    "untagged_pass_percent_of_compile_seconds": 6.05,
+    "tagged_passes_seconds_sum": 397.531,
+    "tagged_passes_percent_of_compile_seconds": 93.94,
+    "tagged_pass_duration_difference_seconds": 0.471,
+    "compile_time_target_seconds": 180,
+    "compile_time_target_met": false,
+    "peak_rss_target_mib": 512,
+    "peak_rss_target_met": false,
+    "interpretation": "The two tagged passes account for 93.94% of this profiled converged build and take almost the same time. The first tagged pass reaches the RSS peak. The same-source ru_maxrss measurement is 71.14 MiB above the previous unprofiled repeat; this pair does not establish the cause or stable memory impact. The 17,591 page-link calls remain in the source after shared URL deduplication; preserving their accessible Link structure is required."
+  },
+  "measurement_notes": [
+    "The wrapper also observed two fast subprocess calls from platform.platform() (uname -p and file -b); these calls had no compiler log or LuaLaTeX RSS samples and are excluded from the three recorded compiler passes.",
+    "Per-pass RSS is sampled once per second and can miss brief peaks. macOS ru_maxrss records the maximum resident size among waited children; LuaLaTeX is the dominant child.",
+    "The temporary workspace monitor samples logical file sizes every 100 ms and can miss brief peaks.",
+    "The PDF's binary hash differs from other builds because creation/modification metadata and the trailer ID are regenerated. Its audited text and structure metrics match the candidate."
+  ]
+}
