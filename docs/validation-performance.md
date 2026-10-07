@@ -661,4 +661,32 @@ On macOS, `ru_maxrss` reports 1,069,842,432 bytes (1,020.28 MiB) for child proce
 
 The repeated PDF is tagged, PDF 2.0, and has 1,096 pages. It retains 24,126 link annotations, 3,248 URI annotations across 3,125 targets, 20,878 internal GoTo links, and all 400 figures with alternative text and valid /BBox values. Every link annotation has a matching OBJR owner in the ParentTree; the normalized extracted-text hash exactly matches the first candidate PDF. The binary hash differs because date metadata and the trailer ID are regenerated on each compile. Per-pass durations were not captured for this repeat. See the [raw repeat and RSS record](validation-latex-citation-url-dedup-repeat-rss-n1000-20261007.json) and the [recompiled PDF](../tmp/l83-shared-source-url-dedup-20261007/n1000/repeat-rss/book.pdf).
 
-The next L8.3 step is to measure the candidate's tagged passes separately and profile their remaining cost, without dropping a pass or degrading accessible figure geometry.
+### Detailed pass profile — N=1,000 — October 7, 2026
+
+The same candidate source was compiled in a fresh directory while measuring each LuaLaTeX process and sampling RSS once per second:
+
+| Pass | Tagging / hyperref | Duration | Sampled peak RSS |
+| --- | --- | ---: | ---: |
+| 1 | off / draft | 25.596 s | 161.22 MiB |
+| 2 | on / final | 199.001 s | 1,091.39 MiB |
+| 3 | on / final | 198.530 s | 918.95 MiB |
+
+The converged build takes 423.158 seconds; the two tagged passes total 397.531 seconds, or 93.94% of the build. They take nearly the same time. `ru_maxrss` peaks at 1,144,438,784 bytes (1,091.42 MiB) during the second pass. The PDF retains 1,096 pages, 24,126 links with matching OBJR/ParentTree owners, 3,125 URI targets, 20,878 internal links, all 400 accessible figures, and the normalized extracted-text hash. The source contains 17,591 `\gfbpagelink` calls, which must retain their accessible Link structure. The 180-second and 512 MiB targets remain unmet.
+
+The profiled run's `ru_maxrss` is 74,596,352 bytes (71.14 MiB) above the previous unprofiled repeat. This pair cannot attribute the difference to profiling or run-to-run variation; peak RSS still needs repeated measurements.
+
+The next measurement targets internal page-link cost in the tagged passes using this deduplicated source; any prototype must preserve every Link role, annotation, and ParentTree association. The [raw per-pass profile](validation-latex-citation-url-dedup-pass-profile-n1000-20261007.json) includes timings, RSS peaks, hashes, and the PDF audit.
+
+### Hyperref macro profile on the deduplicated source — N=1,000 — October 7, 2026
+
+One direct tagged pass was instrumented around the complete `\hyperlink` and `\href` macros, using the candidate's converged `.aux` and `.toc` files. It takes 200.481 seconds. The Lua timer records 17,601 `\hyperlink` calls with 50.906 seconds of inclusive CPU time, and 3,125 `\href` calls with 9.896 seconds.
+
+The earlier profile of the source before URL deduplication also recorded 17,601 `\hyperlink` calls (49.005 seconds), but 9,009 `\href` calls (26.052 seconds). The candidate removes 5,884 external-link calls and about 62% of their inclusive time. The small increase in `\hyperlink` time (1.901 seconds) is not a paired comparison and does not establish a slowdown. These intervals overlap with tagpdf work and should not be added to compiler durations.
+
+The diagnostic tagged PDF has 1,096 pages and retains 24,126 links with matching OBJR/ParentTree owners, 3,125 URI targets, 20,878 internal links, all 400 accessible figures, and the same normalized extracted-text hash. This profile makes no production code change. The next investigation can examine the internal hyperlink path while preserving all accessible structure. See the [raw hyperref profile](validation-latex-citation-url-dedup-link-profile-n1000-20261007.json), the [earlier profile](validation-latex-link-macro-profile-parenttree-batched-n1000-20261006.json), and the [diagnostic PDF](../tmp/l83-shared-source-url-dedup-20261007/n1000/hyperlink-profile/instrumented/book.pdf).
+
+### Internal anchor profile — N=1,000 — October 7, 2026
+
+A separate tagged pass also instruments `\hypertarget` and `\label` with the same auxiliary files. It records 14,498 calls of each macro: `\hypertarget` accumulates 9.602 seconds of CPU time and `\label` 0.235 seconds. In this same profile, `\hyperlink` accumulates 50.424 seconds over 17,601 calls and `\href` 9.697 seconds over 3,125 calls. The measurements are inclusive, run once, and the wrapper overhead was not calibrated; they target work and do not compare build times.
+
+The diagnostic PDF retains 1,096 pages, all 24,126 link/OBJR/ParentTree associations, 3,125 URI targets, 20,878 internal links, all 400 accessible figures, and identical extracted text. Destination and label creation is smaller than the `\hyperlink` calls in this sample. The next investigation targets internal-link handling without removing Link tags. See the [raw anchor profile](validation-latex-citation-url-dedup-anchor-profile-n1000-20261007.json) and the [diagnostic PDF](../tmp/l83-shared-source-url-dedup-20261007/n1000/anchor-profile/instrumented/book.pdf).
