@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-07",
+  "title": "Hyperref destination and label macro profile for the URL-deduplicated N=1,000 source",
+  "environment": {
+    "platform": "macOS 27.0 arm64",
+    "python": "CPython 3.13.7",
+    "compiler": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "tagpdf": "0.99y (2026-01-29)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media_artifacts": 200
+  },
+  "source": {
+    "source_revision": "2a14b4fb278d085092b5ea7d82091f5e06c9754c",
+    "generated_tex_sha256": "63d0178239ab9e25e97f87d2bab0ac7100c854329eb642814068fd72934df900",
+    "generated_tex_bytes": 4025413,
+    "gfbanchor_invocations_in_source": 14499
+  },
+  "method": {
+    "compilation": "One direct tagged LuaLaTeX pass using the converged candidate .aux and .toc seeds; no .out seed.",
+    "aux_seed_sha256": "cc026874de761f9dd8b3b00b3bcd84ee40256f9524ef12ebf54c4dd4387eaa33",
+    "toc_seed_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+    "instrumentation": "Lua os.clock wrappers around complete hyperref hyperlink, href, hypertarget, and label macro calls.",
+    "instrumented_tex_sha256": "65738c909dff86ee529e7e47b344cf80d95b80bcfe606f6ca73e377e10de7dc3",
+    "production_sources_changed": false,
+    "layout_or_reference_warnings": false
+  },
+  "result": {
+    "returncode": 0,
+    "hyperlink_calls": 17601,
+    "hyperlink_cpu_seconds": 50.424424,
+    "href_calls": 3125,
+    "href_cpu_seconds": 9.696802,
+    "hypertarget_calls": 14498,
+    "hypertarget_cpu_seconds": 9.602325,
+    "label_calls": 14498,
+    "label_cpu_seconds": 0.235252,
+    "pdf_path": "tmp/l83-shared-source-url-dedup-20261007/n1000/anchor-profile/instrumented/book.pdf",
+    "pdf_bytes": 12556074,
+    "pdf_sha256": "a3f906537a71fa6c8c9817c2677267d20a53cd0e624fb91c459b7d28b2c34afa",
+    "pdf_audit": {
+      "pages": 1096,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "figures": 400,
+      "figures_with_nonempty_alt_and_valid_a4_bbox": 400,
+      "link_annotations": 24126,
+      "uri_annotations": 3248,
+      "unique_uri_targets": 3125,
+      "internal_go_to_links": 20878,
+      "links_with_parenttree_objr_owner_match": 24126,
+      "links_missing_or_wrong_parenttree_objr_owner": 0,
+      "normalized_text_sha256": "ceace3ce36f801c17292fdb861dbce8a3bdc87a2e917afccc94c16f7963b0be6",
+      "normalized_text_chars": 2242841
+    }
+  },
+  "limits": [
+    "One instrumented direct pass; the timers are diagnostic and are not a matched speed comparison.",
+    "Each interval surrounds the complete macro call; timer intervals are inclusive and should not be added as independent costs.",
+    "Timer overhead was not calibrated separately.",
+    "The direct pass uses converged .aux and .toc seeds and does not measure complete multipass export time.",
+    "The profiling marker wrapped across TeX log lines; numeric fragments were reassembled before recording the values."
+  ],
+  "decision": "The internal hyperlink macro remains the largest of these measured operations at about 50.4 CPU seconds. Destination creation takes about 9.6 seconds and labels about 0.24 seconds. Investigate the internal link path while preserving accessible Link structure."
+}
