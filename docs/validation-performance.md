@@ -723,3 +723,18 @@ Three counterbalanced pairs use the same source, media, and populated `.aux` and
 All three candidate PDFs match their paired references for page count, link annotation rectangles, link signatures and destinations, annotation contents, ParentTree/OBJR ownership, figure alternative text, and NFC-normalized extracted text. Each PDF is tagged PDF 2.0 with 1,096 pages, 24,126 link annotations (20,878 GoTo and 3,248 URI across 3,125 targets), 24,126 matching OBJR owners, and 400 figures with non-empty alternative text.
 
 This repeated per-pass result supports the narrowly scoped renderer fast path. Two complete builds through the production renderer were also timed at 380.82 and 349.17 seconds. The first produced the audited 1,096-page tagged PDF; the second measured 1,180,112 KiB (1,152.45 MiB) peak LuaLaTeX RSS from 338 one-second samples. The 31.65-second spread is not evidence that the fast path caused a full-build speedup, and the repeat PDF was not retained for a second semantic audit. Both full-build durations exceed 180 seconds, and the sampled RSS exceeds 512 MiB. See the [raw paired profile and audit](validation-latex-hyperref-purify-fastpath-n1000-20261007.json), the [full-build timing and RSS record](validation-latex-hyperref-purify-fastpath-full-build-n1000-20261007.json), and the temporary [candidate PDF](../tmp/l83-hyperref-purify-page-links-repeats-20261007/pair-1/candidate/book.pdf).
+
+### Identity conversion fast path for generated destinations — N=1,000 — October 8, 2026
+
+The production `\gfbpagelink` path receives renderer-generated `target-*` labels containing only URL-safe ASCII. A temporary candidate skips Hyperref's `utf8/string-raw` conversion only while that page-link fast path is active; all other encodings, including the `utf16/hex` accessible Contents strings, still use the original converter.
+
+Three paired direct tagged LuaLaTeX passes used identical populated `.aux` and `.toc` seeds with counterbalanced order:
+
+| Pair | Reference (s) | Candidate (s) | Saved (s) | Saved (%) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 164.840 | 163.508 | 1.332 | 0.81% |
+| 2 | 165.537 | 163.222 | 2.315 | 1.40% |
+| 3 | 165.002 | 163.018 | 1.984 | 1.20% |
+| Mean | 165.126 | 163.249 | 1.877 | 1.14% |
+
+Each PDF pair matches in all audited semantic fields and exact link signatures: 1,096 tagged PDF 2.0 pages; 24,126 links (20,878 GoTo and 3,248 URI); 3,125 URI targets; 24,126 matching OBJR/ParentTree owners with no mismatches; 400 figures with alternative text; and identical NFC text hashes. This is a modest, repeatable per-pass saving. It does not measure a complete export or establish a full-build gain. See the [raw paired profile and audit](validation-latex-hyperref-target-identity-fastpath-n1000-20261008.json) and temporary [candidate PDFs](../tmp/l83-hyperref-target-identity-paired-20261008/).
