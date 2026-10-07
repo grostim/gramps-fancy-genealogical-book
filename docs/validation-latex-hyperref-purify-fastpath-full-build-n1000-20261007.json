@@ -1,0 +1,64 @@
+{
+  "record": "L8.3 guarded Hyperref page-link purification fast path: complete build timing and RSS follow-up",
+  "date": "2026-10-07",
+  "source_commit": "7a65625aa27b0ad6f13a96250917bb11761d4e8c",
+  "fixture": {
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events_and_citations": 3003,
+    "media": 200
+  },
+  "method": {
+    "renderer": "Production Gramps Fancy Book LaTeX renderer",
+    "compilation": "Extended compilation enabled; complete converged LuaLaTeX build",
+    "rss_sampling": "One-second ps samples of the LuaLaTeX process during the second build",
+    "notes": "The first build was retained and audited. The second used a temporary output directory that was removed after measurement; no second semantic audit was retained. The two elapsed times are descriptive repeats, not a controlled comparison of the fast path against a reference."
+  },
+  "runs": [
+    {
+      "run": 1,
+      "elapsed_seconds": 380.82,
+      "pdf_bytes": 12556070,
+      "pages": 1096,
+      "pdf_version": "2.0",
+      "tagged": true,
+      "semantic_audit": {
+        "link_annotations": 24126,
+        "goto_links": 20878,
+        "uri_links": 3248,
+        "unique_uri_targets": 3125,
+        "matching_parenttree_objr_owners": 24126,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_matches_profile_candidate": true,
+        "link_signatures_match_profile_candidate": true
+      }
+    },
+    {
+      "run": 2,
+      "elapsed_seconds": 349.17,
+      "pdf_bytes": 12556074,
+      "pages": null,
+      "semantic_audit": null,
+      "lualatex_rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 338,
+        "max_kib": 1180112,
+        "max_mib": 1152.45
+      }
+    }
+  ],
+  "derived": {
+    "elapsed_spread_seconds": 31.65,
+    "full_build_budget_seconds": 180,
+    "peak_rss_budget_mib": 512,
+    "budgets_met": false,
+    "repeat_difference_attributable_to_fast_path": false
+  },
+  "artifacts": {
+    "retained_pdf_filename": "gramps-fancy-book-hyperref-fastpath-demo-n1000-20261007.pdf",
+    "retained_pdf_location": "output/pdf/gramps-fancy-book-hyperref-fastpath-demo-n1000-20261007.pdf",
+    "per_pass_profile": "validation-latex-hyperref-purify-fastpath-n1000-20261007.json"
+  }
+}
