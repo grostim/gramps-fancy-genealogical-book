@@ -1109,4 +1109,20 @@ Les six PDFs ont le même audit : 1 096 pages, 24 126 annotations de lien associ
 
 Les maxima RSS des trois candidates sont enregistrés avant le finaliseur. La compilation se termine trop vite après la collecte pour que l’échantillonneur capture un RSS candidat post-nettoyage; ces relevés ne démontrent donc pas de baisse stable du pic, et un nettoyage après le pic ne peut pas réduire ce maximum. La mesure confirme une baisse du tas Lua, pas une baisse RSS exploitable. Le prototype dépend d’une API privée et reste hors production. Le détail des séries RSS, états Lua, marqueurs du finaliseur et audits se trouve dans le [relevé apparié](validation-latex-tagpdf-postfinish-release-paired-n1000-20261008.json).
 
-**Suite L8.3 :** profiler la croissance des allocations avant la finalisation tagpdf, en particulier dans le chemin des annotations Hyperref et des entrées OBJR/ParentTree. Conserver les liens, le balisage et un audit PDF identique à chaque essai.
+### Croissance des tables Lua tagpdf avant et après finalisation — N=1 000 — 8 octobre 2026
+
+Un passage direct instrumenté compte les tables racines et leurs entrées immédiates tous les 100 folios, puis juste avant et après le finaliseur tagpdf. Il part d’une source balisée avec des fichiers `.aux`/`.toc` renseignés. Le PDF final conserve l’audit de référence : 1 096 pages, 24 126 liens et propriétaires OBJR/ParentTree, 400 figures avec texte alternatif, mêmes hashes de texte et de liens.
+
+| Point de mesure | Tas Lua (Kio) | MC racines | Structures racines | `tables` racines | Propriétés / séquences | Entrées enfants de `tables` |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Folio 100 | 62 056 | 11 378 | 8 877 | 37 052 | 18 529 / 18 521 | 155 466 |
+| Folio 500 | 298 901 | 62 934 | 38 544 | 133 908 | 66 957 / 66 949 | 571 687 |
+| Folio 1 000 | 275 029 | 101 914 | 62 082 | 213 794 | 106 900 / 106 892 | 912 364 |
+| Avant finaliseur | 404 181 | 112 893 | 69 941 | 244 308 | 122 157 / 122 149 | 1 039 817 |
+| Après finaliseur | 407 592 | 112 893 | 69 941 | 244 308 | 122 157 / 122 149 | 1 161 700 |
+
+Entre les deux derniers points, le finaliseur ajoute 121 883 entrées enfants à ces tables sans changer leur nombre de racines. La somme des longueurs des clés et valeurs chaîne directement observées dans `tables` passe de 21 117 935 à 28 532 422 octets; cette somme ne correspond pas à la mémoire réellement allouée. Le compteur global LuaTeX `collectgarbage("count")` augmente de 3 411 Kio entre les mêmes points et couvre tout l’état Lua, pas uniquement tagpdf.
+
+Dans le backend LuaTeX tagpdf 0.99y installé pour ce profil, les macros qui créent des propriétés et séquences expl3 en maintiennent aussi des miroirs dans `ltx.__tag.tables`. Le commentaire du paquet mentionne des données historiques de structure/MC et des doublons possibles, sans identifier les tables supprimables. Ce profil unique indique où approfondir, mais ne permet pas de supprimer ces miroirs : le finaliseur les enrichit encore pour écrire la structure PDF. Aucun code de production n’a changé. Le [relevé complet](validation-latex-tagpdf-map-growth-n1000-20261008.json) conserve les séries RSS, les points de contrôle et l’audit.
+
+**Suite L8.3 :** relier les propriétés et séquences tagpdf aux éléments produits par le renderer et rechercher des structures redondantes. N’en réduire le nombre que si l’audit du PDF balisé et des liens reste identique; sinon, conserver le comportement et transmettre les mesures à la dépendance tagpdf.
