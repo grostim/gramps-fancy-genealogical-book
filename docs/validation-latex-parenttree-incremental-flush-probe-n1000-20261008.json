@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "1dc2717a2d84eac582d954f2b57cf9f2c6c7a2e7",
+  "variant": "append each 128-entry ParentTree chunk directly to tagpdf's ParentTree token list; no chunk sequence retained until finish",
+  "production_code_changed": false,
+  "method": "One direct tagged LuaLaTeX pass with the same populated .aux/.toc seed as pair 1 of the current-cache memory profile; RSS sampled once per second; LuaTeX status recorded every 100 pages.",
+  "seed_sha256": {
+    "book_aux": "bd787feeb37b8e474d6acab93154550373fea65406d715871350dd617e4ce0ef",
+    "book_toc": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+    "seed_book_tex": "c5cddfb9c718f62e8c1dbc33709d42dd93b4f68223a974f33eef8f5c4d1ffbda",
+    "variant_book_tex": "5864c6a61e21ac0b9f1ddad0f8fd938fc86c7aea2eb7d3873117597914711413"
+  },
+  "baseline": {
+    "profile": "validation-latex-memory-cache-paired-n1000-20261008.json",
+    "pair": "pair-1",
+    "variant": "reference: no GoTo contents cache; current ParentTree batching",
+    "same_initial_aux_toc_seed": true,
+    "source_sha256": "c5cddfb9c718f62e8c1dbc33709d42dd93b4f68223a974f33eef8f5c4d1ffbda",
+    "elapsed_seconds": 163.689,
+    "peak_rss_mib": 1145.86,
+    "peak_rss_reference_range_mib": [
+      1016.47,
+      1145.86
+    ],
+    "final_dyn_used": 30203005,
+    "final_lua_gc_kib": 390991.78320312
+  },
+  "candidate": {
+    "elapsed_seconds": 168.913,
+    "peak_rss_mib": 1047.3,
+    "rss_samples": 164,
+    "pdf_bytes": 12556083,
+    "final_dyn_used": 30202469,
+    "final_lua_gc_kib": 393903.3359375,
+    "semantic_audit_matches_baseline": true,
+    "link_signatures_match_baseline": true,
+    "semantic_audit": {
+      "pages": 1096,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "link_annotations": 24126,
+      "action_counts": {
+        "/GoTo": 20878,
+        "/URI": 3248
+      },
+      "unique_uri_targets": 3125,
+      "parenttree_objr_owner_matches": 24126,
+      "parenttree_mismatches": 0,
+      "figures": 400,
+      "figures_with_nonempty_alt": 400,
+      "nfc_text_chars": 2244123,
+      "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+      "link_signature_count": 24126,
+      "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+    },
+    "memory_checkpoints": [
+      {
+        "page": 100,
+        "var_used": 44725,
+        "dyn_used": 5282116,
+        "obj_ptr": 34457,
+        "pdf_mem_ptr": 11441,
+        "pdf_mem_size": 12500,
+        "dest_names_size": 6186,
+        "lua_gc_kib": 59112.924804688
+      },
+      {
+        "page": 200,
+        "var_used": 51195,
+        "dyn_used": 9508352,
+        "obj_ptr": 70715,
+        "pdf_mem_ptr": 34176,
+        "pdf_mem_size": 38145,
+        "dest_names_size": 10688,
+        "lua_gc_kib": 145459.33691406
+      },
+      {
+        "page": 300,
+        "var_used": 45054,
+        "dyn_used": 12741841,
+        "obj_ptr": 99452,
+        "pdf_mem_ptr": 46336,
+        "pdf_mem_size": 47681,
+        "dest_names_size": 15390,
+        "lua_gc_kib": 186158.51464844
+      },
+      {
+        "page": 400,
+        "var_used": 71558,
+        "dyn_used": 14827451,
+        "obj_ptr": 119122,
+        "pdf_mem_ptr": 54336,
+        "pdf_mem_size": 59601,
+        "dest_names_size": 22161,
+        "lua_gc_kib": 160741.609375
+      },
+      {
+        "page": 500,
+        "var_used": 79469,
+        "dyn_used": 16942484,
+        "obj_ptr": 139088,
+        "pdf_mem_ptr": 62456,
+        "pdf_mem_size": 74501,
+        "dest_names_size": 26593,
+        "lua_gc_kib": 293286.24414062
+      },
+      {
+        "page": 600,
+        "var_used": 61912,
+        "dyn_used": 18643905,
+        "obj_ptr": 155149,
+        "pdf_mem_ptr": 68996,
+        "pdf_mem_size": 74501,
+        "dest_names_size": 26593,
+        "lua_gc_kib": 255307.4375
+      },
+      {
+        "page": 700,
+        "var_used": 95966,
+        "dyn_used": 21232322,
+        "obj_ptr": 179642,
+        "pdf_mem_ptr": 78956,
+        "pdf_mem_size": 93126,
+        "dest_names_size": 31911,
+        "lua_gc_kib": 279829.73632812
+      },
+      {
+        "page": 800,
+        "var_used": 83623,
+        "dyn_used": 23465352,
+        "obj_ptr": 196814,
+        "pdf_mem_ptr": 91361,
+        "pdf_mem_size": 93126,
+        "dest_names_size": 31911,
+        "lua_gc_kib": 209172.45898438
+      },
+      {
+        "page": 900,
+        "var_used": 102861,
+        "dyn_used": 25101743,
+        "obj_ptr": 209312,
+        "pdf_mem_ptr": 99656,
+        "pdf_mem_size": 116407,
+        "dest_names_size": 38293,
+        "lua_gc_kib": 242196.00292969
+      },
+      {
+        "page": 1000,
+        "var_used": 103698,
+        "dyn_used": 26752899,
+        "obj_ptr": 221857,
+        "pdf_mem_ptr": 107981,
+        "pdf_mem_size": 116407,
+        "dest_names_size": 38293,
+        "lua_gc_kib": 265693.88574219
+      },
+      {
+        "final_page": 1095,
+        "var_used": 53392,
+        "dyn_used": 30202469,
+        "obj_ptr": 252622,
+        "pdf_mem_ptr": 122601,
+        "pdf_mem_size": 145508,
+        "dest_names_size": 38293,
+        "lua_gc_kib": 393903.3359375
+      }
+    ]
+  },
+  "delta_to_baseline": {
+    "elapsed_seconds": 5.224,
+    "elapsed_percent": 3.191,
+    "peak_rss_mib": -98.56,
+    "final_dyn_used_units": -536,
+    "final_lua_gc_kib": 2911.553
+  },
+  "interpretation": {
+    "decision": "Reject the incremental flush variant; no production code changed.",
+    "reason": "The candidate is slower, its final dyn_used is effectively unchanged, and its RSS result is one point inside the reference run range. The single RSS delta does not demonstrate a memory improvement.",
+    "pdf_equivalence": "All 1,096 pages, 24,126 link annotations and OBJR/ParentTree owners, 400 figures with Alt, normalized text, and ordered link signatures match."
+  }
+}
