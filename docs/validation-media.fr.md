@@ -1,10 +1,18 @@
 # Validation média / Pillow et PDFium
 
-Statut au 4 octobre 2026.
+Actualisé le 8 octobre 2026.
 
 ## Périmètre vérifié
 
 La CI installe l’extra `media` pendant la matrice Python 3.10–3.13 et exécute les conversions sur des images synthétiques ainsi que sur des PDF mono- et multipages. La matrice d’intégration Gramps utilise Ubuntu 24.04, Python 3.12 et Gramps 6.0.7 et 6.0.8. L’intégration locale de cette recette utilise Gramps Desktop 6.0.8 sur macOS avec une base isolée.
+
+### L8.3 — portraits d’archives photographiques — 8 octobre 2026
+
+Le banc utilise vingt portraits d’archives de la Wellcome Collection, tous marqués `cc-by` dans le Catalogue API et accessibles via l’API IIIF. Le manifeste [wellcome-open-portraits-cc-by.json](fixtures/wellcome-open-portraits-cc-by.json) conserve titre, crédit, identifiants, URL de l’œuvre, URL IIIF, licence, dimensions, taille et SHA-256. Les JPEG ne sont pas versionnés ; le script les télécharge dans un répertoire temporaire et vérifie leur contenu. La [documentation Catalogue](https://developers.wellcomecollection.org/api/catalogue) expose notamment le filtre de licence et les champs de crédit ; l’[API IIIF](https://developers.wellcomecollection.org/api/iiif) permet de demander une taille et un format d’image. L’URL demandait 1 600 pixels de large au maximum ; une réponse fait 1 601 pixels. Les légendes comprennent le titre, Wellcome Collection et CC BY 4.0, et le relevé indique la transformation IIIF. Voir le [texte de la licence](https://creativecommons.org/licenses/by/4.0/).
+
+Les photos sont des portraits historiques d’archives, principalement du XIXᵉ et du début du XXᵉ siècle ; elles ne représentent pas des photos modernes de téléphone. Le graphe familial reste entièrement fictif. La recette améliore donc la mesure du rendu avec de vraies photographies, mais ne qualifie pas encore les médias extraits d’une base Gramps réelle.
+
+Le premier build a exposé un débordement LaTeX de 14,06 pt : une photo verticale intégrée au profil était limitée par sa largeur seulement et dépassait la hauteur utile de page. `_render_media_image` ajoute maintenant un maximum à `0.65\textheight` avec conservation des proportions. Les trois builds N=100 qui suivent compilent sans avertissement de mise en page. Les pages PDF 71, 72, 76 et 77 ont été examinées visuellement ; les photos restent proportionnelles, leurs crédits tiennent dans les légendes et aucune coupure ni superposition n’est visible. L’audit du PDF conservé confirme 40 figures avec texte alternatif et attribution, une structure balisée et aucune divergence ParentTree/OBJR ; les mesures détaillées figurent dans [validation de performance](validation-performance.fr.md) et le [relevé JSON](validation-latex-open-portraits-n100-20261008.json).
 
 La recette native Gramps CLI couvre maintenant AC-13 : une image fictive présente sur disque porte à la fois `BOOK_EXCLUDE` et `BOOK_FEATURED`, et sa référence porte une citation dédiée qui n’est utilisée nulle part ailleurs. L’export du modèle confirme que l’objet conserve ses deux étiquettes dans la source, mais qu’il n’a ni placement, ni référence éditoriale, ni dérivé ; sa citation exclusive ne rejoint pas l’annexe. Le ZIP n’inclut que les deux images attendues pour les autres médias, et ne contient ni description ni détail de citation AC-13. Cela qualifie l’import XML natif et l’export CLI ; voir aussi la recette Desktop ci-dessous. La saisie des tags dans les éditeurs graphiques reste à vérifier.
 
@@ -30,7 +38,7 @@ Le rendu PDF A4 français produit 18 pages. Les pages physiques 12 et 14 ont ét
 
 Le [ZIP de l’intégration native](../output/gramps-fancy-book-native-integration-20261004.zip), identifié par le SHA-256 `4b57d50081362327a48e60fbac6d369c0dc6ddab4f2abba0349d3746e6e67f76`, a été extrait puis servi au navigateur par un serveur local sur `127.0.0.1`. Le lien de la fiche individuelle a été activé ; il atteint la figure unique placée dans la notice familiale. Le navigateur charge le recadrage AC-12 en 540 × 600 pixels, avec sa légende et le texte alternatif synthétique de la fixture. Les quatre images de cette archive combinée chargent et possèdent un texte alternatif non vide ; les 282 liens internes pointent vers une ancre existante.
 
-Aux largeurs de 320, 375, 768, 1 024 et 1 440 px, la page ne déborde pas horizontalement. Ce contrôle porte sur le ZIP natif CLI extrait et servi localement, pas sur un ZIP exporté depuis la boîte de dialogue Gramps ni sur une ouverture directe par `file://`. Le texte alternatif de démonstration est un marqueur de fixture, pas une description de photographie réelle. L’essai au lecteur d’écran, les médias réalistes et l’export GUI ciblé restent à faire.
+Aux largeurs de 320, 375, 768, 1 024 et 1 440 px, la page ne déborde pas horizontalement. Ce contrôle porte sur le ZIP natif CLI extrait et servi localement, pas sur un ZIP exporté depuis la boîte de dialogue Gramps ni sur une ouverture directe par `file://`. Le texte alternatif de démonstration est un marqueur de fixture, pas une description de photographie réelle. L’essai au lecteur d’écran, les médias d’une base Gramps réelle et l’export GUI ciblé restent à faire.
 
 Le [livre synthétique de 127 pages](../output/pdf/gramps-fancy-book-122-person-featured-media-centered-preview-20260930.pdf) contient deux autres médias `BOOK_FEATURED`. Les pages physiques 49–51 et 64–67 ont été examinées séparément ; les images pleine page restent centrées, sans déformation, avec leurs légendes. Les 127 pages ont aussi été parcourues sur planches de contact. Cette revue confirme le rendu PDF sur un volume synthétique ; la recette native ci-dessus couvre désormais la sélection et le partage d’un média dans Gramps.
 
