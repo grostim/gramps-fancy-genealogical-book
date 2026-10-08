@@ -889,4 +889,18 @@ For this synthetic fixture, time and RSS remain under the 180-second and 512-MiB
 
 The HTML-only records and PDF records are in the [three HTML runs](validation-latex-benchmark-highres-n100-html-20261008.json), [first PDF run](validation-latex-benchmark-highres-n100-pdf-20261008.json), and [PDF runs 2 and 3](validation-latex-benchmark-highres-n100-pdf-repeats-20261008.json). The benchmark's 256-MiB limit on estimated synthetic source-media volume prevents scaling this case tenfold to N=1,000 without changing the benchmark.
 
+### Effect of media compressibility — N=100 — October 8, 2026
+
+To isolate content, the same N=100 case was repeated with twenty 1,600 × 1,200 PNGs generated from low-resolution (100 × 75) random RGB textures, upscaled with bicubic resampling, then blurred. These are smooth synthetic textures, not photographs. The fixture, crop, renderer, and three complete PDF compilations otherwise match the pseudo-random case above.
+
+| Median measurement | Pseudo-random PNGs | Smooth synthetic PNGs | Change |
+| --- | ---: | ---: | ---: |
+| PNG sources (bytes) | 115,379,213 | 51,837,250 | −55.1% |
+| PDF (bytes) | 79,709,779 | 36,620,288 | −54.1% |
+| Logical temporary workspace (bytes) | 316,529,066 | 144,134,561 | −54.5% |
+| PDF time (s) | 38.049 | 35.649 | −6.3% |
+| LuaTeX peak RSS (MiB) | 319.1 | 324.0 | +1.5% |
+
+Across these two synthetic profiles, source size strongly tracks derivative and PDF size; LuaTeX RSS remains similar. This confirms that random noise in the first experiment artificially inflated output sizes. It does not predict the size of real photographs or justify lossy encoding or downsampling. The [raw record for the three smooth-image compilations](validation-latex-benchmark-smooth-n100-pdf-20261008.json) is available; temporary workspace is sampled every 100 ms, and the PDFs did not receive an independent semantic audit.
+
 The next L8.3 step is to avoid setting a general temporary-space limit until realistic-media and target-environment cases are measured. Preserve accessible structures; examine derivative and PDF sizes with representative images before changing renderer behavior.
