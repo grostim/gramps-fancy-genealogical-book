@@ -817,3 +817,20 @@ One complete build per size was monitored at 100-ms intervals. The metric sums l
 | 1,000 | 344.09 | 21,420,988 | 1,092.44 | Passed, 1,096 pages |
 
 The elapsed-time (180 seconds) and RSS (512 MiB) budgets are met at N=10 and N=100; both remain exceeded at N=1,000. These are first per-build reference points, not repeated bounds or a system-wide disk quota measurement. See the [detailed record](validation-latex-temp-space-20261008.json).
+
+### Paired memory profiles for the GoTo cache — N=1,000 — October 8, 2026
+
+To resolve the seed mismatch in the first diagnostics, three pairs of direct passes were rerun from identical populated `.aux` and `.toc` files within each pair. The only source difference is the `/Contents` cache plug for generated page links. Run order was counterbalanced; LuaTeX counters were sampled every 100 pages and RSS once per second.
+
+| Pair | Variant | Elapsed (s) | Peak RSS (MiB) | Final `dyn_used` |
+| --- | --- | ---: | ---: | ---: |
+| 1 | Reference | 163.689 | 1,145.86 | 30,203,005 |
+| 1 | Cache | 162.003 | 1,057.50 | 31,759,614 |
+| 2 | Reference | 164.183 | 1,093.30 | 30,203,005 |
+| 2 | Cache | 163.110 | 1,098.97 | 31,759,614 |
+| 3 | Reference | 165.284 | 1,016.47 | 30,203,076 |
+| 3 | Cache | 163.976 | 1,096.53 | 31,759,651 |
+
+The cache saves 1.073–1.686 seconds per pass, averaging 1.356 seconds (0.825%). Its `dyn_used` counter is 1,556,575–1,556,609 units higher (about 5.154%); this is not converted to bytes. RSS varies from −88.36 to +80.06 MiB by pair, showing no stable cache-attributable effect. Each PDF retains the same 1,096 pages, 24,126 links and OBJR/ParentTree associations, 400 accessible figures, NFC-text hashes, and ordered link-signature hashes. The cache records 8,541 hits and 9,049 misses per pass.
+
+The cache retains its modest timing gain without a demonstrated RSS effect. The next prototype can replace its per-destination control-sequence definitions with an `expl3` property table and check whether that lowers `dyn_used` without losing the gain or changing the PDF. See the [detailed paired record](validation-latex-memory-cache-paired-n1000-20261008.json).
