@@ -1,0 +1,1907 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "fb01e7a132ffd3d2894882d112d1e549969bc367",
+  "instrumented_source_sha256": "23ef308f5e589a30938398344cc7a7f446a92d0877bb57201a97444018f5168d",
+  "base_instrumented_source_sha256": "df040ceae353add6ead1bbcfd3bd889b16d85c10be5c0198a8762d72f38bc35b",
+  "seed_hashes": {
+    "aux": "ac4406d5f1011f083fe23faea8dd9d5775b05bb7e28643baa6ed9b4ff2b4ff92",
+    "toc": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5"
+  },
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
+    "pypdf": "6.19.0",
+    "tagpdf": "0.99y (2026-01-29, tagpdf-luatex.def in TeX Live 2026 installation)"
+  },
+  "fixture": {
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "synthetic_portraits": 200,
+    "pages": 1096
+  },
+  "method": {
+    "runs": 1,
+    "sampling": "One direct tagged LuaLaTeX pass from identical populated aux/toc seeds; RSS sampled every 0.5 seconds; map key counts at each 100th shipped page and immediately before/after the private tagpdf finalizer.",
+    "counting": "For mc/struct/tables/page/role: root keys, direct child tables and their direct entries. For tables: root keys suffixed _prop and _seq separated. Shallow string byte totals count direct keys/values only and are not memory-size measurements.",
+    "production_code_changed": false,
+    "seed_provenance": "The populated .aux/.toc pair was copied from the completed tagged_active cell of the preceding factorial profile; the same pair was used for this direct compilation.",
+    "base_render_source_sha256": "8347e6b716418220534a2c3ee1938b3c551fec9d7b252da5ab70e314f5f23e65"
+  },
+  "run": {
+    "elapsed_seconds": 172.793,
+    "peak_rss_mib": 1092.91,
+    "rss_samples": 326,
+    "rss_trace": [
+      {
+        "elapsed_seconds": 0.03,
+        "rss_mib": 2.22
+      },
+      {
+        "elapsed_seconds": 0.56,
+        "rss_mib": 119.25
+      },
+      {
+        "elapsed_seconds": 1.09,
+        "rss_mib": 128.47
+      },
+      {
+        "elapsed_seconds": 1.63,
+        "rss_mib": 157.41
+      },
+      {
+        "elapsed_seconds": 2.16,
+        "rss_mib": 179.33
+      },
+      {
+        "elapsed_seconds": 2.69,
+        "rss_mib": 181.06
+      },
+      {
+        "elapsed_seconds": 3.22,
+        "rss_mib": 195.88
+      },
+      {
+        "elapsed_seconds": 3.76,
+        "rss_mib": 214.34
+      },
+      {
+        "elapsed_seconds": 4.28,
+        "rss_mib": 231.11
+      },
+      {
+        "elapsed_seconds": 4.81,
+        "rss_mib": 235.5
+      },
+      {
+        "elapsed_seconds": 5.33,
+        "rss_mib": 236.42
+      },
+      {
+        "elapsed_seconds": 5.87,
+        "rss_mib": 237.23
+      },
+      {
+        "elapsed_seconds": 6.4,
+        "rss_mib": 238.36
+      },
+      {
+        "elapsed_seconds": 6.93,
+        "rss_mib": 247.19
+      },
+      {
+        "elapsed_seconds": 7.47,
+        "rss_mib": 253.25
+      },
+      {
+        "elapsed_seconds": 7.99,
+        "rss_mib": 253.25
+      },
+      {
+        "elapsed_seconds": 8.53,
+        "rss_mib": 253.25
+      },
+      {
+        "elapsed_seconds": 9.05,
+        "rss_mib": 253.5
+      },
+      {
+        "elapsed_seconds": 9.59,
+        "rss_mib": 261.91
+      },
+      {
+        "elapsed_seconds": 10.12,
+        "rss_mib": 272.84
+      },
+      {
+        "elapsed_seconds": 10.65,
+        "rss_mib": 272.88
+      },
+      {
+        "elapsed_seconds": 11.19,
+        "rss_mib": 272.89
+      },
+      {
+        "elapsed_seconds": 11.72,
+        "rss_mib": 268.0
+      },
+      {
+        "elapsed_seconds": 12.25,
+        "rss_mib": 274.05
+      },
+      {
+        "elapsed_seconds": 12.78,
+        "rss_mib": 281.92
+      },
+      {
+        "elapsed_seconds": 13.31,
+        "rss_mib": 281.95
+      },
+      {
+        "elapsed_seconds": 13.83,
+        "rss_mib": 282.0
+      },
+      {
+        "elapsed_seconds": 14.36,
+        "rss_mib": 290.0
+      },
+      {
+        "elapsed_seconds": 14.9,
+        "rss_mib": 290.95
+      },
+      {
+        "elapsed_seconds": 15.43,
+        "rss_mib": 302.0
+      },
+      {
+        "elapsed_seconds": 15.96,
+        "rss_mib": 302.08
+      },
+      {
+        "elapsed_seconds": 16.5,
+        "rss_mib": 302.12
+      },
+      {
+        "elapsed_seconds": 17.03,
+        "rss_mib": 302.17
+      },
+      {
+        "elapsed_seconds": 17.56,
+        "rss_mib": 311.19
+      },
+      {
+        "elapsed_seconds": 18.09,
+        "rss_mib": 314.97
+      },
+      {
+        "elapsed_seconds": 18.63,
+        "rss_mib": 326.78
+      },
+      {
+        "elapsed_seconds": 19.16,
+        "rss_mib": 326.8
+      },
+      {
+        "elapsed_seconds": 19.69,
+        "rss_mib": 326.83
+      },
+      {
+        "elapsed_seconds": 20.22,
+        "rss_mib": 326.84
+      },
+      {
+        "elapsed_seconds": 20.76,
+        "rss_mib": 326.88
+      },
+      {
+        "elapsed_seconds": 21.28,
+        "rss_mib": 339.16
+      },
+      {
+        "elapsed_seconds": 21.82,
+        "rss_mib": 354.75
+      },
+      {
+        "elapsed_seconds": 22.34,
+        "rss_mib": 355.11
+      },
+      {
+        "elapsed_seconds": 22.88,
+        "rss_mib": 355.17
+      },
+      {
+        "elapsed_seconds": 23.4,
+        "rss_mib": 355.23
+      },
+      {
+        "elapsed_seconds": 23.93,
+        "rss_mib": 355.3
+      },
+      {
+        "elapsed_seconds": 24.47,
+        "rss_mib": 355.34
+      },
+      {
+        "elapsed_seconds": 24.99,
+        "rss_mib": 355.69
+      },
+      {
+        "elapsed_seconds": 25.53,
+        "rss_mib": 379.55
+      },
+      {
+        "elapsed_seconds": 26.06,
+        "rss_mib": 384.97
+      },
+      {
+        "elapsed_seconds": 26.58,
+        "rss_mib": 385.06
+      },
+      {
+        "elapsed_seconds": 27.11,
+        "rss_mib": 385.09
+      },
+      {
+        "elapsed_seconds": 27.64,
+        "rss_mib": 386.84
+      },
+      {
+        "elapsed_seconds": 28.17,
+        "rss_mib": 386.89
+      },
+      {
+        "elapsed_seconds": 28.7,
+        "rss_mib": 387.03
+      },
+      {
+        "elapsed_seconds": 29.23,
+        "rss_mib": 387.11
+      },
+      {
+        "elapsed_seconds": 29.77,
+        "rss_mib": 396.09
+      },
+      {
+        "elapsed_seconds": 30.3,
+        "rss_mib": 405.75
+      },
+      {
+        "elapsed_seconds": 30.83,
+        "rss_mib": 405.77
+      },
+      {
+        "elapsed_seconds": 31.36,
+        "rss_mib": 405.77
+      },
+      {
+        "elapsed_seconds": 31.89,
+        "rss_mib": 405.8
+      },
+      {
+        "elapsed_seconds": 32.42,
+        "rss_mib": 405.8
+      },
+      {
+        "elapsed_seconds": 32.95,
+        "rss_mib": 405.83
+      },
+      {
+        "elapsed_seconds": 33.48,
+        "rss_mib": 370.02
+      },
+      {
+        "elapsed_seconds": 34.01,
+        "rss_mib": 370.86
+      },
+      {
+        "elapsed_seconds": 34.55,
+        "rss_mib": 377.42
+      },
+      {
+        "elapsed_seconds": 35.07,
+        "rss_mib": 395.16
+      },
+      {
+        "elapsed_seconds": 35.61,
+        "rss_mib": 397.86
+      },
+      {
+        "elapsed_seconds": 36.14,
+        "rss_mib": 397.88
+      },
+      {
+        "elapsed_seconds": 36.67,
+        "rss_mib": 397.89
+      },
+      {
+        "elapsed_seconds": 37.2,
+        "rss_mib": 397.91
+      },
+      {
+        "elapsed_seconds": 37.73,
+        "rss_mib": 397.92
+      },
+      {
+        "elapsed_seconds": 38.25,
+        "rss_mib": 397.94
+      },
+      {
+        "elapsed_seconds": 38.77,
+        "rss_mib": 397.98
+      },
+      {
+        "elapsed_seconds": 39.31,
+        "rss_mib": 398.05
+      },
+      {
+        "elapsed_seconds": 39.83,
+        "rss_mib": 399.53
+      },
+      {
+        "elapsed_seconds": 40.36,
+        "rss_mib": 413.06
+      },
+      {
+        "elapsed_seconds": 40.89,
+        "rss_mib": 415.16
+      },
+      {
+        "elapsed_seconds": 41.42,
+        "rss_mib": 415.19
+      },
+      {
+        "elapsed_seconds": 41.96,
+        "rss_mib": 415.2
+      },
+      {
+        "elapsed_seconds": 42.48,
+        "rss_mib": 415.22
+      },
+      {
+        "elapsed_seconds": 43.01,
+        "rss_mib": 415.23
+      },
+      {
+        "elapsed_seconds": 43.53,
+        "rss_mib": 417.25
+      },
+      {
+        "elapsed_seconds": 44.07,
+        "rss_mib": 417.28
+      },
+      {
+        "elapsed_seconds": 44.6,
+        "rss_mib": 417.3
+      },
+      {
+        "elapsed_seconds": 45.13,
+        "rss_mib": 417.31
+      },
+      {
+        "elapsed_seconds": 45.66,
+        "rss_mib": 419.69
+      },
+      {
+        "elapsed_seconds": 46.19,
+        "rss_mib": 437.11
+      },
+      {
+        "elapsed_seconds": 46.72,
+        "rss_mib": 437.17
+      },
+      {
+        "elapsed_seconds": 47.26,
+        "rss_mib": 437.2
+      },
+      {
+        "elapsed_seconds": 47.79,
+        "rss_mib": 437.2
+      },
+      {
+        "elapsed_seconds": 48.32,
+        "rss_mib": 437.25
+      },
+      {
+        "elapsed_seconds": 48.85,
+        "rss_mib": 437.25
+      },
+      {
+        "elapsed_seconds": 49.39,
+        "rss_mib": 437.28
+      },
+      {
+        "elapsed_seconds": 49.92,
+        "rss_mib": 440.27
+      },
+      {
+        "elapsed_seconds": 50.45,
+        "rss_mib": 441.14
+      },
+      {
+        "elapsed_seconds": 50.98,
+        "rss_mib": 442.11
+      },
+      {
+        "elapsed_seconds": 51.51,
+        "rss_mib": 443.98
+      },
+      {
+        "elapsed_seconds": 52.05,
+        "rss_mib": 455.02
+      },
+      {
+        "elapsed_seconds": 52.58,
+        "rss_mib": 464.53
+      },
+      {
+        "elapsed_seconds": 53.11,
+        "rss_mib": 465.33
+      },
+      {
+        "elapsed_seconds": 53.63,
+        "rss_mib": 466.67
+      },
+      {
+        "elapsed_seconds": 54.16,
+        "rss_mib": 468.17
+      },
+      {
+        "elapsed_seconds": 54.7,
+        "rss_mib": 468.67
+      },
+      {
+        "elapsed_seconds": 55.23,
+        "rss_mib": 468.69
+      },
+      {
+        "elapsed_seconds": 55.76,
+        "rss_mib": 464.03
+      },
+      {
+        "elapsed_seconds": 56.29,
+        "rss_mib": 465.95
+      },
+      {
+        "elapsed_seconds": 56.82,
+        "rss_mib": 467.78
+      },
+      {
+        "elapsed_seconds": 57.35,
+        "rss_mib": 469.17
+      },
+      {
+        "elapsed_seconds": 57.89,
+        "rss_mib": 470.59
+      },
+      {
+        "elapsed_seconds": 58.41,
+        "rss_mib": 480.42
+      },
+      {
+        "elapsed_seconds": 58.94,
+        "rss_mib": 494.58
+      },
+      {
+        "elapsed_seconds": 59.47,
+        "rss_mib": 495.34
+      },
+      {
+        "elapsed_seconds": 59.99,
+        "rss_mib": 496.05
+      },
+      {
+        "elapsed_seconds": 60.52,
+        "rss_mib": 496.91
+      },
+      {
+        "elapsed_seconds": 61.06,
+        "rss_mib": 497.52
+      },
+      {
+        "elapsed_seconds": 61.58,
+        "rss_mib": 497.62
+      },
+      {
+        "elapsed_seconds": 62.11,
+        "rss_mib": 499.75
+      },
+      {
+        "elapsed_seconds": 62.64,
+        "rss_mib": 501.2
+      },
+      {
+        "elapsed_seconds": 63.17,
+        "rss_mib": 502.72
+      },
+      {
+        "elapsed_seconds": 63.71,
+        "rss_mib": 504.25
+      },
+      {
+        "elapsed_seconds": 64.23,
+        "rss_mib": 505.55
+      },
+      {
+        "elapsed_seconds": 64.76,
+        "rss_mib": 506.92
+      },
+      {
+        "elapsed_seconds": 65.28,
+        "rss_mib": 514.92
+      },
+      {
+        "elapsed_seconds": 65.81,
+        "rss_mib": 533.14
+      },
+      {
+        "elapsed_seconds": 66.33,
+        "rss_mib": 537.72
+      },
+      {
+        "elapsed_seconds": 66.86,
+        "rss_mib": 538.7
+      },
+      {
+        "elapsed_seconds": 67.39,
+        "rss_mib": 540.14
+      },
+      {
+        "elapsed_seconds": 67.92,
+        "rss_mib": 541.5
+      },
+      {
+        "elapsed_seconds": 68.45,
+        "rss_mib": 542.2
+      },
+      {
+        "elapsed_seconds": 68.97,
+        "rss_mib": 542.33
+      },
+      {
+        "elapsed_seconds": 69.51,
+        "rss_mib": 542.47
+      },
+      {
+        "elapsed_seconds": 70.04,
+        "rss_mib": 542.55
+      },
+      {
+        "elapsed_seconds": 70.57,
+        "rss_mib": 542.61
+      },
+      {
+        "elapsed_seconds": 71.1,
+        "rss_mib": 577.56
+      },
+      {
+        "elapsed_seconds": 71.63,
+        "rss_mib": 577.69
+      },
+      {
+        "elapsed_seconds": 72.16,
+        "rss_mib": 577.73
+      },
+      {
+        "elapsed_seconds": 72.69,
+        "rss_mib": 579.83
+      },
+      {
+        "elapsed_seconds": 73.22,
+        "rss_mib": 587.62
+      },
+      {
+        "elapsed_seconds": 73.76,
+        "rss_mib": 595.78
+      },
+      {
+        "elapsed_seconds": 74.28,
+        "rss_mib": 595.12
+      },
+      {
+        "elapsed_seconds": 74.81,
+        "rss_mib": 595.58
+      },
+      {
+        "elapsed_seconds": 75.34,
+        "rss_mib": 596.11
+      },
+      {
+        "elapsed_seconds": 75.87,
+        "rss_mib": 596.67
+      },
+      {
+        "elapsed_seconds": 76.4,
+        "rss_mib": 597.25
+      },
+      {
+        "elapsed_seconds": 76.93,
+        "rss_mib": 597.81
+      },
+      {
+        "elapsed_seconds": 77.46,
+        "rss_mib": 598.33
+      },
+      {
+        "elapsed_seconds": 77.99,
+        "rss_mib": 598.81
+      },
+      {
+        "elapsed_seconds": 78.52,
+        "rss_mib": 599.36
+      },
+      {
+        "elapsed_seconds": 79.05,
+        "rss_mib": 599.83
+      },
+      {
+        "elapsed_seconds": 79.58,
+        "rss_mib": 599.77
+      },
+      {
+        "elapsed_seconds": 80.11,
+        "rss_mib": 575.03
+      },
+      {
+        "elapsed_seconds": 80.65,
+        "rss_mib": 576.44
+      },
+      {
+        "elapsed_seconds": 81.17,
+        "rss_mib": 590.23
+      },
+      {
+        "elapsed_seconds": 81.7,
+        "rss_mib": 592.08
+      },
+      {
+        "elapsed_seconds": 82.22,
+        "rss_mib": 596.61
+      },
+      {
+        "elapsed_seconds": 82.75,
+        "rss_mib": 596.77
+      },
+      {
+        "elapsed_seconds": 83.28,
+        "rss_mib": 597.14
+      },
+      {
+        "elapsed_seconds": 83.81,
+        "rss_mib": 597.72
+      },
+      {
+        "elapsed_seconds": 84.34,
+        "rss_mib": 598.28
+      },
+      {
+        "elapsed_seconds": 84.88,
+        "rss_mib": 598.86
+      },
+      {
+        "elapsed_seconds": 85.4,
+        "rss_mib": 599.42
+      },
+      {
+        "elapsed_seconds": 85.94,
+        "rss_mib": 599.97
+      },
+      {
+        "elapsed_seconds": 86.46,
+        "rss_mib": 600.56
+      },
+      {
+        "elapsed_seconds": 86.99,
+        "rss_mib": 602.05
+      },
+      {
+        "elapsed_seconds": 87.51,
+        "rss_mib": 602.19
+      },
+      {
+        "elapsed_seconds": 88.05,
+        "rss_mib": 602.39
+      },
+      {
+        "elapsed_seconds": 88.58,
+        "rss_mib": 588.42
+      },
+      {
+        "elapsed_seconds": 89.11,
+        "rss_mib": 620.83
+      },
+      {
+        "elapsed_seconds": 89.64,
+        "rss_mib": 621.64
+      },
+      {
+        "elapsed_seconds": 90.17,
+        "rss_mib": 632.42
+      },
+      {
+        "elapsed_seconds": 90.7,
+        "rss_mib": 650.3
+      },
+      {
+        "elapsed_seconds": 91.24,
+        "rss_mib": 648.75
+      },
+      {
+        "elapsed_seconds": 91.76,
+        "rss_mib": 648.8
+      },
+      {
+        "elapsed_seconds": 92.29,
+        "rss_mib": 648.88
+      },
+      {
+        "elapsed_seconds": 92.82,
+        "rss_mib": 648.92
+      },
+      {
+        "elapsed_seconds": 93.35,
+        "rss_mib": 649.0
+      },
+      {
+        "elapsed_seconds": 93.88,
+        "rss_mib": 649.08
+      },
+      {
+        "elapsed_seconds": 94.41,
+        "rss_mib": 649.14
+      },
+      {
+        "elapsed_seconds": 94.94,
+        "rss_mib": 649.23
+      },
+      {
+        "elapsed_seconds": 95.47,
+        "rss_mib": 649.27
+      },
+      {
+        "elapsed_seconds": 96.0,
+        "rss_mib": 649.33
+      },
+      {
+        "elapsed_seconds": 96.53,
+        "rss_mib": 649.39
+      },
+      {
+        "elapsed_seconds": 97.06,
+        "rss_mib": 651.98
+      },
+      {
+        "elapsed_seconds": 97.59,
+        "rss_mib": 654.36
+      },
+      {
+        "elapsed_seconds": 98.12,
+        "rss_mib": 654.56
+      },
+      {
+        "elapsed_seconds": 98.65,
+        "rss_mib": 654.84
+      },
+      {
+        "elapsed_seconds": 99.17,
+        "rss_mib": 662.53
+      },
+      {
+        "elapsed_seconds": 99.7,
+        "rss_mib": 682.48
+      },
+      {
+        "elapsed_seconds": 100.22,
+        "rss_mib": 682.69
+      },
+      {
+        "elapsed_seconds": 100.76,
+        "rss_mib": 682.75
+      },
+      {
+        "elapsed_seconds": 101.28,
+        "rss_mib": 682.97
+      },
+      {
+        "elapsed_seconds": 101.81,
+        "rss_mib": 683.22
+      },
+      {
+        "elapsed_seconds": 102.34,
+        "rss_mib": 683.39
+      },
+      {
+        "elapsed_seconds": 102.86,
+        "rss_mib": 683.66
+      },
+      {
+        "elapsed_seconds": 103.39,
+        "rss_mib": 683.88
+      },
+      {
+        "elapsed_seconds": 103.92,
+        "rss_mib": 684.05
+      },
+      {
+        "elapsed_seconds": 104.45,
+        "rss_mib": 684.28
+      },
+      {
+        "elapsed_seconds": 104.98,
+        "rss_mib": 684.48
+      },
+      {
+        "elapsed_seconds": 105.51,
+        "rss_mib": 684.69
+      },
+      {
+        "elapsed_seconds": 106.04,
+        "rss_mib": 684.98
+      },
+      {
+        "elapsed_seconds": 106.57,
+        "rss_mib": 685.12
+      },
+      {
+        "elapsed_seconds": 107.1,
+        "rss_mib": 689.14
+      },
+      {
+        "elapsed_seconds": 107.63,
+        "rss_mib": 709.42
+      },
+      {
+        "elapsed_seconds": 108.16,
+        "rss_mib": 710.34
+      },
+      {
+        "elapsed_seconds": 108.69,
+        "rss_mib": 710.47
+      },
+      {
+        "elapsed_seconds": 109.21,
+        "rss_mib": 710.31
+      },
+      {
+        "elapsed_seconds": 109.74,
+        "rss_mib": 710.67
+      },
+      {
+        "elapsed_seconds": 110.26,
+        "rss_mib": 711.56
+      },
+      {
+        "elapsed_seconds": 110.79,
+        "rss_mib": 712.23
+      },
+      {
+        "elapsed_seconds": 111.32,
+        "rss_mib": 699.72
+      },
+      {
+        "elapsed_seconds": 111.85,
+        "rss_mib": 700.0
+      },
+      {
+        "elapsed_seconds": 112.38,
+        "rss_mib": 700.45
+      },
+      {
+        "elapsed_seconds": 112.92,
+        "rss_mib": 739.33
+      },
+      {
+        "elapsed_seconds": 113.44,
+        "rss_mib": 739.52
+      },
+      {
+        "elapsed_seconds": 113.96,
+        "rss_mib": 739.67
+      },
+      {
+        "elapsed_seconds": 114.49,
+        "rss_mib": 740.09
+      },
+      {
+        "elapsed_seconds": 115.02,
+        "rss_mib": 740.58
+      },
+      {
+        "elapsed_seconds": 115.55,
+        "rss_mib": 740.73
+      },
+      {
+        "elapsed_seconds": 116.08,
+        "rss_mib": 741.92
+      },
+      {
+        "elapsed_seconds": 116.61,
+        "rss_mib": 759.48
+      },
+      {
+        "elapsed_seconds": 117.14,
+        "rss_mib": 764.14
+      },
+      {
+        "elapsed_seconds": 117.67,
+        "rss_mib": 764.98
+      },
+      {
+        "elapsed_seconds": 118.2,
+        "rss_mib": 765.77
+      },
+      {
+        "elapsed_seconds": 118.72,
+        "rss_mib": 766.94
+      },
+      {
+        "elapsed_seconds": 119.25,
+        "rss_mib": 767.61
+      },
+      {
+        "elapsed_seconds": 119.78,
+        "rss_mib": 767.94
+      },
+      {
+        "elapsed_seconds": 120.31,
+        "rss_mib": 768.14
+      },
+      {
+        "elapsed_seconds": 120.84,
+        "rss_mib": 768.25
+      },
+      {
+        "elapsed_seconds": 121.38,
+        "rss_mib": 768.36
+      },
+      {
+        "elapsed_seconds": 121.9,
+        "rss_mib": 768.52
+      },
+      {
+        "elapsed_seconds": 122.44,
+        "rss_mib": 768.67
+      },
+      {
+        "elapsed_seconds": 122.97,
+        "rss_mib": 768.84
+      },
+      {
+        "elapsed_seconds": 123.5,
+        "rss_mib": 768.97
+      },
+      {
+        "elapsed_seconds": 124.03,
+        "rss_mib": 769.05
+      },
+      {
+        "elapsed_seconds": 124.57,
+        "rss_mib": 769.22
+      },
+      {
+        "elapsed_seconds": 125.1,
+        "rss_mib": 769.31
+      },
+      {
+        "elapsed_seconds": 125.63,
+        "rss_mib": 773.62
+      },
+      {
+        "elapsed_seconds": 126.16,
+        "rss_mib": 792.77
+      },
+      {
+        "elapsed_seconds": 126.69,
+        "rss_mib": 792.94
+      },
+      {
+        "elapsed_seconds": 127.22,
+        "rss_mib": 793.05
+      },
+      {
+        "elapsed_seconds": 127.75,
+        "rss_mib": 793.14
+      },
+      {
+        "elapsed_seconds": 128.28,
+        "rss_mib": 793.27
+      },
+      {
+        "elapsed_seconds": 128.81,
+        "rss_mib": 793.41
+      },
+      {
+        "elapsed_seconds": 129.35,
+        "rss_mib": 793.55
+      },
+      {
+        "elapsed_seconds": 129.88,
+        "rss_mib": 793.7
+      },
+      {
+        "elapsed_seconds": 130.4,
+        "rss_mib": 793.83
+      },
+      {
+        "elapsed_seconds": 130.93,
+        "rss_mib": 793.95
+      },
+      {
+        "elapsed_seconds": 131.46,
+        "rss_mib": 794.03
+      },
+      {
+        "elapsed_seconds": 131.99,
+        "rss_mib": 794.14
+      },
+      {
+        "elapsed_seconds": 132.52,
+        "rss_mib": 794.23
+      },
+      {
+        "elapsed_seconds": 133.05,
+        "rss_mib": 794.33
+      },
+      {
+        "elapsed_seconds": 133.59,
+        "rss_mib": 794.42
+      },
+      {
+        "elapsed_seconds": 134.12,
+        "rss_mib": 794.53
+      },
+      {
+        "elapsed_seconds": 134.64,
+        "rss_mib": 794.72
+      },
+      {
+        "elapsed_seconds": 135.18,
+        "rss_mib": 795.3
+      },
+      {
+        "elapsed_seconds": 135.71,
+        "rss_mib": 807.95
+      },
+      {
+        "elapsed_seconds": 136.24,
+        "rss_mib": 817.06
+      },
+      {
+        "elapsed_seconds": 136.77,
+        "rss_mib": 817.23
+      },
+      {
+        "elapsed_seconds": 137.31,
+        "rss_mib": 817.3
+      },
+      {
+        "elapsed_seconds": 137.84,
+        "rss_mib": 817.39
+      },
+      {
+        "elapsed_seconds": 138.36,
+        "rss_mib": 817.45
+      },
+      {
+        "elapsed_seconds": 138.89,
+        "rss_mib": 817.48
+      },
+      {
+        "elapsed_seconds": 139.42,
+        "rss_mib": 817.42
+      },
+      {
+        "elapsed_seconds": 139.95,
+        "rss_mib": 854.94
+      },
+      {
+        "elapsed_seconds": 140.48,
+        "rss_mib": 855.06
+      },
+      {
+        "elapsed_seconds": 141.01,
+        "rss_mib": 855.17
+      },
+      {
+        "elapsed_seconds": 141.54,
+        "rss_mib": 855.3
+      },
+      {
+        "elapsed_seconds": 142.06,
+        "rss_mib": 855.39
+      },
+      {
+        "elapsed_seconds": 142.59,
+        "rss_mib": 855.48
+      },
+      {
+        "elapsed_seconds": 143.12,
+        "rss_mib": 855.62
+      },
+      {
+        "elapsed_seconds": 143.65,
+        "rss_mib": 859.75
+      },
+      {
+        "elapsed_seconds": 144.18,
+        "rss_mib": 859.84
+      },
+      {
+        "elapsed_seconds": 144.7,
+        "rss_mib": 859.94
+      },
+      {
+        "elapsed_seconds": 145.23,
+        "rss_mib": 860.06
+      },
+      {
+        "elapsed_seconds": 145.75,
+        "rss_mib": 860.17
+      },
+      {
+        "elapsed_seconds": 146.29,
+        "rss_mib": 862.2
+      },
+      {
+        "elapsed_seconds": 146.82,
+        "rss_mib": 862.2
+      },
+      {
+        "elapsed_seconds": 147.35,
+        "rss_mib": 862.2
+      },
+      {
+        "elapsed_seconds": 147.88,
+        "rss_mib": 871.73
+      },
+      {
+        "elapsed_seconds": 148.41,
+        "rss_mib": 998.56
+      },
+      {
+        "elapsed_seconds": 148.95,
+        "rss_mib": 998.94
+      },
+      {
+        "elapsed_seconds": 149.47,
+        "rss_mib": 999.61
+      },
+      {
+        "elapsed_seconds": 150.0,
+        "rss_mib": 1000.25
+      },
+      {
+        "elapsed_seconds": 150.53,
+        "rss_mib": 1000.84
+      },
+      {
+        "elapsed_seconds": 151.07,
+        "rss_mib": 1001.56
+      },
+      {
+        "elapsed_seconds": 151.6,
+        "rss_mib": 1020.34
+      },
+      {
+        "elapsed_seconds": 152.13,
+        "rss_mib": 1028.31
+      },
+      {
+        "elapsed_seconds": 152.66,
+        "rss_mib": 1032.31
+      },
+      {
+        "elapsed_seconds": 153.19,
+        "rss_mib": 1034.41
+      },
+      {
+        "elapsed_seconds": 153.72,
+        "rss_mib": 1034.73
+      },
+      {
+        "elapsed_seconds": 154.25,
+        "rss_mib": 1035.12
+      },
+      {
+        "elapsed_seconds": 154.79,
+        "rss_mib": 1035.55
+      },
+      {
+        "elapsed_seconds": 155.32,
+        "rss_mib": 1035.95
+      },
+      {
+        "elapsed_seconds": 155.85,
+        "rss_mib": 1036.42
+      },
+      {
+        "elapsed_seconds": 156.38,
+        "rss_mib": 1038.78
+      },
+      {
+        "elapsed_seconds": 156.91,
+        "rss_mib": 1046.06
+      },
+      {
+        "elapsed_seconds": 157.44,
+        "rss_mib": 1053.92
+      },
+      {
+        "elapsed_seconds": 157.97,
+        "rss_mib": 1060.97
+      },
+      {
+        "elapsed_seconds": 158.5,
+        "rss_mib": 1068.08
+      },
+      {
+        "elapsed_seconds": 159.02,
+        "rss_mib": 1072.53
+      },
+      {
+        "elapsed_seconds": 159.55,
+        "rss_mib": 1074.92
+      },
+      {
+        "elapsed_seconds": 160.08,
+        "rss_mib": 1075.59
+      },
+      {
+        "elapsed_seconds": 160.61,
+        "rss_mib": 1079.92
+      },
+      {
+        "elapsed_seconds": 161.14,
+        "rss_mib": 1082.02
+      },
+      {
+        "elapsed_seconds": 161.67,
+        "rss_mib": 1082.77
+      },
+      {
+        "elapsed_seconds": 162.2,
+        "rss_mib": 1083.19
+      },
+      {
+        "elapsed_seconds": 162.73,
+        "rss_mib": 1083.61
+      },
+      {
+        "elapsed_seconds": 163.27,
+        "rss_mib": 1084.02
+      },
+      {
+        "elapsed_seconds": 163.79,
+        "rss_mib": 1084.44
+      },
+      {
+        "elapsed_seconds": 164.32,
+        "rss_mib": 1084.91
+      },
+      {
+        "elapsed_seconds": 164.86,
+        "rss_mib": 1085.33
+      },
+      {
+        "elapsed_seconds": 165.38,
+        "rss_mib": 1085.33
+      },
+      {
+        "elapsed_seconds": 165.91,
+        "rss_mib": 1085.67
+      },
+      {
+        "elapsed_seconds": 166.44,
+        "rss_mib": 1086.08
+      },
+      {
+        "elapsed_seconds": 166.97,
+        "rss_mib": 1086.45
+      },
+      {
+        "elapsed_seconds": 167.5,
+        "rss_mib": 1086.88
+      },
+      {
+        "elapsed_seconds": 168.04,
+        "rss_mib": 1087.31
+      },
+      {
+        "elapsed_seconds": 168.57,
+        "rss_mib": 1087.75
+      },
+      {
+        "elapsed_seconds": 169.1,
+        "rss_mib": 1088.11
+      },
+      {
+        "elapsed_seconds": 169.62,
+        "rss_mib": 1088.34
+      },
+      {
+        "elapsed_seconds": 170.15,
+        "rss_mib": 1088.59
+      },
+      {
+        "elapsed_seconds": 170.69,
+        "rss_mib": 1088.69
+      },
+      {
+        "elapsed_seconds": 171.22,
+        "rss_mib": 1088.73
+      },
+      {
+        "elapsed_seconds": 171.75,
+        "rss_mib": 1091.0
+      },
+      {
+        "elapsed_seconds": 172.28,
+        "rss_mib": 1092.91
+      }
+    ],
+    "map_snapshots": [
+      {
+        "page": 100,
+        "lua_gc_kib": 62056.31640625,
+        "mc_roots": 11378,
+        "mc_child_tables": 11378,
+        "mc_child_entries": 43489,
+        "mc_shallow_string_bytes": 240834,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 11378,
+        "struct_roots": 8877,
+        "struct_child_tables": 8877,
+        "struct_child_entries": 8877,
+        "struct_shallow_string_bytes": 17754,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 8877,
+        "tables_roots": 37052,
+        "tables_child_tables": 37052,
+        "tables_child_entries": 155466,
+        "tables_shallow_string_bytes": 3016750,
+        "tables_prop_roots": 18529,
+        "tables_seq_roots": 18521,
+        "tables_other_roots": 2,
+        "page_data_roots": 100,
+        "page_data_child_tables": 100,
+        "page_data_child_entries": 9355,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 100,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "page"
+      },
+      {
+        "page": 200,
+        "lua_gc_kib": 148643.25097656,
+        "mc_roots": 28005,
+        "mc_child_tables": 28005,
+        "mc_child_entries": 105359,
+        "mc_shallow_string_bytes": 590126,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 28005,
+        "struct_roots": 19360,
+        "struct_child_tables": 19360,
+        "struct_child_entries": 19360,
+        "struct_shallow_string_bytes": 38720,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 19360,
+        "tables_roots": 72366,
+        "tables_child_tables": 72366,
+        "tables_child_entries": 306212,
+        "tables_shallow_string_bytes": 6030583,
+        "tables_prop_roots": 36186,
+        "tables_seq_roots": 36178,
+        "tables_other_roots": 2,
+        "page_data_roots": 200,
+        "page_data_child_tables": 200,
+        "page_data_child_entries": 21344,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 200,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "id": 99285,
+        "stage": "page"
+      },
+      {
+        "page": 300,
+        "lua_gc_kib": 190500.47070312,
+        "mc_roots": 43088,
+        "mc_child_tables": 43088,
+        "mc_child_entries": 160410,
+        "mc_shallow_string_bytes": 908257,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 43088,
+        "struct_roots": 27638,
+        "struct_child_tables": 27638,
+        "struct_child_entries": 27638,
+        "struct_shallow_string_bytes": 55276,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 27638,
+        "tables_roots": 99096,
+        "tables_child_tables": 99096,
+        "tables_child_entries": 421413,
+        "tables_shallow_string_bytes": 8482763,
+        "tables_prop_roots": 49551,
+        "tables_seq_roots": 49543,
+        "tables_other_roots": 2,
+        "page_data_roots": 300,
+        "page_data_child_tables": 300,
+        "page_data_child_entries": 31146,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 300,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "id": 100752,
+        "stage": "page"
+      },
+      {
+        "page": 400,
+        "lua_gc_kib": 165949.05175781,
+        "mc_roots": 52932,
+        "mc_child_tables": 52932,
+        "mc_child_entries": 196263,
+        "mc_shallow_string_bytes": 1116023,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 52932,
+        "struct_roots": 33047,
+        "struct_child_tables": 33047,
+        "struct_child_entries": 33047,
+        "struct_shallow_string_bytes": 66094,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 33047,
+        "tables_roots": 116360,
+        "tables_child_tables": 116360,
+        "tables_child_entries": 495938,
+        "tables_shallow_string_bytes": 10039981,
+        "tables_prop_roots": 58183,
+        "tables_seq_roots": 58175,
+        "tables_other_roots": 2,
+        "page_data_roots": 400,
+        "page_data_child_tables": 400,
+        "page_data_child_entries": 37467,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 400,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "id": 120585,
+        "stage": "page"
+      },
+      {
+        "page": 500,
+        "lua_gc_kib": 298901.19042969,
+        "mc_roots": 62934,
+        "mc_child_tables": 62934,
+        "mc_child_entries": 232686,
+        "mc_shallow_string_bytes": 1327073,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 62934,
+        "struct_roots": 38544,
+        "struct_child_tables": 38544,
+        "struct_child_entries": 38544,
+        "struct_shallow_string_bytes": 77088,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 38544,
+        "tables_roots": 133908,
+        "tables_child_tables": 133908,
+        "tables_child_entries": 571687,
+        "tables_shallow_string_bytes": 11622965,
+        "tables_prop_roots": 66957,
+        "tables_seq_roots": 66949,
+        "tables_other_roots": 2,
+        "page_data_roots": 500,
+        "page_data_child_tables": 500,
+        "page_data_child_entries": 43884,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 500,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "id": 141328,
+        "stage": "page"
+      },
+      {
+        "page": 600,
+        "lua_gc_kib": 188426.84082031,
+        "mc_roots": 71033,
+        "mc_child_tables": 71033,
+        "mc_child_entries": 262110,
+        "mc_shallow_string_bytes": 1497811,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 71033,
+        "struct_roots": 43002,
+        "struct_child_tables": 43002,
+        "struct_child_entries": 43002,
+        "struct_shallow_string_bytes": 86004,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 43002,
+        "tables_roots": 148116,
+        "tables_child_tables": 148116,
+        "tables_child_entries": 633060,
+        "tables_shallow_string_bytes": 12904183,
+        "tables_prop_roots": 74061,
+        "tables_seq_roots": 74053,
+        "tables_other_roots": 2,
+        "page_data_roots": 600,
+        "page_data_child_tables": 600,
+        "page_data_child_entries": 49011,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 600,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "id": 156150,
+        "stage": "page"
+      },
+      {
+        "page": 700,
+        "lua_gc_kib": 286285.93457031,
+        "mc_roots": 83214,
+        "mc_child_tables": 83214,
+        "mc_child_entries": 306571,
+        "mc_shallow_string_bytes": 1755145,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 83214,
+        "struct_roots": 49690,
+        "struct_child_tables": 49690,
+        "struct_child_entries": 49690,
+        "struct_shallow_string_bytes": 99380,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 49690,
+        "tables_roots": 169490,
+        "tables_child_tables": 169490,
+        "tables_child_entries": 725280,
+        "tables_shallow_string_bytes": 14833176,
+        "tables_prop_roots": 84748,
+        "tables_seq_roots": 84740,
+        "tables_other_roots": 2,
+        "page_data_roots": 700,
+        "page_data_child_tables": 700,
+        "page_data_child_entries": 56929,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 700,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "page"
+      },
+      {
+        "page": 800,
+        "lua_gc_kib": 217356.70410156,
+        "mc_roots": 90739,
+        "mc_child_tables": 90739,
+        "mc_child_entries": 335060,
+        "mc_shallow_string_bytes": 1914231,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 90739,
+        "struct_roots": 54632,
+        "struct_child_tables": 54632,
+        "struct_child_entries": 54632,
+        "struct_shallow_string_bytes": 109264,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 54632,
+        "tables_roots": 187266,
+        "tables_child_tables": 187266,
+        "tables_child_entries": 800294,
+        "tables_shallow_string_bytes": 16311097,
+        "tables_prop_roots": 93636,
+        "tables_seq_roots": 93628,
+        "tables_other_roots": 2,
+        "page_data_roots": 800,
+        "page_data_child_tables": 800,
+        "page_data_child_entries": 62918,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 800,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "page"
+      },
+      {
+        "page": 900,
+        "lua_gc_kib": 251135.91601562,
+        "mc_roots": 96316,
+        "mc_child_tables": 96316,
+        "mc_child_entries": 356030,
+        "mc_shallow_string_bytes": 2032025,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 96316,
+        "struct_roots": 58349,
+        "struct_child_tables": 58349,
+        "struct_child_entries": 58349,
+        "struct_shallow_string_bytes": 116698,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 58349,
+        "tables_roots": 200500,
+        "tables_child_tables": 200500,
+        "tables_child_entries": 856201,
+        "tables_shallow_string_bytes": 17419691,
+        "tables_prop_roots": 100253,
+        "tables_seq_roots": 100245,
+        "tables_other_roots": 2,
+        "page_data_roots": 900,
+        "page_data_child_tables": 900,
+        "page_data_child_entries": 67194,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 900,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "page"
+      },
+      {
+        "page": 1000,
+        "lua_gc_kib": 275029.04101562,
+        "mc_roots": 101914,
+        "mc_child_tables": 101914,
+        "mc_child_entries": 377078,
+        "mc_shallow_string_bytes": 2150256,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 101914,
+        "struct_roots": 62082,
+        "struct_child_tables": 62082,
+        "struct_child_entries": 62082,
+        "struct_shallow_string_bytes": 124164,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 62082,
+        "tables_roots": 213794,
+        "tables_child_tables": 213794,
+        "tables_child_entries": 912364,
+        "tables_shallow_string_bytes": 18551899,
+        "tables_prop_roots": 106900,
+        "tables_seq_roots": 106892,
+        "tables_other_roots": 2,
+        "page_data_roots": 1000,
+        "page_data_child_tables": 1000,
+        "page_data_child_entries": 71494,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 1000,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "page"
+      },
+      {
+        "page": 1095,
+        "lua_gc_kib": 403617.71972656,
+        "mc_roots": 112891,
+        "mc_child_tables": 112891,
+        "mc_child_entries": 416322,
+        "mc_shallow_string_bytes": 2371772,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 112891,
+        "struct_roots": 69941,
+        "struct_child_tables": 69941,
+        "struct_child_entries": 69941,
+        "struct_shallow_string_bytes": 139882,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 69941,
+        "tables_roots": 244308,
+        "tables_child_tables": 244308,
+        "tables_child_entries": 1039811,
+        "tables_shallow_string_bytes": 21117875,
+        "tables_prop_roots": 122157,
+        "tables_seq_roots": 122149,
+        "tables_other_roots": 2,
+        "page_data_roots": 1095,
+        "page_data_child_tables": 1095,
+        "page_data_child_entries": 77827,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 1095,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "before_finish"
+      },
+      {
+        "page": 1096,
+        "lua_gc_kib": 404180.63183594,
+        "mc_roots": 112893,
+        "mc_child_tables": 112893,
+        "mc_child_entries": 416340,
+        "mc_shallow_string_bytes": 2371868,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 112893,
+        "struct_roots": 69941,
+        "struct_child_tables": 69941,
+        "struct_child_entries": 69941,
+        "struct_shallow_string_bytes": 139882,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 69941,
+        "tables_roots": 244308,
+        "tables_child_tables": 244308,
+        "tables_child_entries": 1039817,
+        "tables_shallow_string_bytes": 21117935,
+        "tables_prop_roots": 122157,
+        "tables_seq_roots": 122149,
+        "tables_other_roots": 2,
+        "page_data_roots": 1096,
+        "page_data_child_tables": 1096,
+        "page_data_child_entries": 77839,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 1096,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "finish_before"
+      },
+      {
+        "page": 1096,
+        "lua_gc_kib": 407591.84277344,
+        "mc_roots": 112893,
+        "mc_child_tables": 112893,
+        "mc_child_entries": 416340,
+        "mc_shallow_string_bytes": 2371868,
+        "mc_prop_roots": 0,
+        "mc_seq_roots": 0,
+        "mc_other_roots": 112893,
+        "struct_roots": 69941,
+        "struct_child_tables": 69941,
+        "struct_child_entries": 69941,
+        "struct_shallow_string_bytes": 139882,
+        "struct_prop_roots": 0,
+        "struct_seq_roots": 0,
+        "struct_other_roots": 69941,
+        "tables_roots": 244308,
+        "tables_child_tables": 244308,
+        "tables_child_entries": 1161700,
+        "tables_shallow_string_bytes": 28532422,
+        "tables_prop_roots": 122157,
+        "tables_seq_roots": 122149,
+        "tables_other_roots": 2,
+        "page_data_roots": 1096,
+        "page_data_child_tables": 1096,
+        "page_data_child_entries": 77839,
+        "page_data_shallow_string_bytes": 0,
+        "page_data_prop_roots": 0,
+        "page_data_seq_roots": 0,
+        "page_data_other_roots": 1096,
+        "role_roots": 3,
+        "role_child_tables": 3,
+        "role_child_entries": 314,
+        "role_shallow_string_bytes": 1465,
+        "role_prop_roots": 0,
+        "role_seq_roots": 0,
+        "role_other_roots": 3,
+        "stage": "finish_after"
+      }
+    ],
+    "pdf_bytes": 12556074,
+    "semantic_audit_matches_reference": true,
+    "semantic_audit": {
+      "pages": 1096,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "link_annotations": 24126,
+      "action_counts": {
+        "/GoTo": 20878,
+        "/URI": 3248
+      },
+      "unique_uri_targets": 3125,
+      "parenttree_objr_owner_matches": 24126,
+      "parenttree_mismatches": 0,
+      "figures": 400,
+      "figures_with_nonempty_alt": 400,
+      "nfc_text_chars": 2244123,
+      "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+      "link_signature_count": 24126,
+      "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+    },
+    "finalizer_delta": {
+      "tables_child_entries": 121883,
+      "tables_shallow_string_bytes": 7414487,
+      "lua_gc_kib": 3411.211
+    }
+  },
+  "interpretation": {
+    "finding": "Immediately before finalization, ltx.__tag.tables has 244,308 root tables (122,157 _prop and 122,149 _seq) with 1,039,817 direct child entries. Immediately after the finalizer, the root count is unchanged but direct child entries rise by 121,883. The aggregate is consistent with the Lua mirrors that tagpdf-luatex.def maintains for expl3 properties and sequences.",
+    "limitations": [
+      "One instrumented run on one host and one synthetic fixture.",
+      "Root/child counts and shallow string-byte totals are structural indicators, not Lua allocation sizes.",
+      "The finalizer is wrapped through a private tagpdf function for phase snapshots.",
+      "The PDF semantic audit matches the tagged-active factorial reference."
+    ],
+    "decision": "Do not clear or compact these maps before finalization: the finalizer adds structure-tree data to them. Further work should determine which generated tags/maps can be reduced without changing the PDF audit; no production code changed."
+  }
+}
