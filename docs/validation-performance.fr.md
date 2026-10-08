@@ -1221,3 +1221,20 @@ Les trois répétitions utilisent le graphe fictif N=100 (202 personnes, 101 fam
 L’audit du premier PDF conservé compte 133 pages A4, un PDF 2.0 balisé en `en-US`, 12 447 éléments de structure, 40 figures avec Alt et attribution, et 2 453 annotations de lien. Les 2 453 annotations ont un OBJR correspondant dans le ParentTree ; aucun écart n’est relevé. Son SHA-256 est `0942b240a9697506766c37dff15c69f665d7118ff08c274413ec9227ff3f4d7a`. Le relevé [JSON](validation-latex-open-portraits-n100-20261008.json) contient les résultats complets et l’empreinte du texte extrait.
 
 Le temps et le pic RSS de ce cas N=100 sont sous les repères provisoires de 180 s et 512 Mio ; la taille du PDF dépasse celui de 16 Mio. L’espace temporaire atteint 184,2 Mio. Ce corpus historique JPEG est plus compressible que les PNG synthétiques pseudo-aléatoires précédemment mesurés : les deux expériences éclairent des profils différents et ne forment pas une comparaison causale. Ce run qualifie une fixture locale, pas des médias tirés d’une base Gramps, les installateurs Desktop ou Gramps Web. Les 20 portraits d’archives ne représentent pas des photos modernes de téléphone.
+
+### Même banc sous CPython 3.13.7 — N=100 — 8 octobre 2026
+
+Le banc précédent a été relancé trois fois avec CPython 3.13.7 sur macOS 27.0 arm64, en gardant LuaHBTeX 1.24.0 et le même manifeste de portraits dont le SHA-256 est `ac8f4d25…`. Les trois PDFs convergent et ne signalent aucun avertissement de mise en page. Cette exécution mesure le Python hôte 3.13.7 ; elle n’utilise pas le Python 3.13.2 embarqué par Gramps et ne lance pas Gramps Desktop.
+
+| Mesure | Médiane | Étendue |
+| --- | ---: | ---: |
+| Temps de compilation PDF | 38,002 s | 37,311–38,591 s |
+| Pic RSS LuaTeX | 338 886 656 octets (323,2 Mio) | 320,2–323,8 Mio |
+| Tas Python maximal (`tracemalloc`) | 25 077 798 octets (23,9 Mio) | 23,9–24,5 Mio |
+| Espace logique temporaire échantillonné | 193 110 244 octets (184,2 Mio) | identique sur les trois runs |
+| Archive HTML ZIP | 47 716 648 octets | identique sur les trois runs |
+| PDF | 48 938 425 octets (46,7 Mio) | identique sur les trois runs |
+
+L’audit du premier PDF retrouve 133 pages A4, PDF 2.0 balisé en `en-US`, 12 447 éléments de structure, 40 figures avec texte alternatif et attribution, 2 453 annotations de lien correctement associées dans le ParentTree, et zéro écart OBJR/ParentTree. Le SHA-256 du PDF est `c729bd719c0880536f3bd0a3f6de6c1526127ac61630abcad4b2829345d67438` ; l’empreinte du texte extrait est la même que sous Python 3.14.0.
+
+En comparaison descriptive non appariée avec les trois runs Python 3.14.0 précédents, le temps médian est supérieur de 0,546 s (1,46 %), le RSS de 1,65 Mo (0,49 %) et le tas Python de 1,08 Mo (4,48 %) ; la taille du PDF varie de six octets et le ZIP reste identique. L’ordre des campagnes n’était pas alterné : ces écarts ne démontrent pas un effet causal de la version de Python. Le [relevé JSON](validation-latex-open-portraits-py313-n100-20261008.json) conserve les trois mesures, l’audit et les limites de cette comparaison.
