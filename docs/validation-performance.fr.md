@@ -1148,8 +1148,23 @@ Le banc `benchmark_book.py` génère un arbre ramifié fictif de 1 000 unions de
 | 3 | 377,507 | 12 556 074 | 1 166,48 | 76,18 | 27 718 445 |
 | Médiane | 378,028 | 12 556 080 | 995,73 | 78,98 | 27 718 444 |
 
-La durée varie de 377,51 à 392,59 s ; le RSS va de 970,19 à 1 166,48 Mio, soit une dispersion notable. Le PDF reste sous le repère provisoire de 16 Mio, tandis que les durées et les pics RSS dépassent respectivement les budgets de 180 s et 512 Mio sur les trois runs. L’espace temporaire varie d’un octet seulement entre runs ; un plafond provisoire de 64 Mio par exécution de ce banc laisse une marge d’environ 2,4×, mais doit encore être vérifié avec des médias réalistes et sur les environnements cibles.
+La durée varie de 377,51 à 392,59 s ; le RSS va de 970,19 à 1 166,48 Mio, soit une dispersion notable. Le PDF reste sous le repère provisoire de 16 Mio, tandis que les durées et les pics RSS dépassent respectivement les budgets de 180 s et 512 Mio sur les trois runs. L’espace temporaire varie d’un octet seulement. Ces 26,43 Mio ne valent que pour la fixture ramifiée N=1 000 aux images de 96 × 72 pixels et ne fondent aucun plafond général ; le cas N=100 haute résolution ci-dessous atteint plus de 300 Mio.
 
 Trois essais avec les délais standard ont expiré sans PDF complet ; leurs RSS partiels ne sont pas utilisés comme pics d’un build abouti. Les trois runs étendus sont sur macOS 27.0 arm64 ; les échantillons RSS sont pris toutes les 100 ms et peuvent manquer des pics plus courts, l’espace est calculé à partir des tailles logiques des fichiers et aucun des PDFs temporaires n’a reçu d’audit sémantique indépendant. Aucun réglage du renderer n’a changé. Les [métriques de la première répétition](validation-latex-benchmark-n1000-extended-20261008.json) et les [deux suivantes](validation-latex-benchmark-n1000-extended-repeats-20261008.json) conservent les relevés bruts.
 
-**Suite L8.3 :** conserver les structures et les tables tagpdf du renderer. Confirmer l’enveloppe temporaire provisoire de 64 Mio sur des médias réalistes et les environnements cibles ; les objectifs de durée et de RSS restent à améliorer ou à arbitrer. N’ouvrir une piste de réduction des données héritées qu’au niveau de la dépendance tagpdf avec une validation dédiée.
+### Fixture haute résolution avec HTML et PDF — N=100 — 8 octobre 2026
+
+Vingt portraits PNG pseudo-aléatoires de 1 600 × 1 200 pixels représentent 115 379 213 octets de source. La mesure HTML seule, répétée trois fois, atteint exactement 157 472 909 octets (150,18 Mio) d’espace temporaire et 120,33 à 123,13 Mio de tas Python. Trois exports PDF complets avec délais étendus réussissent ensuite :
+
+| Répétition | Durée PDF (s) | PDF (octets) | Pic RSS LuaTeX (Mio) | Pic tas Python (Mio) | Espace logique temporaire (octets) |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 37,935 | 79 709 779 | 328,30 | 123,13 | 316 529 068 |
+| 2 | 38,614 | 79 709 777 | 319,09 | 123,13 | 316 529 066 |
+| 3 | 38,049 | 79 709 782 | 316,23 | 120,33 | 316 528 229 |
+| Médiane | 38,049 | 79 709 779 | 319,09 | 123,13 | 316 529 066 |
+
+Pour cette fixture synthétique, le temps et le RSS restent sous les repères de 180 s et 512 Mio ; le PDF dépasse le repère de 16 Mio, et l’espace temporaire atteint 301,86–301,87 Mio. Le plafond envisagé de 64 Mio est donc invalidé comme budget général. Ces images aléatoires PNG ne représentent pas des photographies ; l’espace est la somme échantillonnée des tailles logiques sous le dossier temporaire du banc (100 ms), susceptible de manquer de très courts pics. Aucun audit sémantique indépendant n’a été fait sur ces PDFs temporaires.
+
+Les relevés HTML seuls et PDF sont conservés dans les [trois runs HTML](validation-latex-benchmark-highres-n100-html-20261008.json), le [premier run PDF](validation-latex-benchmark-highres-n100-pdf-20261008.json) et les [runs PDF 2 et 3](validation-latex-benchmark-highres-n100-pdf-repeats-20261008.json). La limite de 256 Mio sur les données sources synthétiques empêche de multiplier ce cas par dix à N=1 000 sans modifier le banc.
+
+**Suite L8.3 :** ne pas retenir de plafond temporaire général tant que des cas réalistes et les environnements cibles ne sont pas mesurés. Garder les structures accessibles ; examiner ensuite la taille des dérivés et du PDF à partir de médias réalistes avant toute modification du renderer.
