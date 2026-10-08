@@ -1044,4 +1044,10 @@ Pour lever l’ambiguïté des premiers diagnostics, trois paires de passes dire
 
 Le cache économise entre 1,073 et 1,686 s par passe, soit 1,356 s (0,825 %) en moyenne. Son compteur `dyn_used` est supérieur de 1 556 575 à 1 556 609 unités (environ 5,154 %), sans conversion en octets. Le RSS varie de −88,36 à +80,06 Mio selon la paire et ne montre donc pas d’effet stable attribuable au cache. Chaque PDF garde les mêmes 1 096 pages, 24 126 liens et associations OBJR/ParentTree, 400 figures accessibles, hashes du texte NFC et signatures ordonnées des liens. Le cache compte 8 541 réutilisations et 9 049 créations par passe.
 
-Le cache garde son gain de temps modeste sans effet démontré sur le RSS. Le prochain essai peut remplacer ses définitions de contrôle séquence par une table `expl3` et vérifier si cela réduit `dyn_used` sans perdre le gain ni modifier le PDF. Voir le [relevé apparié détaillé](validation-latex-memory-cache-paired-n1000-20261008.json).
+Le cache garde son gain de temps modeste sans effet démontré sur le RSS. Le prototype `expl3` a ensuite été essayé sur le même jeu ; ses résultats partiels sont consignés ci-dessous. Voir le [relevé apparié détaillé](validation-latex-memory-cache-paired-n1000-20261008.json).
+
+### Essai exploratoire du cache `expl3` — N=1 000 — 8 octobre 2026
+
+Une table de propriétés `expl3` a remplacé temporairement le cache par destinations, avec les mêmes fichiers auxiliaires initiaux que la première paire du profil précédent. L’essai a été interrompu après plus de 573 s, lorsque LuaLaTeX signalait la page 933 sur 1 096 ; la passe directe de référence avec cache avait pris 162,003 s. Un relevé RSS à 573 s indiquait 813 952 Kio (794,88 Mio), sans constituer un pic final. Aux pages 100, 500 et 900, `dyn_used` était supérieur de 0,46 %, 0,83 % et 0,74 % à celui du cache actuel.
+
+La compilation étant incomplète, aucun audit du PDF ni pic RSS complet n’est disponible. Ces résultats suffisent à écarter cette table comme remplacement : elle est beaucoup plus lente et ne montre pas la baisse mémoire recherchée. Aucun code de production n’a changé. Le [relevé exploratoire](validation-latex-expl3-cache-probe-n1000-20261008.json) conserve les graines, observations et limites. La suite du profilage portera sur l’évolution conjointe du RSS et du tas Lua pendant un build complet.

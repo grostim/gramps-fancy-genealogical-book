@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "2acea3d762d0c1bfa1d051373eb8cf7b8c21e8a6",
+  "variant": "expl3 property-table cache for GoTo Contents",
+  "production_code_changed": false,
+  "method": "One exploratory direct tagged LuaLaTeX pass, seeded from pair 1 candidate .aux/.toc files used by the paired cache profile. RSS was sampled by ps while LuaTeX emitted LuaTeX memory checkpoints every 100 pages.",
+  "seed_sha256": {
+    "book_tex": "c5cddfb9c718f62e8c1dbc33709d42dd93b4f68223a974f33eef8f5c4d1ffbda",
+    "book_aux": "bd787feeb37b8e474d6acab93154550373fea65406d715871350dd617e4ce0ef",
+    "book_toc": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5"
+  },
+  "run": {
+    "status": "stopped_early",
+    "stop_reason": "The property-table variant was far slower than the completed current-cache pass, so the exploratory process was terminated before the final pages.",
+    "elapsed_seconds_lower_bound": 573,
+    "current_cache_reference_seconds": 162.003,
+    "elapsed_multiple_lower_bound": 3.53,
+    "compiler_page_reported_at_stop": 933,
+    "compiler_expected_pages": 1096,
+    "book_log_last_flushed_page": 927,
+    "rss_observation": {
+      "elapsed_seconds": 573,
+      "value_kib": 813952,
+      "value_mib": 794.88,
+      "is_peak": false
+    },
+    "pdf_audit": {
+      "status": "not_run",
+      "reason": "The compilation was incomplete; the partial PDF was not audited."
+    },
+    "cache_hit_miss_metrics": "not emitted because the document did not reach end-of-document."
+  },
+  "partial_memory_checkpoints": [
+    {
+      "page": 100,
+      "current_cache_dyn_used": 5456866,
+      "expl3_dyn_used": 5482173,
+      "dyn_used_delta": 25307,
+      "dyn_used_delta_percent": 0.46,
+      "current_cache_lua_gc_kib": 58145.85,
+      "expl3_lua_gc_kib": 63082.0
+    },
+    {
+      "page": 500,
+      "current_cache_dyn_used": 17974704,
+      "expl3_dyn_used": 18124613,
+      "dyn_used_delta": 149909,
+      "dyn_used_delta_percent": 0.83,
+      "current_cache_lua_gc_kib": 289476.01,
+      "expl3_lua_gc_kib": 300273.77
+    },
+    {
+      "page": 900,
+      "current_cache_dyn_used": 26448017,
+      "expl3_dyn_used": 26643650,
+      "dyn_used_delta": 195633,
+      "dyn_used_delta_percent": 0.74,
+      "current_cache_lua_gc_kib": 236576.29,
+      "expl3_lua_gc_kib": 268546.61
+    }
+  ],
+  "interpretation": [
+    "The pass did not complete, so it provides no PDF semantic-audit result and no full-run peak RSS.",
+    "At the interruption it had spent over 3.5 times the duration of the completed current-cache reference while reporting 933 of 1096 pages.",
+    "Partial dyn_used checkpoints were slightly higher than the current-cache checkpoints; this does not support the intended memory reduction."
+  ],
+  "decision": "Reject this expl3 property-table implementation as a full-document cache replacement. Keep it out of production."
+}
