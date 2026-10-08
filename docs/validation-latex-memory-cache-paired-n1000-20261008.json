@@ -1,0 +1,1044 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "2acea3d762d0c1bfa1d051373eb8cf7b8c21e8a6",
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media": 200,
+    "pages_expected": 1096
+  },
+  "environment": {
+    "platform": "Darwin arm64",
+    "python": "3.13.7",
+    "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)"
+  },
+  "method": {
+    "source_seed_directory": "tmp/l83-hyperref-target-identity-paired-20261008/pair-1/candidate",
+    "source_seed_sha256": {
+      "tex": "c5cddfb9c718f62e8c1dbc33709d42dd93b4f68223a974f33eef8f5c4d1ffbda",
+      "aux": "bd787feeb37b8e474d6acab93154550373fea65406d715871350dd617e4ce0ef",
+      "toc": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5"
+    },
+    "paired_aux_toc_seed_sha256": {
+      "aux": "bd787feeb37b8e474d6acab93154550373fea65406d715871350dd617e4ce0ef",
+      "toc": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5"
+    },
+    "runs_per_variant": 3,
+    "order_by_pair": {
+      "pair-1": [
+        "reference",
+        "candidate"
+      ],
+      "pair-2": [
+        "candidate",
+        "reference"
+      ],
+      "pair-3": [
+        "reference",
+        "candidate"
+      ]
+    },
+    "timed_scope": "One direct tagged LuaLaTeX pass from identical populated .aux/.toc seeds for each reference/candidate pair; one-second process RSS sampling.",
+    "memory_status": "LuaTeX status sampled after every 100th shipped page and at document end; status counters are not byte conversions.",
+    "candidate_change": "The candidate adds only the generated-page-link GoTo Contents cache plug; other renderer fast paths are the same.",
+    "production_code_changed": false
+  },
+  "runs": [
+    {
+      "pair": "pair-1",
+      "variant": "reference",
+      "order_index": 1,
+      "same_initial_aux_seed": true,
+      "same_initial_toc_seed": true,
+      "elapsed_seconds": 163.689,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 159,
+        "peak_kib": 1173360,
+        "peak_mib": 1145.86
+      },
+      "pdf_bytes": 12556083,
+      "semantic_audit": {
+        "pages": 1096,
+        "pdf_version": "%PDF-2.0",
+        "tagged": true,
+        "link_annotations": 24126,
+        "action_counts": {
+          "/GoTo": 20878,
+          "/URI": 3248
+        },
+        "unique_uri_targets": 3125,
+        "parenttree_objr_owner_matches": 24126,
+        "parenttree_mismatches": 0,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_chars": 2244123,
+        "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+        "link_signature_count": 24126,
+        "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+      },
+      "memory_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5282176,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 58471.4296875
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 9508520,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 144295.15429688
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 12742066,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 185168.90527344
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 14827712,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 159338.14746094
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 16942781,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 291675.72558594
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 18644218,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 282829.40527344
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 21232668,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 277598.96679688
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 23465756,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 206815.74804688
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 25102194,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 239442.57519531
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 26753387,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 262719.38183594
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 30203005,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 390991.78320312
+        }
+      ],
+      "cache_metrics": null
+    },
+    {
+      "pair": "pair-1",
+      "variant": "candidate",
+      "order_index": 2,
+      "same_initial_aux_seed": true,
+      "same_initial_toc_seed": true,
+      "elapsed_seconds": 162.003,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 157,
+        "peak_kib": 1082880,
+        "peak_mib": 1057.5
+      },
+      "pdf_bytes": 12556077,
+      "semantic_audit": {
+        "pages": 1096,
+        "pdf_version": "%PDF-2.0",
+        "tagged": true,
+        "link_annotations": 24126,
+        "action_counts": {
+          "/GoTo": 20878,
+          "/URI": 3248
+        },
+        "unique_uri_targets": 3125,
+        "parenttree_objr_owner_matches": 24126,
+        "parenttree_mismatches": 0,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_chars": 2244123,
+        "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+        "link_signature_count": 24126,
+        "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+      },
+      "memory_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5456866,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 58145.854492188
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 10113210,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 143449.5859375
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 13605591,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 183461.96386719
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 15774828,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 157656.05566406
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17974704,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 289476.01367188
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 19739954,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 317643.24511719
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 22437638,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 274102.98046875
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 24680702,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 203490.12207031
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 26448017,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 236576.29296875
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28230447,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 259899.11328125
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31759614,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 388064.45996094
+        }
+      ],
+      "cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      }
+    },
+    {
+      "pair": "pair-2",
+      "variant": "candidate",
+      "order_index": 1,
+      "same_initial_aux_seed": true,
+      "same_initial_toc_seed": true,
+      "elapsed_seconds": 163.11,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 158,
+        "peak_kib": 1125344,
+        "peak_mib": 1098.97
+      },
+      "pdf_bytes": 12556080,
+      "semantic_audit": {
+        "pages": 1096,
+        "pdf_version": "%PDF-2.0",
+        "tagged": true,
+        "link_annotations": 24126,
+        "action_counts": {
+          "/GoTo": 20878,
+          "/URI": 3248
+        },
+        "unique_uri_targets": 3125,
+        "parenttree_objr_owner_matches": 24126,
+        "parenttree_mismatches": 0,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_chars": 2244123,
+        "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+        "link_signature_count": 24126,
+        "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+      },
+      "memory_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5456812,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 58345.44140625
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 10113210,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 141584.90625
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 13605591,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 181470.19335938
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 15774828,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 155487.25390625
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17974690,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 287707.734375
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 19739943,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 343271.56347656
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 22437613,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 271785.80664062
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 24680677,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 202432.61816406
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 26448005,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 235012.09179688
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28230433,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 258084.23535156
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31759614,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 386003.19628906
+        }
+      ],
+      "cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      }
+    },
+    {
+      "pair": "pair-2",
+      "variant": "reference",
+      "order_index": 2,
+      "same_initial_aux_seed": true,
+      "same_initial_toc_seed": true,
+      "elapsed_seconds": 164.183,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 159,
+        "peak_kib": 1119536,
+        "peak_mib": 1093.3
+      },
+      "pdf_bytes": 12556073,
+      "semantic_audit": {
+        "pages": 1096,
+        "pdf_version": "%PDF-2.0",
+        "tagged": true,
+        "link_annotations": 24126,
+        "action_counts": {
+          "/GoTo": 20878,
+          "/URI": 3248
+        },
+        "unique_uri_targets": 3125,
+        "parenttree_objr_owner_matches": 24126,
+        "parenttree_mismatches": 0,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_chars": 2244123,
+        "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+        "link_signature_count": 24126,
+        "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+      },
+      "memory_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5282176,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 58525.329101562
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 9508520,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 144050.18359375
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 12742052,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 184418.2890625
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 14827686,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 158601.41015625
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 16942766,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 290543.38867188
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 18644218,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 291913.33886719
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 21232668,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 276486.58300781
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 23465756,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 205408.05371094
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 25102194,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 238715.83398438
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 26753387,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 261983.45800781
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 30203005,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 390085.95019531
+        }
+      ],
+      "cache_metrics": null
+    },
+    {
+      "pair": "pair-3",
+      "variant": "reference",
+      "order_index": 1,
+      "same_initial_aux_seed": true,
+      "same_initial_toc_seed": true,
+      "elapsed_seconds": 165.284,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 160,
+        "peak_kib": 1040864,
+        "peak_mib": 1016.47
+      },
+      "pdf_bytes": 12556077,
+      "semantic_audit": {
+        "pages": 1096,
+        "pdf_version": "%PDF-2.0",
+        "tagged": true,
+        "link_annotations": 24126,
+        "action_counts": {
+          "/GoTo": 20878,
+          "/URI": 3248
+        },
+        "unique_uri_targets": 3125,
+        "parenttree_objr_owner_matches": 24126,
+        "parenttree_mismatches": 0,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_chars": 2244123,
+        "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+        "link_signature_count": 24126,
+        "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+      },
+      "memory_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5282227,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 62050.434570312
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 9508541,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 149015.16113281
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 12742087,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 190332.41015625
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 14827722,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 165112.85253906
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 16942807,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 297509.70410156
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 18644256,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 201093.43457031
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 21232716,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 284644.81054688
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 23465804,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 215314.46875
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 25102232,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 248692.25195312
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 26753439,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 272286.23730469
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 30203076,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 400641.73242188
+        }
+      ],
+      "cache_metrics": null
+    },
+    {
+      "pair": "pair-3",
+      "variant": "candidate",
+      "order_index": 2,
+      "same_initial_aux_seed": true,
+      "same_initial_toc_seed": true,
+      "elapsed_seconds": 163.976,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "samples": 159,
+        "peak_kib": 1122848,
+        "peak_mib": 1096.53
+      },
+      "pdf_bytes": 12556079,
+      "semantic_audit": {
+        "pages": 1096,
+        "pdf_version": "%PDF-2.0",
+        "tagged": true,
+        "link_annotations": 24126,
+        "action_counts": {
+          "/GoTo": 20878,
+          "/URI": 3248
+        },
+        "unique_uri_targets": 3125,
+        "parenttree_objr_owner_matches": 24126,
+        "parenttree_mismatches": 0,
+        "figures": 400,
+        "figures_with_nonempty_alt": 400,
+        "nfc_text_chars": 2244123,
+        "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+        "link_signature_count": 24126,
+        "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+      },
+      "memory_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5456866,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 58724.219726562
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 10113210,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 144448.90429688
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 13605616,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 185378.0703125
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 15774854,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 159471.1796875
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17974719,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 291838.55078125
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 19739968,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 282458.28320312
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 22437638,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 277401.09472656
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 24680702,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 206600.77246094
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 26448032,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 239260.15234375
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28230461,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 262531.64160156
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31759651,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 390491.37402344
+        }
+      ],
+      "cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "pair": "pair-1",
+      "order": [
+        "reference",
+        "candidate"
+      ],
+      "same_initial_aux_toc_seed": true,
+      "semantic_audits_identical": true,
+      "reference_elapsed_seconds": 163.689,
+      "candidate_elapsed_seconds": 162.003,
+      "candidate_saved_seconds": 1.686,
+      "reference_peak_rss_mib": 1145.86,
+      "candidate_peak_rss_mib": 1057.5,
+      "candidate_minus_reference_peak_rss_mib": -88.36,
+      "reference_final_dyn_used": 30203005,
+      "candidate_final_dyn_used": 31759614,
+      "candidate_minus_reference_dyn_used": 1556609,
+      "candidate_minus_reference_dyn_used_percent": 5.154,
+      "reference_pdf_bytes": 12556083,
+      "candidate_pdf_bytes": 12556077,
+      "candidate_cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      }
+    },
+    {
+      "pair": "pair-2",
+      "order": [
+        "candidate",
+        "reference"
+      ],
+      "same_initial_aux_toc_seed": true,
+      "semantic_audits_identical": true,
+      "reference_elapsed_seconds": 164.183,
+      "candidate_elapsed_seconds": 163.11,
+      "candidate_saved_seconds": 1.073,
+      "reference_peak_rss_mib": 1093.3,
+      "candidate_peak_rss_mib": 1098.97,
+      "candidate_minus_reference_peak_rss_mib": 5.67,
+      "reference_final_dyn_used": 30203005,
+      "candidate_final_dyn_used": 31759614,
+      "candidate_minus_reference_dyn_used": 1556609,
+      "candidate_minus_reference_dyn_used_percent": 5.154,
+      "reference_pdf_bytes": 12556073,
+      "candidate_pdf_bytes": 12556080,
+      "candidate_cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      }
+    },
+    {
+      "pair": "pair-3",
+      "order": [
+        "reference",
+        "candidate"
+      ],
+      "same_initial_aux_toc_seed": true,
+      "semantic_audits_identical": true,
+      "reference_elapsed_seconds": 165.284,
+      "candidate_elapsed_seconds": 163.976,
+      "candidate_saved_seconds": 1.308,
+      "reference_peak_rss_mib": 1016.47,
+      "candidate_peak_rss_mib": 1096.53,
+      "candidate_minus_reference_peak_rss_mib": 80.06,
+      "reference_final_dyn_used": 30203076,
+      "candidate_final_dyn_used": 31759651,
+      "candidate_minus_reference_dyn_used": 1556575,
+      "candidate_minus_reference_dyn_used_percent": 5.154,
+      "reference_pdf_bytes": 12556077,
+      "candidate_pdf_bytes": 12556079,
+      "candidate_cache_metrics": {
+        "hits": 8541,
+        "misses": 9049
+      }
+    }
+  ],
+  "summary": {
+    "reference_mean_seconds": 164.385,
+    "candidate_mean_seconds": 163.03,
+    "mean_saved_seconds": 1.356,
+    "mean_saved_percent": 0.825,
+    "reference_peak_rss_mib_range": [
+      1016.47,
+      1145.86
+    ],
+    "candidate_peak_rss_mib_range": [
+      1057.5,
+      1098.97
+    ],
+    "candidate_minus_reference_rss_delta_mib_range": [
+      -88.36,
+      80.06
+    ],
+    "candidate_minus_reference_dyn_used_mean": 1556598,
+    "candidate_minus_reference_dyn_used_range": [
+      1556575,
+      1556609
+    ],
+    "all_semantic_audits_identical": true
+  }
+}

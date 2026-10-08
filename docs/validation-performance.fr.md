@@ -1028,3 +1028,20 @@ Une compilation complète par taille a été suivie par échantillons de 100 ms.
 | 1 000 | 344,09 | 21 420 988 | 1 092,44 | Réussi, 1 096 pages |
 
 Les plafonds de durée (180 s) et de RSS (512 Mio) sont respectés à N=10 et N=100 ; ils restent dépassés à N=1 000. Ces valeurs sont un premier repère par build, pas une borne répétée ni une mesure de quota disque système. Voir le [relevé détaillé](validation-latex-temp-space-20261008.json).
+
+### Profils mémoire appariés du cache GoTo — N=1 000 — 8 octobre 2026
+
+Pour lever l’ambiguïté des premiers diagnostics, trois paires de passes directes ont été relancées depuis les mêmes fichiers `.aux` et `.toc` peuplés au sein de chaque paire. Le seul écart de source est le plug de cache `/Contents` pour les liens de page générés. L’ordre est alterné ; les compteurs LuaTeX sont relevés toutes les 100 pages et le RSS échantillonné à une seconde.
+
+| Paire | Variante | Durée (s) | Pic RSS (Mio) | `dyn_used` final |
+| --- | --- | ---: | ---: | ---: |
+| 1 | Témoin | 163,689 | 1 145,86 | 30 203 005 |
+| 1 | Cache | 162,003 | 1 057,50 | 31 759 614 |
+| 2 | Témoin | 164,183 | 1 093,30 | 30 203 005 |
+| 2 | Cache | 163,110 | 1 098,97 | 31 759 614 |
+| 3 | Témoin | 165,284 | 1 016,47 | 30 203 076 |
+| 3 | Cache | 163,976 | 1 096,53 | 31 759 651 |
+
+Le cache économise entre 1,073 et 1,686 s par passe, soit 1,356 s (0,825 %) en moyenne. Son compteur `dyn_used` est supérieur de 1 556 575 à 1 556 609 unités (environ 5,154 %), sans conversion en octets. Le RSS varie de −88,36 à +80,06 Mio selon la paire et ne montre donc pas d’effet stable attribuable au cache. Chaque PDF garde les mêmes 1 096 pages, 24 126 liens et associations OBJR/ParentTree, 400 figures accessibles, hashes du texte NFC et signatures ordonnées des liens. Le cache compte 8 541 réutilisations et 9 049 créations par passe.
+
+Le cache garde son gain de temps modeste sans effet démontré sur le RSS. Le prochain essai peut remplacer ses définitions de contrôle séquence par une table `expl3` et vérifier si cela réduit `dyn_used` sans perdre le gain ni modifier le PDF. Voir le [relevé apparié détaillé](validation-latex-memory-cache-paired-n1000-20261008.json).
