@@ -18,6 +18,7 @@ import tempfile
 import time
 from dataclasses import replace
 from datetime import UTC, datetime
+from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
@@ -126,9 +127,19 @@ def _parse_args() -> argparse.Namespace:
         type=Path,
         help="Preserve LaTeX source and log files when a PDF compilation fails.",
     )
+    parser.add_argument(
+        "--max-derived-side-px",
+        type=int,
+        help=(
+            "Diagnostic only: downsample prepared PNG derivatives so their longest "
+            "side is at most this many pixels; source JPEGs remain unchanged."
+        ),
+    )
     args = parser.parse_args()
     if args.repetitions < 1:
         parser.error("--repetitions must be at least 1")
+    if args.max_derived_side_px is not None and args.max_derived_side_px < 1:
+        parser.error("--max-derived-side-px must be at least 1")
     return args
 
 
@@ -193,9 +204,49 @@ def _run_benchmark(
     original_photo = benchmark_book._synthetic_photo
     original_writer = latex_pdf.write_latex_pdf
     original_compile = latex_pdf._compile_latex
+    from gramps_fancy_book import media as media_module
+
+    original_prepare_raster = media_module.prepare_raster_derivative
+    derivative_png_bytes: dict[str, int] = {}
     active_repeat = 0
     source_hash = _sha256(raw_manifest)
     maximum_width = max(int(item["width"]) for item in items)
+
+    if args.max_derived_side_px is not None:
+        from PIL import Image
+
+        max_side = args.max_derived_side_px
+
+        def prepare_with_pixel_limit(source_content, rectangle, *, dpi=None):
+            derivative = original_prepare_raster(
+                source_content,
+                rectangle,
+                dpi=dpi,
+            )
+            with Image.open(BytesIO(derivative.content)) as image:
+                image.thumbnail((max_side, max_side), Image.Resampling.LANCZOS)
+                save_options = {"format": "PNG"}
+                if derivative.dpi is not None:
+                    save_options["dpi"] = (derivative.dpi, derivative.dpi)
+                icc_profile = image.info.get("icc_profile")
+                if isinstance(icc_profile, bytes):
+                    save_options["icc_profile"] = icc_profile
+                with BytesIO() as stream:
+                    image.save(stream, **save_options)
+                    content = stream.getvalue()
+                cache_key = hashlib.sha256(
+                    f"{derivative.cache_key}:max-side:{max_side}".encode("ascii")
+                ).hexdigest()
+                derivative_png_bytes[cache_key] = len(content)
+                return replace(
+                    derivative,
+                    cache_key=cache_key,
+                    content=content,
+                    width=image.width,
+                    height=image.height,
+                )
+
+        media_module.prepare_raster_derivative = prepare_with_pixel_limit
 
     def placeholder_photo(seed: int, size: tuple[int, int], *, profile: str) -> bytes:
         del seed, size, profile
@@ -279,7 +330,14 @@ def _run_benchmark(
                 extended_pdf_compilation=True,
             )
             run["portrait_size"] = f"variable; maximum width {maximum_width} px"
-            run["portrait_profile"] = "wellcome-cc-by-4.0-archival-jpeg"
+            run["portrait_profile"] = (
+                "wellcome-cc-by-4.0-archival-jpeg"
+                if args.max_derived_side_px is None
+                else (
+                    "wellcome-cc-by-4.0-archival-jpeg-derived-max-side-"
+                    f"{args.max_derived_side_px}px"
+                )
+            )
             run["source_manifest_sha256"] = source_hash
             run["repeat"] = active_repeat
             runs.append(run)
@@ -288,6 +346,7 @@ def _run_benchmark(
         benchmark_book._synthetic_photo = original_photo
         latex_pdf.write_latex_pdf = original_writer
         latex_pdf._compile_latex = original_compile
+        media_module.prepare_raster_derivative = original_prepare_raster
 
     metric_names = (
         "fixture_seconds",
@@ -321,7 +380,7 @@ def _run_benchmark(
     medians["compiler_peak_rss_bytes"] = statistics.median(
         int(run["pdf"]["compiler_peak_rss_bytes"]) for run in runs
     )
-    return {
+    report = {
         "date": datetime.now(UTC).date().isoformat(),
         "environment": {
             "python": platform.python_version(),
@@ -360,6 +419,21 @@ def _run_benchmark(
         "cases": runs,
         "medians": medians,
     }
+    if args.max_derived_side_px is not None:
+        report["derivative_variant"] = {
+            "policy": (
+                "Diagnostic only: resize the prepared, cropped image derivative "
+                "with Pillow LANCZOS and store it as lossless PNG. Original JPEG "
+                "sources are unchanged."
+            ),
+            "maximum_side_px": args.max_derived_side_px,
+            "unique_derivative_png_bytes": sum(derivative_png_bytes.values()),
+        }
+        report["method"]["image_transform"] += (
+            " The diagnostic option then downsamples the cropped PNG derivative "
+            f"to a {args.max_derived_side_px} px maximum side."
+        )
+    return report
 
 
 if __name__ == "__main__":
