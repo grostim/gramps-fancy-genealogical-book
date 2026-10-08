@@ -1,6 +1,6 @@
 # Book language validation
 
-Updated on 4 October 2026. This check covers the language option added in PR #100 and uses only synthetic Gramps databases.
+Updated on 8 October 2026. This check covers the language option added in PR #100 and uses only synthetic Gramps databases.
 
 ## Environment
 
@@ -65,9 +65,17 @@ All four JSON files contain the same normalized genealogy and reference family; 
 
 A fifth GUI export used German Gramps with the book forced to French. It produced a [local seven-page A4 PDF](../output/pdf/gramps-fancy-book-gramps-gui-fr-demo-20261002.pdf), tagged by LuaHBTeX 1.24.0, with SHA-256 `89331f631741dfcc30715cba68d36c4360b4458b7545e65dce1f37bb4411c964`. Extracted text begins with “Histoire familiale”, “Table des matières”, and “Ascendance”. The cover and ancestry page were inspected visually. The small tree has no photos or citations, so this PDF demonstrates the GUI path without qualifying a richer layout or a full-page review.
 
+## French interface and catalog check — 8 October 2026
+
+In Gramps Desktop displayed in French, the report is available under **Rapports → Pages web → Livre généalogique illustré pour Gramps**. The dialog presents the book-language choices (“Utiliser la langue de Gramps”, “Français”, “Anglais”), output formats (automatic mode, HTML ZIP, PDF LuaLaTeX, and JSON snapshot with a coherence report), and the privacy notice in French. The consent checkbox is unchecked when the dialog opens. The dialog was closed with **Cancel**; no export was started, so this check does not qualify the graphical generation flow.
+
+The `fr-local.po` catalog passes `msgfmt --check --check-format --statistics` with 63 translated messages, and `msgcmp` confirms it is synchronized with `template.pot`. Comparing it with strings extracted from the Python sources reports no missing source strings; it warns about eight unused strings because PDF compilation error messages are selected dynamically. The contribution guides explicitly say to retain those entries.
+
+This recipe qualifies access to the report, the visible French dialog labels, and static catalog consistency. It does not verify runtime display of the eight dynamic errors, export through this dialog, or Gramps Web.
+
 ## Limits
 
-- The PDF and HTML ZIP checks above invoke Gramps Desktop through its CLI with isolated profiles; the additional GUI check uses a smaller fictional JSON fixture.
+- The PDF and HTML ZIP checks above invoke Gramps Desktop through its CLI with isolated profiles; the additional GUI check uses a smaller fictional JSON fixture. The 8 October interface check was canceled before export.
 - The check does not compare every note and event string; it confirms retention of the entered name. All fixture data is fictional.
 - Structured dates are formatted by Gramps in the book language and the CLI fixture’s free-text date remains intact; the small GUI fixture does not contain those dates.
 - The demonstration PDF uses a small tree and synthetic portraits; final layout, PDF accessibility, and comparison with private mockups are outside this check.
