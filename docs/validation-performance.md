@@ -908,3 +908,15 @@ Reproduction command:
 Across these synthetic profiles, the reduction in PNG source size is accompanied by similar reductions in PDF and temporary workspace size. Time and RSS do not support a conclusion about the effect of image profile: runs were not interleaved and values varied, particularly the smooth-profile RSS range of 254–327 MiB. This confirms that random noise in the first experiment inflated output sizes, but does not predict the size of real photographs. It does not justify lossy encoding or downsampling. The [raw record for the three smooth-image compilations](validation-latex-benchmark-smooth-n100-pdf-20261008.json) is available; temporary workspace is sampled every 100 ms, and the PDFs did not receive an independent semantic audit.
 
 The next L8.3 step is to avoid setting a general temporary-space limit until realistic-media and target-environment cases are measured. Preserve accessible structures; examine derivative and PDF sizes with representative images before changing renderer behavior.
+
+### Exploratory tagpdf comparison — N=100 — October 8, 2026
+
+Three pairs of complete PDF builds compared installed tagpdf 0.99y with tagpdf 1.0h extracted from a CTAN mirror archive snapshot. Run order was counterbalanced; only package files differed. No system TeX files were replaced. The [CTAN package entry](https://ctan.org/pkg/tagpdf?lang=en) now lists 1.0h, dated October 8, 2026, matching the tested archive.
+
+| Measurement | tagpdf 0.99y | tagpdf 1.0h snapshot |
+| --- | ---: | ---: |
+| Median PDF time (s) | 39.240 | 38.259 |
+| Median peak RSS (MiB) | 254.05 | 253.16 |
+| Median PDF size (bytes) | 1,312,920 | 1,312,877 |
+
+The three paired RSS deltas (1.0h minus 0.99y) are −1.94, −52.73, and +9.16 MiB, showing no stable reduction. Median time improves by 0.981 seconds (2.5%) on this N=100 case alone. All six PDFs retain 117 pages and 12,447 structure elements, including 2,436 `/Link` roles and 40 figures with alternative text. Each file retains 2,449 link annotations, no OBJR/ParentTree mismatch, and the same extracted-text hash. These results do not qualify N=1,000 and are not sufficient on their own to update the dependency. The [paired record and audits](validation-latex-tagpdf-version-paired-n100-20261008.json) include measurements, archive SHA-256, and provenance.
