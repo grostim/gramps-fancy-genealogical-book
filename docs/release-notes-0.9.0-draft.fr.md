@@ -11,13 +11,13 @@
 
 ## Exemple fictif
 
-Le [README français](../README.fr.md#exemple-en-ligne-de-commande) décrit l’import et l’export de l’exemple [reference-family.ged](../examples/reference-family.ged). Ses personnes, lieux et références d’archives sont fictifs ; il ne contient pas de média. Dans un profil isolé Gramps 6.0.8-1, l’archive 0.9.0 produit depuis cet exemple un PDF français balisé de 9 pages A4 et un ZIP HTML valide dont les 29 liens locaux sont résolus. Les neuf pages PDF ont été examinées sans coupure ni superposition visible. Voir les [relevés d’import](validation-example-import-20261006.json) et d’[export](validation-example-report-20261006.json). Ce n’est pas un modèle de livre complet ; l’ouverture interactive du ZIP et le parcours GUI restent à qualifier.
+Le [README français](../README.fr.md#exemple-en-ligne-de-commande) décrit l’import et l’export de l’exemple [reference-family.ged](../examples/reference-family.ged). Ses personnes, lieux et références d’archives sont fictifs ; il ne contient pas de média. Dans un profil isolé Gramps 6.0.8-1, l’archive 0.9.0 produit depuis cet exemple un PDF français balisé de 9 pages A4 et un ZIP HTML valide dont les 29 liens locaux sont résolus. Les neuf pages PDF ont été examinées sans coupure ni superposition visible. Voir les [relevés d’import](validation-example-import-20261006.json) et d’[export](validation-example-report-20261006.json). Ce n’est pas un modèle de livre complet ; l’ouverture interactive du ZIP et l’installation via le gestionnaire graphique restent à qualifier. Un export PDF GUI distinct est documenté dans la [validation du cycle du paquet](validation-addon-lifecycle.fr.md).
 
 ## Vérifications déjà disponibles
 
 - La CI du [run 37517722010](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37517722010) passe sur Python 3.10–3.13, Windows, macOS, Gramps 6.0.7 et 6.0.8 en CLI, le canari 6.1 et le prototype LuaLaTeX.
 - Sur Gramps 6.0.8 en profil propre, l’archive 0.9.0 génère les sorties JSON, HTML ZIP et PDF ; le PDF français balisé compte 18 pages A4. Les marges configurées sont de 15 mm. Voir la [validation du paquet](validation-addon-lifecycle.fr.md).
-- La recette CLI actuelle ne prouve pas l’installation graphique du paquet courant. La fenêtre temporaire Gramps et l’export GUI correspondant restent à qualifier.
+- Un export graphique français du paquet 0.9.0 sous Gramps Desktop 6.0.8-1 produit un PDF A4 balisé de neuf pages ; les neuf pages ont été examinées. Voir la [qualification GUI](validation-addon-lifecycle.fr.md). L’installation via le gestionnaire graphique reste à qualifier.
 
 ## Limites connues
 
@@ -31,4 +31,4 @@ Le [README français](../README.fr.md#exemple-en-ligne-de-commande) décrit l’
 
 ## Conditions avant une version stable
 
-Terminer les recettes fonctionnelles requises ou faire approuver explicitement les changements de périmètre, qualifier l’installation et les exports graphiques du paquet courant, décider des seuils de performance, achever les revues d’accessibilité et résoudre le blocage Gramps Web ou faire approuver explicitement un changement de périmètre. Réexaminer ensuite ces notes et construire l’artefact de release avant toute publication.
+Terminer les recettes fonctionnelles requises ou faire approuver explicitement les changements de périmètre, qualifier l’installation via le gestionnaire graphique et les autres exports GUI requis, décider des seuils de performance, achever les revues d’accessibilité et résoudre le blocage Gramps Web ou faire approuver explicitement un changement de périmètre. Réexaminer ensuite ces notes et construire l’artefact de release avant toute publication.
