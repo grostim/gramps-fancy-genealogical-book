@@ -974,3 +974,57 @@ Le candidat observe 8 541 réutilisations et 9 049 créations de contenus mis en
 Un build complet par `write_latex_pdf` avec convergence étendue prend 344,58 s. Le PDF balisé compte 1 096 pages et fait 12 556 080 octets ; le maximum RSS LuaLaTeX échantillonné à une seconde est de 1 167 088 Kio (1 139,73 Mio) sur 333 relevés. L’audit confirme 24 126 annotations et associations OBJR/ParentTree, aucune anomalie, 400 figures accessibles, ainsi que les hashes de texte NFC et de signatures de liens du profil par passe.
 
 Ce build unique confirme le renderer intégré, mais ne permet pas d’attribuer un gain complet au cache ; les budgets de 180 s et 512 Mio restent dépassés. Le [relevé brut](validation-latex-hyperref-goto-contents-cache-full-build-n1000-20261008.json) et le [PDF de démonstration conservé](../output/pdf/gramps-fancy-book-goto-contents-cache-demo-n1000-20261008.pdf) sont disponibles.
+
+### Builds convergés du renderer courant — N=100 — 8 octobre 2026
+
+Trois exports complets ont été exécutés avec `write_latex_pdf` et la compilation convergée étendue, sur le même jeu ramifié (100 couples descendants, 20 médias). La préparation de la fixture, du modèle et des médias est exclue du chronométrage ; chaque pic RSS est échantillonné à une seconde.
+
+| Passage | Durée (s) | Pic RSS (Kio) | Pic RSS (Mio) | PDF (octets) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 35,97 | 331 584 | 323,81 | 1 312 911 |
+| 2 | 35,88 | 336 032 | 328,16 | 1 312 912 |
+| 3 | 35,94 | 325 872 | 318,23 | 1 312 915 |
+| Médiane | 35,94 | 331 584 | 323,81 | — |
+
+Les trois audits donnent les mêmes résultats : 117 pages en PDF 2.0 balisé, 2 449 liens (2 119 GoTo et 330 URI), 317 cibles URI, 2 449 associations OBJR/ParentTree sans anomalie et 40 figures avec texte alternatif. Les hashes du texte NFC et des signatures ordonnées de liens sont identiques sur les trois fichiers. Chaque passage respecte les références de 180 s et 512 Mio. Cette répétition qualifie le build actuel à N=100 ; sans build témoin apparié, elle n’attribue pas de gain au cache GoTo. Voir le [relevé consolidé](validation-latex-hyperref-goto-contents-cache-full-build-n100-20261008.json).
+
+### Diagnostic des compteurs mémoire LuaTeX — N=1 000 — 8 octobre 2026
+
+Cinq passages directs balisés ont été instrumentés avec des fichiers auxiliaires déjà renseignés : un témoin, deux passages avec le cache GoTo, puis un passage avec le contrôle tagpdf parent-enfant désactivé et un autre avec ce contrôle différé à la fin. Les compteurs LuaTeX ont été relevés toutes les 100 pages et à la finalisation ; le RSS a été échantillonné à une seconde. Les PDFs passent l’audit sémantique de référence et conservent 1 096 pages. Les relevés `dyn_used` sont des unités de compteur LuaTeX, pas des octets ([documentation LuaTeX](https://github.com/TeXLuaCATS/LuaTeX/blob/main/resources/manual/10_tex.tex.lua)).
+
+| Variante | Durée (s) | Pic RSS (Mio) | `dyn_used` avant finalisation | Après tagpdf |
+| --- | ---: | ---: | ---: | ---: |
+| Cache, premier profil | 163,057 | 1 078,47 | 31 760 208 | — |
+| Témoin | 163,957 | 1 132,78 | 30 203 384 | — |
+| Cache, répétition | 161,837 | 1 036,39 | 31 760 030 | — |
+| Contrôle parent-enfant désactivé | 160,773 | 1 096,50 | 31 760 303 | 31 802 130 |
+| Contrôle différé à la fin | 161,828 | 1 145,45 | 31 760 338 | 31 802 165 |
+
+Le RSS varie de 96,39 Mio entre les trois profils cache/témoin, et de 48,95 Mio entre les deux réglages parent-enfant exécutés une fois chacun. Après finalisation, leurs compteurs Lua GC diffèrent d’environ 6,01 Mio et `dyn_used` de 35 unités. Ces observations ne sont pas appariées ni assez répétées pour attribuer les écarts au cache ou au contrôle tagpdf ; elles ne motivent pas sa désactivation. Le plafond N=1 000 de 512 Mio reste largement dépassé. Le [relevé mémoire détaillé](validation-latex-memory-profile-n1000-20261008.json) conserve les points de contrôle, tailles PDF et limites d’interprétation.
+
+
+### Builds convergés du renderer courant — N=10 — 8 octobre 2026
+
+Trois exports complets ont été exécutés avec `write_latex_pdf` et la compilation convergée étendue. Le RSS LuaLaTeX est échantillonné à une seconde ; la préparation de la fixture est exclue du chronométrage.
+
+| Passage | Durée (s) | Pic RSS (Kio) | Pic RSS (Mio) | PDF (octets) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 7,81 | 194 736 | 190,17 | 182 436 |
+| 2 | 7,73 | 206 800 | 201,95 | 182 440 |
+| 3 | 7,74 | 217 888 | 212,78 | 182 440 |
+| Médiane | 7,74 | 206 800 | 201,95 | — |
+
+Les trois audits donnent des PDFs balisés identiques sur le plan sémantique : 17 pages, 278 liens (240 GoTo et 38 URI), 36 cibles URI, 278 associations OBJR/ParentTree sans anomalie et quatre figures avec texte alternatif. Les hashes du texte NFC et des signatures de liens concordent. Les trois builds restent sous les plafonds de 180 s et 512 Mio. Voir le [relevé consolidé](validation-latex-hyperref-goto-contents-cache-full-build-n10-20261008.json).
+
+
+### Espace temporaire du renderer — N=10, 100 et 1 000 — 8 octobre 2026
+
+Une compilation complète par taille a été suivie par échantillons de 100 ms. La mesure additionne les tailles logiques des fichiers réguliers dans `output/pdf/.book-pdf-*`, le répertoire de compilation créé par le renderer. Elle exclut la préparation préalable de la fixture, du modèle et des médias ; un fichier créé et supprimé entre deux relevés peut manquer.
+
+| Couples descendants | Durée (s) | Espace temporaire maximal (octets) | Pic RSS (Mio) | Audit sémantique |
+| ---: | ---: | ---: | ---: | --- |
+| 10 | 7,75 | 332 448 | 203,30 | Réussi, 17 pages |
+| 100 | 35,89 | 2 249 042 | 310,88 | Réussi, 117 pages |
+| 1 000 | 344,09 | 21 420 988 | 1 092,44 | Réussi, 1 096 pages |
+
+Les plafonds de durée (180 s) et de RSS (512 Mio) sont respectés à N=10 et N=100 ; ils restent dépassés à N=1 000. Ces valeurs sont un premier repère par build, pas une borne répétée ni une mesure de quota disque système. Voir le [relevé détaillé](validation-latex-temp-space-20261008.json).

@@ -763,3 +763,57 @@ The candidate records 8,541 cache hits and 9,049 misses per pass. All three PDF 
 One production `write_latex_pdf` build with extended convergence takes 344.58 seconds. The tagged PDF has 1,096 pages and is 12,556,080 bytes. One-second LuaLaTeX RSS sampling captures a maximum of 1,167,088 KiB (1,139.73 MiB) across 333 samples. The audit confirms 24,126 annotations and OBJR/ParentTree associations with no mismatch, 400 accessible figures, and the same normalized-text and link-signature hashes as the per-pass profile.
 
 This single build verifies the integrated renderer but does not attribute a complete-build speedup to the cache; the 180-second and 512 MiB budgets remain unmet. See the [raw build record](validation-latex-hyperref-goto-contents-cache-full-build-n1000-20261008.json) and retained [demonstration PDF](../output/pdf/gramps-fancy-book-goto-contents-cache-demo-n1000-20261008.pdf).
+
+### Repeated converged builds with the current renderer — N=100 — October 8, 2026
+
+Three complete exports used `write_latex_pdf` with extended convergent compilation on the same branching fixture (100 descendant couples, 20 media). Fixture, model, and media preparation are outside the timed scope; peak RSS was sampled once per second.
+
+| Run | Elapsed (s) | Peak RSS (KiB) | Peak RSS (MiB) | PDF (bytes) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 35.97 | 331,584 | 323.81 | 1,312,911 |
+| 2 | 35.88 | 336,032 | 328.16 | 1,312,912 |
+| 3 | 35.94 | 325,872 | 318.23 | 1,312,915 |
+| Median | 35.94 | 331,584 | 323.81 | — |
+
+All three audits agree: 117 tagged PDF 2.0 pages, 2,449 links (2,119 GoTo and 330 URI), 317 URI targets, 2,449 OBJR/ParentTree associations with no mismatch, and 40 figures with alternative text. The NFC-text and ordered-link-signature hashes match across all three files. Every run meets the 180-second and 512-MiB reference budgets. This qualifies the current N=100 build; without a paired reference build, it does not attribute a gain to the GoTo cache. See the [consolidated record](validation-latex-hyperref-goto-contents-cache-full-build-n100-20261008.json).
+
+### LuaTeX memory-counter diagnostic — N=1,000 — October 8, 2026
+
+Five direct tagged passes were instrumented with populated auxiliary files: one reference, two passes with the GoTo cache, then one pass with tagpdf's parent-child check disabled and one with that check deferred until the end. LuaTeX counters were sampled every 100 pages and at finalization; RSS was sampled once per second. The PDFs pass the reference semantic audit and retain 1,096 pages. `dyn_used` is a LuaTeX status counter, not a byte count ([LuaTeX status documentation](https://github.com/TeXLuaCATS/LuaTeX/blob/main/resources/manual/10_tex.tex.lua)).
+
+| Variant | Elapsed (s) | Peak RSS (MiB) | `dyn_used` before finalization | After tagpdf |
+| --- | ---: | ---: | ---: | ---: |
+| Cache, first profile | 163.057 | 1,078.47 | 31,760,208 | — |
+| Reference | 163.957 | 1,132.78 | 30,203,384 | — |
+| Cache, repeat | 161.837 | 1,036.39 | 31,760,030 | — |
+| Parent-child check disabled | 160.773 | 1,096.50 | 31,760,303 | 31,802,130 |
+| Check deferred until end | 161.828 | 1,145.45 | 31,760,338 | 31,802,165 |
+
+RSS varies by 96.39 MiB across the three cache/reference profiles and by 48.95 MiB between the two one-off parent-child settings. After finalization, Lua GC counters differ by about 6.01 MiB and `dyn_used` by 35 units. These runs are exploratory, not matched or sufficiently repeated to attribute the differences to the cache or tagpdf check; they do not support disabling the check. The N=1,000 512-MiB budget remains substantially exceeded. The [detailed memory record](validation-latex-memory-profile-n1000-20261008.json) preserves checkpoints, PDF sizes, and interpretation limits.
+
+
+### Repeated converged builds with the current renderer — N=10 — October 8, 2026
+
+Three complete exports used `write_latex_pdf` with extended convergent compilation. LuaLaTeX RSS was sampled once per second; fixture preparation is outside the timed scope.
+
+| Run | Elapsed (s) | Peak RSS (KiB) | Peak RSS (MiB) | PDF (bytes) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 7.81 | 194,736 | 190.17 | 182,436 |
+| 2 | 7.73 | 206,800 | 201.95 | 182,440 |
+| 3 | 7.74 | 217,888 | 212.78 | 182,440 |
+| Median | 7.74 | 206,800 | 201.95 | — |
+
+All three audits agree on the tagged PDF semantics: 17 pages, 278 links (240 GoTo and 38 URI), 36 URI targets, 278 OBJR/ParentTree associations with no mismatch, and four figures with alternative text. NFC-text and link-signature hashes match. All builds stay within the 180-second and 512-MiB budgets. See the [consolidated record](validation-latex-hyperref-goto-contents-cache-full-build-n10-20261008.json).
+
+
+### Renderer temporary workspace — N=10, 100, and 1,000 — October 8, 2026
+
+One complete build per size was monitored at 100-ms intervals. The metric sums logical sizes of regular files under `output/pdf/.book-pdf-*`, the renderer's compilation directory. It excludes prior fixture, model, and media preparation; files created and removed between samples may be missed.
+
+| Descendant couples | Elapsed (s) | Peak temporary workspace (bytes) | Peak RSS (MiB) | Semantic audit |
+| ---: | ---: | ---: | ---: | --- |
+| 10 | 7.75 | 332,448 | 203.30 | Passed, 17 pages |
+| 100 | 35.89 | 2,249,042 | 310.88 | Passed, 117 pages |
+| 1,000 | 344.09 | 21,420,988 | 1,092.44 | Passed, 1,096 pages |
+
+The elapsed-time (180 seconds) and RSS (512 MiB) budgets are met at N=10 and N=100; both remain exceeded at N=1,000. These are first per-build reference points, not repeated bounds or a system-wide disk quota measurement. See the [detailed record](validation-latex-temp-space-20261008.json).
