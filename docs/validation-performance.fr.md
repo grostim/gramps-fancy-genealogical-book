@@ -1169,16 +1169,20 @@ Les relevés HTML seuls et PDF sont conservés dans les [trois runs HTML](valida
 
 ### Effet de la compressibilité des médias — N=100 — 8 octobre 2026
 
-Pour isoler l’effet du contenu, le même cas N=100 a été répété avec vingt PNG de 1 600 × 1 200 pixels générés à partir d’une texture RGB aléatoire basse résolution (100 × 75), agrandie par bicubique puis floutée. C’est une texture synthétique lisse, pas une photographie. La fixture, le recadrage, le renderer et les trois compilations PDF complètes restent identiques au cas pseudo-aléatoire ci-dessus.
+Pour isoler l’effet du contenu, le même cas N=100 a été répété avec vingt PNG de 1 600 × 1 200 pixels générés à partir d’une texture RGB aléatoire basse résolution (100 × 75), agrandie par bicubique puis floutée avec Pillow `GaussianBlur(1.2)`. La graine de chaque image est l’index de la personne ; le générateur utilise `random.Random(seed).randbytes(100 * 75 * 3)`. C’est une texture synthétique lisse, pas une photographie. La fixture, le recadrage, le renderer et les trois compilations PDF complètes restent identiques au cas pseudo-aléatoire ci-dessus.
+
+Commande reproductible :
+
+    python scripts/benchmark_book.py --shape branching --descendant-couples 100 --with-media --portrait-size 1600x1200 --portrait-profile smooth --compile-pdf-for 100 --extended-pdf-compilation --repeat 3
 
 | Mesure médiane | PNG pseudo-aléatoires | PNG synthétiques lisses | Écart |
 | --- | ---: | ---: | ---: |
 | Sources PNG (octets) | 115 379 213 | 51 837 250 | −55,1 % |
-| PDF (octets) | 79 709 779 | 36 620 288 | −54,1 % |
-| Espace temporaire logique (octets) | 316 529 066 | 144 134 561 | −54,5 % |
-| Temps PDF (s) | 38,049 | 35,649 | −6,3 % |
-| RSS maximal LuaTeX (Mio) | 319,1 | 324,0 | +1,5 % |
+| PDF (octets) | 79 709 779 | 36 620 291 | −54,1 % |
+| Espace temporaire logique (octets) | 316 529 066 | 144 134 577 | −54,5 % |
+| Temps PDF médian (s) | 38,049 (37,935–38,614) | 42,703 (41,116–43,626) | +12,2 % observés |
+| Pic RSS LuaTeX médian (Mio) | 319,1 (316,2–328,3) | 272,0 (254,0–327,0) | −14,8 % des médianes |
 
-Sur ces deux seuls profils synthétiques, la taille des sources suit fortement celle des dérivés et du PDF ; le RSS LuaTeX reste du même ordre. Cela confirme que le bruit aléatoire du premier essai gonflait artificiellement la taille des sorties. Ce résultat ne prédit pas la taille de vraies photographies et ne justifie ni encodage avec perte ni redimensionnement. Les données brutes des trois compilations lisses sont dans [le relevé JSON](validation-latex-benchmark-smooth-n100-pdf-20261008.json) ; l’espace temporaire est échantillonné toutes les 100 ms et les PDFs n’ont pas reçu d’audit sémantique indépendant.
+Sur ces deux profils synthétiques, la baisse des sources PNG accompagne une baisse proche des tailles du PDF et de l’espace temporaire. Les durées et les RSS ne permettent pas de conclure à un effet du profil : les runs n’ont pas été alternés et les valeurs varient, notamment le RSS lisse de 254 à 327 Mio. Cela confirme que le bruit aléatoire du premier essai gonflait artificiellement la taille des sorties, sans prédire la taille de vraies photographies. Le résultat ne justifie ni encodage avec perte ni redimensionnement. Les données brutes sont dans [le relevé JSON](validation-latex-benchmark-smooth-n100-pdf-20261008.json) ; l’espace temporaire est échantillonné toutes les 100 ms et les PDFs n’ont pas reçu d’audit sémantique indépendant.
 
 **Suite L8.3 :** ne pas retenir de plafond temporaire général tant que des cas réalistes et les environnements cibles ne sont pas mesurés. Garder les structures accessibles ; examiner ensuite la taille des dérivés et du PDF à partir de médias réalistes avant toute modification du renderer.
