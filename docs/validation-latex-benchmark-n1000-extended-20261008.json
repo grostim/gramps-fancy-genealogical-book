@@ -1,0 +1,60 @@
+{
+  "python": "3.14.0",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "memory_metric": "tracemalloc Python heap; excludes native allocations and subprocesses",
+  "pdf_rss_metric": "sampled RSS of LuaTeX compiler processes; 100 ms interval, so shorter peaks may be missed; requires psutil",
+  "temporary_workspace_metric": "sampled logical file sizes under the benchmark temporary directory; sample interval 100 ms; shorter-lived peaks may be missed",
+  "media_enabled": true,
+  "portrait_size": "96x72",
+  "repetitions": 1,
+  "extended_pdf_compilation": true,
+  "pdf_compile_case": {
+    "shape": "branching",
+    "descendant_couples": 1000
+  },
+  "cases": [
+    {
+      "shape": "branching",
+      "descendant_couples": 1000,
+      "people": 2002,
+      "families": 1001,
+      "events": 3003,
+      "notes": 267,
+      "citations": 3003,
+      "sources": 121,
+      "media": 200,
+      "portrait_size": "96x72",
+      "media_source_bytes": 4175200,
+      "family_notices": 1001,
+      "family_sections": 1001,
+      "profiles": 2002,
+      "media_artifacts": 200,
+      "fixture_seconds": 0.461709,
+      "model_seconds": 1.405165,
+      "media_prepare_seconds": 0.113959,
+      "json_seconds": 3.316926,
+      "html_seconds": 0.408114,
+      "latex_seconds": 0.799156,
+      "html_zip_seconds": 0.502686,
+      "json_bytes": 16265394,
+      "html_bytes": 5842609,
+      "latex_bytes": 4029209,
+      "html_zip_bytes": 3328646,
+      "fixture_heap_bytes": 15850969,
+      "fixture_peak_heap_bytes": 15910195,
+      "peak_additional_heap_bytes": 66967133,
+      "peak_total_heap_bytes": 82818102,
+      "temporary_workspace_peak_bytes": 27718444,
+      "pdf": {
+        "status": "compiled",
+        "seconds": 378.027942,
+        "bytes": 12556083,
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1044103168,
+        "rss_sample_count": 3455,
+        "compiler_rss_sample_interval_ms": 100
+      },
+      "repeat": 1
+    }
+  ]
+}

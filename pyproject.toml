@@ -13,7 +13,7 @@ authors = [{name = "Gramps Fancy Genealogical Book contributors"}]
 dependencies = ["mistune>=3,<4"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.6"]
+dev = ["pytest>=8", "ruff>=0.6", "psutil>=6,<8"]
 media = ["Pillow>=10", "pypdfium2>=4"]
 
 [tool.setuptools.packages.find]

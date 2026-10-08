@@ -4,7 +4,7 @@ Mesures répétées le 29 septembre 2026 sur macOS 27.0 arm64 et CPython 3.14.0,
 
 ## Méthode et jeux synthétiques
 
-Lancer depuis la racine du dépôt, dans un environnement Python où le projet et son extra médias sont installés (pip install -e ".[media]"); LuaLaTeX doit être disponible dans PATH :
+Lancer depuis la racine du dépôt, dans un environnement Python où le projet, son extra médias et les outils de développement sont installés (pip install -e ".[dev,media]"); LuaLaTeX doit être disponible dans PATH :
 
     PYTHONPATH=src python scripts/benchmark_book.py --shape both --descendant-couples 10 100 1000 --with-media --compile-pdf-for 100 --repeat 3
 
@@ -17,7 +17,9 @@ Deux structures sont comparées :
 - Jeu large : un couple central avec N enfants et leur partenaire. Chaque personne reçoit une fiche ; il n’y a ni événement ni média. Il conserve le point de repère initial, mais ne représente pas un arbre profond.
 - Jeu ramifié : N unions descendantes réparties en branches, avec au plus deux enfants par famille. Chaque personne a un événement de naissance ; chaque famille a un événement d’union. Chaque événement a une citation, les sources sont partagées entre 25 citations, et un dépôt ainsi que des lieux sont inclus. Les notes publiables apparaissent environ une fois par douze personnes et une fois par dix familles. Un portrait PNG synthétique avec région de recadrage apparaît environ une fois par dix personnes.
 
-Le premier script mesure la construction du modèle, la préparation des dérivés, la sérialisation JSON, les deux moteurs de rendu et l’archive ZIP. Il compile aussi un PDF sur le petit cas ramifié. Les portraits PNG pseudo-aléatoires font 96 × 72 pixels par défaut ; `--portrait-size WIDTHxHEIGHT` permet de choisir une autre taille avec `--with-media`. Le script limite une image synthétique à 24 millions de pixels et le volume estimé des sources à 256 Mio. Depuis le 4 octobre, il place explicitement le dossier `src` du checkout en tête du chemin Python avant ses imports du projet : il mesure ainsi le code courant même si l’environnement virtuel contient une ancienne installation non éditable. Le préfixe `PYTHONPATH=src` des commandes ci-dessus reste valide.
+Le premier script mesure la construction du modèle, la préparation des dérivés, la sérialisation JSON, les deux moteurs de rendu et l’archive ZIP. Il compile aussi un PDF sur le petit cas ramifié. `tracemalloc` mesure le tas Python, mais pas la mémoire native ni les sous-processus ; lors d’une compilation PDF, le script échantillonne séparément le RSS du processus LuaTeX à 100 ms avec `psutil`. Cette mesure peut manquer un pic plus court et reste distincte du pic Python. Les portraits PNG pseudo-aléatoires font 96 × 72 pixels par défaut ; `--portrait-size WIDTHxHEIGHT` permet de choisir une autre taille avec `--with-media`. Le script limite une image synthétique à 24 millions de pixels et le volume estimé des sources à 256 Mio. Depuis le 4 octobre, il place explicitement le dossier `src` du checkout en tête du chemin Python avant ses imports du projet : il mesure ainsi le code courant même si l’environnement virtuel contient une ancienne installation non éditable. Le préfixe `PYTHONPATH=src` des commandes ci-dessus reste valide.
+
+Par défaut, les mesures PDF utilisent les délais du renderer de 120 secondes par passe et 180 secondes au total. Pour une grande fixture, ajouter `--extended-pdf-compilation` à une commande qui contient `--compile-pdf-for` sélectionne les délais étendus configurés dans le renderer : 600 secondes par passe et 1 800 secondes au total. Le rapport JSON indique si ce mode a été activé.
 
 Le second script lance le rapport JSON par l’interface en ligne de commande de Gramps à partir de GEDCOM fictifs. Chaque répétition utilise un profil `GRAMPSHOME` neuf, puis le script installe l’archive construite depuis le dépôt et copie Mistune dans ce profil temporaire. Le fichier [validation-gramps-extraction-20260929.json](validation-gramps-extraction-20260929.json) conserve le premier relevé ramifié. Les cinq scénarios élargis et leurs mesures brutes figurent dans [validation-gramps-scenarios-20260929.json](validation-gramps-scenarios-20260929.json). Un chronométrage ajouté uniquement à la copie temporaire du rapport sépare `GrampsDatabaseAdapter.read_snapshot_by_gramps_id` de la construction du modèle. Le temps de bout en bout et le pic RSS comprennent aussi le démarrage de Gramps, l’import GEDCOM et l’écriture JSON. Aucun arbre Gramps habituel n’est ouvert ou modifié.
 
@@ -1135,4 +1137,19 @@ Le source de tagpdf 0.99y crée une propriété et une séquence d’enfants pou
 
 Les comptages détaillés par rôle, les hashes des PDFs, les propriétaires ParentTree, le décompte des commandes du source et les limites de l’audit figurent dans le [relevé reproductible](validation-latex-tagpdf-structure-audit-n10-n100-n1000-20261008.json). Cette analyse ne certifie pas la conformité PDF/UA et ne remplace pas une revue par lecteur d’écran.
 
-**Suite L8.3 :** conserver les structures et les tables tagpdf du renderer. Terminer la confirmation des enveloppes de performance sur les environnements cibles; n’ouvrir une piste de réduction des données héritées qu’au niveau de la dépendance tagpdf avec une validation dédiée.
+### Mesure complète du banc courant avec délais étendus — N=1 000 — 8 octobre 2026
+
+Le banc `benchmark_book.py` génère un arbre ramifié fictif de 1 000 unions descendantes, avec 2 002 personnes, 1 001 familles, 3 003 événements, 200 portraits PNG synthétiques de 96 × 72 pixels et une archive HTML. Trois compilations complètes avec `--extended-pdf-compilation` ont réussi :
+
+| Répétition | Durée PDF (s) | PDF (octets) | Pic RSS LuaTeX (Mio) | Pic tas Python (Mio) | Espace logique temporaire (octets) |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 378,028 | 12 556 083 | 995,73 | 78,98 | 27 718 444 |
+| 2 | 392,588 | 12 556 080 | 970,19 | 78,99 | 27 718 444 |
+| 3 | 377,507 | 12 556 074 | 1 166,48 | 76,18 | 27 718 445 |
+| Médiane | 378,028 | 12 556 080 | 995,73 | 78,98 | 27 718 444 |
+
+La durée varie de 377,51 à 392,59 s ; le RSS va de 970,19 à 1 166,48 Mio, soit une dispersion notable. Le PDF reste sous le repère provisoire de 16 Mio, tandis que les durées et les pics RSS dépassent respectivement les budgets de 180 s et 512 Mio sur les trois runs. L’espace temporaire varie d’un octet seulement entre runs ; un plafond provisoire de 64 Mio par exécution de ce banc laisse une marge d’environ 2,4×, mais doit encore être vérifié avec des médias réalistes et sur les environnements cibles.
+
+Trois essais avec les délais standard ont expiré sans PDF complet ; leurs RSS partiels ne sont pas utilisés comme pics d’un build abouti. Les trois runs étendus sont sur macOS 27.0 arm64 ; les échantillons RSS sont pris toutes les 100 ms et peuvent manquer des pics plus courts, l’espace est calculé à partir des tailles logiques des fichiers et aucun des PDFs temporaires n’a reçu d’audit sémantique indépendant. Aucun réglage du renderer n’a changé. Les [métriques de la première répétition](validation-latex-benchmark-n1000-extended-20261008.json) et les [deux suivantes](validation-latex-benchmark-n1000-extended-repeats-20261008.json) conservent les relevés bruts.
+
+**Suite L8.3 :** conserver les structures et les tables tagpdf du renderer. Confirmer l’enveloppe temporaire provisoire de 64 Mio sur des médias réalistes et les environnements cibles ; les objectifs de durée et de RSS restent à améliorer ou à arbitrer. N’ouvrir une piste de réduction des données héritées qu’au niveau de la dépendance tagpdf avec une validation dédiée.
