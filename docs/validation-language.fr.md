@@ -1,6 +1,6 @@
 # Validation de la langue du livre
 
-Compte rendu actualisé le 4 octobre 2026. Cette recette cible l’option de langue ajoutée par la PR #100 et utilise uniquement des bases Gramps fictives.
+Compte rendu actualisé le 8 octobre 2026. Cette recette cible l’option de langue ajoutée par la PR #100 et utilise uniquement des bases Gramps fictives.
 
 ## Environnement
 
@@ -93,9 +93,17 @@ La même base Gramps fictive de 122 personnes et 61 familles a été exportée d
 
 Cette fixture ne comporte que des dates structurées à l'année : elle confirme la conservation des années, sans exercer le format des mois et jours dans l'interface graphique. L'ouverture interactive hors ligne de ces ZIP précis, la revue complète du PDF anglais et l'essai au lecteur d'écran restent à faire. Les fichiers liés dans le tableau sont locaux et ignorés par Git ; voir aussi la [recette AC-20 GUI](validation-gramps-gui-ac20.fr.md).
 
+## Contrôle de l’interface française et du catalogue — 8 octobre 2026
+
+Dans Gramps Desktop affiché en français, le rapport est accessible par **Rapports → Pages web → Livre généalogique illustré pour Gramps**. La boîte de dialogue présente en français les options de langue du livre (« Utiliser la langue de Gramps », « Français », « Anglais »), les formats de sortie (mode automatique, HTML ZIP, PDF LuaLaTeX et instantané JSON avec rapport de cohérence), ainsi que l’avertissement de confidentialité. La case de consentement est décochée à l’ouverture. La boîte a été fermée avec **Annuler** : aucun export n’a été lancé et cette vérification ne valide donc pas un parcours de génération graphique.
+
+Le catalogue `fr-local.po` passe `msgfmt --check --check-format --statistics` avec 63 messages traduits, et `msgcmp` le confirme synchronisé au modèle `template.pot`. La comparaison aux chaînes extraites des sources Python se termine sans chaîne manquante ; elle signale huit chaînes non utilisées parce que les messages d’erreur de compilation PDF sont sélectionnés dynamiquement. Les guides de contribution demandent de conserver ces entrées.
+
+Cette recette qualifie l’accès au rapport et les libellés visibles de la boîte française, ainsi que la cohérence statique du catalogue. Elle ne vérifie ni l’affichage effectif des huit erreurs dynamiques, ni l’export par cette boîte, ni Gramps Web.
+
 ## Limites
 
-- Les dix essais PDF et HTML ZIP initiaux invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés ; les exports graphiques complémentaires couvrent désormais le JSON de la petite base et les PDF/ZIP FR/EN de la base AC-20 riche.
+- Les dix essais PDF et HTML ZIP initiaux invoquent le binaire Gramps Desktop en ligne de commande avec des profils isolés ; les exports graphiques complémentaires couvrent le JSON de la petite base et les PDF/ZIP FR/EN de la base AC-20 riche. Le contrôle d’interface du 8 octobre a été annulé avant export.
 - La recette ne compare pas toutes les chaînes de notes et d’événements ; elle confirme la conservation du nom saisi. Les données de la fixture sont fictives.
 - Les dates structurées sont formatées par Gramps dans la langue du livre et la date libre de la fixture CLI reste intacte ; la base graphique AC-20 ne contient que des années, sans mois ni jour.
 - Le PDF de démonstration utilise un petit arbre et des portraits synthétiques ; sa mise en page finale, l’accessibilité PDF et la comparaison avec les maquettes privées ne sont pas qualifiées par cette recette.
