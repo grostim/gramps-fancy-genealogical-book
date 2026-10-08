@@ -2057,7 +2057,8 @@ def _render_media_image(
     )
     output = [
         "\\begin{center}\n"
-        f"\\includegraphics[width={width},alt={{{alt}}}]"
+        f"\\includegraphics[width={width},height=0.65\\textheight,"
+        f"keepaspectratio,alt={{{alt}}}]"
         f"{{\\detokenize{{{path}}}}}\n"
         "\\par\n"
     ]

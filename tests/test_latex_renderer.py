@@ -241,7 +241,10 @@ def test_pdf_renders_shared_citation_media_once_and_links_later_uses():
     target = _latex_target(f"media-{cache_key}")
 
     assert rendered.startswith(r"\DocumentMetadata{lang=fr-FR,tagging=on}")
-    image_command = r"\includegraphics[width=0.6\linewidth,alt={Document partagé}]"
+    image_command = (
+        r"\includegraphics[width=0.6\linewidth,height=0.65\textheight,"
+        r"keepaspectratio,alt={Document partagé}]"
+    )
     assert rendered.count(image_command) == 1
     assert rendered.count(f"\\gfbanchor{{{target}}}") == 1
     assert rendered.count(f"\\gfbpagelink{{{target}}}") == 1

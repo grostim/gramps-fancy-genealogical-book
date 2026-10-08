@@ -1185,7 +1185,7 @@ Commande reproductible :
 
 Sur ces deux profils synthétiques, la baisse des sources PNG accompagne une baisse proche des tailles du PDF et de l’espace temporaire. Les durées et les RSS ne permettent pas de conclure à un effet du profil : les runs n’ont pas été alternés et les valeurs varient, notamment le RSS lisse de 254 à 327 Mio. Cela confirme que le bruit aléatoire du premier essai gonflait artificiellement la taille des sorties, sans prédire la taille de vraies photographies. Le résultat ne justifie ni encodage avec perte ni redimensionnement. Les données brutes sont dans [le relevé JSON](validation-latex-benchmark-smooth-n100-pdf-20261008.json) ; l’espace temporaire est échantillonné toutes les 100 ms et les PDFs n’ont pas reçu d’audit sémantique indépendant.
 
-**Suite L8.3 :** ne pas retenir de plafond temporaire général tant que des cas réalistes et les environnements cibles ne sont pas mesurés. Garder les structures accessibles ; examiner ensuite la taille des dérivés et du PDF à partir de médias réalistes avant toute modification du renderer.
+**Suite L8.3 :** une première enveloppe avec des photographies réalistes est maintenant mesurée ci-dessous. Aucun plafond temporaire général n’est encore retenu : confirmer les tailles et les pics sur les environnements Gramps cibles, puis arbitrer séparément le budget PDF de 16 Mio, déjà dépassé dans cette fixture. Garder les structures accessibles.
 
 ### Comparaison exploratoire de tagpdf — N=100 — 8 octobre 2026
 
@@ -1198,3 +1198,26 @@ Trois paires de builds PDF complets ont comparé tagpdf 0.99y, installé, à tag
 | Taille PDF médiane (octets) | 1 312 920 | 1 312 877 |
 
 Les trois écarts RSS appariés (1.0h moins 0.99y) sont −1,94, −52,73 et +9,16 Mio ; ils ne montrent pas de baisse stable. Le gain médian de temps est de 0,981 s (2,5 %) sur ce seul cas N=100. Les six PDFs gardent 117 pages et 12 447 éléments de structure, dont 2 436 rôles `/Link` et 40 figures avec texte alternatif. Chaque fichier conserve 2 449 annotations de lien, aucune divergence OBJR/ParentTree et le même hash de texte extrait. Ces résultats ne qualifient pas N=1 000 et ne suffisent pas, à eux seuls, à mettre à jour la dépendance. Le [relevé apparié et ses audits](validation-latex-tagpdf-version-paired-n100-20261008.json) contient les mesures, l’empreinte SHA-256 de l’archive et la provenance.
+
+### Portraits d’archives CC BY 4.0 — N=100 — 8 octobre 2026
+
+Le script [benchmark_book_open_media.py](../scripts/benchmark_book_open_media.py) remplace les vingt médias d’une fixture ramifiée fictive par vingt JPEG de la Wellcome Collection. Le [manifeste source](fixtures/wellcome-open-portraits-cc-by.json) documente titre, crédit, identifiant, licence, URLs, dimensions, tailles et hashes ; les images ne sont pas incluses dans Git. La requête IIIF demande au plus 1 600 pixels de large, mais le service renvoie un fichier de 1 601 pixels. Les fichiers source totalisent 13 741 822 octets. La génération du PDF ajoute le titre, « Wellcome Collection » et « CC BY 4.0 » à la légende ; le rapport indique également la transformation et l’URL de la licence.
+
+Commande reproductible depuis la racine du dépôt (Pillow, pypdf, `psutil` et LuaLaTeX disponibles) :
+
+    python scripts/benchmark_book_open_media.py --repetitions 3 --pdf-output-dir /tmp/gfb-open-media-pdf --output /tmp/gfb-open-media-report.json
+
+Les trois répétitions utilisent le graphe fictif N=100 (202 personnes, 101 familles, 303 événements et citations), le renderer courant et la compilation convergée étendue. Elles ont toutes abouti sans avertissement de mise en page. Environnement : macOS 27.0 arm64, Python 3.14.0, LuaHBTeX 1.24.0 (TeX Live 2026).
+
+| Mesure | Médiane | Étendue |
+| --- | ---: | ---: |
+| Temps de compilation PDF | 37,455 s | 37,072–37,986 s |
+| Pic RSS LuaTeX | 337 231 872 octets (321,6 Mio) | 313,0–325,5 Mio |
+| Tas Python maximal (`tracemalloc`) | 24 001 906 octets (22,9 Mio) | 22,9–23,7 Mio |
+| Espace logique temporaire échantillonné | 193 110 238 octets (184,2 Mio) | 193 110 238–193 110 246 octets |
+| Archive HTML ZIP | 47 716 648 octets | identique sur les trois runs |
+| PDF | 48 938 419 octets (46,7 Mio) | 48 938 419–48 938 427 octets |
+
+L’audit du premier PDF conservé compte 133 pages A4, un PDF 2.0 balisé en `en-US`, 12 447 éléments de structure, 40 figures avec Alt et attribution, et 2 453 annotations de lien. Les 2 453 annotations ont un OBJR correspondant dans le ParentTree ; aucun écart n’est relevé. Son SHA-256 est `0942b240a9697506766c37dff15c69f665d7118ff08c274413ec9227ff3f4d7a`. Le relevé [JSON](validation-latex-open-portraits-n100-20261008.json) contient les résultats complets et l’empreinte du texte extrait.
+
+Le temps et le pic RSS de ce cas N=100 sont sous les repères provisoires de 180 s et 512 Mio ; la taille du PDF dépasse celui de 16 Mio. L’espace temporaire atteint 184,2 Mio. Ce corpus historique JPEG est plus compressible que les PNG synthétiques pseudo-aléatoires précédemment mesurés : les deux expériences éclairent des profils différents et ne forment pas une comparaison causale. Ce run qualifie une fixture locale, pas des médias tirés d’une base Gramps, les installateurs Desktop ou Gramps Web. Les 20 portraits d’archives ne représentent pas des photos modernes de téléphone.
