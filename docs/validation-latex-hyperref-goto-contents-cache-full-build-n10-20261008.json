@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "7598042a7775e3590106feb91579ab32f96f4906",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 10,
+    "people": 22,
+    "families": 11,
+    "events": 33,
+    "citations": 33,
+    "media": 2,
+    "media_artifacts": 2
+  },
+  "method": {
+    "renderer": "Production write_latex_pdf with extended convergent compilation",
+    "timed_scope": "write_latex_pdf call, including LaTeX rendering, prepared-media copying, and convergent LuaLaTeX compilation; synthetic data/model/media preparation excluded",
+    "rss_sampling": "One-second ps samples of LuaLaTeX/LuaHBTeX processes running book.tex during the timed call",
+    "full_build_budget_seconds": 180,
+    "peak_rss_budget_mib": 512,
+    "comparison": "One merged-code build; not a paired reference/candidate comparison",
+    "repetitions": 3,
+    "interpretation": "Repeated full builds of the merged renderer; this is not a paired reference/candidate comparison and does not attribute a speed change to the GoTo cache."
+  },
+  "runs": [
+    {
+      "run_index": 1,
+      "elapsed_seconds": 7.81,
+      "pdf_bytes": 182436,
+      "pdf_path": "output/pdf/gramps-fancy-book-goto-contents-cache-demo-n10-20261008.pdf",
+      "lualatex_rss_sampling": {
+        "interval_seconds": 1,
+        "process_samples": 7,
+        "max_kib": 194736,
+        "max_mib": 190.17
+      },
+      "semantic_audit": {
+        "pages": 17,
+        "pdf_version": "2.0",
+        "tagged": true,
+        "link_annotations": 278,
+        "actions": {
+          "GoTo": 240,
+          "URI": 38
+        },
+        "unique_uri_targets": 36,
+        "parenttree_objr_owner_matches": 278,
+        "parenttree_mismatches": 0,
+        "figures": 4,
+        "figures_with_nonempty_alt": 4,
+        "nfc_text_chars": 24534,
+        "nfc_text_sha256": "874ff2051dfec3354bf7a75e192ff415e0b0ea1be94d5f46101b234b08ea913a",
+        "link_signatures_sha256": "9cca40310e701a2f21e4cad1c95d311d641a34a6dd47c03ca08193f07669cc23"
+      },
+      "semantic_audit_passed": true
+    },
+    {
+      "run_index": 2,
+      "elapsed_seconds": 7.73,
+      "pdf_bytes": 182440,
+      "pdf_path": "output/pdf/gramps-fancy-book-goto-contents-cache-demo-n10-repeat2-20261008.pdf",
+      "lualatex_rss_sampling": {
+        "interval_seconds": 1,
+        "process_samples": 7,
+        "max_kib": 206800,
+        "max_mib": 201.95
+      },
+      "semantic_audit": {
+        "pages": 17,
+        "pdf_version": "2.0",
+        "tagged": true,
+        "link_annotations": 278,
+        "actions": {
+          "GoTo": 240,
+          "URI": 38
+        },
+        "unique_uri_targets": 36,
+        "parenttree_objr_owner_matches": 278,
+        "parenttree_mismatches": 0,
+        "figures": 4,
+        "figures_with_nonempty_alt": 4,
+        "nfc_text_chars": 24534,
+        "nfc_text_sha256": "874ff2051dfec3354bf7a75e192ff415e0b0ea1be94d5f46101b234b08ea913a",
+        "link_signatures_sha256": "9cca40310e701a2f21e4cad1c95d311d641a34a6dd47c03ca08193f07669cc23"
+      },
+      "semantic_audit_passed": true
+    },
+    {
+      "run_index": 3,
+      "elapsed_seconds": 7.74,
+      "pdf_bytes": 182440,
+      "pdf_path": "output/pdf/gramps-fancy-book-goto-contents-cache-demo-n10-repeat3-20261008.pdf",
+      "lualatex_rss_sampling": {
+        "interval_seconds": 1,
+        "process_samples": 7,
+        "max_kib": 217888,
+        "max_mib": 212.78
+      },
+      "semantic_audit": {
+        "pages": 17,
+        "pdf_version": "2.0",
+        "tagged": true,
+        "link_annotations": 278,
+        "actions": {
+          "GoTo": 240,
+          "URI": 38
+        },
+        "unique_uri_targets": 36,
+        "parenttree_objr_owner_matches": 278,
+        "parenttree_mismatches": 0,
+        "figures": 4,
+        "figures_with_nonempty_alt": 4,
+        "nfc_text_chars": 24534,
+        "nfc_text_sha256": "874ff2051dfec3354bf7a75e192ff415e0b0ea1be94d5f46101b234b08ea913a",
+        "link_signatures_sha256": "9cca40310e701a2f21e4cad1c95d311d641a34a6dd47c03ca08193f07669cc23"
+      },
+      "semantic_audit_passed": true
+    }
+  ],
+  "summary": {
+    "elapsed_seconds": {
+      "median": 7.74,
+      "min": 7.73,
+      "max": 7.81
+    },
+    "peak_rss_kib": {
+      "median": 206800,
+      "min": 194736,
+      "max": 217888,
+      "median_mib": 201.95,
+      "min_mib": 190.17,
+      "max_mib": 212.78
+    },
+    "pdf_bytes": {
+      "min": 182436,
+      "max": 182440
+    },
+    "all_semantic_audits_passed": true,
+    "semantic_audits_identical": true,
+    "all_runs_within_budgets": true,
+    "full_build_speedup_attributable": false
+  }
+}

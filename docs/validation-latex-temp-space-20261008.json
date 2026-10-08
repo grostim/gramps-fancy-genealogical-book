@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "7598042a7775e3590106feb91579ab32f96f4906",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdf_audit_library": "pypdf 6.19.0"
+  },
+  "temporary_workspace_metric": {
+    "definition": "Sum of logical sizes of regular files under output/pdf/.book-pdf-* during write_latex_pdf compilation.",
+    "sampling_interval_ms": 100,
+    "symlinks_followed": false,
+    "scope": "Renderer compilation directory only. Synthetic fixture, model, and prepared media generation are outside this measured workspace.",
+    "limitations": "Transient files created and removed between samples may be missed; this is not a system-wide disk quota or total temporary disk usage measurement."
+  },
+  "cases": [
+    {
+      "descendant_couples": 10,
+      "fixture": {
+        "shape": "branching",
+        "descendant_couples": 10,
+        "people": 22,
+        "families": 11,
+        "events": 33,
+        "citations": 33,
+        "media": 2,
+        "media_artifacts": 2
+      },
+      "renderer": "Production write_latex_pdf with extended convergent compilation",
+      "timed_scope": "write_latex_pdf call, including LaTeX rendering, prepared-media copying, and convergent LuaLaTeX compilation; synthetic data/model/media preparation excluded",
+      "run": {
+        "elapsed_seconds": 7.75,
+        "pdf_bytes": 182439,
+        "pdf_path": "output/pdf/gramps-fancy-book-temp-space-profile-n10-20261008.pdf",
+        "lualatex_rss_sampling": {
+          "interval_seconds": 1,
+          "process_samples": 9,
+          "max_kib": 208176,
+          "max_mib": 203.3
+        },
+        "temporary_workspace_sampling": {
+          "interval_ms": 100,
+          "samples": 73,
+          "peak_bytes": 332448
+        },
+        "semantic_audit": {
+          "pages": 17,
+          "pdf_version": "2.0",
+          "tagged": true,
+          "link_annotations": 278,
+          "actions": {
+            "GoTo": 240,
+            "URI": 38
+          },
+          "unique_uri_targets": 36,
+          "parenttree_objr_owner_matches": 278,
+          "parenttree_mismatches": 0,
+          "figures": 4,
+          "figures_with_nonempty_alt": 4,
+          "nfc_text_chars": 24534,
+          "nfc_text_sha256": "874ff2051dfec3354bf7a75e192ff415e0b0ea1be94d5f46101b234b08ea913a",
+          "link_signatures_sha256": "9cca40310e701a2f21e4cad1c95d311d641a34a6dd47c03ca08193f07669cc23"
+        },
+        "semantic_audit_passed": true
+      },
+      "derived": {
+        "budgets_met": true,
+        "full_build_speedup_attributable": false,
+        "semantic_audit_passed": true
+      }
+    },
+    {
+      "descendant_couples": 100,
+      "fixture": {
+        "shape": "branching",
+        "descendant_couples": 100,
+        "people": 202,
+        "families": 101,
+        "events": 303,
+        "citations": 303,
+        "media": 20,
+        "media_artifacts": 20
+      },
+      "renderer": "Production write_latex_pdf with extended convergent compilation",
+      "timed_scope": "write_latex_pdf call, including LaTeX rendering, prepared-media copying, and convergent LuaLaTeX compilation; synthetic data/model/media preparation excluded",
+      "run": {
+        "elapsed_seconds": 35.89,
+        "pdf_bytes": 1312917,
+        "pdf_path": "output/pdf/gramps-fancy-book-temp-space-profile-n100-20261008.pdf",
+        "lualatex_rss_sampling": {
+          "interval_seconds": 1,
+          "process_samples": 33,
+          "max_kib": 318336,
+          "max_mib": 310.88
+        },
+        "temporary_workspace_sampling": {
+          "interval_ms": 100,
+          "samples": 331,
+          "peak_bytes": 2249042
+        },
+        "semantic_audit": {
+          "pages": 117,
+          "pdf_version": "2.0",
+          "tagged": true,
+          "link_annotations": 2449,
+          "actions": {
+            "GoTo": 2119,
+            "URI": 330
+          },
+          "unique_uri_targets": 317,
+          "parenttree_objr_owner_matches": 2449,
+          "parenttree_mismatches": 0,
+          "figures": 40,
+          "figures_with_nonempty_alt": 40,
+          "nfc_text_chars": 223771,
+          "nfc_text_sha256": "be7884d14cabcb158cefb6c227bef00ac2242c640b8d71a680779e73f2bfb33c",
+          "link_signatures_sha256": "efa09b2b9d54dc0250e367b6da4f0496b1fa61117b0595523e5f79b08ce30527"
+        },
+        "semantic_audit_passed": true
+      },
+      "derived": {
+        "budgets_met": true,
+        "full_build_speedup_attributable": false,
+        "semantic_audit_passed": true
+      }
+    },
+    {
+      "descendant_couples": 1000,
+      "fixture": {
+        "shape": "branching",
+        "descendant_couples": 1000,
+        "people": 2002,
+        "families": 1001,
+        "events": 3003,
+        "citations": 3003,
+        "media": 200,
+        "media_artifacts": 200
+      },
+      "renderer": "Production write_latex_pdf with extended convergent compilation",
+      "timed_scope": "write_latex_pdf call, including LaTeX rendering, prepared-media copying, and convergent LuaLaTeX compilation; synthetic data/model/media preparation excluded",
+      "run": {
+        "elapsed_seconds": 344.09,
+        "pdf_bytes": 12556073,
+        "pdf_path": "output/pdf/gramps-fancy-book-temp-space-profile-n1000-20261008.pdf",
+        "lualatex_rss_sampling": {
+          "interval_seconds": 1,
+          "process_samples": 333,
+          "max_kib": 1118656,
+          "max_mib": 1092.44
+        },
+        "temporary_workspace_sampling": {
+          "interval_ms": 100,
+          "samples": 3145,
+          "peak_bytes": 21420988
+        },
+        "semantic_audit": {
+          "pages": 1096,
+          "pdf_version": "2.0",
+          "tagged": true,
+          "link_annotations": 24126,
+          "actions": {
+            "GoTo": 20878,
+            "URI": 3248
+          },
+          "unique_uri_targets": 3125,
+          "parenttree_objr_owner_matches": 24126,
+          "parenttree_mismatches": 0,
+          "figures": 400,
+          "figures_with_nonempty_alt": 400,
+          "nfc_text_chars": 2244123,
+          "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+          "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+        },
+        "semantic_audit_passed": true
+      },
+      "derived": {
+        "budgets_met": false,
+        "full_build_speedup_attributable": false,
+        "semantic_audit_passed": true
+      }
+    }
+  ],
+  "interpretation": "One current-renderer full build per size. All semantic PDF audits passed. N=10 and N=100 meet the elapsed-time and sampled-RSS budgets; N=1000 exceeds both. The temporary-workspace metric is a first baseline, not a repeated bound."
+}

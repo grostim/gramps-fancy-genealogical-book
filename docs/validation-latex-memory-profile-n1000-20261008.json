@@ -1,0 +1,283 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "7598042a7775e3590106feb91579ab32f96f4906",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "engine": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "renderer_state": "GoTo contents cache merged in source revision"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media": 200,
+    "media_artifacts": 200,
+    "pages": 1096
+  },
+  "method": {
+    "runs": "Five exploratory single-pass diagnostics using populated auxiliary files; cache/reference runs and tagpdf setting probes are not counterbalanced or repeated as matched experiments.",
+    "memory_stats": "LuaTeX status values sampled at each 100th shipped page and at document end; post-tagpdf values were recorded separately where available.",
+    "memory_status_units": "Status counters such as dyn_used are LuaTeX memory-unit counts; they are not converted to bytes.",
+    "rss_sampling": "One-second ps sampling of the LuaLaTeX process; sampled peak, not a hard limit.",
+    "production_code_changed": false,
+    "audits": "Each diagnostic PDF was semantically audited against its corresponding expected candidate; all retained the same 1,096-page tagged book semantics."
+  },
+  "runs": [
+    {
+      "name": "cache_profile_first",
+      "variant": "GoTo contents cache enabled; first memory-profile pass",
+      "source_directory": "tmp/l83-goto-contents-csname-paired-20261008/pair-1/candidate",
+      "source_aux_sha256": "9f795adac156a43c52174c00a3d795301193f79f4691c4a0fe2c7ec539fa0c68",
+      "source_toc_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+      "elapsed_seconds": 163.057,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "sample_count": 157,
+        "peak_kib": 1104352,
+        "peak_mib": 1078.47
+      },
+      "pdf_bytes": 12556083,
+      "semantic_audit_matches_reference_candidate": true,
+      "status_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5457208,
+          "obj_ptr": 34457
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17975090,
+          "obj_ptr": 139088
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28230954,
+          "obj_ptr": 221857
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31760208,
+          "obj_ptr": 252622
+        }
+      ],
+      "post_tagpdf_status": []
+    },
+    {
+      "name": "reference",
+      "variant": "GoTo contents cache reference path",
+      "source_directory": "tmp/l83-goto-contents-csname-paired-20261008/pair-1/reference",
+      "source_aux_sha256": "2b6ddfe7397cbf22a4b5b90999ab26ca56bfdee5d9934b2aa6a560dd38800ba5",
+      "source_toc_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+      "elapsed_seconds": 163.957,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "sample_count": 159,
+        "peak_kib": 1159968,
+        "peak_mib": 1132.78
+      },
+      "pdf_bytes": 12556080,
+      "semantic_audit_matches_reference_candidate": true,
+      "status_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5282518,
+          "obj_ptr": 34457
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 16943123,
+          "obj_ptr": 139088
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 26753745,
+          "obj_ptr": 221857
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 30203384,
+          "obj_ptr": 252622
+        }
+      ],
+      "post_tagpdf_status": []
+    },
+    {
+      "name": "cache_profile_repeat",
+      "variant": "GoTo contents cache enabled; repeat memory-profile pass",
+      "source_directory": "tmp/l83-goto-contents-csname-paired-20261008/pair-3/candidate",
+      "source_aux_sha256": "9f795adac156a43c52174c00a3d795301193f79f4691c4a0fe2c7ec539fa0c68",
+      "source_toc_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+      "elapsed_seconds": 161.837,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "sample_count": 157,
+        "peak_kib": 1061264,
+        "peak_mib": 1036.39
+      },
+      "pdf_bytes": 12556079,
+      "semantic_audit_matches_reference_candidate": true,
+      "status_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5457208,
+          "obj_ptr": 34457
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17975073,
+          "obj_ptr": 139088
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28230830,
+          "obj_ptr": 221857
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31760030,
+          "obj_ptr": 252622
+        }
+      ],
+      "post_tagpdf_status": []
+    },
+    {
+      "name": "tagpdf_parent_check_off",
+      "variant": "Diagnostic tagpdf parent-child check disabled",
+      "source_directory": "tmp/l83-goto-contents-csname-paired-20261008/pair-3/candidate",
+      "source_aux_sha256": "d57defc2fb1f8e7c66ae928f25fe135aa3282cc0a07c9d39a884476fb9043ea0",
+      "source_toc_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+      "elapsed_seconds": 160.773,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "sample_count": 156,
+        "peak_kib": 1122816,
+        "peak_mib": 1096.5
+      },
+      "pdf_bytes": 12556083,
+      "semantic_audit_matches_reference_candidate": true,
+      "status_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5457444,
+          "obj_ptr": 34457
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17975309,
+          "obj_ptr": 139088
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28231078,
+          "obj_ptr": 221857
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31760303,
+          "obj_ptr": 252622
+        }
+      ],
+      "post_tagpdf_status": [
+        {
+          "p": 1095,
+          "dyn": 31802130,
+          "obj": 252623,
+          "pdf": 122601,
+          "gc": 397857.2109375
+        }
+      ]
+    },
+    {
+      "name": "tagpdf_parent_check_atend",
+      "variant": "Diagnostic tagpdf parent-child check deferred until end",
+      "source_directory": "tmp/l83-goto-contents-csname-paired-20261008/pair-3/candidate",
+      "source_aux_sha256": "d57defc2fb1f8e7c66ae928f25fe135aa3282cc0a07c9d39a884476fb9043ea0",
+      "source_toc_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+      "elapsed_seconds": 161.828,
+      "rss_sampling": {
+        "interval_seconds": 1,
+        "sample_count": 157,
+        "peak_kib": 1172944,
+        "peak_mib": 1145.45
+      },
+      "pdf_bytes": 12556077,
+      "semantic_audit_matches_reference_candidate": true,
+      "status_checkpoints": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5457442,
+          "obj_ptr": 34457
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17975315,
+          "obj_ptr": 139088
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28231108,
+          "obj_ptr": 221857
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31760338,
+          "obj_ptr": 252622
+        }
+      ],
+      "post_tagpdf_status": [
+        {
+          "p": 1095,
+          "dyn": 31802165,
+          "obj": 252623,
+          "pdf": 122601,
+          "gc": 404015.25585938
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "first_three_runs_peak_rss_mib_range": [
+      1036.39,
+      1132.78
+    ],
+    "first_three_runs_peak_rss_span_mib": 96.39,
+    "all_runs_peak_rss_mib_range": [
+      1036.39,
+      1145.45
+    ],
+    "cache_first_final_dyn_used": 31760208,
+    "reference_final_dyn_used": 30203384,
+    "cache_first_minus_reference_dyn_used": 1556824,
+    "cache_first_minus_reference_dyn_used_percent": 5.15,
+    "parent_check_off_vs_atend": {
+      "rss_peak_delta_mib_atend_minus_off": 48.95,
+      "post_tagpdf_dyn_used_delta": 35,
+      "post_tagpdf_gc_delta_kib": 6158.04,
+      "interpretation": "One run per setting; the observed RSS spread is larger than the Lua GC status difference, so these measurements do not justify disabling the check."
+    },
+    "attribution": "Exploratory observations only; the run-to-run RSS variation prevents attributing the observed memory changes to the cache or tagpdf parent-child check."
+  }
+}
