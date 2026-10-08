@@ -56,6 +56,8 @@ _DEFAULT_PORTRAIT_SIZE = (96, 72)
 _MAX_SYNTHETIC_PORTRAIT_PIXELS = 24_000_000
 _MAX_SYNTHETIC_MEDIA_SOURCE_BYTES = 256 * 1024 * 1024
 _TEMPORARY_WORKSPACE_SAMPLE_SECONDS = 0.1
+_COMPILER_RSS_SAMPLE_SECONDS = 0.1
+_COMPILER_PROCESS_NAMES = {"lualatex", "luahbtex", "luatex"}
 
 
 class _TemporaryWorkspaceMonitor:
@@ -104,6 +106,88 @@ class _TemporaryWorkspaceMonitor:
                     except OSError:
                         continue
         self._peak_bytes = max(self._peak_bytes, total_bytes)
+
+
+class _CompilerRssMonitor:
+    """Sample the peak RSS of LuaTeX descendants during PDF compilation."""
+
+    def __init__(self, root_pid: int) -> None:
+        try:
+            import psutil
+        except ImportError:
+            self._psutil = None
+        else:
+            self._psutil = psutil
+        self._root = self._psutil.Process(root_pid) if self._psutil else None
+        self._stop = threading.Event()
+        self._sample_count = 0
+        self._compiler_process_count = 0
+        self._peak_rss_bytes = 0
+        self._thread = threading.Thread(target=self._sample_until_stopped, daemon=True)
+
+    def __enter__(self) -> _CompilerRssMonitor:
+        self._sample()
+        if self._root is not None:
+            self._thread.start()
+        return self
+
+    def __exit__(self, *_exception_info: object) -> None:
+        if self._root is not None:
+            self._stop.set()
+            self._thread.join()
+            self._sample()
+
+    def as_dict(self) -> dict[str, object]:
+        if self._psutil is None:
+            status = "psutil_unavailable"
+        elif self._compiler_process_count == 0:
+            status = "compiler_process_not_observed"
+        else:
+            status = "sampled"
+        return {
+            "compiler_rss_status": status,
+            "compiler_peak_rss_bytes": (
+                self._peak_rss_bytes if self._compiler_process_count else None
+            ),
+            "rss_sample_count": self._sample_count,
+            "compiler_rss_sample_interval_ms": int(
+                _COMPILER_RSS_SAMPLE_SECONDS * 1000
+            ),
+        }
+
+    def _sample_until_stopped(self) -> None:
+        while not self._stop.wait(_COMPILER_RSS_SAMPLE_SECONDS):
+            self._sample()
+
+    def _sample(self) -> None:
+        if self._root is None:
+            return
+        self._sample_count += 1
+        try:
+            children = self._root.children(recursive=True)
+        except (
+            self._psutil.AccessDenied,
+            self._psutil.NoSuchProcess,
+            self._psutil.ZombieProcess,
+        ):
+            return
+        for process in children:
+            try:
+                names = {
+                    Path(process.name()).stem.casefold(),
+                    Path(process.exe()).stem.casefold(),
+                }
+                if not names.intersection(_COMPILER_PROCESS_NAMES):
+                    continue
+                rss_bytes = process.memory_info().rss
+            except (
+                self._psutil.AccessDenied,
+                self._psutil.NoSuchProcess,
+                self._psutil.ZombieProcess,
+            ):
+                continue
+            self._compiler_process_count += 1
+            self._peak_rss_bytes = max(self._peak_rss_bytes, rss_bytes)
 
 
 def synthetic_wide_snapshot(descendant_couples: int) -> Snapshot:
@@ -548,6 +632,7 @@ def benchmark(
     include_media: bool = False,
     portrait_size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE,
     compile_pdf: bool = False,
+    extended_pdf_compilation: bool = False,
 ) -> dict[str, object]:
     gc.collect()
     tracemalloc.start()
@@ -626,28 +711,31 @@ def benchmark(
 
                 pdf_path = temporary / "book.pdf"
                 start = time.perf_counter()
-                try:
-                    write_latex_pdf(
-                        model,
-                        pdf_path,
-                        media_asset_directory=(
-                            media_directory if model.media_artifacts else None
-                        ),
-                    )
-                except LatexCompilerUnavailable as error:
-                    pdf_result = {"status": "skipped", "reason": str(error)}
-                except LatexCompilationError as error:
-                    pdf_result = {
-                        "status": "failed",
-                        "seconds": round(time.perf_counter() - start, 6),
-                        "reason": error.reason,
-                    }
-                else:
-                    pdf_result = {
-                        "status": "compiled",
-                        "seconds": round(time.perf_counter() - start, 6),
-                        "bytes": pdf_path.stat().st_size,
-                    }
+                with _CompilerRssMonitor(os.getpid()) as rss_monitor:
+                    try:
+                        write_latex_pdf(
+                            model,
+                            pdf_path,
+                            media_asset_directory=(
+                                media_directory if model.media_artifacts else None
+                            ),
+                            extended_compilation=extended_pdf_compilation,
+                        )
+                    except LatexCompilerUnavailable as error:
+                        pdf_result = {"status": "skipped", "reason": str(error)}
+                    except LatexCompilationError as error:
+                        pdf_result = {
+                            "status": "failed",
+                            "seconds": round(time.perf_counter() - start, 6),
+                            "reason": error.reason,
+                        }
+                    else:
+                        pdf_result = {
+                            "status": "compiled",
+                            "seconds": round(time.perf_counter() - start, 6),
+                            "bytes": pdf_path.stat().st_size,
+                        }
+                pdf_result.update(rss_monitor.as_dict())
 
         temporary_workspace_peak_bytes = temporary_monitor.peak_bytes
         _, peak_heap = tracemalloc.get_traced_memory()
@@ -757,6 +845,14 @@ def main() -> None:
         metavar="N",
         help="also compile the branching case with N descendant couples through LuaLaTeX",
     )
+    parser.add_argument(
+        "--extended-pdf-compilation",
+        action="store_true",
+        help=(
+            "use the renderer's extended PDF pass and total timeouts; only applies "
+            "with --compile-pdf-for"
+        ),
+    )
     arguments = parser.parse_args()
     portrait_size = arguments.portrait_size or _DEFAULT_PORTRAIT_SIZE
     if any(count < 0 for count in arguments.descendant_couples):
@@ -785,6 +881,8 @@ def main() -> None:
             )
     if arguments.compile_pdf_for is not None and arguments.shape == "wide":
         parser.error("--compile-pdf-for requires --shape branching or --shape both")
+    if arguments.extended_pdf_compilation and arguments.compile_pdf_for is None:
+        parser.error("--extended-pdf-compilation requires --compile-pdf-for")
 
     shapes = (
         ("wide", "branching")
@@ -803,6 +901,7 @@ def main() -> None:
                     compile_pdf=(
                         arguments.compile_pdf_for == count and shape == "branching"
                     ),
+                    extended_pdf_compilation=arguments.extended_pdf_compilation,
                 )
                 result["repeat"] = repetition
                 cases.append(result)
@@ -811,6 +910,10 @@ def main() -> None:
         "platform": platform.platform(),
         "memory_metric": (
             "tracemalloc Python heap; excludes native allocations and subprocesses"
+        ),
+        "pdf_rss_metric": (
+            "sampled RSS of LuaTeX compiler processes; 100 ms interval, so shorter "
+            "peaks may be missed; requires psutil"
         ),
         "temporary_workspace_metric": (
             "sampled logical file sizes under the benchmark temporary directory; "
@@ -824,6 +927,7 @@ def main() -> None:
             else None
         ),
         "repetitions": arguments.repeat,
+        "extended_pdf_compilation": arguments.extended_pdf_compilation,
         "pdf_compile_case": (
             {
                 "shape": "branching",

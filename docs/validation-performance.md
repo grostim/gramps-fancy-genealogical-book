@@ -4,7 +4,7 @@ Repeated measurements on 2026-09-29 with macOS 27.0 arm64 and CPython 3.14.0, Gr
 
 ## Method and synthetic data sets
 
-Run from the repository root in a Python environment with the project and its media extra installed (pip install -e ".[media]"); LuaLaTeX must be available on PATH:
+Run from the repository root in a Python environment with the project, media extra, and development tools installed (pip install -e ".[dev,media]"); LuaLaTeX must be available on PATH:
 
     PYTHONPATH=src python scripts/benchmark_book.py --shape both --descendant-couples 10 100 1000 --with-media --compile-pdf-for 100 --repeat 3
 
@@ -17,7 +17,9 @@ Two structures are compared:
 - Wide data set: one central couple with N children and their partners. Every person gets a profile; there are no events or media. This preserves the original reference case, but does not represent a deep tree.
 - Branching data set: N descendant unions distributed across branches, with at most two children per family. Each person has a birth event and each family has a union event. Every event has a citation; sources are shared across 25 citations; one repository and multiple places are included. Publishable notes appear about once per 12 people and once per 10 families. A synthetic PNG portrait with a crop region appears about once per 10 people.
 
-The first script measures model construction, derivative preparation, JSON serialization, both renderers and the HTML ZIP archive. It also compiles a PDF for the small branching case. Media consists of deterministic pseudo-random images, not real portraits.
+The first script measures model construction, derivative preparation, JSON serialization, both renderers and the HTML ZIP archive. It also compiles a PDF for the small branching case. `tracemalloc` measures the Python heap, but not native allocations or child processes; during PDF compilation the script separately samples the LuaTeX process RSS every 100 ms with `psutil`. This can miss shorter peaks and is distinct from the Python heap peak. Media consists of deterministic pseudo-random images, not real portraits.
+
+PDF benchmarks use the renderer's standard 120-second per-pass and 180-second total limits by default. For a large fixture, pass `--extended-pdf-compilation` with `--compile-pdf-for`; it selects the renderer's 600-second per-pass and 1,800-second total limits. The JSON report records whether extended compilation was selected.
 
 The second script invokes the Gramps CLI report on synthetic GEDCOM files. Every repetition gets a fresh `GRAMPSHOME` profile; the script installs the repository archive and copies Mistune into the temporary profile. The first branching-only measurements are in [validation-gramps-extraction-20260929.json](validation-gramps-extraction-20260929.json). Five expanded scenarios and their raw measurements are in [validation-gramps-scenarios-20260929.json](validation-gramps-scenarios-20260929.json). Timing added only to the temporary report copy separates `GrampsDatabaseAdapter.read_snapshot_by_gramps_id` from model construction. End-to-end time and peak RSS also include Gramps startup, GEDCOM import and JSON writing. No normal Gramps tree is opened or changed.
 
@@ -856,3 +858,20 @@ An instrumented build without synthetic media (200 media records and 400 figures
 Across these two single runs, removing media and 218 pages lowered peak RSS by only 11.12 MiB. The final Lua heap counter was about 52 MiB lower, while RSS was nearly unchanged; these different metrics do not identify a specific memory component. This ablation is not a production-equivalent PDF and was not repeated. It suggests images are not the main source of the peak.
 
 The profile also shows 266.81 MiB peak RSS on the first pass, where the renderer disables tagging and puts Hyperref in draft mode, versus 1,151.89 MiB on the tagged passes. Since both settings change together, this points to the tagpdf/Hyperref and ParentTree path for inspection but does not prove causality. The [detailed record](validation-latex-no-media-rss-ablation-n1000-20261008.json) preserves both audits and the measurement series. The next step is to trace growth in OBJR/ParentTree entries and GoTo annotations through the renderer and tagpdf hooks without disabling tagging.
+
+### Complete current benchmark with extended timeouts — N=1,000 — October 8, 2026
+
+`benchmark_book.py` generated a synthetic branching tree with 1,000 descendant unions, 2,002 people, 1,001 families, 3,003 events, 200 synthetic 96 × 72 PNG portraits, and an HTML archive. Three complete compilations using `--extended-pdf-compilation` succeeded:
+
+| Run | PDF time (s) | PDF (bytes) | LuaTeX peak RSS (MiB) | Python heap peak (MiB) | Logical temporary workspace peak (bytes) |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 378.028 | 12,556,083 | 995.73 | 78.98 | 27,718,444 |
+| 2 | 392.588 | 12,556,080 | 970.19 | 78.99 | 27,718,444 |
+| 3 | 377.507 | 12,556,074 | 1,166.48 | 76.18 | 27,718,445 |
+| Median | 378.028 | 12,556,080 | 995.73 | 78.98 | 27,718,444 |
+
+Elapsed time ranges from 377.51 to 392.59 seconds; RSS ranges from 970.19 to 1,166.48 MiB, a notable spread. The PDF remains under the provisional 16-MiB size target, while all three times and RSS peaks exceed the 180-second and 512-MiB budgets. Temporary workspace varies by just one byte across runs. A provisional 64-MiB per-run limit for this benchmark would leave about 2.4× headroom, but it still needs validation with realistic media and on target environments.
+
+Three attempts with standard timeouts expired without a complete PDF; their partial RSS values are not treated as full-build peaks. The three extended runs were on macOS 27.0 arm64; RSS samples were taken every 100 ms and may miss shorter peaks, workspace size counts logical file lengths, and none of these temporary PDFs received an independent semantic audit. No renderer setting changed. The [first-run record](validation-latex-benchmark-n1000-extended-20261008.json) and [next two runs](validation-latex-benchmark-n1000-extended-repeats-20261008.json) preserve the raw measurements.
+
+The next L8.3 step is to validate the provisional 64-MiB temporary-workspace limit with realistic media and on target environments, while preserving the accessible structure generated by tagpdf; elapsed-time and RSS targets remain unmet.
