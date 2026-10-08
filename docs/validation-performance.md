@@ -833,4 +833,10 @@ To resolve the seed mismatch in the first diagnostics, three pairs of direct pas
 
 The cache saves 1.073–1.686 seconds per pass, averaging 1.356 seconds (0.825%). Its `dyn_used` counter is 1,556,575–1,556,609 units higher (about 5.154%); this is not converted to bytes. RSS varies from −88.36 to +80.06 MiB by pair, showing no stable cache-attributable effect. Each PDF retains the same 1,096 pages, 24,126 links and OBJR/ParentTree associations, 400 accessible figures, NFC-text hashes, and ordered link-signature hashes. The cache records 8,541 hits and 9,049 misses per pass.
 
-The cache retains its modest timing gain without a demonstrated RSS effect. The next prototype can replace its per-destination control-sequence definitions with an `expl3` property table and check whether that lowers `dyn_used` without losing the gain or changing the PDF. See the [detailed paired record](validation-latex-memory-cache-paired-n1000-20261008.json).
+The cache retains its modest timing gain without a demonstrated RSS effect. An `expl3` prototype was then tried on the same fixture; its partial results are recorded below. See the [detailed paired record](validation-latex-memory-cache-paired-n1000-20261008.json).
+
+### Exploratory `expl3` cache probe — N=1,000 — October 8, 2026
+
+An `expl3` property table temporarily replaced the per-destination cache, using the same initial auxiliary files as pair 1 of the preceding profile. The run was stopped after more than 573 seconds, when LuaLaTeX reported page 933 of 1,096; the pair 1 current-cache direct pass took 162.003 seconds. An RSS sample at 573 seconds was 813,952 KiB (794.88 MiB), not a final peak. At pages 100, 500, and 900, `dyn_used` was 0.46%, 0.83%, and 0.74% higher than the current-cache checkpoints.
+
+Because compilation was incomplete, there is no PDF audit or full-run RSS peak. The evidence is sufficient to reject this table as a replacement: it is much slower and does not show the intended memory reduction. No production code changed. The [exploratory record](validation-latex-expl3-cache-probe-n1000-20261008.json) preserves the seeds, observations, and limitations. The next profile will track RSS and Lua heap growth together during a complete build.
