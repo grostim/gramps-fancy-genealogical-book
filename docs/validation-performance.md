@@ -848,3 +848,11 @@ A complete production-renderer build was instrumented with LuaTeX counters every
 At the end of the final tagged pass, Lua `collectgarbage("count")` reported 396,922 KiB (about 387.62 MiB), while process RSS continued to rise near the end of the document. The Lua counter describes the heap, not RSS. This suggests the Lua heap contributes materially to memory use, but does not by itself explain the 1,151.89-MiB peak.
 
 The audit exactly matches the previous complete build: tagged PDF 2.0, 1,096 pages, all 24,126 links associated with their OBJR/ParentTree owners, 400 figures with alternative text, and identical NFC-text/link hashes. The 180-second and 512-MiB budgets remain exceeded. The [detailed per-pass, per-second record](validation-latex-memory-rss-full-build-n1000-20261008.json) preserves the correlated data. Next measurement: a synthetic N=1,000 build without media to estimate their contribution to RSS.
+
+### Diagnostic no-media ablation — N=1,000 — October 8, 2026
+
+An instrumented build without synthetic media (200 media records and 400 figures removed) took 344.40 seconds and reached 1,140.77 MiB sampled RSS. Its tagged PDF has 878 pages and 24,086 links; all 24,086 links have OBJR/ParentTree associations, and there are no figures. The media build in the preceding section has 1,096 pages, 24,126 links, and 400 accessible figures, with 1,151.89 MiB peak RSS.
+
+Across these two single runs, removing media and 218 pages lowered peak RSS by only 11.12 MiB. The final Lua heap counter was about 52 MiB lower, while RSS was nearly unchanged; these different metrics do not identify a specific memory component. This ablation is not a production-equivalent PDF and was not repeated. It suggests images are not the main source of the peak.
+
+The profile also shows 266.81 MiB peak RSS on the first pass, where the renderer disables tagging and puts Hyperref in draft mode, versus 1,151.89 MiB on the tagged passes. Since both settings change together, this points to the tagpdf/Hyperref and ParentTree path for inspection but does not prove causality. The [detailed record](validation-latex-no-media-rss-ablation-n1000-20261008.json) preserves both audits and the measurement series. The next step is to trace growth in OBJR/ParentTree entries and GoTo annotations through the renderer and tagpdf hooks without disabling tagging.
