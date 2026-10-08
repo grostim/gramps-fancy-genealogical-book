@@ -840,3 +840,11 @@ The cache retains its modest timing gain without a demonstrated RSS effect. An `
 An `expl3` property table temporarily replaced the per-destination cache, using the same initial auxiliary files as pair 1 of the preceding profile. The run was stopped after more than 573 seconds, when LuaLaTeX reported page 933 of 1,096; the pair 1 current-cache direct pass took 162.003 seconds. An RSS sample at 573 seconds was 813,952 KiB (794.88 MiB), not a final peak. At pages 100, 500, and 900, `dyn_used` was 0.46%, 0.83%, and 0.74% higher than the current-cache checkpoints.
 
 Because compilation was incomplete, there is no PDF audit or full-run RSS peak. The evidence is sufficient to reject this table as a replacement: it is much slower and does not show the intended memory reduction. No production code changed. The [exploratory record](validation-latex-expl3-cache-probe-n1000-20261008.json) preserves the seeds, observations, and limitations. The next profile will track RSS and Lua heap growth together during a complete build.
+
+### RSS and Lua heap profile on a complete build — N=1,000 — October 8, 2026
+
+A complete production-renderer build was instrumented with LuaTeX counters every 100 pages; production code was unchanged. The three converged passes took 351.98 seconds, with a sampled peak RSS of 1,151.89 MiB across 340 one-second samples. These values include the instrumentation and are not a paired comparison with the previous build.
+
+At the end of the final tagged pass, Lua `collectgarbage("count")` reported 396,922 KiB (about 387.62 MiB), while process RSS continued to rise near the end of the document. The Lua counter describes the heap, not RSS. This suggests the Lua heap contributes materially to memory use, but does not by itself explain the 1,151.89-MiB peak.
+
+The audit exactly matches the previous complete build: tagged PDF 2.0, 1,096 pages, all 24,126 links associated with their OBJR/ParentTree owners, 400 figures with alternative text, and identical NFC-text/link hashes. The 180-second and 512-MiB budgets remain exceeded. The [detailed per-pass, per-second record](validation-latex-memory-rss-full-build-n1000-20261008.json) preserves the correlated data. Next measurement: a synthetic N=1,000 build without media to estimate their contribution to RSS.

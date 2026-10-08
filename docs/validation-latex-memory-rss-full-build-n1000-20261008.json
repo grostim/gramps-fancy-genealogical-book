@@ -1,0 +1,3826 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "154341458b60a9b64d6e53433dbedbaaed43752e",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 1000,
+    "people": 2002,
+    "families": 1001,
+    "events": 3003,
+    "citations": 3003,
+    "media": 200,
+    "media_artifacts": 200
+  },
+  "method": {
+    "renderer": "Production write_latex_pdf with extended convergent compilation; instrumentation only adds LuaTeX status log lines every 100 pages and at end of document.",
+    "timed_scope": "Complete write_latex_pdf call including rendering, media copying, and all convergent LuaLaTeX passes; synthetic snapshot/model/media preparation and PDF audit excluded.",
+    "rss_sampling": "One-second ps samples of LuaLaTeX/LuaHBTeX processes during the renderer call; page memory checkpoints are associated with the current compiler pass.",
+    "pass_count": 3,
+    "full_build_budget_seconds": 180,
+    "peak_rss_budget_mib": 512,
+    "comparison": "One instrumented production build; not a paired performance comparison."
+  },
+  "run": {
+    "elapsed_seconds": 351.98,
+    "pdf_bytes": 12556074,
+    "pdf_sha256": "4060346227c03476e2bef43708e0d3a08f1e0c2737898f8cb5908ff6c9420b92",
+    "rss_sampling": {
+      "interval_seconds": 1,
+      "process_samples": 340,
+      "peak_kib": 1179536,
+      "peak_mib": 1151.89,
+      "samples": [
+        {
+          "elapsed_seconds": 0.02,
+          "pass": 0,
+          "page_checkpoint": null,
+          "rss_kib": null,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 1.05,
+          "pass": 1,
+          "page_checkpoint": null,
+          "rss_kib": 134240,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 2.08,
+          "pass": 1,
+          "page_checkpoint": null,
+          "rss_kib": 176416,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 3.12,
+          "pass": 1,
+          "page_checkpoint": null,
+          "rss_kib": 199024,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 4.16,
+          "pass": 1,
+          "page_checkpoint": 100,
+          "rss_kib": 231312,
+          "dyn_used": 1353051,
+          "lua_gc_kib": 66947.518554688,
+          "obj_ptr": 335,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 5.19,
+          "pass": 1,
+          "page_checkpoint": 100,
+          "rss_kib": 234544,
+          "dyn_used": 1353051,
+          "lua_gc_kib": 66947.518554688,
+          "obj_ptr": 335,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 6.22,
+          "pass": 1,
+          "page_checkpoint": 200,
+          "rss_kib": 238496,
+          "dyn_used": 1779250,
+          "lua_gc_kib": 73110.4765625,
+          "obj_ptr": 647,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 7.25,
+          "pass": 1,
+          "page_checkpoint": 200,
+          "rss_kib": 241616,
+          "dyn_used": 1779250,
+          "lua_gc_kib": 73110.4765625,
+          "obj_ptr": 647,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 8.29,
+          "pass": 1,
+          "page_checkpoint": 300,
+          "rss_kib": 246544,
+          "dyn_used": 2058366,
+          "lua_gc_kib": 81638.4609375,
+          "obj_ptr": 961,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 9.32,
+          "pass": 1,
+          "page_checkpoint": 400,
+          "rss_kib": 246656,
+          "dyn_used": 2253070,
+          "lua_gc_kib": 60893.500976562,
+          "obj_ptr": 1323,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 10.36,
+          "pass": 1,
+          "page_checkpoint": 400,
+          "rss_kib": 250496,
+          "dyn_used": 2253070,
+          "lua_gc_kib": 60893.500976562,
+          "obj_ptr": 1323,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 11.39,
+          "pass": 1,
+          "page_checkpoint": 500,
+          "rss_kib": 255456,
+          "dyn_used": 2450377,
+          "lua_gc_kib": 94018.657226562,
+          "obj_ptr": 1686,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 12.42,
+          "pass": 1,
+          "page_checkpoint": 600,
+          "rss_kib": 255488,
+          "dyn_used": 2612420,
+          "lua_gc_kib": 75317.797851562,
+          "obj_ptr": 2066,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 13.46,
+          "pass": 1,
+          "page_checkpoint": 600,
+          "rss_kib": 255824,
+          "dyn_used": 2612420,
+          "lua_gc_kib": 75317.797851562,
+          "obj_ptr": 2066,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 14.5,
+          "pass": 1,
+          "page_checkpoint": 700,
+          "rss_kib": 261120,
+          "dyn_used": 2849501,
+          "lua_gc_kib": 61086.3203125,
+          "obj_ptr": 2408,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 15.54,
+          "pass": 1,
+          "page_checkpoint": 700,
+          "rss_kib": 261952,
+          "dyn_used": 2849501,
+          "lua_gc_kib": 61086.3203125,
+          "obj_ptr": 2408,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 16.58,
+          "pass": 1,
+          "page_checkpoint": 800,
+          "rss_kib": 262832,
+          "dyn_used": 3017373,
+          "lua_gc_kib": 72194.0546875,
+          "obj_ptr": 2721,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 17.62,
+          "pass": 1,
+          "page_checkpoint": 900,
+          "rss_kib": 266544,
+          "dyn_used": 3152403,
+          "lua_gc_kib": 46922.416992188,
+          "obj_ptr": 3033,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 18.65,
+          "pass": 1,
+          "page_checkpoint": 900,
+          "rss_kib": 266560,
+          "dyn_used": 3152403,
+          "lua_gc_kib": 46922.416992188,
+          "obj_ptr": 3033,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 19.69,
+          "pass": 1,
+          "page_checkpoint": 1000,
+          "rss_kib": 267824,
+          "dyn_used": 3287886,
+          "lua_gc_kib": 95328.66796875,
+          "obj_ptr": 3345,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 20.73,
+          "pass": 1,
+          "page_checkpoint": 1000,
+          "rss_kib": 273216,
+          "dyn_used": 3287886,
+          "lua_gc_kib": 95328.66796875,
+          "obj_ptr": 3345,
+          "pdf_mem_size": 10000
+        },
+        {
+          "elapsed_seconds": 21.76,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 128096,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 22.79,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 175168,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 23.83,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 188816,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 24.86,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 222528,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 25.89,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 245792,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 26.92,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 246816,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 27.95,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 255616,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 28.98,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 264272,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 30.02,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 264496,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 31.04,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 284160,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 32.07,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 284240,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 33.1,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 280944,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 34.13,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 293840,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 35.17,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 294544,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 36.19,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 308224,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 37.23,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 310576,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 38.26,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 320528,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 39.29,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 337648,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 40.33,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 337760,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 41.35,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 337808,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 42.38,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 356032,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 43.42,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 366960,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 44.44,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 367072,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 45.47,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 367200,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 46.5,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 397328,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 47.53,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 397456,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 48.57,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 399024,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 49.6,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 403232,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 50.63,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 418944,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 51.66,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 421840,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 52.68,
+          "pass": 2,
+          "page_checkpoint": null,
+          "rss_kib": 421872,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 53.71,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 421936,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 54.74,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 390704,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 55.78,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 418224,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 56.81,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 418272,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 57.84,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 418336,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 58.89,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 418608,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 59.92,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 419600,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 60.95,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 435632,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 61.98,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 435792,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 63.02,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 435952,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 64.05,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 438336,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 65.08,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 438544,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 66.11,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 453568,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 67.14,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 459488,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 68.18,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 459664,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 69.21,
+          "pass": 2,
+          "page_checkpoint": 200,
+          "rss_kib": 459824,
+          "dyn_used": 10084925,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 70.24,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 464096,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 71.27,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 466848,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 72.31,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 488192,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 73.34,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 490560,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 74.37,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 492160,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 75.4,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 488192,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 76.43,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 491952,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 77.46,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 494944,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 78.49,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 519248,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 79.52,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 520784,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 80.55,
+          "pass": 2,
+          "page_checkpoint": 300,
+          "rss_kib": 522096,
+          "dyn_used": 13577317,
+          "lua_gc_kib": 185692.59179688,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 81.59,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 524368,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 82.62,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 527360,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 83.66,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 530208,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 84.69,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 545504,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 85.72,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 564096,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 86.75,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 566608,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 87.78,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 567600,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 88.81,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 567840,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 89.85,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 603744,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 90.88,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 603856,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 91.91,
+          "pass": 2,
+          "page_checkpoint": 400,
+          "rss_kib": 611408,
+          "dyn_used": 15746554,
+          "lua_gc_kib": 159878.05761719,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 92.93,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 628240,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 93.96,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 629136,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 94.99,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 630240,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 96.03,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 631264,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 97.06,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 632272,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 98.1,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 633328,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 99.13,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 635616,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 100.16,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 664656,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 101.2,
+          "pass": 2,
+          "page_checkpoint": 500,
+          "rss_kib": 673200,
+          "dyn_used": 17946419,
+          "lua_gc_kib": 292320.46582031,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 102.23,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 674176,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 103.26,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 675248,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 104.29,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 676336,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 105.32,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 676848,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 106.35,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 677088,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 107.39,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 710608,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 108.42,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 725616,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 109.46,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 740960,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 110.49,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 741072,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 111.53,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 741200,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 112.56,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 741296,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 113.59,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 741424,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 114.63,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 745056,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 115.66,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 746544,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 116.69,
+          "pass": 2,
+          "page_checkpoint": 600,
+          "rss_kib": 749760,
+          "dyn_used": 19711682,
+          "lua_gc_kib": 276058.56347656,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 117.72,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 775952,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 118.75,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 776240,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 119.78,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 776672,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 120.82,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 777120,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 121.84,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 777600,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 122.88,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 778064,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 123.91,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 778528,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 124.94,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 795488,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 125.97,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 803312,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 127.01,
+          "pass": 2,
+          "page_checkpoint": 700,
+          "rss_kib": 804096,
+          "dyn_used": 22409336,
+          "lua_gc_kib": 278035.14355469,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 128.04,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 805872,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 129.07,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 806928,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 130.1,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 846896,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 131.13,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 847168,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 132.17,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 847472,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 133.2,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 851152,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 134.24,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 869264,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 135.27,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 869488,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 136.31,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 839712,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 137.34,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 840048,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 138.37,
+          "pass": 2,
+          "page_checkpoint": 800,
+          "rss_kib": 840368,
+          "dyn_used": 24652421,
+          "lua_gc_kib": 207446.37890625,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 139.4,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 840416,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 140.43,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 840752,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 141.46,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 841056,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 142.49,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 858032,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 143.53,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 860880,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 144.56,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 861024,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 145.6,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 861312,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 146.63,
+          "pass": 2,
+          "page_checkpoint": 900,
+          "rss_kib": 861696,
+          "dyn_used": 26419731,
+          "lua_gc_kib": 240328.25292969,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 147.67,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 862000,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 148.71,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 862304,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 149.74,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 860976,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 150.78,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 854432,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 151.81,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 875024,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 152.85,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 878336,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 153.88,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 878464,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 154.9,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 853152,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 155.94,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 720976,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 156.97,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 727440,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 158.0,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 733664,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 159.04,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 743408,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 160.07,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 748800,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 161.1,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 757648,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 162.14,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 758800,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 163.17,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 836944,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 164.2,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 838144,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 165.23,
+          "pass": 2,
+          "page_checkpoint": 1000,
+          "rss_kib": 839312,
+          "dyn_used": 28202160,
+          "lua_gc_kib": 263828.44042969,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 166.27,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 864512,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 167.29,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 881200,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 168.33,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 905312,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 169.36,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 918544,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 170.4,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 934800,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 171.43,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 947280,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 172.46,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 961872,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 173.49,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 973840,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 174.52,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 979152,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 175.56,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 993312,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 176.59,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1006928,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 177.62,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1020224,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 178.66,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1034128,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 179.69,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1041424,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 180.73,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1037696,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 181.76,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1052400,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 182.8,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1054208,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 183.83,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1064784,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 184.87,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1072720,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 185.9,
+          "pass": 2,
+          "page_checkpoint": 1095,
+          "rss_kib": 1077456,
+          "dyn_used": 31731238,
+          "lua_gc_kib": 391933.21289062,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 186.94,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 121376,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 187.97,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 161376,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 189.0,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 180688,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 190.03,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 208816,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 191.07,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 237616,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 192.1,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 238640,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 193.13,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 239920,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 194.16,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 255776,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 195.2,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 255776,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 196.23,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 274864,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 197.26,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 275648,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 198.3,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 270944,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 199.33,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 285456,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 200.36,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 293280,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 201.38,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 300208,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 202.41,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 305040,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 203.44,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 314352,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 204.47,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 327520,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 205.51,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 332816,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 206.54,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 332896,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 207.57,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 348240,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 208.61,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 362224,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 209.63,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 362400,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 210.66,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 362528,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 211.69,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 356848,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 212.72,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 365264,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 213.75,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 368528,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 214.78,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 373008,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 215.81,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 385248,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 216.84,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 391744,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 217.88,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": 392000,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        },
+        {
+          "elapsed_seconds": 218.91,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 392288,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 219.93,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 383376,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 220.97,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 411840,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 222.0,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 412144,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 223.02,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 412416,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 224.05,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 412624,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 225.08,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 413216,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 226.12,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 430464,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 227.15,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 430672,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 228.18,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 430832,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 229.21,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 433072,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 230.24,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 433184,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 231.27,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 442848,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 232.3,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 453264,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 233.33,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 453376,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 234.36,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 453520,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 235.39,
+          "pass": 3,
+          "page_checkpoint": 200,
+          "rss_kib": 457120,
+          "dyn_used": 10113650,
+          "lua_gc_kib": null,
+          "obj_ptr": 70715,
+          "pdf_mem_size": 38145
+        },
+        {
+          "elapsed_seconds": 236.43,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 459472,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 237.46,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 481424,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 238.49,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 483536,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 239.53,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 485872,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 240.55,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 479680,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 241.59,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 484944,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 242.62,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 488560,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 243.65,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 510784,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 244.68,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 514768,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 245.72,
+          "pass": 3,
+          "page_checkpoint": 300,
+          "rss_kib": 516304,
+          "dyn_used": 13606032,
+          "lua_gc_kib": 188167.53515625,
+          "obj_ptr": 99452,
+          "pdf_mem_size": 47681
+        },
+        {
+          "elapsed_seconds": 246.75,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 517920,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 247.78,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 520976,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 248.81,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 523904,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 249.84,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 532368,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 250.87,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 557824,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 251.91,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 560160,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 252.94,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 562064,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 253.97,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 562320,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 254.99,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 535008,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 256.02,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 549040,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 257.06,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 552416,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 258.09,
+          "pass": 3,
+          "page_checkpoint": 400,
+          "rss_kib": 580112,
+          "dyn_used": 15775283,
+          "lua_gc_kib": 163008.22265625,
+          "obj_ptr": 119122,
+          "pdf_mem_size": 59601
+        },
+        {
+          "elapsed_seconds": 259.12,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 581408,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 260.15,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 584496,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 261.18,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 585632,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 262.22,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 586704,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 263.24,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 587744,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 264.27,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 589408,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 265.29,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 611152,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 266.32,
+          "pass": 3,
+          "page_checkpoint": 500,
+          "rss_kib": 627152,
+          "dyn_used": 17975147,
+          "lua_gc_kib": 295748.57128906,
+          "obj_ptr": 139088,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 267.35,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 628240,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 268.38,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 629344,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 269.42,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 630464,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 270.45,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 632080,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 271.48,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 634048,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 272.51,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 669088,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 273.55,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 679904,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 274.57,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 703008,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 275.61,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 704416,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 276.64,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 706288,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 277.67,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 708064,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 278.7,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 709792,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 279.74,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 710576,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 280.77,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 718496,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 281.81,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 724912,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 282.84,
+          "pass": 3,
+          "page_checkpoint": 600,
+          "rss_kib": 753504,
+          "dyn_used": 19740412,
+          "lua_gc_kib": 233986.61523438,
+          "obj_ptr": 155149,
+          "pdf_mem_size": 74501
+        },
+        {
+          "elapsed_seconds": 283.88,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 753840,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 284.91,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 754272,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 285.94,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 754768,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 286.97,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 755232,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 288.01,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 755696,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 289.04,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 756144,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 290.07,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 767904,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 291.11,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 781072,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 292.14,
+          "pass": 3,
+          "page_checkpoint": 700,
+          "rss_kib": 781376,
+          "dyn_used": 22438080,
+          "lua_gc_kib": 282151.12207031,
+          "obj_ptr": 179642,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 293.18,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 783632,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 294.2,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 785248,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 295.23,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 826224,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 296.26,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 828464,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 297.3,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 829920,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 298.33,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 832176,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 299.37,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 854416,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 300.4,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 856144,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 301.43,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 857936,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 302.47,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 858608,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 303.5,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 858896,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 304.54,
+          "pass": 3,
+          "page_checkpoint": 800,
+          "rss_kib": 859184,
+          "dyn_used": 24681168,
+          "lua_gc_kib": 211959.7421875,
+          "obj_ptr": 196814,
+          "pdf_mem_size": 93126
+        },
+        {
+          "elapsed_seconds": 305.57,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 859408,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 306.61,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 859664,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 307.64,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 873920,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 308.67,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 883216,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 309.71,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 883408,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 310.74,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 883632,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 311.76,
+          "pass": 3,
+          "page_checkpoint": 900,
+          "rss_kib": 883904,
+          "dyn_used": 26448476,
+          "lua_gc_kib": 244875.63964844,
+          "obj_ptr": 209312,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 312.8,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 884176,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 313.83,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 884480,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 314.87,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 884768,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 315.9,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 885184,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 316.93,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 900320,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 317.96,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 909232,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 318.99,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 909328,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 320.03,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 909456,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 321.06,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 951728,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 322.09,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 951856,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 323.13,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 951984,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 324.16,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 952096,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 325.2,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 960416,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 326.23,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 960544,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 327.27,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 962080,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 328.3,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 908048,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 329.33,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 910000,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 330.37,
+          "pass": 3,
+          "page_checkpoint": 1000,
+          "rss_kib": 911824,
+          "dyn_used": 28230904,
+          "lua_gc_kib": 268727.75585938,
+          "obj_ptr": 221857,
+          "pdf_mem_size": 116407
+        },
+        {
+          "elapsed_seconds": 331.4,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 934336,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 332.44,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 961024,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 333.46,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 974240,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 334.5,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 986864,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 335.53,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1002768,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 336.56,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1015104,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 337.6,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1028608,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 338.62,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1043424,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 339.66,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1052384,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 340.68,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1065984,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 341.72,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1079088,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 342.75,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1090400,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 343.78,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1103568,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 344.81,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1114144,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 345.84,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1121504,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 346.87,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1135648,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 347.91,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1152512,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 348.94,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1166800,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 349.98,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1173376,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 351.01,
+          "pass": 3,
+          "page_checkpoint": 1095,
+          "rss_kib": 1179536,
+          "dyn_used": 31759992,
+          "lua_gc_kib": 396922.02246094,
+          "obj_ptr": 252622,
+          "pdf_mem_size": 145508
+        },
+        {
+          "elapsed_seconds": 351.98,
+          "pass": 3,
+          "page_checkpoint": null,
+          "rss_kib": null,
+          "dyn_used": null,
+          "lua_gc_kib": null,
+          "obj_ptr": null,
+          "pdf_mem_size": null
+        }
+      ]
+    },
+    "memory_checkpoints_by_pass": {
+      "compile-pass-1.log": [
+        {
+          "page": 100,
+          "var_used": 29947,
+          "dyn_used": 1353051,
+          "obj_ptr": 335,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 66947.518554688
+        },
+        {
+          "page": 200,
+          "var_used": 35244,
+          "dyn_used": 1779250,
+          "obj_ptr": 647,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 73110.4765625
+        },
+        {
+          "page": 300,
+          "var_used": 33709,
+          "dyn_used": 2058366,
+          "obj_ptr": 961,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 81638.4609375
+        },
+        {
+          "page": 400,
+          "var_used": 52668,
+          "dyn_used": 2253070,
+          "obj_ptr": 1323,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 60893.500976562
+        },
+        {
+          "page": 500,
+          "var_used": 59642,
+          "dyn_used": 2450377,
+          "obj_ptr": 1686,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 94018.657226562
+        },
+        {
+          "page": 600,
+          "var_used": 49403,
+          "dyn_used": 2612420,
+          "obj_ptr": 2066,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 75317.797851562
+        },
+        {
+          "page": 700,
+          "var_used": 73767,
+          "dyn_used": 2849501,
+          "obj_ptr": 2408,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 61086.3203125
+        },
+        {
+          "page": 800,
+          "var_used": 67453,
+          "dyn_used": 3017373,
+          "obj_ptr": 2721,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 72194.0546875
+        },
+        {
+          "page": 900,
+          "var_used": 81274,
+          "dyn_used": 3152403,
+          "obj_ptr": 3033,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 46922.416992188
+        },
+        {
+          "page": 1000,
+          "var_used": 81997,
+          "dyn_used": 3287886,
+          "obj_ptr": 3345,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 95328.66796875
+        },
+        {
+          "final_page": 1095,
+          "var_used": 45527,
+          "dyn_used": 3640171,
+          "obj_ptr": 3642,
+          "pdf_mem_ptr": 1,
+          "pdf_mem_size": 10000,
+          "dest_names_size": 1000,
+          "lua_gc_kib": 74839.627929688
+        }
+      ],
+      "compile-pass-2.log": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5428581,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 59235.357421875
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 10084925,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 145339.9921875
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 13577317,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 185692.59179688
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 15746554,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 159878.05761719
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17946419,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 292320.46582031
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 19711682,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 276058.56347656
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 22409336,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 278035.14355469
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 24652421,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 207446.37890625
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 26419731,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 240328.25292969
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28202160,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 263828.44042969
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31731238,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 391933.21289062
+        }
+      ],
+      "compile-pass-3.log": [
+        {
+          "page": 100,
+          "var_used": 44725,
+          "dyn_used": 5457282,
+          "obj_ptr": 34457,
+          "pdf_mem_ptr": 11441,
+          "pdf_mem_size": 12500,
+          "dest_names_size": 6186,
+          "lua_gc_kib": 61574.095703125
+        },
+        {
+          "page": 200,
+          "var_used": 51195,
+          "dyn_used": 10113650,
+          "obj_ptr": 70715,
+          "pdf_mem_ptr": 34176,
+          "pdf_mem_size": 38145,
+          "dest_names_size": 10688,
+          "lua_gc_kib": 147515.89550781
+        },
+        {
+          "page": 300,
+          "var_used": 45054,
+          "dyn_used": 13606032,
+          "obj_ptr": 99452,
+          "pdf_mem_ptr": 46336,
+          "pdf_mem_size": 47681,
+          "dest_names_size": 15390,
+          "lua_gc_kib": 188167.53515625
+        },
+        {
+          "page": 400,
+          "var_used": 71558,
+          "dyn_used": 15775283,
+          "obj_ptr": 119122,
+          "pdf_mem_ptr": 54336,
+          "pdf_mem_size": 59601,
+          "dest_names_size": 22161,
+          "lua_gc_kib": 163008.22265625
+        },
+        {
+          "page": 500,
+          "var_used": 79469,
+          "dyn_used": 17975147,
+          "obj_ptr": 139088,
+          "pdf_mem_ptr": 62456,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 295748.57128906
+        },
+        {
+          "page": 600,
+          "var_used": 61912,
+          "dyn_used": 19740412,
+          "obj_ptr": 155149,
+          "pdf_mem_ptr": 68996,
+          "pdf_mem_size": 74501,
+          "dest_names_size": 26593,
+          "lua_gc_kib": 233986.61523438
+        },
+        {
+          "page": 700,
+          "var_used": 95966,
+          "dyn_used": 22438080,
+          "obj_ptr": 179642,
+          "pdf_mem_ptr": 78956,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 282151.12207031
+        },
+        {
+          "page": 800,
+          "var_used": 83623,
+          "dyn_used": 24681168,
+          "obj_ptr": 196814,
+          "pdf_mem_ptr": 91361,
+          "pdf_mem_size": 93126,
+          "dest_names_size": 31911,
+          "lua_gc_kib": 211959.7421875
+        },
+        {
+          "page": 900,
+          "var_used": 102861,
+          "dyn_used": 26448476,
+          "obj_ptr": 209312,
+          "pdf_mem_ptr": 99656,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 244875.63964844
+        },
+        {
+          "page": 1000,
+          "var_used": 103698,
+          "dyn_used": 28230904,
+          "obj_ptr": 221857,
+          "pdf_mem_ptr": 107981,
+          "pdf_mem_size": 116407,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 268727.75585938
+        },
+        {
+          "final_page": 1095,
+          "var_used": 53392,
+          "dyn_used": 31759992,
+          "obj_ptr": 252622,
+          "pdf_mem_ptr": 122601,
+          "pdf_mem_size": 145508,
+          "dest_names_size": 38293,
+          "lua_gc_kib": 396922.02246094
+        }
+      ]
+    },
+    "semantic_audit": {
+      "pages": 1096,
+      "pdf_version": "2.0",
+      "tagged": true,
+      "link_annotations": 24126,
+      "unique_uri_targets": 3125,
+      "parenttree_objr_owner_matches": 24126,
+      "parenttree_mismatches": 0,
+      "figures": 400,
+      "figures_with_nonempty_alt": 400,
+      "nfc_text_chars": 2244123,
+      "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+      "link_signature_count": 24126,
+      "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374",
+      "actions": {
+        "GoTo": 20878,
+        "URI": 3248
+      }
+    },
+    "semantic_audit_matches_previous_full_build": true,
+    "semantic_audit_passed": true
+  },
+  "interpretation": [
+    "The three-pass instrumented production build completed and its semantic audit exactly matched the prior full-build record.",
+    "The tagged second and third passes ended at 391933 KiB and 396922 KiB for Lua collectgarbage count (about 382.75 MiB and 387.6 MiB), while peak process RSS was 1151.89 MiB. These are different measures; their ratio is only indicative.",
+    "RSS and Lua heap both grew substantially across the tagged passes. The profile does not isolate media, PDF object, or allocator contributions.",
+    "The 351.98-second duration includes page-level instrumentation and is not a paired timing result."
+  ]
+}
