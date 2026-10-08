@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-08",
+  "source_revision": "fb01e7a132ffd3d2894882d112d1e549969bc367",
+  "source_sha256": "8347e6b716418220534a2c3ee1938b3c551fec9d7b252da5ab70e314f5f23e65",
+  "seed_aux_sha256": "bd787feeb37b8e474d6acab93154550373fea65406d715871350dd617e4ce0ef",
+  "seed_toc_sha256": "6ff28419e1a8870377243ef3d75314aacbc13b37351f711069baa02e96041da5",
+  "variant": "Wrap tagpdf private finish function, then clear ltx.__tag mc/struct/tables/page mirrors and collect Lua garbage.",
+  "production_code_changed": false,
+  "method": "One direct tagged LuaLaTeX pass; same generated source template and auxiliary seed as the memory factorial; RSS sampled each second; full PDF audit afterward.",
+  "run": {
+    "elapsed_seconds": 167.993,
+    "peak_rss_mib": 1092.83,
+    "rss_samples": 163,
+    "pdf_bytes": 12556079,
+    "cleanup_counts": {
+      "mc_keys": 112893,
+      "struct_keys": 69941,
+      "table_keys": 244308,
+      "page_keys": 1096,
+      "lua_gc_before_kib": 405628.9453125,
+      "lua_gc_after_kib": 45197.702148438
+    },
+    "lua_gc_reclaimed_kib": 360431.243,
+    "audit": {
+      "pages": 1096,
+      "pdf_version": "%PDF-2.0",
+      "tagged": true,
+      "link_annotations": 24126,
+      "action_counts": {
+        "/GoTo": 20878,
+        "/URI": 3248
+      },
+      "unique_uri_targets": 3125,
+      "parenttree_objr_owner_matches": 24126,
+      "parenttree_mismatches": 0,
+      "figures": 400,
+      "figures_with_nonempty_alt": 400,
+      "nfc_text_chars": 2244123,
+      "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+      "link_signature_count": 24126,
+      "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+    }
+  },
+  "baseline_without_cleanup": {
+    "profile": "validation-latex-tag-hyperref-memory-factorial-n1000-20261008.json",
+    "variant": "tagged_active",
+    "elapsed_seconds": 167.739,
+    "peak_rss_mib": 1137.33,
+    "final_dyn_used": 31759992,
+    "nfc_text_sha256": "dc651b39639aa21fffdc4da75f02cf36b0878d2bbf440deece02b48b03ce5c29",
+    "link_signatures_sha256": "ec4d5c2bb1296533f9a03cbac87f1387bae621797d517203e808aed1977ef374"
+  },
+  "delta_to_single_baseline": {
+    "elapsed_seconds": 0.254,
+    "peak_rss_mib": -44.5
+  },
+  "interpretation": {
+    "finding": "The Lua heap fell substantially after tagpdf finished writing the structure tree. The candidate PDF passed the exact audit: 1,096 pages, all 24,126 link OBJR/ParentTree owners, 400 accessible figures, and matching text and link hashes.",
+    "limitation": "This is one candidate and one baseline. The 44.50 MiB lower RSS peak is within the observed run-to-run variation; the data does not yet establish a stable peak-RSS reduction.",
+    "decision": "Do not integrate this private-API cleanup yet. It needs repeated paired runs and a memory-sampling trace around finalization; no production code changed."
+  }
+}

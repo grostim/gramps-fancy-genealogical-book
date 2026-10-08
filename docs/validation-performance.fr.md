@@ -1067,3 +1067,46 @@ Un build instrumenté sans médias fictifs (200 enregistrements et 400 figures e
 Sur ces deux exécutions uniques, retirer les médias et 218 pages ne baisse le pic RSS que de 11,12 Mio. Le tas Lua final est inférieur d’environ 52 Mio, mais le RSS reste presque inchangé ; ces métriques différentes ne permettent pas d’attribuer la mémoire à un composant précis. L’ablation ne représente pas un PDF de production et n’est pas répétée. Elle suggère que les images ne sont pas la cause principale du pic.
 
 Le profil montre aussi 266,81 Mio au pic du premier passage, où le renderer désactive le balisage et met Hyperref en mode brouillon, contre 1 151,89 Mio sur les passages balisés. Comme ces deux réglages changent ensemble, cela indique une piste d’inspection dans le chemin tagpdf/Hyperref et la construction ParentTree, sans prouver sa causalité. Le [relevé détaillé](validation-latex-no-media-rss-ablation-n1000-20261008.json) conserve les deux audits et les séries de mesures. La prochaine étape est de tracer la croissance des entrées OBJR/ParentTree et des annotations GoTo dans le renderer et les hooks tagpdf, sans désactiver le balisage.
+
+### Essai de vidage incrémental du ParentTree — N=1 000 — 8 octobre 2026
+
+Un prototype temporaire ajoute chaque lot de 128 entrées directement à la liste token de tagpdf, sans conserver une séquence intermédiaire jusqu’à la fin. Avec les mêmes fichiers auxiliaires initiaux que la référence, le passage candidat prend 168,913 s contre 163,689 s (+3,19 %). Son `dyn_used` final ne baisse que de 536 unités, tandis que le tas Lua augmente de 2 912 Kio. Le pic RSS candidat est de 1 047,30 Mio, dans la plage de 1 016,47 à 1 145,86 Mio observée sur les trois profils de référence ; ce point unique ne démontre donc pas une baisse mémoire.
+
+L’audit confirme les 1 096 pages, les 24 126 annotations et propriétaires OBJR/ParentTree, les 400 figures avec texte alternatif, ainsi que les mêmes hashes du texte et des liens. La variante est écartée : elle ralentit le passage et ne produit aucun gain mémoire mesurable. Aucun code de production n’a changé. Voir le [relevé corrigé](validation-latex-parenttree-incremental-flush-probe-n1000-20261008.json).
+
+### Profil factoriel du balisage et d’Hyperref — N=1 000 — 8 octobre 2026
+
+Quatre passages directs partent de la source générée depuis le renderer actuel et des mêmes fichiers `.aux`/`.toc` renseignés. Le seul réglage varie entre cellules : balisage actif ou inactif, Hyperref actif ou en mode brouillon. Chaque cellule n’a qu’une exécution et l’ordre n’est pas randomisé.
+
+| Balisage | Hyperref | Durée (s) | Pic RSS (Mio) | `dyn_used` final | Tas Lua final (Kio) | Annotations de lien |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Actif | Actif | 167,739 | 1 137,33 | 31 759 992 | 393 428 | 24 126 |
+| Actif | Brouillon | 105,971 | 814,92 | 19 649 627 | 164 624 | 0 |
+| Inactif | Actif | 56,629 | 284,53 | 4 440 128 | 92 599 | 24 126 |
+| Inactif | Brouillon | 19,526 | 256,17 | 2 878 419 | 68 941 | 0 |
+
+Sur cette série unique, activer le balisage ajoute 558,75 Mio lorsque Hyperref est en brouillon et 852,80 Mio lorsqu’il est actif. Hyperref actif ajoute 28,36 Mio sans balisage et 322,41 Mio avec balisage ; l’interaction calculée est de 294,05 Mio. `dyn_used` est un compteur LuaTeX en unités, pas en octets. Les quatre PDFs comptent 1 096 pages et leur texte normalisé par Poppler est identique. Seule la cellule balisée avec Hyperref actif conserve les annotations et leur association OBJR/ParentTree ; les autres cellules sont des diagnostics, pas des sorties acceptables.
+
+Le profil confirme une forte empreinte dans le chemin combiné tagpdf/Hyperref, sans identifier la fonction précise à corriger. L’ordre fixe et l’unique mesure par cellule interdisent de conclure à un gain stable. Aucun comportement de production n’a été désactivé. Voir le [relevé factoriel et les audits](validation-latex-tag-hyperref-memory-factorial-n1000-20261008.json).
+
+### Libération exploratoire des tables Lua après la finalisation tagpdf — N=1 000 — 8 octobre 2026
+
+Un wrapper temporaire autour du finaliseur privé tagpdf libère ses tables Lua `mc`, `struct`, `tables` et `page` après l’écriture du ParentTree, de l’IDTree et des éléments de structure. Le relevé observe 112 893 clés `mc`, 69 941 clés `struct`, 244 308 clés `tables` et 1 096 clés de page. Après une collecte complète, le tas Lua passe de 405 629 à 45 198 Kio (−360 431 Kio).
+
+Le PDF garde les 1 096 pages, les 24 126 associations OBJR/ParentTree, les 400 figures accessibles et les mêmes hashes de texte et de liens. Le passage prend 167,993 s et atteint 1 092,83 Mio de RSS, soit 44,50 Mio de moins que le témoin factoriel unique. Cet écart reste dans la dispersion déjà observée du RSS et ne prouve pas un gain stable. Le prototype dépend d’une API privée et n’est pas intégré. Voir le [relevé de libération et l’audit](validation-latex-tagpdf-postfinish-release-probe-n1000-20261008.json).
+
+### Répétitions appariées du nettoyage après finalisation — N=1 000 — 8 octobre 2026
+
+Trois paires de compilations directes reprennent la même source générée et les mêmes fichiers `.aux`/`.toc`. La référence et la variante candidate utilisent le même wrapper autour du finaliseur tagpdf privé; seule la candidate libère ensuite les tables Lua `mc`, `struct`, `tables` et `page`, puis lance une collecte complète. L’ordre est alterné entre les paires et le RSS du processus est échantillonné toutes les 0,5 seconde.
+
+| Paire | Ordre | Durée référence (s) | Durée candidate (s) | Pic RSS référence (Mio) | Pic RSS candidate (Mio) | Candidate − référence (Mio) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | Référence puis candidate | 169,416 | 169,006 | 1 112,52 | 1 066,69 | −45,83 |
+| 2 | Candidate puis référence | 168,992 | 168,934 | 1 078,38 | 1 085,47 | +7,09 |
+| 3 | Référence puis candidate | 169,206 | 169,182 | 1 098,81 | 1 004,28 | −94,53 |
+
+Les six PDFs ont le même audit : 1 096 pages, 24 126 annotations de lien associées à leur propriétaire OBJR dans le ParentTree, 400 figures avec texte alternatif, et les mêmes hashes du texte et des liens. Chaque collecte libère entre 358 344 et 370 193 Kio du tas Lua (environ 349,95 à 361,52 Mio). Les médianes RSS sont de 1 098,81 Mio pour la référence et 1 066,69 Mio pour la candidate, mais les trois écarts appariés varient de −94,53 à +7,09 Mio.
+
+Les maxima RSS des trois candidates sont enregistrés avant le finaliseur. La compilation se termine trop vite après la collecte pour que l’échantillonneur capture un RSS candidat post-nettoyage; ces relevés ne démontrent donc pas de baisse stable du pic, et un nettoyage après le pic ne peut pas réduire ce maximum. La mesure confirme une baisse du tas Lua, pas une baisse RSS exploitable. Le prototype dépend d’une API privée et reste hors production. Le détail des séries RSS, états Lua, marqueurs du finaliseur et audits se trouve dans le [relevé apparié](validation-latex-tagpdf-postfinish-release-paired-n1000-20261008.json).
+
+**Suite L8.3 :** profiler la croissance des allocations avant la finalisation tagpdf, en particulier dans le chemin des annotations Hyperref et des entrées OBJR/ParentTree. Conserver les liens, le balisage et un audit PDF identique à chaque essai.
