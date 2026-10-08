@@ -1186,3 +1186,15 @@ Commande reproductible :
 Sur ces deux profils synthétiques, la baisse des sources PNG accompagne une baisse proche des tailles du PDF et de l’espace temporaire. Les durées et les RSS ne permettent pas de conclure à un effet du profil : les runs n’ont pas été alternés et les valeurs varient, notamment le RSS lisse de 254 à 327 Mio. Cela confirme que le bruit aléatoire du premier essai gonflait artificiellement la taille des sorties, sans prédire la taille de vraies photographies. Le résultat ne justifie ni encodage avec perte ni redimensionnement. Les données brutes sont dans [le relevé JSON](validation-latex-benchmark-smooth-n100-pdf-20261008.json) ; l’espace temporaire est échantillonné toutes les 100 ms et les PDFs n’ont pas reçu d’audit sémantique indépendant.
 
 **Suite L8.3 :** ne pas retenir de plafond temporaire général tant que des cas réalistes et les environnements cibles ne sont pas mesurés. Garder les structures accessibles ; examiner ensuite la taille des dérivés et du PDF à partir de médias réalistes avant toute modification du renderer.
+
+### Comparaison exploratoire de tagpdf — N=100 — 8 octobre 2026
+
+Trois paires de builds PDF complets ont comparé tagpdf 0.99y, installé, à tagpdf 1.0h extrait d’un instantané d’archive de miroir CTAN. L’ordre était alterné ; seuls les fichiers du paquet différaient. Aucun fichier TeX système n’a été remplacé. La fiche [CTAN](https://ctan.org/pkg/tagpdf?lang=en) référence maintenant 1.0h, daté du 8 octobre 2026, comme l’archive testée.
+
+| Mesure | tagpdf 0.99y | Instantané tagpdf 1.0h |
+| --- | ---: | ---: |
+| Durée PDF médiane (s) | 39,240 | 38,259 |
+| Pic RSS médian (Mio) | 254,05 | 253,16 |
+| Taille PDF médiane (octets) | 1 312 920 | 1 312 877 |
+
+Les trois écarts RSS appariés (1.0h moins 0.99y) sont −1,94, −52,73 et +9,16 Mio ; ils ne montrent pas de baisse stable. Le gain médian de temps est de 0,981 s (2,5 %) sur ce seul cas N=100. Les six PDFs gardent 117 pages et 12 447 éléments de structure, dont 2 436 rôles `/Link` et 40 figures avec texte alternatif. Chaque fichier conserve 2 449 annotations de lien, aucune divergence OBJR/ParentTree et le même hash de texte extrait. Ces résultats ne qualifient pas N=1 000 et ne suffisent pas, à eux seuls, à mettre à jour la dépendance. Le [relevé apparié et ses audits](validation-latex-tagpdf-version-paired-n100-20261008.json) contient les mesures, l’empreinte SHA-256 de l’archive et la provenance.
