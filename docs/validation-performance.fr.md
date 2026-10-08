@@ -1238,3 +1238,23 @@ Le banc précédent a été relancé trois fois avec CPython 3.13.7 sur macOS 27
 L’audit du premier PDF retrouve 133 pages A4, PDF 2.0 balisé en `en-US`, 12 447 éléments de structure, 40 figures avec texte alternatif et attribution, 2 453 annotations de lien correctement associées dans le ParentTree, et zéro écart OBJR/ParentTree. Le SHA-256 du PDF est `c729bd719c0880536f3bd0a3f6de6c1526127ac61630abcad4b2829345d67438` ; l’empreinte du texte extrait est la même que sous Python 3.14.0.
 
 En comparaison descriptive non appariée avec les trois runs Python 3.14.0 précédents, le temps médian est supérieur de 0,546 s (1,46 %), le RSS de 1,65 Mo (0,49 %) et le tas Python de 1,08 Mo (4,48 %) ; la taille du PDF varie de six octets et le ZIP reste identique. L’ordre des campagnes n’était pas alterné : ces écarts ne démontrent pas un effet causal de la version de Python. Le [relevé JSON](validation-latex-open-portraits-py313-n100-20261008.json) conserve les trois mesures, l’audit et les limites de cette comparaison.
+
+### Plafond diagnostique des dérivés photo — N=100 — 9 octobre 2026
+
+L’option `--max-derived-side-px` du [banc des portraits ouverts](../scripts/benchmark_book_open_media.py) réduit, après recadrage, le côté le plus long des dérivés PNG avec Pillow LANCZOS. Les JPEG source restent intacts ; les pixels réduits sont ensuite encodés sans perte en PNG. Le PDF et le ZIP HTML utilisent tous deux ces dérivés. Aucun réglage du renderer de production n’a été changé.
+
+Commande d’exemple pour reproduire la variante 900 px depuis la racine du dépôt (Pillow, `psutil` et LuaLaTeX disponibles) :
+
+    python scripts/benchmark_book_open_media.py --repetitions 3 --max-derived-side-px 900 --pdf-output-dir /tmp/gfb-openmedia-900-pdfs --output /tmp/gfb-openmedia-900.json
+
+| Variante | Runs | PNG dérivés uniques | Temps PDF médian | RSS LuaTeX médian | Résolution image effective | Temporaire médian | ZIP HTML médian | PDF médian |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Pleine résolution, sans plafond | 3 | — | 38,002 s | 338 886 656 octets (323,2 Mio) | 206–364 ppp | 193 110 244 octets (184,2 Mio) | 47 716 648 octets | 48 938 425 octets |
+| Côté maximal de 1 000 px | 3 | 16 103 191 octets | 36,545 s | 336 216 064 octets (320,7 Mio) | 126–247 ppp | 66 021 911 octets (63,0 Mio) | 16 019 199 octets | 17 145 252 octets |
+| Côté maximal de 900 px | 3 | 13 148 813 octets | 36,363 s | 337 182 720 octets (321,5 Mio) | 113–223 ppp | 54 224 088 octets (51,7 Mio) | 13 085 392 octets | 14 190 950 octets |
+
+Le seuil provisoire de **16 Mio (16 777 216 octets)** est encore dépassé de 368 036 octets avec le plafond de 1 000 px ; 900 px le respecte avec une marge de 2 586 266 octets. Les plages du PDF sont 17 145 252–17 145 262 octets à 1 000 px et 14 190 950 octets à 900 px. La durée et le RSS ne baissent pas de façon mesurable avec ces deux variantes ; les pics temporaires, eux, diminuent parce que les images préparées et les archives sont plus petites.
+
+Les trois PDF de chaque variante gardent 133 pages A4, 12 447 éléments de structure, 40 figures avec texte alternatif et crédit CC BY 4.0, 2 453 liens et 2 453 OBJR correspondants dans le ParentTree. Aucun écart OBJR/ParentTree n’est relevé. Le texte extrait normalisé est identique au document pleine résolution après retrait des en-têtes courants dont la position change au saut de page. Les pages 71, 117 et 118 ont été examinées à l’écran sans coupure ni chevauchement ; cette revue échantillonnée ne qualifie pas l’impression.
+
+La résolution effective de ces 40 placements, calculée par `pdfimages`, tombe de 206–364 ppp à pleine résolution à 113–223 ppp avec le plafond de 900 px. Ce dernier respecte le budget PDF sur cette fixture, au prix d’un choix de qualité qui touche aussi le ZIP HTML. Aucune réduction n’est activée en production ; le budget reste à arbitrer avec les besoins d’impression et des médias Gramps représentatifs. Les relevés [1 000 px](validation-latex-open-portraits-maxside-1000-n100-20261009.json) et [900 px](validation-latex-open-portraits-maxside-900-n100-20261009.json) contiennent les runs, les hashes et l’audit PDF.

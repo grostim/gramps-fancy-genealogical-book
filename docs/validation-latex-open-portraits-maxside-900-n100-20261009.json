@@ -1,0 +1,326 @@
+{
+  "date": "2026-10-08",
+  "date_timezone": "UTC",
+  "measurement_date_local": "2026-10-09",
+  "measurement_timezone": "Europe/Paris",
+  "environment": {
+    "python": "3.13.7",
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "lualatex": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)"
+  },
+  "fixture": {
+    "shape": "branching",
+    "descendant_couples": 100,
+    "family_data": "fully synthetic; no private family data used"
+  },
+  "source": {
+    "publisher": "Wellcome Collection Catalogue API and IIIF Image API",
+    "query": "portrait photograph, locations.license=cc-by",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "manifest": "docs/fixtures/wellcome-open-portraits-cc-by.json",
+    "manifest_sha256": "ac8f4d25c457549bbd1d89f2cc351092d8ae3d9e18a53a891c684ff592c02a97",
+    "image_count": 20,
+    "total_bytes": 13741822,
+    "maximum_width_px": 1601,
+    "acquisition_seconds": 0.008057,
+    "image_files_committed": false,
+    "attribution": "Each PDF caption includes the catalogue title, credit, and CC BY 4.0."
+  },
+  "method": {
+    "benchmark": "Production snapshot-to-book pipeline; N=100; three independent fixture builds by default.",
+    "pdf_compilation": "Extended convergent LuaLaTeX compilation; no diagnostic source changes.",
+    "placeholder_media": "Synthetic image payloads are stubbed out; snapshot media records are replaced before model building with checksum-verified JPEGs.",
+    "image_transform": "Images were requested from Wellcome IIIF at 1600 px maximum width; the largest returned JPEG is 1601 px wide. The diagnostic option then downsamples the cropped PNG derivative to a 900 px maximum side.",
+    "compiler_rss_sampling": "100 ms; shorter peaks may be missed.",
+    "temporary_workspace_sampling": "100 ms; shorter peaks may be missed.",
+    "python_heap": "tracemalloc; excludes native allocations and child processes.",
+    "download_time_included_in_benchmarks": false
+  },
+  "cases": [
+    {
+      "shape": "branching",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "notes": 27,
+      "citations": 303,
+      "sources": 13,
+      "media": 20,
+      "portrait_size": "variable; maximum width 1601 px",
+      "portrait_profile": "wellcome-cc-by-4.0-archival-jpeg-derived-max-side-900px",
+      "media_source_bytes": 13741822,
+      "family_notices": 101,
+      "family_sections": 101,
+      "profiles": 202,
+      "media_artifacts": 20,
+      "fixture_seconds": 0.03833,
+      "model_seconds": 0.154508,
+      "media_prepare_seconds": 3.8168,
+      "json_seconds": 0.355543,
+      "html_seconds": 0.051758,
+      "latex_seconds": 0.126659,
+      "html_zip_seconds": 0.294482,
+      "json_bytes": 1643233,
+      "html_bytes": 596373,
+      "latex_bytes": 423250,
+      "html_zip_bytes": 13085392,
+      "fixture_heap_bytes": 14665636,
+      "fixture_peak_heap_bytes": 14671097,
+      "peak_additional_heap_bytes": 11005585,
+      "peak_total_heap_bytes": 25671221,
+      "temporary_workspace_peak_bytes": 54224085,
+      "pdf": {
+        "status": "compiled",
+        "seconds": 36.363446,
+        "bytes": 14190950,
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 333119488,
+        "rss_sample_count": 318,
+        "compiler_rss_sample_interval_ms": 100
+      },
+      "source_manifest_sha256": "ac8f4d25c457549bbd1d89f2cc351092d8ae3d9e18a53a891c684ff592c02a97",
+      "repeat": 1
+    },
+    {
+      "shape": "branching",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "notes": 27,
+      "citations": 303,
+      "sources": 13,
+      "media": 20,
+      "portrait_size": "variable; maximum width 1601 px",
+      "portrait_profile": "wellcome-cc-by-4.0-archival-jpeg-derived-max-side-900px",
+      "media_source_bytes": 13741822,
+      "family_notices": 101,
+      "family_sections": 101,
+      "profiles": 202,
+      "media_artifacts": 20,
+      "fixture_seconds": 0.038613,
+      "model_seconds": 0.154359,
+      "media_prepare_seconds": 3.802889,
+      "json_seconds": 0.354779,
+      "html_seconds": 0.042804,
+      "latex_seconds": 0.124933,
+      "html_zip_seconds": 0.293498,
+      "json_bytes": 1643233,
+      "html_bytes": 596373,
+      "latex_bytes": 423250,
+      "html_zip_bytes": 13085392,
+      "fixture_heap_bytes": 14634484,
+      "fixture_peak_heap_bytes": 14639961,
+      "peak_additional_heap_bytes": 10447959,
+      "peak_total_heap_bytes": 25082443,
+      "temporary_workspace_peak_bytes": 54225018,
+      "pdf": {
+        "status": "compiled",
+        "seconds": 36.398975,
+        "bytes": 14190950,
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 342753280,
+        "rss_sample_count": 320,
+        "compiler_rss_sample_interval_ms": 100
+      },
+      "source_manifest_sha256": "ac8f4d25c457549bbd1d89f2cc351092d8ae3d9e18a53a891c684ff592c02a97",
+      "repeat": 2
+    },
+    {
+      "shape": "branching",
+      "descendant_couples": 100,
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "notes": 27,
+      "citations": 303,
+      "sources": 13,
+      "media": 20,
+      "portrait_size": "variable; maximum width 1601 px",
+      "portrait_profile": "wellcome-cc-by-4.0-archival-jpeg-derived-max-side-900px",
+      "media_source_bytes": 13741822,
+      "family_notices": 101,
+      "family_sections": 101,
+      "profiles": 202,
+      "media_artifacts": 20,
+      "fixture_seconds": 0.038638,
+      "model_seconds": 0.153209,
+      "media_prepare_seconds": 3.819338,
+      "json_seconds": 0.355509,
+      "html_seconds": 0.042502,
+      "latex_seconds": 0.124476,
+      "html_zip_seconds": 0.297684,
+      "json_bytes": 1643233,
+      "html_bytes": 596373,
+      "latex_bytes": 423250,
+      "html_zip_bytes": 13085392,
+      "fixture_heap_bytes": 14633852,
+      "fixture_peak_heap_bytes": 14639329,
+      "peak_additional_heap_bytes": 10446243,
+      "peak_total_heap_bytes": 25080095,
+      "temporary_workspace_peak_bytes": 54224088,
+      "pdf": {
+        "status": "compiled",
+        "seconds": 36.345955,
+        "bytes": 14190950,
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 337182720,
+        "rss_sample_count": 318,
+        "compiler_rss_sample_interval_ms": 100
+      },
+      "source_manifest_sha256": "ac8f4d25c457549bbd1d89f2cc351092d8ae3d9e18a53a891c684ff592c02a97",
+      "repeat": 3
+    }
+  ],
+  "medians": {
+    "fixture_seconds": 0.038613,
+    "model_seconds": 0.154359,
+    "media_prepare_seconds": 3.8168,
+    "json_seconds": 0.355509,
+    "html_seconds": 0.042804,
+    "latex_seconds": 0.124933,
+    "html_zip_seconds": 0.294482,
+    "media_source_bytes": 13741822.0,
+    "fixture_heap_bytes": 14634484.0,
+    "fixture_peak_heap_bytes": 14639961.0,
+    "peak_additional_heap_bytes": 10447959.0,
+    "peak_total_heap_bytes": 25082443.0,
+    "json_bytes": 1643233.0,
+    "html_bytes": 596373.0,
+    "latex_bytes": 423250.0,
+    "html_zip_bytes": 13085392.0,
+    "temporary_workspace_peak_bytes": 54224088.0,
+    "pdf_seconds": 36.363446,
+    "pdf_bytes": 14190950,
+    "compiler_peak_rss_bytes": 337182720
+  },
+  "derivative_variant": {
+    "policy": "Diagnostic only: resize the prepared, cropped image derivative with Pillow LANCZOS and store it as lossless PNG. Original JPEG sources are unchanged.",
+    "maximum_side_px": 900,
+    "unique_derivative_png_bytes": 13148813
+  },
+  "comparison_to_full_resolution": {
+    "baseline_report": "validation-latex-open-portraits-py313-n100-20261008.json",
+    "paired": false,
+    "median_deltas": {
+      "pdf_bytes": {
+        "full_resolution": 48938425,
+        "derived_max_side": 14190950,
+        "difference": -34747475
+      },
+      "pdf_seconds": {
+        "full_resolution": 38.001559,
+        "derived_max_side": 36.363446,
+        "difference": -1.638112999999997
+      },
+      "compiler_peak_rss_bytes": {
+        "full_resolution": 338886656,
+        "derived_max_side": 337182720,
+        "difference": -1703936
+      },
+      "html_zip_bytes": {
+        "full_resolution": 47716648.0,
+        "derived_max_side": 13085392.0,
+        "difference": -34631256.0
+      },
+      "temporary_workspace_peak_bytes": {
+        "full_resolution": 193110244.0,
+        "derived_max_side": 54224088.0,
+        "difference": -138886156.0
+      },
+      "python_peak_heap_bytes": {
+        "full_resolution": 25077798.0,
+        "derived_max_side": 25082443.0,
+        "difference": 4645.0
+      }
+    },
+    "pdf_size_limit_16_mib": {
+      "limit_bytes": 16777216,
+      "pdf_bytes": 14190950,
+      "within_limit": true,
+      "difference_bytes": -2586266
+    }
+  },
+  "performance_summary": {
+    "repetitions": 3,
+    "pdf_bytes": {
+      "median": 14190950,
+      "range": [
+        14190950,
+        14190950
+      ]
+    },
+    "pdf_seconds": {
+      "median": 36.363446,
+      "range": [
+        36.345955,
+        36.398975
+      ]
+    },
+    "compiler_peak_rss_bytes": {
+      "median": 337182720,
+      "range": [
+        333119488,
+        342753280
+      ]
+    },
+    "html_zip_bytes": 13085392.0,
+    "temporary_workspace_peak_bytes": {
+      "median": 54224088.0,
+      "range": [
+        54224085.0,
+        54225018.0
+      ]
+    },
+    "python_peak_heap_bytes": {
+      "median": 25082443.0,
+      "range": [
+        25080095.0,
+        25671221.0
+      ]
+    },
+    "unique_derivative_png_bytes": 13148813
+  },
+  "pdf_audit": {
+    "sha256": "367fc957b4dab7080e2e63194a5a4c3c4a37c1699d3090e0e1890bc40b945bd8",
+    "bytes": 14190950,
+    "pages": 133,
+    "pdf_version": "%PDF-2.0",
+    "language": "en-US",
+    "tagged": true,
+    "structure_elements": 12447,
+    "figures": 40,
+    "figures_without_alt": 0,
+    "figures_with_cc_by_credit": 40,
+    "links": 2453,
+    "objr_nodes": 2453,
+    "link_parenttree_objr_matches": 2453,
+    "links_without_parenttree_key": 0,
+    "text_sha256": "dafe08eb2e4c61a7200ebbc6ce30b9f01f7dc8a5e44ca64bd5ec22fb0aebca19",
+    "body_sha256_excluding_appendix_running_headers": "5efc8703b7e792bb25b297c7a35899669849db864f8f05469e2ab3b0eabe55ab",
+    "body_text_matches_full_resolution_after_running_header_normalization": true,
+    "image_placement_resolution_ppi": {
+      "placements": 40,
+      "x_ppi_range": [
+        113,
+        223
+      ],
+      "y_ppi_range": [
+        113,
+        223
+      ]
+    }
+  },
+  "visual_review": {
+    "pages_reviewed": [
+      71,
+      117,
+      118
+    ],
+    "result": "No clipping or overlap observed in these sampled pages; the archival portrait remains recognizable at the displayed scale.",
+    "scope_limit": "Sampled page review only; this is not an exhaustive visual or print-quality assessment."
+  },
+  "decision_status": "Diagnostic benchmark only; no production downsampling policy was changed."
+}
