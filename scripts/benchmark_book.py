@@ -264,6 +264,7 @@ def synthetic_branching_snapshot(
     *,
     include_media: bool = False,
     portrait_size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE,
+    portrait_profile: str = "random",
 ) -> tuple[Snapshot, dict[str, bytes]]:
     """Create a bounded binary descendant tree with editorial records.
 
@@ -401,7 +402,7 @@ def synthetic_branching_snapshot(
                 rectangle=(5 + index % 16, 5 + index % 12, 94, 94),
                 order=0,
             )
-            photo = _synthetic_photo(index, portrait_size)
+            photo = _synthetic_photo(index, portrait_size, profile=portrait_profile)
             media[media_handle] = Media(
                 handle=media_handle,
                 gramps_id=f"M{index:07d}",
@@ -560,16 +561,31 @@ def synthetic_branching_snapshot(
 
 
 def _synthetic_photo(
-    seed: int, size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE
+    seed: int,
+    size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE,
+    *,
+    profile: str = "random",
 ) -> bytes:
     try:
         from io import BytesIO
 
-        from PIL import Image
+        from PIL import Image, ImageFilter
     except ImportError as error:
         raise RuntimeError("Portrait benchmarking requires the optional Pillow package.") from error
 
     width, height = size
+    if profile == "smooth":
+        low_size = (max(64, width // 16), max(48, height // 16))
+        low_pixels = random.Random(seed).randbytes(low_size[0] * low_size[1] * 3)
+        with Image.frombytes("RGB", low_size, low_pixels) as low_resolution:
+            with low_resolution.resize(size, Image.Resampling.BICUBIC) as upscaled:
+                with upscaled.filter(ImageFilter.GaussianBlur(1.2)) as image:
+                    with BytesIO() as stream:
+                        image.save(stream, format="PNG")
+                        return stream.getvalue()
+    if profile != "random":
+        raise ValueError(f"Unknown synthetic portrait profile: {profile}")
+
     pixels = random.Random(seed).randbytes(width * height * 3)
     with BytesIO() as stream:
         Image.frombytes("RGB", (width, height), pixels).save(stream, format="PNG")
@@ -631,6 +647,7 @@ def benchmark(
     shape: str,
     include_media: bool = False,
     portrait_size: tuple[int, int] = _DEFAULT_PORTRAIT_SIZE,
+    portrait_profile: str = "random",
     compile_pdf: bool = False,
     extended_pdf_compilation: bool = False,
 ) -> dict[str, object]:
@@ -646,6 +663,7 @@ def benchmark(
                 descendant_couples,
                 include_media=include_media,
                 portrait_size=portrait_size,
+                portrait_profile=portrait_profile,
             )
         else:
             raise ValueError(f"Unknown synthetic shape: {shape}")
@@ -755,6 +773,7 @@ def benchmark(
             "portrait_size": (
                 f"{portrait_size[0]}x{portrait_size[1]}" if include_media else None
             ),
+            "portrait_profile": portrait_profile if include_media else None,
             "media_source_bytes": sum(map(len, media_sources.values())),
             "family_notices": len(model.editorial_book.family_notices),
             "family_sections": len(model.genealogy.family_sections),
@@ -840,6 +859,15 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--portrait-profile",
+        choices=("random", "smooth"),
+        default="random",
+        help=(
+            "synthetic portrait pixel profile (default: random; smooth uses seeded "
+            "low-resolution texture and blur; requires --with-media)"
+        ),
+    )
+    parser.add_argument(
         "--compile-pdf-for",
         type=int,
         metavar="N",
@@ -868,6 +896,8 @@ def main() -> None:
         parser.error("--with-media requires --shape branching or --shape both")
     if arguments.portrait_size is not None and not arguments.with_media:
         parser.error("--portrait-size requires --with-media")
+    if arguments.portrait_profile != "random" and not arguments.with_media:
+        parser.error("--portrait-profile requires --with-media")
     if arguments.with_media:
         width, height = portrait_size
         largest_source_set = max(
@@ -898,6 +928,7 @@ def main() -> None:
                     shape=shape,
                     include_media=arguments.with_media and shape == "branching",
                     portrait_size=portrait_size,
+                    portrait_profile=arguments.portrait_profile,
                     compile_pdf=(
                         arguments.compile_pdf_for == count and shape == "branching"
                     ),
@@ -925,6 +956,9 @@ def main() -> None:
             f"{portrait_size[0]}x{portrait_size[1]}"
             if arguments.with_media
             else None
+        ),
+        "portrait_profile": (
+            arguments.portrait_profile if arguments.with_media else None
         ),
         "repetitions": arguments.repeat,
         "extended_pdf_compilation": arguments.extended_pdf_compilation,
