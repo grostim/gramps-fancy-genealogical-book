@@ -282,6 +282,7 @@ jobs:
         with:
           name: lualatex-book-fixtures
           if-no-files-found: ignore
+          include-hidden-files: true
           path: |
             .work/latex-spike/figure-geometry-*.json
             .work/latex-spike/ua2-*/**/*.xml
