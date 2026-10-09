@@ -237,6 +237,10 @@ jobs:
         run: python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-book.pdf --language en
       - name: Verify French tagged list structure and labels
         run: python scripts/verify_tagged_latex_pdf.py .work/latex-spike/rendered-french-book.pdf
+      - name: Audit link ownership and destinations in both books
+        run: |
+          python scripts/verify_pdf_link_audit.py .work/latex-spike/rendered-book.pdf --negative-controls
+          python scripts/verify_pdf_link_audit.py .work/latex-spike/rendered-french-book.pdf
       - uses: actions/upload-artifact@v4
         if: always()
         with:

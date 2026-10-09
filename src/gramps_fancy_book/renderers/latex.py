@@ -1484,8 +1484,6 @@ def _render_citation_appendix(
     seen_repository_handles: set[str] = set()
     for entry in ordered_entries:
         keep_entry_together = not entry.media_refs and len(entry.calls) <= 3
-        if keep_entry_together:
-            output.append("\\begin{samepage}\n")
         citation = model.citations.get(entry.citation_handle)
         source_handle = entry.source_handle or (
             citation.source_handle if citation is not None else None
@@ -1493,8 +1491,13 @@ def _render_citation_appendix(
         source = model.sources.get(source_handle) if source_handle else None
         citation_number = citation_numbers.get(entry.entry_id)
         number_label = f"[{citation_number}] " if citation_number is not None else ""
+        # Let the tagged list close the previous item outside the local group.
+        # Grouping the item transition itself can corrupt tagpdf's structure stack.
+        output.append("\\item ")
+        if keep_entry_together:
+            output.append("\\begin{samepage}\n")
         output.append(
-            f"\\item {_latex_anchor(entry.entry_id, emitted_targets)}"
+            f"{_latex_anchor(entry.entry_id, emitted_targets)}"
             f"\\textbf{{{number_label}{escape_latex_text(_citation_title(entry, model))}}}\n"
         )
         details = []
@@ -1663,7 +1666,7 @@ def _render_citation_appendix(
                 )
                 output.append("\\end{itemize}\n")
         if keep_entry_together:
-            output.append("\\end{samepage}\n")
+            output.append("\\par\n\\end{samepage}\n")
     output.append("\\end{itemize}\n")
     output.append("\\endgroup\n")
     return "".join(output)
