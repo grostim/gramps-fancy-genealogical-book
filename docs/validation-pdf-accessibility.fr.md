@@ -111,3 +111,36 @@ contrôles réussis rapportés. Il utilise le renderer antérieur au déplacemen
 du groupe `samepage` après `\item` ; cette preuve ne remplace pas la
 réexportation GUI du renderer actuel. Le rapport intégral est
 [conservé](validation-pdf-accessibility-native-gui-20261009.xml).
+
+## Qualification finale CI et export natif courant
+
+La PR #339 est fusionnée après le succès du
+[run 37946900354](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37946900354),
+commit `1283c51`. Les six relevés attendus sont présents dans l’artefact
+`11624441929` : FR, EN, peu documenté, clone intact et deux corruptions.
+L’archive téléchargée correspond à son empreinte GitHub. Les trois sorties
+normales et le clone intact passent la garde automatique ; les cas langue
+absente et Alt supprimé sont rejetés. Les fichiers restent non conformes
+au profil PDF/UA-2 en raison de l’identification absente.
+
+Un nouveau profil Gramps 6.0.8-1 a aussi reçu l’archive courante, avec
+Mistune et les dépendances média uniquement dans ce profil. Le checkout
+n’est pas ajouté au `PYTHONPATH`. La fixture fictive de 202 personnes,
+101 familles, 303 citations et vingt portraits publics produit un PDF
+natif CLI de 103 pages, 77 489 201 octets. L’audit des 2 034 liens ne
+trouve aucun écart ParentTree/OBJR ni destination non résolue ; les vingt
+figures ont un Alt non vide et des BBox valides. veraPDF signale uniquement
+le même défaut d’identification.
+
+Les pixels des **103 pages** sont identiques au PDF GUI corrigé conservé
+du 9 octobre, lors d’un rendu PDFium à 108 ppp sur ce Mac. Les pages
+physiques 1, 22, 70 et 97 ont également été examinées directement : pas
+de coupure visible, attribution du portrait lisible, citation [299] entière
+sur la page 97. La comparaison exhaustive porte sur les pixels à cette
+résolution ; elle ne qualifie ni la lecture d’écran ni le nouveau parcours GUI.
+
+Le temps natif observé de 41,955 s comprend l’extraction et le rapport :
+ce n’est ni une mesure du compilateur seul ni une comparaison appariée.
+Le PDF reste au-dessus du repère de 16 Mio. Aucune réduction des images
+ni déclaration de conformité n’est adoptée. Voir le
+[relevé complet](validation-native-current-portraits-20261009.json).
