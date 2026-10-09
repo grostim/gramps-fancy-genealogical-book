@@ -1,0 +1,701 @@
+{
+  "environment": {
+    "git_commit": "bf80ada2c683e0c2c392d915d29d2790147fcdc8",
+    "hardware_cpu": "Apple M3",
+    "physical_memory_bytes": 17179869184,
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "engine": "This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)",
+    "candidate_archive_sha256": "7171fa191b5bd6df3dd5d491cb8b16c440e95c456ca8642dc3d7ffc128c55317",
+    "candidate_archive_version": "1.0h",
+    "run_order": [
+      "installed",
+      "candidate",
+      "candidate",
+      "installed",
+      "installed",
+      "candidate"
+    ],
+    "limits": {
+      "per_pass_seconds": 600,
+      "per_build_seconds": 1800
+    },
+    "measurement_scope": "complete converged compilation; audit time excluded from seconds; LuaTeX RSS sampled at 100 ms; same synthetic source; no production dependency change"
+  },
+  "benchmark": {
+    "descendant_couples": 1000,
+    "pairs": 3,
+    "runs": [
+      {
+        "pair": 1,
+        "variant": "installed",
+        "seconds": 341.2945014999714,
+        "pdf_bytes": 12560198,
+        "pdf_path": "/private/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-1-installed/book.pdf",
+        "package_paths": {
+          "sty": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty",
+          "lua": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "0.99y",
+        "actual_lua_module_version": "0.99y",
+        "package_sha256": {
+          "sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663",
+          "lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9"
+        },
+        "loaded_tagpdf_files": [
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty": "7969986a450976ca2ec9b38a7418e532974b6df0b8297d137c80bf87e385624d",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def": "76cf53360b2272dd5e379fdf1e15f1287d26b6ab11d746fbcc30556446bfc730",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty": "0c21293a9baa46280c9b759530d376ec0cb58061dd2a8e2a7e19ee200a3d10e9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def": "85cc1ec63fc3a4e08e14667ed404b5de2a63734a3b2df58de0f2c5ccbe905181",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def": "91ec46eb8787d53e73f75a194f4337e9eda75fa65ebdeb757e47e494ea53b22e",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def": "7e8aeb9508a025c4d9ef13fb39a1af8cb19e8e55fae75742890931e00f5cfdb0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def": "8d10e5c37beff649555b2a86f7a95dd9f9a3d2d3dc36db242605aa1ee11d21d0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def": "5662685e5f09fa43f206503a5eb2317c5ba0a27ae59df67cc546442d6372f214",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv": "4d026fce2b9315c5aedb6552588622fa0432f623ceb812971724d710d9e50da6",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1228374016,
+        "rss_sample_count": 3045,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 1108,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 122145,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 22473,
+            "/P": 23144,
+            "/Sect": 6292,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 24003,
+            "/L": 783,
+            "/LI": 9555,
+            "/Lbl": 16095,
+            "/LBody": 9555,
+            "/H2": 3014,
+            "/H3": 3270,
+            "/Note": 3270,
+            "/BlockQuote": 267,
+            "/Figure": 400
+          },
+          "named_destinations": 37993,
+          "figures_without_alt": 0,
+          "link_annotations": 24124,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+          "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+          "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+          "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+        }
+      },
+      {
+        "pair": 1,
+        "variant": "candidate",
+        "seconds": 337.9947595000267,
+        "pdf_bytes": 12559954,
+        "pdf_path": "/private/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-1-candidate/book.pdf",
+        "package_paths": {
+          "sty": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "lua": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "1.0h",
+        "actual_lua_module_version": "1.0h",
+        "package_sha256": {
+          "sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655"
+        },
+        "loaded_tagpdf_files": [
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty": "cd621c34a183663e1f9f2e95549a135cd9b4651a585809fca6f8c73eb8f6c396",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def": "11eab39f1ecc3c9dfccec6534a63201c391beeb324bca48b514d68b578114934",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty": "6e32f6240c6e74a05fa7a10c0021aa8367c723ebb8ef5ef7c9cd3b1b3fb75d8f",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def": "d3303230d0a77b98ae29a514f11b00050a919ea5f76fc5069807fffb33a3fbf0",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def": "ab6a79d91257bd9e434401480dd7963f2c8d7951a5ab7803a6247a4ec648783e",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def": "3cd48ed2b0510564f9390299357e9423522a38bd6244a7057afa159a0aa3a607",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def": "6a08dfe9146f90154d24f6470021bf862b1bd6f01007d936721d2c1b65550e36",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv": "e0eb944610165786aae21db9db7fd2d6c594645d408b5e84359bdc5554da4fd6",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1213333504,
+        "rss_sample_count": 3020,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 1108,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 122145,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 22473,
+            "/P": 23144,
+            "/Sect": 6292,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 24003,
+            "/L": 783,
+            "/LI": 9555,
+            "/Lbl": 16095,
+            "/LBody": 9555,
+            "/H2": 3014,
+            "/H3": 3270,
+            "/Note": 3270,
+            "/BlockQuote": 267,
+            "/Figure": 400
+          },
+          "named_destinations": 37993,
+          "figures_without_alt": 0,
+          "link_annotations": 24124,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+          "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+          "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+          "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+        }
+      },
+      {
+        "pair": 2,
+        "variant": "candidate",
+        "seconds": 338.1219131669495,
+        "pdf_bytes": 12559965,
+        "pdf_path": "/private/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-2-candidate/book.pdf",
+        "package_paths": {
+          "sty": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "lua": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "1.0h",
+        "actual_lua_module_version": "1.0h",
+        "package_sha256": {
+          "sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655"
+        },
+        "loaded_tagpdf_files": [
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty": "cd621c34a183663e1f9f2e95549a135cd9b4651a585809fca6f8c73eb8f6c396",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def": "11eab39f1ecc3c9dfccec6534a63201c391beeb324bca48b514d68b578114934",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty": "6e32f6240c6e74a05fa7a10c0021aa8367c723ebb8ef5ef7c9cd3b1b3fb75d8f",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def": "d3303230d0a77b98ae29a514f11b00050a919ea5f76fc5069807fffb33a3fbf0",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def": "ab6a79d91257bd9e434401480dd7963f2c8d7951a5ab7803a6247a4ec648783e",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def": "3cd48ed2b0510564f9390299357e9423522a38bd6244a7057afa159a0aa3a607",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def": "6a08dfe9146f90154d24f6470021bf862b1bd6f01007d936721d2c1b65550e36",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv": "e0eb944610165786aae21db9db7fd2d6c594645d408b5e84359bdc5554da4fd6",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1202634752,
+        "rss_sample_count": 3037,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 1108,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 122145,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 22473,
+            "/P": 23144,
+            "/Sect": 6292,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 24003,
+            "/L": 783,
+            "/LI": 9555,
+            "/Lbl": 16095,
+            "/LBody": 9555,
+            "/H2": 3014,
+            "/H3": 3270,
+            "/Note": 3270,
+            "/BlockQuote": 267,
+            "/Figure": 400
+          },
+          "named_destinations": 37993,
+          "figures_without_alt": 0,
+          "link_annotations": 24124,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+          "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+          "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+          "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+        }
+      },
+      {
+        "pair": 2,
+        "variant": "installed",
+        "seconds": 342.1844158329768,
+        "pdf_bytes": 12560193,
+        "pdf_path": "/private/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-2-installed/book.pdf",
+        "package_paths": {
+          "sty": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty",
+          "lua": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "0.99y",
+        "actual_lua_module_version": "0.99y",
+        "package_sha256": {
+          "sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663",
+          "lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9"
+        },
+        "loaded_tagpdf_files": [
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty": "7969986a450976ca2ec9b38a7418e532974b6df0b8297d137c80bf87e385624d",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def": "76cf53360b2272dd5e379fdf1e15f1287d26b6ab11d746fbcc30556446bfc730",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty": "0c21293a9baa46280c9b759530d376ec0cb58061dd2a8e2a7e19ee200a3d10e9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def": "85cc1ec63fc3a4e08e14667ed404b5de2a63734a3b2df58de0f2c5ccbe905181",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def": "91ec46eb8787d53e73f75a194f4337e9eda75fa65ebdeb757e47e494ea53b22e",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def": "7e8aeb9508a025c4d9ef13fb39a1af8cb19e8e55fae75742890931e00f5cfdb0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def": "8d10e5c37beff649555b2a86f7a95dd9f9a3d2d3dc36db242605aa1ee11d21d0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def": "5662685e5f09fa43f206503a5eb2317c5ba0a27ae59df67cc546442d6372f214",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv": "4d026fce2b9315c5aedb6552588622fa0432f623ceb812971724d710d9e50da6",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1206681600,
+        "rss_sample_count": 3076,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 1108,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 122145,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 22473,
+            "/P": 23144,
+            "/Sect": 6292,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 24003,
+            "/L": 783,
+            "/LI": 9555,
+            "/Lbl": 16095,
+            "/LBody": 9555,
+            "/H2": 3014,
+            "/H3": 3270,
+            "/Note": 3270,
+            "/BlockQuote": 267,
+            "/Figure": 400
+          },
+          "named_destinations": 37993,
+          "figures_without_alt": 0,
+          "link_annotations": 24124,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+          "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+          "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+          "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+        }
+      },
+      {
+        "pair": 3,
+        "variant": "installed",
+        "seconds": 339.34215562499594,
+        "pdf_bytes": 12560199,
+        "pdf_path": "/private/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-3-installed/book.pdf",
+        "package_paths": {
+          "sty": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty",
+          "lua": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "0.99y",
+        "actual_lua_module_version": "0.99y",
+        "package_sha256": {
+          "sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663",
+          "lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9"
+        },
+        "loaded_tagpdf_files": [
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty": "7969986a450976ca2ec9b38a7418e532974b6df0b8297d137c80bf87e385624d",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def": "76cf53360b2272dd5e379fdf1e15f1287d26b6ab11d746fbcc30556446bfc730",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty": "0c21293a9baa46280c9b759530d376ec0cb58061dd2a8e2a7e19ee200a3d10e9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def": "85cc1ec63fc3a4e08e14667ed404b5de2a63734a3b2df58de0f2c5ccbe905181",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def": "91ec46eb8787d53e73f75a194f4337e9eda75fa65ebdeb757e47e494ea53b22e",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def": "7e8aeb9508a025c4d9ef13fb39a1af8cb19e8e55fae75742890931e00f5cfdb0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def": "8d10e5c37beff649555b2a86f7a95dd9f9a3d2d3dc36db242605aa1ee11d21d0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def": "5662685e5f09fa43f206503a5eb2317c5ba0a27ae59df67cc546442d6372f214",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv": "4d026fce2b9315c5aedb6552588622fa0432f623ceb812971724d710d9e50da6",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1206272000,
+        "rss_sample_count": 3048,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 1108,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 122145,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 22473,
+            "/P": 23144,
+            "/Sect": 6292,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 24003,
+            "/L": 783,
+            "/LI": 9555,
+            "/Lbl": 16095,
+            "/LBody": 9555,
+            "/H2": 3014,
+            "/H3": 3270,
+            "/Note": 3270,
+            "/BlockQuote": 267,
+            "/Figure": 400
+          },
+          "named_destinations": 37993,
+          "figures_without_alt": 0,
+          "link_annotations": 24124,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+          "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+          "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+          "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+        }
+      },
+      {
+        "pair": 3,
+        "variant": "candidate",
+        "seconds": 333.35358687490225,
+        "pdf_bytes": 12559954,
+        "pdf_path": "/private/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-3-candidate/book.pdf",
+        "package_paths": {
+          "sty": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "lua": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "1.0h",
+        "actual_lua_module_version": "1.0h",
+        "package_sha256": {
+          "sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655"
+        },
+        "loaded_tagpdf_files": [
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty": "cd621c34a183663e1f9f2e95549a135cd9b4651a585809fca6f8c73eb8f6c396",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def": "11eab39f1ecc3c9dfccec6534a63201c391beeb324bca48b514d68b578114934",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty": "6e32f6240c6e74a05fa7a10c0021aa8367c723ebb8ef5ef7c9cd3b1b3fb75d8f",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def": "d3303230d0a77b98ae29a514f11b00050a919ea5f76fc5069807fffb33a3fbf0",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def": "ab6a79d91257bd9e434401480dd7963f2c8d7951a5ab7803a6247a4ec648783e",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def": "3cd48ed2b0510564f9390299357e9423522a38bd6244a7057afa159a0aa3a607",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def": "6a08dfe9146f90154d24f6470021bf862b1bd6f01007d936721d2c1b65550e36",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv": "e0eb944610165786aae21db9db7fd2d6c594645d408b5e84359bdc5554da4fd6",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 1219723264,
+        "rss_sample_count": 3041,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 1108,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 122145,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 22473,
+            "/P": 23144,
+            "/Sect": 6292,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 24003,
+            "/L": 783,
+            "/LI": 9555,
+            "/Lbl": 16095,
+            "/LBody": 9555,
+            "/H2": 3014,
+            "/H3": 3270,
+            "/Note": 3270,
+            "/BlockQuote": 267,
+            "/Figure": 400
+          },
+          "named_destinations": 37993,
+          "figures_without_alt": 0,
+          "link_annotations": 24124,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+          "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+          "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+          "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+        }
+      }
+    ],
+    "python": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "benchmark_script_sha256": "35987912b2fcff41b083df3e4a6b569874960e3fe4d4e653e819ca67aa8b6894",
+    "fixture_generator_sha256": "f13d957a3c5984ca10d067838fd9b23eda2f228d37a02e03ad6fb05fac8b65bd",
+    "renderer_source_sha256": "e1e9473d84bda7867a6bd3ebbc06a8d09502438e9df666438058f40ebd5134f5",
+    "model_sha256": "a703208a55b53d767285eb653173a689a25748e89e7c3f67433cd567f0462f8c",
+    "instrumentation": "compiler recorder only; production source unchanged",
+    "scope": "complete converged builds; synthetic 96x72 portraits; not PDF/UA",
+    "median_seconds": {
+      "installed": 341.2945014999714,
+      "candidate": 337.9947595000267
+    },
+    "status": "complete; all paired audits match"
+  },
+  "analysis": {
+    "variants": {
+      "installed": {
+        "median_seconds": 341.2945014999714,
+        "seconds_range": [
+          339.34215562499594,
+          342.1844158329768
+        ],
+        "median_rss_bytes": 1206681600,
+        "rss_bytes_range": [
+          1206272000,
+          1228374016
+        ],
+        "median_pdf_bytes": 12560198
+      },
+      "candidate": {
+        "median_seconds": 337.9947595000267,
+        "seconds_range": [
+          333.35358687490225,
+          338.1219131669495
+        ],
+        "median_rss_bytes": 1213333504,
+        "rss_bytes_range": [
+          1202634752,
+          1219723264
+        ],
+        "median_pdf_bytes": 12559954
+      }
+    },
+    "paired_deltas": [
+      {
+        "pair": 1,
+        "candidate_minus_installed_seconds": -3.299741999944672,
+        "candidate_minus_installed_rss_bytes": -15040512
+      },
+      {
+        "pair": 2,
+        "candidate_minus_installed_seconds": -4.062502666027285,
+        "candidate_minus_installed_rss_bytes": -4046848
+      },
+      {
+        "pair": 3,
+        "candidate_minus_installed_seconds": -5.988568750093691,
+        "candidate_minus_installed_rss_bytes": 13451264
+      }
+    ],
+    "scope": "descriptive comparison of three alternating pairs on one host; synthetic 96x72 portraits; audits excluded from build seconds",
+    "median_delta_seconds": -3.299741999944672,
+    "median_delta_seconds_percent": -0.966831280739211,
+    "median_delta_rss_bytes": 6651904,
+    "all_builds_over_default_180_seconds": true,
+    "all_builds_over_512_mib_rss_target": true,
+    "all_pdfs_under_16_mib_size_target": true
+  },
+  "supplemental_figure_geometry": {
+    "tool_sha256": "3efc3e3e39282cfe266eb4ca3990b296577ec4ac9d07a6cb25c5108af584a845",
+    "python": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "pypdf": "6.19.0",
+    "scope": "supplemental figure attributes after timed builds; not painted-image or PDF/UA validation",
+    "runs": [
+      {
+        "pair": 1,
+        "variant": "installed",
+        "pdf_sha256": "7972c79f529ba41e60f54c5e48c850ee3218973912eb2b3a5665141cf13f20a7",
+        "audit": {
+          "pages": 1108,
+          "figures": 400,
+          "geometry_sha256": "ae9db2cb589bdf9f805684c5836d6e156e292a3f59ea356a6c4a98cda6b5efa4",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      },
+      {
+        "pair": 1,
+        "variant": "candidate",
+        "pdf_sha256": "7ff1a24e33577ee74902dddfd0d0ff7f6bc2e992c2fecc6f46dd615f5a4e53c4",
+        "audit": {
+          "pages": 1108,
+          "figures": 400,
+          "geometry_sha256": "ae9db2cb589bdf9f805684c5836d6e156e292a3f59ea356a6c4a98cda6b5efa4",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      },
+      {
+        "pair": 2,
+        "variant": "candidate",
+        "pdf_sha256": "da84cf8dd64536796b7999cf05626d1ba0084cde5c65b08fba36d6fc18bec2e4",
+        "audit": {
+          "pages": 1108,
+          "figures": 400,
+          "geometry_sha256": "ae9db2cb589bdf9f805684c5836d6e156e292a3f59ea356a6c4a98cda6b5efa4",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      },
+      {
+        "pair": 2,
+        "variant": "installed",
+        "pdf_sha256": "160c64d44d3bef89a079224cee3e354ad310f00544cc98d7a1a8495b73d761f9",
+        "audit": {
+          "pages": 1108,
+          "figures": 400,
+          "geometry_sha256": "ae9db2cb589bdf9f805684c5836d6e156e292a3f59ea356a6c4a98cda6b5efa4",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      },
+      {
+        "pair": 3,
+        "variant": "installed",
+        "pdf_sha256": "ae63a0b9de2a6c0465335d1a19d7f76614e4d8bdc82066844d8fd8ac2fe94c18",
+        "audit": {
+          "pages": 1108,
+          "figures": 400,
+          "geometry_sha256": "ae9db2cb589bdf9f805684c5836d6e156e292a3f59ea356a6c4a98cda6b5efa4",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      },
+      {
+        "pair": 3,
+        "variant": "candidate",
+        "pdf_sha256": "629121bff68f94450f5654cb4607fe680886858ebe4cbff818e6c5f79f0a6946",
+        "audit": {
+          "pages": 1108,
+          "figures": 400,
+          "geometry_sha256": "ae9db2cb589bdf9f805684c5836d6e156e292a3f59ea356a6c4a98cda6b5efa4",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      }
+    ],
+    "status": "complete; all six figure geometry audits match"
+  },
+  "ci_figure_geometry": {
+    "run_id": 37936272667,
+    "commit": "c99a3789f164f21de1b9a3321cb9aee4b7406121",
+    "artifact_id": 11618726899,
+    "artifact_sha256": "2c468d6251de5496ccbd3a69ab3e8a61878fe5d0f4eb11704ff76eac9a4628eb",
+    "records": {
+      "figure-geometry-en.json": {
+        "pdf_sha256": "38cd65a2e1f20269741951f616be27c94928f8ba0948085652a932ddf4dbabc7",
+        "audit": {
+          "pages": 16,
+          "figures": 4,
+          "geometry_sha256": "e402dd568cde9b1dbeea8412632ceac2d4d1af22d79fa65d684a81b26be32df1",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        },
+        "rejected_corruptions": [
+          "missing_bbox",
+          "zero_origin",
+          "zero_width"
+        ],
+        "validated_clones": [
+          "intact",
+          "class_attributes"
+        ]
+      },
+      "figure-geometry-fr.json": {
+        "pdf_sha256": "ca8738768a0d16a5f8f5d729e9b86ac8e12d50cf9204464d68c5913009fa119a",
+        "audit": {
+          "pages": 15,
+          "figures": 4,
+          "geometry_sha256": "a69408aaae2c43e65548b36c346e3c0f1d12e598b40c040601b593dfc10dcca8",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      }
+    }
+  },
+  "decision": "No production dependency update: small local time improvement, no stable RSS reduction, default time and RSS targets exceeded. The geometry audit covers recorded attributes, not painted pixels or PDF/UA.",
+  "remaining": "Original 103-page GUI re-export; supported Gramps environments and representative user data; performance targets."
+}
