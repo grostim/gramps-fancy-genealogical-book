@@ -153,9 +153,11 @@ jobs:
           name: GrampsFancyBook-addon-Gramps-${{ matrix.gramps_version }}
           path: gramps60/download/GrampsFancyBook.addon.tgz
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: GrampsFancyBook-installer-Gramps-${{ matrix.gramps_version }}
           path: ${{ runner.temp }}/native-installer-${{ matrix.gramps_version }}.json
+          if-no-files-found: ignore
           retention-days: 14
       - uses: actions/upload-artifact@v4
         if: always()
