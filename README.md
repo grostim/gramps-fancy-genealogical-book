@@ -4,6 +4,8 @@
 
 An experimental Gramps 6 add-on for a family genealogical book. The Gramps report creates a self-contained HTML book ZIP by default, can compile a PDF with LuaLaTeX, and retains a JSON snapshot mode for diagnostics. Targeted PDF reviews have used fictional fixtures with 15 mm margins. An earlier 0.9.0 archive, with PDF-renderer sources matching commit `b8141bc`, produced a tagged nine-page A4 reference PDF in Gramps Desktop 6.0.8-1; all nine pages were reviewed. On October 9, the current renderer also produced a tagged 103-page A4 GUI PDF and an HTML ZIP from an isolated fictional tree with twenty public portraits. The initial page-by-page review found an orphaned line in citation [299]; after correcting citation pagination, a new PDF was generated and its appendix pages were re-reviewed. PDF/UA conformance, screen-reader behavior, and broader Desktop-version coverage remain unqualified ([validation record](docs/validation-addon-lifecycle.md)).
 
+Automated PDF/UA-2 audits with veraPDF 1.30.3 report only a missing conformance identification schema on four fictional PDFs, including the 1,108-page N=1,000 book. All four are noncompliant with that profile; human accessibility qualification remains outstanding ([accessibility record](docs/validation-pdf-accessibility.md)).
+
 ## What works now
 
 - Native Gramps family selector, HTML ZIP output by default, and JSON snapshot output for diagnostics.
