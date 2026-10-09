@@ -1276,3 +1276,28 @@ La revue du banc a aussi corrigé les dossiers de sortie relatifs et interdit le
 L’audit des liens et des textes alternatifs ne couvre pas les attributs géométriques des figures. L’essai à une seule passe balisée du 7 octobre avait déjà montré des coordonnées d’origine `(0, 0)` erronées malgré des textes et liens corrects. Le nouveau script `scripts/verify_pdf_figure_geometry.py` contrôle une boîte Layout/BBox à quatre coordonnées finies, une origine et des dimensions positives dans la page, et une référence à une seule page existante. Il prend en charge les attributs directs et les classes d’attributs, et peut comparer les coordonnées, pages et textes alternatifs à un PDF de référence. Son périmètre est celui des figures du renderer, placées à l’intérieur des marges ; il ne compare pas les pixels peints aux coordonnées déclarées.
 
 Sur la paire fictive N=10 corrigée, les quatre figures des deux PDFs de 17 pages ont la même empreinte géométrique. Un clone intact et un clone utilisant une classe d’attributs sont acceptés ; trois corruptions volontaires sont rejetées : BBox absent, origine nulle et largeur nulle. La CI reçoit ce contrôle sur les livres anglais et français et conserve les relevés JSON avec les PDFs. Les six sorties N=1 000 seront contrôlées séparément après la série de performance en cours, pour éviter qu’un audit volumineux perturbe les compilations mesurées. Il ne s’agit pas d’un audit PDF/UA ni d’une validation de la lecture d’écran. Voir le [relevé ciblé](validation-pdf-figure-geometry-20261009.json).
+
+### Comparaison complète de tagpdf — N=1 000 — 9 octobre 2026
+
+Trois paires alternées de builds complets comparent tagpdf 0.99y à l’archive candidate 1.0h sur le renderer corrigé du commit `bf80ada`. L’ordre est référence/candidate, candidate/référence, puis référence/candidate. Environnement : Apple M3 avec 16 Gio de RAM, macOS 27.0 arm64, CPython 3.13.7 et LuaHBTeX 1.24.0. Le source et les médias fictifs sont identiques ; le recorder vérifie les fichiers TeX et Lua réellement chargés ainsi que leurs empreintes. Parmi les fichiers tagpdf chargés, seule la définition de namespace fournie par latex-lab vient de la distribution commune ; tous les autres viennent du paquet sélectionné. Aucun fichier TeX système n’a été remplacé.
+
+| Mesure | tagpdf 0.99y | tagpdf 1.0h |
+| --- | ---: | ---: |
+| Temps médian du build convergé (s) | 341,295 | 337,995 |
+| Plage des temps (s) | 339,342–342,184 | 333,354–338,122 |
+| Pic RSS médian LuaTeX (Mio) | 1 150,78 | 1 157,12 |
+| Taille PDF médiane (octets) | 12 560 198 | 12 559 954 |
+
+Les écarts appariés de temps (candidate moins référence) sont −3,300, −4,063 et −5,989 s ; l’écart entre médianes est de −3,300 s, soit −0,97 %. Les écarts RSS appariés sont −14,34, −3,86 et +12,83 Mio ; la médiane candidate est supérieure de 6,34 Mio. Cette comparaison locale descriptive montre un petit gain de temps sur ce scénario et ne montre pas de baisse stable de mémoire. Elle ne fonde aucun résultat général sur d’autres arbres ou environnements. Aucun changement de dépendance en production n’est retenu.
+
+Les six PDFs ont les mêmes 1 108 pages, 122 145 éléments de structure, 400 figures avec Alt, 24 124 annotations de lien, et les mêmes empreintes de texte, structure, destinations et liens. Aucun écart ParentTree/OBJR ni destination interne manquante n’est trouvé. Après la fin des six mesures, le contrôle géométrique vérifie chaque figure : boîte Layout/BBox valide dans sa page et mêmes coordonnées, pages et textes alternatifs dans les six sorties. Ce contrôle porte sur les attributs déclarés, pas sur leur correspondance aux pixels peints, la lecture d’écran ou la conformité PDF/UA.
+
+Les temps excluent les audits. Le RSS est échantillonné à 100 ms et peut manquer de courts pics. Les six builds dépassent les repères de 180 s et 512 Mio ; les PDFs restent sous 16 Mio. Les délais étendus de 600 s par passe / 1 800 s au total sont utilisés, comme dans l’option publiée pour les grands livres. Cette réussite ne qualifie pas les délais par défaut. Les portraits synthétiques source de 96 × 72 pixels ne représentent pas des photographies réelles.
+
+Reproduction, avec un dossier candidat contenant les fichiers runtime tagpdf générés et un dossier de sortie neuf :
+
+```sh
+python scripts/benchmark_tagpdf_versions.py --candidate-root /chemin/tagpdf-1.0h --work-directory /chemin/n1000-neuf --descendant-couples 1000 --pairs 3
+```
+
+Le banc nécessite les dépendances médias du projet, psutil, pypdf et Poppler. Les [relevés complets](validation-latex-tagpdf-version-paired-n1000-20261009.json) conservent versions, fichiers chargés, empreintes, ordre, mesures par run et audits. Ils incluent aussi les relevés CI de géométrie FR/EN du [run 37936272667](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37936272667), dont l’archive téléchargée a été vérifiée contre son SHA-256. Restent la répétition du PDF GUI original de 103 pages, un arbre utilisateur représentatif et les environnements Gramps cibles.

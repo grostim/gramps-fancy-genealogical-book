@@ -938,3 +938,28 @@ Review also fixed relative output directories and rejected silent fallback to an
 Link ownership and alternative-text checks do not cover figure geometry. The October 7 single-tagged-pass experiment had incorrect `(0, 0)` origins despite correct text and links. `scripts/verify_pdf_figure_geometry.py` checks one Layout/BBox with four finite coordinates, positive origin and dimensions inside its page, and exactly one existing page reference. It supports direct attributes and attribute classes and can compare geometry, page numbers and alternative text to a reference PDF. Its scope is renderer figures placed inside positive margins; it does not compare painted image pixels with recorded coordinates.
 
 The corrected fictional N=10 pair has matching geometry for all four figures in both 17-page PDFs. An intact clone and an attribute-class clone pass; three deliberate corruptions fail: missing BBox, zero origin and zero width. CI now includes this control for English and French books and retains JSON records with their PDFs. All six N=1,000 outputs will receive a separate geometry audit after the live performance series ends, avoiding a large audit workload during measured compilation. This is not a PDF/UA or screen-reader assessment. See the [targeted record](validation-pdf-figure-geometry-20261009.json).
+
+### Full tagpdf comparison — N=1,000 — October 9, 2026
+
+Three alternating pairs of complete builds compare installed tagpdf 0.99y with the candidate 1.0h archive using the corrected renderer at `bf80ada`. Order is installed/candidate, candidate/installed, then installed/candidate. Environment: Apple M3 with 16 GiB RAM, macOS 27.0 arm64, CPython 3.13.7 and LuaHBTeX 1.24.0. Identical fictional sources and media are used; the recorder confirms the actual TeX/Lua files loaded and their hashes. Among loaded tagpdf files, only the external latex-lab namespace comes from the shared distribution; all others come from the selected package. No system TeX files were replaced.
+
+| Measurement | tagpdf 0.99y | tagpdf 1.0h |
+| --- | ---: | ---: |
+| Median converged build time (s) | 341.295 | 337.995 |
+| Time range (s) | 339.342–342.184 | 333.354–338.122 |
+| Median peak LuaTeX RSS (MiB) | 1,150.78 | 1,157.12 |
+| Median PDF size (bytes) | 12,560,198 | 12,559,954 |
+
+Paired time deltas (candidate minus installed) are −3.300, −4.063 and −5.989 seconds; the difference between medians is −3.300 seconds (−0.97%). Paired RSS deltas are −14.34, −3.86 and +12.83 MiB; candidate median RSS is 6.34 MiB higher. This local descriptive comparison shows a small time improvement for this scenario and no stable memory reduction. It does not establish results for other trees or environments. No production dependency update is adopted.
+
+All six PDFs retain identical 1,108 pages, 122,145 structure elements, 400 figures with Alt, 24,124 link annotations, and matching text, structure, destination and link hashes. No ParentTree/OBJR ownership mismatch or unresolved internal destination is found. After all timed builds ended, every figure received a geometry audit: valid Layout/BBox within its page, with matching coordinates, page numbers and alternative text across all six outputs. This covers recorded attributes, not their correspondence to painted pixels, screen-reader behavior or PDF/UA conformance.
+
+Build times exclude audits. RSS is sampled at 100 ms and may miss short peaks. All six builds exceed the 180-second and 512 MiB targets; all PDFs remain below 16 MiB. Extended 600-second per-pass / 1,800-second overall limits are used, matching the published option for large books. Success with extended limits does not qualify default limits. Synthetic source portraits of 96 × 72 pixels do not represent real photographs.
+
+Reproduce with a candidate directory containing generated tagpdf runtime files and a new output directory:
+
+```sh
+python scripts/benchmark_tagpdf_versions.py --candidate-root /path/tagpdf-1.0h --work-directory /path/new-n1000 --descendant-couples 1000 --pairs 3
+```
+
+The runner requires project media dependencies, psutil, pypdf and Poppler. The [full record](validation-latex-tagpdf-version-paired-n1000-20261009.json) retains versions, loaded files, hashes, order, individual measurements and audits. It also retains English/French CI geometry records from [run 37936272667](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37936272667); the downloaded artifact archive was checked against its SHA-256. The original 103-page GUI re-export, representative user data and target Gramps environments remain pending.
