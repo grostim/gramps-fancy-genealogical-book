@@ -104,3 +104,35 @@ audited: one failure for the same missing identification schema, with
 `samepage` group after `\item`; this evidence does not replace a current
 GUI re-export. The [complete report](validation-pdf-accessibility-native-gui-20261009.xml)
 is retained.
+
+## Final CI qualification and current native export
+
+PR #339 was merged after
+[run 37946900354](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37946900354)
+succeeded at commit `1283c51`. Artifact `11624441929` contains the six
+expected records: English, French, sparse, intact clone and two corruptions.
+The downloaded archive matches its GitHub digest. Normal outputs and the
+intact clone pass the automatic baseline; missing language and removed Alt
+are rejected. The PDFs remain noncompliant with PDF/UA-2 because they lack
+the identification schema.
+
+A fresh Gramps 6.0.8-1 profile also received the current archive, with
+Mistune and media dependencies installed only there. The checkout was
+removed from `PYTHONPATH`. The fictional fixture has 202 people, 101 families,
+303 citations and twenty public portraits. Its native CLI PDF has 103 pages
+and 77,489,201 bytes. All 2,034 links pass the ParentTree/OBJR ownership and
+destination audit; all twenty figures have nonempty Alt and valid BBox.
+veraPDF reports only the same missing identification schema.
+
+All **103 rendered pages** have identical pixels to the preserved corrected
+GUI PDF from October 9, using PDFium at 108 dpi on this host. Physical pages
+1, 22, 70 and 97 were also inspected directly: no observed clipping, readable
+portrait attribution and citation [299] entirely on page 97. The full
+comparison covers pixels at that resolution, not screen-reader behavior or
+the current GUI export path.
+
+The single observed native duration of 41.955 seconds includes extraction
+and report generation; it is neither compiler-only timing nor a paired
+benchmark. The PDF remains above the 16 MiB size target. No image cap or
+conformance declaration is adopted. See the
+[complete record](validation-native-current-portraits-20261009.json).

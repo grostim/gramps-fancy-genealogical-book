@@ -1,0 +1,1526 @@
+{
+  "date": "2026-10-09",
+  "title": "Current archive native CLI PDF qualification with twenty public portraits",
+  "native": {
+    "commit": "63307162becb253194234e6462f3fb43ac647935",
+    "archive_sha256": "04024f0dd8451414a2dfc17a27e92b187136ec135fa92d3a8ae03487703be3d5",
+    "renderer_sha256": "a575fffa74d8a6130d7759810d6e9e7529b6bf5c12d18af159bf67ed056148dc",
+    "installed_renderer_sha256": "a575fffa74d8a6130d7759810d6e9e7529b6bf5c12d18af159bf67ed056148dc",
+    "fixture_sha256": "dcc58d189aac5a4cb10b485f8b9daa8d06a2b22b471976c583bc95a6f3523218",
+    "profile": "/tmp/gfb-native-current-portraits-20261009-6yp_lq7p/profile",
+    "source_checkout_on_pythonpath": false,
+    "public_portraits": 20,
+    "runs": [
+      {
+        "format": "json_snapshot",
+        "seconds": 11.180999292060733,
+        "exit_code": 0,
+        "output_exists": true,
+        "bytes": 2940368,
+        "sha256": "da7b956455c064511542a019baa0a83e585f6a6716b8e1d9a7a2807aabae28c6"
+      },
+      {
+        "format": "pdf",
+        "seconds": 41.95520133303944,
+        "exit_code": 0,
+        "output_exists": true,
+        "bytes": 77489201,
+        "sha256": "42d5f0a8f9edec89b1a2b75db1d082961819c6bd8563fc4f48637fafe2cdcc11"
+      }
+    ],
+    "snapshot_counts": {
+      "people": 202,
+      "families": 101,
+      "events": 303,
+      "media": 20,
+      "citations": 303,
+      "sources": 1,
+      "diagnostics": 0
+    },
+    "audits": {
+      "link-audit.json": {
+        "audit": {
+          "pages": 103,
+          "marked": true,
+          "language": "fr-FR",
+          "structure_elements": 11257,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 2095,
+            "/P": 2122,
+            "/Sect": 622,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 2034,
+            "/L": 63,
+            "/LI": 918,
+            "/Lbl": 1524,
+            "/LBody": 918,
+            "/H2": 311,
+            "/H3": 303,
+            "/Note": 303,
+            "/Figure": 20
+          },
+          "named_destinations": 3677,
+          "figures_without_alt": 0,
+          "link_annotations": 2034,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "8e5bb3e9b5e1fc194f5830ac8a40efdc98d5d321fd7b2bf2e3b04a0267d6150f",
+          "destination_pages_sha256": "991da8c58d5f0fdf9b8392e3a65b2cbde2126bd3a1c225fe91ab21be08674e89",
+          "link_signatures_sha256": "281f11f7d14f17ab50eea566f91842f1c1d4ccebc0b5c956484c8d9424eb42af",
+          "text_nfc_sha256": "53e45e8ca660c08d77717194ce50b7b8786aed8563fa58dd3dfe2e40602aa46f"
+        }
+      },
+      "figure-geometry.json": {
+        "pdf_sha256": "42d5f0a8f9edec89b1a2b75db1d082961819c6bd8563fc4f48637fafe2cdcc11",
+        "audit": {
+          "pages": 103,
+          "figures": 20,
+          "geometry_sha256": "92f850579b32d52ca96c2ba28b85ac435f702874dd29fb23ffb82a4da0443263",
+          "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+        }
+      },
+      "ua2-summary.json": {
+        "pdf_sha256": "42d5f0a8f9edec89b1a2b75db1d082961819c6bd8563fc4f48637fafe2cdcc11",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00+02:00"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00+02:00"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00+02:00"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1727,
+          "failedRules": 1,
+          "passedChecks": 1002036,
+          "failedChecks": 1
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": true,
+        "accepted_automated_baseline": true,
+        "human_accessibility_qualified": false,
+        "report_sha256": "4c12e71e9d532e4da71c1fd0d32baad212fd468ed5115e6b43cdfb53736bcdee"
+      }
+    },
+    "visual_review": {
+      "physical_pages": [
+        1,
+        22,
+        97,
+        70
+      ],
+      "observations": "Cover and family notices readable without observed clipping; citation 299 fully on physical page 97. Sample review only. Public portrait and attribution on page 70 are readable with no observed clipping."
+    },
+    "scope_limits": [
+      "CLI qualification only; current GUI re-export remains open.",
+      "No screen-reader or human PDF/UA qualification.",
+      "Single measured native invocation; not a paired performance benchmark.",
+      "PDF remains larger than 16 MiB; full-resolution public portraits kept."
+    ]
+  },
+  "pixel_comparison": {
+    "reference_pdf_sha256": "c2778863a1237840d248a1a4d9cb9cc83e1b41a0a76b3c55b3bbe829c0b1d871",
+    "current_pdf_sha256": "42d5f0a8f9edec89b1a2b75db1d082961819c6bd8563fc4f48637fafe2cdcc11",
+    "renderer": "pypdfium2",
+    "render_scale": 1.5,
+    "dpi": 108,
+    "pages": 103,
+    "equal_pages": 103,
+    "different_pages": [],
+    "seconds": 2.475028667016886,
+    "rows": [
+      {
+        "physical_page": 1,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "2610a4ffebda1c645912f206a71c1066c62deee8dd1331e396e46b30eb76f4ac",
+        "current_sha256": "2610a4ffebda1c645912f206a71c1066c62deee8dd1331e396e46b30eb76f4ac",
+        "equal": true
+      },
+      {
+        "physical_page": 2,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "6416c9c0a3294fec75cc5271adf8b5748eaed3fe1b63ef914ca9e8d5a02998cb",
+        "current_sha256": "6416c9c0a3294fec75cc5271adf8b5748eaed3fe1b63ef914ca9e8d5a02998cb",
+        "equal": true
+      },
+      {
+        "physical_page": 3,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "dc167a71c8e40112491b692b0cc1b50dab5144b0d7045c79e546c2237113d0e0",
+        "current_sha256": "dc167a71c8e40112491b692b0cc1b50dab5144b0d7045c79e546c2237113d0e0",
+        "equal": true
+      },
+      {
+        "physical_page": 4,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "9c70df853a4e7efdaefd22adfc27cd188e330ec0d6134d3265939b347a685572",
+        "current_sha256": "9c70df853a4e7efdaefd22adfc27cd188e330ec0d6134d3265939b347a685572",
+        "equal": true
+      },
+      {
+        "physical_page": 5,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "5fcc5fe9c9cb2cb42411c7eaeedccd6394ff831e74281e4221af33918d4e189d",
+        "current_sha256": "5fcc5fe9c9cb2cb42411c7eaeedccd6394ff831e74281e4221af33918d4e189d",
+        "equal": true
+      },
+      {
+        "physical_page": 6,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "1a062d7665f2cab6240c5ee150355fc9fd278d73af27ee664e7ff6b16b4d159b",
+        "current_sha256": "1a062d7665f2cab6240c5ee150355fc9fd278d73af27ee664e7ff6b16b4d159b",
+        "equal": true
+      },
+      {
+        "physical_page": 7,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "f8f9d32270e9fb458575f573c322faab441971afa7938ce39831da82c317f5ac",
+        "current_sha256": "f8f9d32270e9fb458575f573c322faab441971afa7938ce39831da82c317f5ac",
+        "equal": true
+      },
+      {
+        "physical_page": 8,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "bc6e77afa1dab321b41d1a2e2263f70051960def202e630be995ef7c43630351",
+        "current_sha256": "bc6e77afa1dab321b41d1a2e2263f70051960def202e630be995ef7c43630351",
+        "equal": true
+      },
+      {
+        "physical_page": 9,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "5225320c72f0a3f7d2d47980be77872452b960f10b6ace2bbd4f767ee4182e0f",
+        "current_sha256": "5225320c72f0a3f7d2d47980be77872452b960f10b6ace2bbd4f767ee4182e0f",
+        "equal": true
+      },
+      {
+        "physical_page": 10,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "8da9a4403c2c56a536ec0198f44d31b682d20b563453f2d53d2539e80686d9f1",
+        "current_sha256": "8da9a4403c2c56a536ec0198f44d31b682d20b563453f2d53d2539e80686d9f1",
+        "equal": true
+      },
+      {
+        "physical_page": 11,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "6521aaf073692fab305c6b4023492f509ace0318321ce029266aa2fe4e366db3",
+        "current_sha256": "6521aaf073692fab305c6b4023492f509ace0318321ce029266aa2fe4e366db3",
+        "equal": true
+      },
+      {
+        "physical_page": 12,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "c938a1d0e34642c9a3aa10c4268c9e01220cea78ffc23ec78cea56bfa5db9576",
+        "current_sha256": "c938a1d0e34642c9a3aa10c4268c9e01220cea78ffc23ec78cea56bfa5db9576",
+        "equal": true
+      },
+      {
+        "physical_page": 13,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "81797949ca5d0b079574fa1ece04bfcf252b3a08b61c0408d1d8f9735cd7291c",
+        "current_sha256": "81797949ca5d0b079574fa1ece04bfcf252b3a08b61c0408d1d8f9735cd7291c",
+        "equal": true
+      },
+      {
+        "physical_page": 14,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "ce116c7683345c51ba4adb7bc2840882e0f10c9c578a3b6fcc315fc53b8e7f94",
+        "current_sha256": "ce116c7683345c51ba4adb7bc2840882e0f10c9c578a3b6fcc315fc53b8e7f94",
+        "equal": true
+      },
+      {
+        "physical_page": 15,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "28cc380b02f5301bba341a96ac075da3dd8ca0f204230971256718e17bf03218",
+        "current_sha256": "28cc380b02f5301bba341a96ac075da3dd8ca0f204230971256718e17bf03218",
+        "equal": true
+      },
+      {
+        "physical_page": 16,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "da2bdffb24b56b83f553d713f2ce22d0472ff0b122cf19371f2037cc467f6413",
+        "current_sha256": "da2bdffb24b56b83f553d713f2ce22d0472ff0b122cf19371f2037cc467f6413",
+        "equal": true
+      },
+      {
+        "physical_page": 17,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "ee8f71e4a7ed4e4f81c8cd2c6dd039698dc748fffb1778ddd7b3bdceb313c572",
+        "current_sha256": "ee8f71e4a7ed4e4f81c8cd2c6dd039698dc748fffb1778ddd7b3bdceb313c572",
+        "equal": true
+      },
+      {
+        "physical_page": 18,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "ab65465d970761c38b2fa582c29debaf030ec46a0e2c8c5776f240a412da8e94",
+        "current_sha256": "ab65465d970761c38b2fa582c29debaf030ec46a0e2c8c5776f240a412da8e94",
+        "equal": true
+      },
+      {
+        "physical_page": 19,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "29c8851bffb34150c58f82804689298d807b4f348baea227922f8a0ed4e29efa",
+        "current_sha256": "29c8851bffb34150c58f82804689298d807b4f348baea227922f8a0ed4e29efa",
+        "equal": true
+      },
+      {
+        "physical_page": 20,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "dd645d2e1eb2e78ae72a8f22130a7c4bd189da3425e8d711fbc04c031fc403f9",
+        "current_sha256": "dd645d2e1eb2e78ae72a8f22130a7c4bd189da3425e8d711fbc04c031fc403f9",
+        "equal": true
+      },
+      {
+        "physical_page": 21,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "864919c5c0cb6ee65e95bc32a0d848a613398ff6eea5fa14b7bd8a8351323634",
+        "current_sha256": "864919c5c0cb6ee65e95bc32a0d848a613398ff6eea5fa14b7bd8a8351323634",
+        "equal": true
+      },
+      {
+        "physical_page": 22,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "08df4a539919833c78d6aab44dd1d5ccbeb05b52d21c21a1d525fe8feb834a7a",
+        "current_sha256": "08df4a539919833c78d6aab44dd1d5ccbeb05b52d21c21a1d525fe8feb834a7a",
+        "equal": true
+      },
+      {
+        "physical_page": 23,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "f048fc4731b995708fe3032db6820509c879df823dd17374357d73686ccd2908",
+        "current_sha256": "f048fc4731b995708fe3032db6820509c879df823dd17374357d73686ccd2908",
+        "equal": true
+      },
+      {
+        "physical_page": 24,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d3e40ed32b85c7cad97a5c6a90539872012d8c58e1f9445dad29cb9b7a16172b",
+        "current_sha256": "d3e40ed32b85c7cad97a5c6a90539872012d8c58e1f9445dad29cb9b7a16172b",
+        "equal": true
+      },
+      {
+        "physical_page": 25,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "99354723fd297c762605e83ffd9095d28c4f28a17bcf2f0e595d28c03a4cbdfe",
+        "current_sha256": "99354723fd297c762605e83ffd9095d28c4f28a17bcf2f0e595d28c03a4cbdfe",
+        "equal": true
+      },
+      {
+        "physical_page": 26,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "09224887f04d0bbeb228b7469c03b0e075582f0cd16fc3d0de8fe430d003a2f8",
+        "current_sha256": "09224887f04d0bbeb228b7469c03b0e075582f0cd16fc3d0de8fe430d003a2f8",
+        "equal": true
+      },
+      {
+        "physical_page": 27,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "315799f4f5a2d1f5d57cee35d21e5c9bb49859b042b898526db1c6a8d0f36a18",
+        "current_sha256": "315799f4f5a2d1f5d57cee35d21e5c9bb49859b042b898526db1c6a8d0f36a18",
+        "equal": true
+      },
+      {
+        "physical_page": 28,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "6c3ccf02e37307117ef21f9c1ceb160e115ffd4f75db35444f98e38ec18ae37c",
+        "current_sha256": "6c3ccf02e37307117ef21f9c1ceb160e115ffd4f75db35444f98e38ec18ae37c",
+        "equal": true
+      },
+      {
+        "physical_page": 29,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "813bc54ec0dd8e912691c4db6c935de4c12243da8e6d86191dd5e668f57bada6",
+        "current_sha256": "813bc54ec0dd8e912691c4db6c935de4c12243da8e6d86191dd5e668f57bada6",
+        "equal": true
+      },
+      {
+        "physical_page": 30,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "186553e57a55b51ed76b039b6e43571fa44c6e4a14b1c56ef553904cea4caa43",
+        "current_sha256": "186553e57a55b51ed76b039b6e43571fa44c6e4a14b1c56ef553904cea4caa43",
+        "equal": true
+      },
+      {
+        "physical_page": 31,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "ac14b248091d69e18ba6f8044fd5708ea217f8e2e7d734fdc189f84eac032556",
+        "current_sha256": "ac14b248091d69e18ba6f8044fd5708ea217f8e2e7d734fdc189f84eac032556",
+        "equal": true
+      },
+      {
+        "physical_page": 32,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "cbd14566bf3e84a1b30a5f78c7eb78902186a21d56bfb17f70004e27759d59d9",
+        "current_sha256": "cbd14566bf3e84a1b30a5f78c7eb78902186a21d56bfb17f70004e27759d59d9",
+        "equal": true
+      },
+      {
+        "physical_page": 33,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "65a6f859bf466337dfb82af31265a1a72a118d6b2d6ac33bbecc99ece20ace2f",
+        "current_sha256": "65a6f859bf466337dfb82af31265a1a72a118d6b2d6ac33bbecc99ece20ace2f",
+        "equal": true
+      },
+      {
+        "physical_page": 34,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "69a5b2320f34fb33a6034799603b75cb172e96c1bdb69a2a2c1f3fb7c48cd4aa",
+        "current_sha256": "69a5b2320f34fb33a6034799603b75cb172e96c1bdb69a2a2c1f3fb7c48cd4aa",
+        "equal": true
+      },
+      {
+        "physical_page": 35,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "6a5db4612bfdcb13aa4045d2aa1a8f773a625ffd4364af9a9ce328a87c837811",
+        "current_sha256": "6a5db4612bfdcb13aa4045d2aa1a8f773a625ffd4364af9a9ce328a87c837811",
+        "equal": true
+      },
+      {
+        "physical_page": 36,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "0b6b88bd09d4ae50cf350f0cf4bbd0749422b3906025c874fe2239f2a72b76be",
+        "current_sha256": "0b6b88bd09d4ae50cf350f0cf4bbd0749422b3906025c874fe2239f2a72b76be",
+        "equal": true
+      },
+      {
+        "physical_page": 37,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "bef4455c205399ca29c66b03cfb701128e1400ab80bca4afd6e2ba323706d662",
+        "current_sha256": "bef4455c205399ca29c66b03cfb701128e1400ab80bca4afd6e2ba323706d662",
+        "equal": true
+      },
+      {
+        "physical_page": 38,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "e203275ea0008744f2b360b529ea9cddaabcbcad25757e2cd1444775d1c2ea18",
+        "current_sha256": "e203275ea0008744f2b360b529ea9cddaabcbcad25757e2cd1444775d1c2ea18",
+        "equal": true
+      },
+      {
+        "physical_page": 39,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "941f02eee08cf6701a663685caae72344402364a46dc3ec9e30c81d437187714",
+        "current_sha256": "941f02eee08cf6701a663685caae72344402364a46dc3ec9e30c81d437187714",
+        "equal": true
+      },
+      {
+        "physical_page": 40,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "cf06df576fede42c177a940fac898ff374be3fe674e45a770f2f854d5604d465",
+        "current_sha256": "cf06df576fede42c177a940fac898ff374be3fe674e45a770f2f854d5604d465",
+        "equal": true
+      },
+      {
+        "physical_page": 41,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "95ddaae112005ca77f5019a6ce8cba8538a8e7d0531f61a73a5d90c71828c24a",
+        "current_sha256": "95ddaae112005ca77f5019a6ce8cba8538a8e7d0531f61a73a5d90c71828c24a",
+        "equal": true
+      },
+      {
+        "physical_page": 42,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "c33bf06ee6dff4b6529ebeb23c813dc07b2b132de308db2914cb3b6935f91b53",
+        "current_sha256": "c33bf06ee6dff4b6529ebeb23c813dc07b2b132de308db2914cb3b6935f91b53",
+        "equal": true
+      },
+      {
+        "physical_page": 43,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "37d141c686125f79161111ca2d191ec0cf9c64c37eb18760cc097c345a018128",
+        "current_sha256": "37d141c686125f79161111ca2d191ec0cf9c64c37eb18760cc097c345a018128",
+        "equal": true
+      },
+      {
+        "physical_page": 44,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "0be0787df602880595a268890b2b2fa5a5f61a8c3528c734dc4d44d758fdffd5",
+        "current_sha256": "0be0787df602880595a268890b2b2fa5a5f61a8c3528c734dc4d44d758fdffd5",
+        "equal": true
+      },
+      {
+        "physical_page": 45,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d0090fac285dc7004a3bc6d0982ba0004862e06557acdd3e2d0ef7d8c3345e93",
+        "current_sha256": "d0090fac285dc7004a3bc6d0982ba0004862e06557acdd3e2d0ef7d8c3345e93",
+        "equal": true
+      },
+      {
+        "physical_page": 46,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "599bf2a19234859bf05a04998be9b3e094c4342e798bcea8f03c24573aa6fe81",
+        "current_sha256": "599bf2a19234859bf05a04998be9b3e094c4342e798bcea8f03c24573aa6fe81",
+        "equal": true
+      },
+      {
+        "physical_page": 47,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "3e794716669d7eea441c8f340a47da015b396cec05f4d784a89133e32b03fcea",
+        "current_sha256": "3e794716669d7eea441c8f340a47da015b396cec05f4d784a89133e32b03fcea",
+        "equal": true
+      },
+      {
+        "physical_page": 48,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "493e7cc8ea7827db700f3c500c92801b2a72ea653e1bb40691e6e17df469cc7a",
+        "current_sha256": "493e7cc8ea7827db700f3c500c92801b2a72ea653e1bb40691e6e17df469cc7a",
+        "equal": true
+      },
+      {
+        "physical_page": 49,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "fc5c6381b5fe6a49f906207335e1f1524dd16960b7a2570c564cfd8b33e3efae",
+        "current_sha256": "fc5c6381b5fe6a49f906207335e1f1524dd16960b7a2570c564cfd8b33e3efae",
+        "equal": true
+      },
+      {
+        "physical_page": 50,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "e2f242aab15472d911c5cc14242108b056c5b8e65e81c21e864d88ff4ad6d155",
+        "current_sha256": "e2f242aab15472d911c5cc14242108b056c5b8e65e81c21e864d88ff4ad6d155",
+        "equal": true
+      },
+      {
+        "physical_page": 51,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "63468513103decd2d4b4e726c39c489acf30e5135fc7d67b1aeb7556b3aacc64",
+        "current_sha256": "63468513103decd2d4b4e726c39c489acf30e5135fc7d67b1aeb7556b3aacc64",
+        "equal": true
+      },
+      {
+        "physical_page": 52,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "39f9febf28d4344ea71af9bb5c919c19ba86d785b252da79fb2a3652203a0e53",
+        "current_sha256": "39f9febf28d4344ea71af9bb5c919c19ba86d785b252da79fb2a3652203a0e53",
+        "equal": true
+      },
+      {
+        "physical_page": 53,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "09078974a9f53470ac11019a996ce0a19ff6d8e1278a24c2f7ad292704d1fc20",
+        "current_sha256": "09078974a9f53470ac11019a996ce0a19ff6d8e1278a24c2f7ad292704d1fc20",
+        "equal": true
+      },
+      {
+        "physical_page": 54,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "9b08884fc0a2a5054d6bfa354d9817156087bc6aa3bc09ca08d34edf8b199ba7",
+        "current_sha256": "9b08884fc0a2a5054d6bfa354d9817156087bc6aa3bc09ca08d34edf8b199ba7",
+        "equal": true
+      },
+      {
+        "physical_page": 55,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d50308136d1cee21073b9d2b3969fb24dd278bd5712b5d68b2dd81643ff12b80",
+        "current_sha256": "d50308136d1cee21073b9d2b3969fb24dd278bd5712b5d68b2dd81643ff12b80",
+        "equal": true
+      },
+      {
+        "physical_page": 56,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "05fbfa8e425b9fe1acc44f5a54127dfd0a56263f4b1d0ad0a06e3b8d77675740",
+        "current_sha256": "05fbfa8e425b9fe1acc44f5a54127dfd0a56263f4b1d0ad0a06e3b8d77675740",
+        "equal": true
+      },
+      {
+        "physical_page": 57,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "773e71749b398bb016e1c5c68488955cea8cdeaba5ed93082171fc115433e225",
+        "current_sha256": "773e71749b398bb016e1c5c68488955cea8cdeaba5ed93082171fc115433e225",
+        "equal": true
+      },
+      {
+        "physical_page": 58,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "f839334a6a74ce71a930bc74bb127c33b14ea5a2cb4e83e35b7ccd3e56a0f295",
+        "current_sha256": "f839334a6a74ce71a930bc74bb127c33b14ea5a2cb4e83e35b7ccd3e56a0f295",
+        "equal": true
+      },
+      {
+        "physical_page": 59,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "1d78975497badbf61b01f90ab3d57a2ca1fa37350f869eac1cae71cfc9185d92",
+        "current_sha256": "1d78975497badbf61b01f90ab3d57a2ca1fa37350f869eac1cae71cfc9185d92",
+        "equal": true
+      },
+      {
+        "physical_page": 60,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "cde794be6b98f302533d506efaae0b7aa2dc94da972232b11d274a1702391100",
+        "current_sha256": "cde794be6b98f302533d506efaae0b7aa2dc94da972232b11d274a1702391100",
+        "equal": true
+      },
+      {
+        "physical_page": 61,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "734dc83db3d00a4b72d51bcf61ada98d8a8c0c39e8561fdeb56fa35fb575aefc",
+        "current_sha256": "734dc83db3d00a4b72d51bcf61ada98d8a8c0c39e8561fdeb56fa35fb575aefc",
+        "equal": true
+      },
+      {
+        "physical_page": 62,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "ad015cf3410e155ca98b68f01a78f692bc92e509098de71283dbc98fef31dd50",
+        "current_sha256": "ad015cf3410e155ca98b68f01a78f692bc92e509098de71283dbc98fef31dd50",
+        "equal": true
+      },
+      {
+        "physical_page": 63,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "3a83d6df889e3cc44b891b06f53774721250bae5fdda741517bf847507894a70",
+        "current_sha256": "3a83d6df889e3cc44b891b06f53774721250bae5fdda741517bf847507894a70",
+        "equal": true
+      },
+      {
+        "physical_page": 64,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "bff807295b46d7a8bd1ecf999623b2c0213f0a5da1443e2e29b5b069800c2c53",
+        "current_sha256": "bff807295b46d7a8bd1ecf999623b2c0213f0a5da1443e2e29b5b069800c2c53",
+        "equal": true
+      },
+      {
+        "physical_page": 65,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "e6fd464132aa077ed2efa252d3f9f55a996a4037e130aafb38a838f816cd7fd8",
+        "current_sha256": "e6fd464132aa077ed2efa252d3f9f55a996a4037e130aafb38a838f816cd7fd8",
+        "equal": true
+      },
+      {
+        "physical_page": 66,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "201a989704093a13b735f17676ed26d78a6b82ab70bf9a61d440c17e52129b72",
+        "current_sha256": "201a989704093a13b735f17676ed26d78a6b82ab70bf9a61d440c17e52129b72",
+        "equal": true
+      },
+      {
+        "physical_page": 67,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "7685dba6d8bcd10caf05a3807ddc760c00519efd5ee891cd6062f5bab368bdd9",
+        "current_sha256": "7685dba6d8bcd10caf05a3807ddc760c00519efd5ee891cd6062f5bab368bdd9",
+        "equal": true
+      },
+      {
+        "physical_page": 68,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "e7489c0dc7d72f77f2eceb979f53df0172d8d940373bec1e90f587379ff6dd3e",
+        "current_sha256": "e7489c0dc7d72f77f2eceb979f53df0172d8d940373bec1e90f587379ff6dd3e",
+        "equal": true
+      },
+      {
+        "physical_page": 69,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "48721323653301d914dabdfbe10e89988e64d6d9673cf3038cba2b88fa6ba715",
+        "current_sha256": "48721323653301d914dabdfbe10e89988e64d6d9673cf3038cba2b88fa6ba715",
+        "equal": true
+      },
+      {
+        "physical_page": 70,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "63395e61b1c9514bc47752494d09a2e7a54c9725273dd2ae84b7ccbd3505146e",
+        "current_sha256": "63395e61b1c9514bc47752494d09a2e7a54c9725273dd2ae84b7ccbd3505146e",
+        "equal": true
+      },
+      {
+        "physical_page": 71,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "cfb38ccbf67addc31775fb834d0a6227d650d2965dcdf1a81120db03dcb56ba7",
+        "current_sha256": "cfb38ccbf67addc31775fb834d0a6227d650d2965dcdf1a81120db03dcb56ba7",
+        "equal": true
+      },
+      {
+        "physical_page": 72,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "42bbab6a2a7115032e20cf9a864e265059c899fd48e60c8a38f184ee07b73cfa",
+        "current_sha256": "42bbab6a2a7115032e20cf9a864e265059c899fd48e60c8a38f184ee07b73cfa",
+        "equal": true
+      },
+      {
+        "physical_page": 73,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "445789d616561f7307d1a263da9e96ca2d565d81cad81a15b1097a03f7d02861",
+        "current_sha256": "445789d616561f7307d1a263da9e96ca2d565d81cad81a15b1097a03f7d02861",
+        "equal": true
+      },
+      {
+        "physical_page": 74,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "9d4ee759b5ca2f51d6d9bc35240ea65c331cd7799a62a13ae669f8e1f909e3ef",
+        "current_sha256": "9d4ee759b5ca2f51d6d9bc35240ea65c331cd7799a62a13ae669f8e1f909e3ef",
+        "equal": true
+      },
+      {
+        "physical_page": 75,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "94abba540df17817ff0ece390d220deaf9baec20d5768b2f660c9ed8497a7999",
+        "current_sha256": "94abba540df17817ff0ece390d220deaf9baec20d5768b2f660c9ed8497a7999",
+        "equal": true
+      },
+      {
+        "physical_page": 76,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "53b468fd85266723df90120f8e1ee01e41001fac3e7fa95dd8067d181f6bb420",
+        "current_sha256": "53b468fd85266723df90120f8e1ee01e41001fac3e7fa95dd8067d181f6bb420",
+        "equal": true
+      },
+      {
+        "physical_page": 77,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "0f051ef421ae07891b3bc86fe70ca81ac6425eaf77ed80136bd4adae18db0233",
+        "current_sha256": "0f051ef421ae07891b3bc86fe70ca81ac6425eaf77ed80136bd4adae18db0233",
+        "equal": true
+      },
+      {
+        "physical_page": 78,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "cb9aa5c428740b5ca4b1bfac5cfce0ac54343f42282fc8fa36823d790c4ae7ef",
+        "current_sha256": "cb9aa5c428740b5ca4b1bfac5cfce0ac54343f42282fc8fa36823d790c4ae7ef",
+        "equal": true
+      },
+      {
+        "physical_page": 79,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "1778c6c02b34f1135a271e6e32624544d1270724c43a2c22258ccf64909a93d2",
+        "current_sha256": "1778c6c02b34f1135a271e6e32624544d1270724c43a2c22258ccf64909a93d2",
+        "equal": true
+      },
+      {
+        "physical_page": 80,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "a6a997164d12315c077932fac33587cb6f05f53e97ce61d999e7830a672849a9",
+        "current_sha256": "a6a997164d12315c077932fac33587cb6f05f53e97ce61d999e7830a672849a9",
+        "equal": true
+      },
+      {
+        "physical_page": 81,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "45b5d8a7f6986f4e0fdbe8bda15d21ec7456db37fdcc1f495bb3590e20640534",
+        "current_sha256": "45b5d8a7f6986f4e0fdbe8bda15d21ec7456db37fdcc1f495bb3590e20640534",
+        "equal": true
+      },
+      {
+        "physical_page": 82,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "1e0f68ba274f0872be42f6c8f7d304869cbb1a35121173e67b53f08082e19583",
+        "current_sha256": "1e0f68ba274f0872be42f6c8f7d304869cbb1a35121173e67b53f08082e19583",
+        "equal": true
+      },
+      {
+        "physical_page": 83,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "eebe944e3b2a9ac79ad42325978a94dd14b6c89c57c5bd77866727bb5c56085d",
+        "current_sha256": "eebe944e3b2a9ac79ad42325978a94dd14b6c89c57c5bd77866727bb5c56085d",
+        "equal": true
+      },
+      {
+        "physical_page": 84,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d179d8f29f7f2eab5b31417868110d5f09f3b81cb9c4edc87d513ecfa1abfb0d",
+        "current_sha256": "d179d8f29f7f2eab5b31417868110d5f09f3b81cb9c4edc87d513ecfa1abfb0d",
+        "equal": true
+      },
+      {
+        "physical_page": 85,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d8a7b55e22490354cb68bfdc4ce0cb952f5af715f0e595f66434a8e06bcb17ec",
+        "current_sha256": "d8a7b55e22490354cb68bfdc4ce0cb952f5af715f0e595f66434a8e06bcb17ec",
+        "equal": true
+      },
+      {
+        "physical_page": 86,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d251a19aff19460974d741dd320af93cf51793aefb543c497310d07ced188844",
+        "current_sha256": "d251a19aff19460974d741dd320af93cf51793aefb543c497310d07ced188844",
+        "equal": true
+      },
+      {
+        "physical_page": 87,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "49c757ee5ddfdd89d30f782dfe6ce60926ff57ded435d81951ef9b8462bcf0b7",
+        "current_sha256": "49c757ee5ddfdd89d30f782dfe6ce60926ff57ded435d81951ef9b8462bcf0b7",
+        "equal": true
+      },
+      {
+        "physical_page": 88,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "7e73f2041782ddaf0dfc324d281ed0c24115588ed68c52b528de1c21d0377f39",
+        "current_sha256": "7e73f2041782ddaf0dfc324d281ed0c24115588ed68c52b528de1c21d0377f39",
+        "equal": true
+      },
+      {
+        "physical_page": 89,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "ccd0b828addb7e451f657143b64ba03525b3e90f58df1bb9b935170c189e1cde",
+        "current_sha256": "ccd0b828addb7e451f657143b64ba03525b3e90f58df1bb9b935170c189e1cde",
+        "equal": true
+      },
+      {
+        "physical_page": 90,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "e25cd9289d42de563b5fe962895716fe5e86fdb3e64ed55b2f13f34adf2eab28",
+        "current_sha256": "e25cd9289d42de563b5fe962895716fe5e86fdb3e64ed55b2f13f34adf2eab28",
+        "equal": true
+      },
+      {
+        "physical_page": 91,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "1bdd247ef6d53d819c55a961311dcec0eb122c6888fdbdb92a0d50b9f8def7b7",
+        "current_sha256": "1bdd247ef6d53d819c55a961311dcec0eb122c6888fdbdb92a0d50b9f8def7b7",
+        "equal": true
+      },
+      {
+        "physical_page": 92,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "86676a358dfb811f281d1314f962cd2a210bf7d6f933e319951791b1c0d50552",
+        "current_sha256": "86676a358dfb811f281d1314f962cd2a210bf7d6f933e319951791b1c0d50552",
+        "equal": true
+      },
+      {
+        "physical_page": 93,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "9859e49a5c7530f30f40c4948b98877d13a909ad75e8974382038abb68e05fa7",
+        "current_sha256": "9859e49a5c7530f30f40c4948b98877d13a909ad75e8974382038abb68e05fa7",
+        "equal": true
+      },
+      {
+        "physical_page": 94,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "7f8e21313b3392765937d47db1fc71c0ca4b447522636e12c9703aa345379c6c",
+        "current_sha256": "7f8e21313b3392765937d47db1fc71c0ca4b447522636e12c9703aa345379c6c",
+        "equal": true
+      },
+      {
+        "physical_page": 95,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "4aeffbc9da2fa3aad638f27697a21fb19395d723234e16796cd3d979ba1772e3",
+        "current_sha256": "4aeffbc9da2fa3aad638f27697a21fb19395d723234e16796cd3d979ba1772e3",
+        "equal": true
+      },
+      {
+        "physical_page": 96,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "be1d8f59c80684763b9c4e4be6d860b5b3f1ef651f8f84a769be0c211649877f",
+        "current_sha256": "be1d8f59c80684763b9c4e4be6d860b5b3f1ef651f8f84a769be0c211649877f",
+        "equal": true
+      },
+      {
+        "physical_page": 97,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "c024c9a620002b2e1632f68cb4fd7d729e4d6e004ca2d132b26cee8f4b467f5f",
+        "current_sha256": "c024c9a620002b2e1632f68cb4fd7d729e4d6e004ca2d132b26cee8f4b467f5f",
+        "equal": true
+      },
+      {
+        "physical_page": 98,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "6cbee4563671a28f8865c2f666b9b4b0a8c00edc57829cb7a1de02b452ef3f8a",
+        "current_sha256": "6cbee4563671a28f8865c2f666b9b4b0a8c00edc57829cb7a1de02b452ef3f8a",
+        "equal": true
+      },
+      {
+        "physical_page": 99,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "d30690eeab2c87a7806af23771f9a413e0ea53f3eb05da9fd4c2efcb3b5bb184",
+        "current_sha256": "d30690eeab2c87a7806af23771f9a413e0ea53f3eb05da9fd4c2efcb3b5bb184",
+        "equal": true
+      },
+      {
+        "physical_page": 100,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "10e95b71d08057f0ac444b36a7f8924cd27fda96909f13c4b1a99cab5ee0d92c",
+        "current_sha256": "10e95b71d08057f0ac444b36a7f8924cd27fda96909f13c4b1a99cab5ee0d92c",
+        "equal": true
+      },
+      {
+        "physical_page": 101,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "5f5936e921196122d2bd65cd2ff2a8123c3ee8894d68bbaddd41d642737c8231",
+        "current_sha256": "5f5936e921196122d2bd65cd2ff2a8123c3ee8894d68bbaddd41d642737c8231",
+        "equal": true
+      },
+      {
+        "physical_page": 102,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "f169e7fcf734b5c0b8285e4027e4121a9862ed04da99d7e0fbad2a7e57a2edc7",
+        "current_sha256": "f169e7fcf734b5c0b8285e4027e4121a9862ed04da99d7e0fbad2a7e57a2edc7",
+        "equal": true
+      },
+      {
+        "physical_page": 103,
+        "dimensions": [
+          893,
+          1263
+        ],
+        "reference_sha256": "7756b812aae94968f2dbc15fc33aa464d1ffac921a842771d0db0b7380a8a38b",
+        "current_sha256": "7756b812aae94968f2dbc15fc33aa464d1ffac921a842771d0db0b7380a8a38b",
+        "equal": true
+      }
+    ],
+    "scope": "Pixel comparison at 108 dpi on this host; not structure, screen-reader or PDF/UA conformance."
+  },
+  "environment": {
+    "gramps": "6.0.8-1",
+    "embedded_python": "3.13.2",
+    "host_python": "3.13.7",
+    "host": "macOS 27.0 arm64",
+    "lualatex": "LuaHBTeX 1.24.0 (TeX Live 2026)",
+    "pdfium_render_dpi": 108,
+    "pypdfium2": "5.13.0",
+    "pdfium": "153.0.7999.0"
+  },
+  "final_ci": {
+    "commit": "1283c518af3d0c93496cd227bface6f82a37bf4d",
+    "run": 37946900354,
+    "status": "success",
+    "artifact_id": 11624441929,
+    "artifact_sha256": "a4ded72f49f2f6094da792932404540323645388dda73664abeba37a293309d8",
+    "artifact_report_files": [
+      "ua2-en/intact/report.xml",
+      "ua2-en/intact/result.json",
+      "ua2-en/intact/stderr.log",
+      "ua2-en/missing_figure_alt/report.xml",
+      "ua2-en/missing_figure_alt/result.json",
+      "ua2-en/missing_figure_alt/stderr.log",
+      "ua2-en/missing_language/report.xml",
+      "ua2-en/missing_language/result.json",
+      "ua2-en/missing_language/stderr.log",
+      "ua2-en/report.xml",
+      "ua2-en/result.json",
+      "ua2-en/stderr.log",
+      "ua2-fr/report.xml",
+      "ua2-fr/stderr.log",
+      "ua2-fr/result.json",
+      "ua2-sparse/report.xml",
+      "ua2-sparse/result.json",
+      "ua2-sparse/stderr.log"
+    ],
+    "ua2_results": {
+      "ua2-en/intact/result.json": {
+        "pdf_sha256": "4d4d083748e76438e7028ce8bdc01a3d1e7ead0e9413107e02ff7306da3a4c35",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00Z"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00Z"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00Z"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1727,
+          "failedRules": 1,
+          "passedChecks": 58223,
+          "failedChecks": 1
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": true,
+        "accepted_automated_baseline": true,
+        "human_accessibility_qualified": false,
+        "report_sha256": "ae03f434ebd0bf5383c4640544fe87aea9ff41161b04ab9464d1d0d19415e840"
+      },
+      "ua2-en/missing_figure_alt/result.json": {
+        "pdf_sha256": "dd975794b50935e9d0a3a2356c0e4fb8e9cf7f8a31be0a30ca47b4680a1a7547",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00Z"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00Z"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00Z"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1726,
+          "failedRules": 2,
+          "passedChecks": 58221,
+          "failedChecks": 2
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          },
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "8.2.5.28.2",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "structure,figure,alt-text",
+            "test": "Alt != null || ActualText != null",
+            "description": "A Figure structure element shall have at least one of the following properties: a) an alternate description (Alt property), as specified in ISO 32000-2:2020, 14.9.3; b) a replacement text (ActualText property) that represents the content enclosed by the Figure structure element"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": false,
+        "accepted_automated_baseline": false,
+        "human_accessibility_qualified": false,
+        "report_sha256": "448dd18f490224b9cc0fd0b6dec443b230dbaea9ffefec7baaf877811629606e"
+      },
+      "ua2-en/missing_language/result.json": {
+        "pdf_sha256": "957f0ba15876a3d46e93324f65aab7d8b7c4369dc02805255c9e68aec139e212",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00Z"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00Z"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00Z"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1726,
+          "failedRules": 2,
+          "passedChecks": 58220,
+          "failedChecks": 2
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "8.4.4",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "lang",
+            "test": "containsLang == true",
+            "description": "The default natural language for content and text strings shall be specified using the Lang entry, with a non-empty value, in the catalog dictionary"
+          },
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": false,
+        "accepted_automated_baseline": false,
+        "human_accessibility_qualified": false,
+        "report_sha256": "6520c20d60a1763c06fc5395a9cef265c532b686464d65c48def7c8eb44b6d57"
+      },
+      "ua2-en/result.json": {
+        "pdf_sha256": "1a6ebced183aafc647c3ed79500e97890428cd07c963ff8de6d955ef3a4d67af",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00Z"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00Z"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00Z"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1727,
+          "failedRules": 1,
+          "passedChecks": 58223,
+          "failedChecks": 1
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": true,
+        "accepted_automated_baseline": true,
+        "human_accessibility_qualified": false,
+        "report_sha256": "2d13ab4bfcdfdf08111bc1b8a4c7e1fd363a634c053ae707a4b33b40f54eaed1",
+        "rejected_corruptions": [
+          "missing_language",
+          "missing_figure_alt"
+        ]
+      },
+      "ua2-fr/result.json": {
+        "pdf_sha256": "4a80654476a58a65bcb2a575661e89cfa0220bfe6efcdd078418a1c4ff3a1a70",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00Z"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00Z"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00Z"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1727,
+          "failedRules": 1,
+          "passedChecks": 58532,
+          "failedChecks": 1
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": true,
+        "accepted_automated_baseline": true,
+        "human_accessibility_qualified": false,
+        "report_sha256": "ab5b006aff2944ed11d45402f92c88cc0435005dd95efff37a0560bb770f9167"
+      },
+      "ua2-sparse/result.json": {
+        "pdf_sha256": "68f74d8910b3f1918d98d798675bc5633f7f5549f367d4db79ae47a7f8b37362",
+        "validator_build": [
+          {
+            "id": "core",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T10:02:00Z"
+          },
+          {
+            "id": "validation-model",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:44:00Z"
+          },
+          {
+            "id": "apps",
+            "version": "1.30.3",
+            "buildDate": "2026-10-07T13:52:00Z"
+          }
+        ],
+        "is_compliant": false,
+        "reported_counts": {
+          "passedRules": 1727,
+          "failedRules": 1,
+          "passedChecks": 3368,
+          "failedChecks": 1
+        },
+        "failed_rules": [
+          {
+            "specification": "ISO 14289-2:2024",
+            "clause": "5",
+            "testNumber": "1",
+            "status": "failed",
+            "failedChecks": "1",
+            "tags": "metadata",
+            "test": "containsPDFUAIdentification == true",
+            "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+          }
+        ],
+        "allow_missing_identification": true,
+        "known_missing_identification_permitted": true,
+        "accepted_automated_baseline": true,
+        "human_accessibility_qualified": false,
+        "report_sha256": "84f32f04e245b3104ac475b21039b224a34d7a5cf391e0b792f9f4c286b110c3"
+      }
+    },
+    "java": "17.0.20.1",
+    "runner_kernel": "6.17.0-1022-azure"
+  },
+  "limits": [
+    "Native CLI and pixel comparison do not qualify the current GUI export or graphical installation.",
+    "All UA2 outputs remain noncompliant for missing identification; no human screen-reader qualification.",
+    "Pixel equality is limited to the stated renderer, resolution, options and fixture.",
+    "Native elapsed time includes extraction and report generation; a single observation, not a paired performance comparison.",
+    "The 77,489,201-byte PDF exceeds the 16 MiB size target; no media cap adopted."
+  ]
+}
