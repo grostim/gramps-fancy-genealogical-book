@@ -35,6 +35,14 @@ Pour le script d’intégration avec Gramps réel, utiliser Python 3.12 ou ulté
 
 Le script installe l’archive construite dans un profil Gramps temporaire et importe le GEDCOM fictif de référence. Il ne nécessite pas de base personnelle. La CI couvre Python 3.10 à 3.13 et utilise Gramps 6.0.7 et 6.0.8 pour l’intégration ; un lancement local avec une autre version corrective de Gramps fournit une indication, mais ne remplace aucune de ces cibles CI.
 
+Si Gramps est installé dans l’environnement Python courant, lancer aussi le contrôle de son installateur d’archives dans un processus neuf :
+
+```sh
+python scripts/verify_addon_installer.py --addon-archive gramps60/download/GrampsFancyBook.addon.tgz
+```
+
+Il exerce le backend du gestionnaire de greffons dans un profil temporaire : installation, réinstallation de la même version et refus d’une cible incompatible. Les fichiers installés doivent correspondre exactement à l’archive. La CI lance ce contrôle sous Gramps 6.0.7 et 6.0.8 et conserve son relevé JSON avec l’archive. Ce contrôle n’exerce ni la manipulation graphique ni une mise à niveau interversion.
+
 ## Traduction et fichiers générés
 
 Ajouter ou modifier les libellés du rapport dans `gramps60/GrampsFancyBook/po/fr-local.po` et synchroniser `po/template.pot` avec les chaînes source. Les messages d’échec de compilation PDF sont sélectionnés dynamiquement dans `GrampsFancyBook.py` : les conserver explicitement dans les deux catalogues. La construction compile le catalogue français et inclut `addon.mo` dans l’archive. Ne pas committer les fichiers `.mo` générés ni `gramps60/download/GrampsFancyBook.addon.tgz` : le catalogue est créé temporairement par la construction et l’archive est un artefact généré.

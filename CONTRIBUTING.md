@@ -35,6 +35,19 @@ For the real Gramps integration runner, use Python 3.12 or later with Gramps 6.0
 
 The runner installs the built add-on into a temporary Gramps profile and imports the fictional reference GEDCOM. It does not require a personal database. CI covers Python 3.10–3.13 and uses Gramps 6.0.7 and 6.0.8 for integration; a local run on another Gramps patch version is useful evidence but does not replace either CI target.
 
+With Gramps installed in the current Python environment, also run the native
+archive-installer check in a fresh process:
+
+```sh
+python scripts/verify_addon_installer.py --addon-archive gramps60/download/GrampsFancyBook.addon.tgz
+```
+
+It exercises the backend used by Plugin Manager in a disposable profile:
+installation, same-version reinstallation and refusal of an incompatible target.
+The installed bytes must match the archive. CI runs this check on Gramps 6.0.7
+and 6.0.8 and preserves its JSON record with the archive. This does not exercise
+the graphical interaction or an upgrade between versions.
+
 ## Translation and generated files
 
 Add or update report labels in `gramps60/GrampsFancyBook/po/fr-local.po` and keep `po/template.pot` aligned with the source strings. PDF compilation error messages are selected dynamically in `GrampsFancyBook.py`; preserve them explicitly in both catalogs. The build compiles the French catalog and includes the resulting `addon.mo` in the archive. Do not commit generated `.mo` files or `gramps60/download/GrampsFancyBook.addon.tgz`; the build creates the catalog temporarily and the archive is generated output.

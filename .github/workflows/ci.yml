@@ -137,6 +137,11 @@ jobs:
           EOF
           chmod +x "$RUNNER_TEMP/lualatex-bin/lualatex"
       - run: .venv-gramps/bin/python build_addon.py
+      - name: Verify native archive installation and reinstallation
+        run: >-
+          .venv-gramps/bin/python scripts/verify_addon_installer.py
+          --addon-archive gramps60/download/GrampsFancyBook.addon.tgz
+          --output-record "$RUNNER_TEMP/native-installer-${{ matrix.gramps_version }}.json"
       - name: Verify native Gramps export including PDF
         run: >-
           .venv-gramps/bin/python scripts/verify_gramps.py
@@ -147,6 +152,13 @@ jobs:
         with:
           name: GrampsFancyBook-addon-Gramps-${{ matrix.gramps_version }}
           path: gramps60/download/GrampsFancyBook.addon.tgz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: GrampsFancyBook-installer-Gramps-${{ matrix.gramps_version }}
+          path: ${{ runner.temp }}/native-installer-${{ matrix.gramps_version }}.json
+          if-no-files-found: ignore
+          retention-days: 14
       - uses: actions/upload-artifact@v4
         if: always()
         with:
