@@ -1,10 +1,18 @@
 # Media validation / Pillow and PDFium
 
-Status as of 2026-10-04.
+Status as of 2026-10-09.
 
 ## Verified scope
 
 CI installs the `media` extra across the Python 3.10–3.13 matrix and exercises conversions with synthetic images and single- and multipage PDFs. The Gramps integration matrix runs on Ubuntu 24.04 with Python 3.12 and Gramps 6.0.7 and 6.0.8. The local run of this recipe uses Gramps Desktop 6.0.8 on macOS with an isolated database.
+
+### L8.3 — Gramps GUI export with public archival portraits — 2026-10-09
+
+A synthetic N=100 GEDCOM was imported into a fresh Gramps Desktop profile. The import reported no errors; the tree contains 202 people, 101 families, and twenty local Wellcome Collection photographs totaling 13,741,822 source bytes. The genealogy is fictional, and captions include Wellcome Collection credit and the CC BY 4.0 license.
+
+From **Reports → Web Pages → Gramps Fancy Genealogical Book**, the GUI PDF export produced 103 tagged A4 pages in 77,489,999 bytes in about 70.1 seconds. The twenty full-resolution images range from 1,600 × 1,540 to 1,601 × 2,700 pixels (301–418 effective ppi). Rendered pages 34, 36, 48–49, 59, and 68–69 show no visible clipping or cut-off captions. The HTML ZIP from the same tree passes `unzip -t` and contains `index.html` and twenty PNGs; the attribution and license strings are present. Exact sizes and hashes are in the [package lifecycle validation](validation-addon-lifecycle.md). The production renderer keeps full-resolution derivatives; this result does not change the decision against enabling the exploratory 900-pixel cap.
+
+This GUI qualification covers Gramps 6.0.8-1 and its embedded Python 3.13.2 in an isolated profile. It does not measure media extracted from an existing family tree, cover other Gramps versions, or establish PDF/UA conformance.
 
 The native Gramps CLI recipe covers AC-13: a fictional image present on disk carries both `BOOK_EXCLUDE` and `BOOK_FEATURED`, and its reference carries a dedicated citation used nowhere else. The model export confirms that the source object retains both tags but receives no placement, editorial reference or derivative; its exclusive citation is omitted from the appendix. The ZIP includes only the two expected images for other media, with no AC-13 description or citation detail. This qualifies native XML import and CLI export; see the Desktop recipe below. Entering the tags through the GUI remains unverified.
 
