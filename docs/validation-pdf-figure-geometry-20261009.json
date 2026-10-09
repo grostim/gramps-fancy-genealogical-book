@@ -1,0 +1,27 @@
+{
+  "scope": "renderer figure attributes; no painted-image or PDF/UA validation",
+  "fixture": "fictional branching N=10, synthetic 96x72 portraits",
+  "python": "3.13.7",
+  "pypdf": "6.19.0",
+  "tool_sha256": "3efc3e3e39282cfe266eb4ca3990b296577ec4ac9d07a6cb25c5108af584a845",
+  "result": {
+    "pdf_sha256": "b24feb5b177f7ad57f7788fc4ab9d7492ea51e6a6c4a179440f74ac9f21299e2",
+    "audit": {
+      "pages": 17,
+      "figures": 4,
+      "geometry_sha256": "5e672d6aa81d041b04219ffd2cd59875b006d712e77a0748c09583a11616aea7",
+      "scope": "recorded figure attributes; not painted-image or PDF/UA validation"
+    },
+    "reference_match": true,
+    "rejected_corruptions": [
+      "missing_bbox",
+      "zero_origin",
+      "zero_width"
+    ],
+    "validated_clones": [
+      "intact",
+      "class_attributes"
+    ]
+  },
+  "follow_up_at_record_time": "Audit all six N1000 outputs after the live performance series ends; validate bilingual CI fixture outputs."
+}

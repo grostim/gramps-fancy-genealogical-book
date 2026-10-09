@@ -241,12 +241,17 @@ jobs:
         run: |
           python scripts/verify_pdf_link_audit.py .work/latex-spike/rendered-book.pdf --negative-controls
           python scripts/verify_pdf_link_audit.py .work/latex-spike/rendered-french-book.pdf
+      - name: Verify recorded figure geometry in both books
+        run: |
+          python scripts/verify_pdf_figure_geometry.py .work/latex-spike/rendered-book.pdf --negative-controls > .work/latex-spike/figure-geometry-en.json
+          python scripts/verify_pdf_figure_geometry.py .work/latex-spike/rendered-french-book.pdf > .work/latex-spike/figure-geometry-fr.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lualatex-book-fixtures
           if-no-files-found: ignore
           path: |
+            .work/latex-spike/figure-geometry-*.json
             .work/latex-spike/layout-spike.pdf
             .work/latex-spike/layout-spike.tex
             .work/latex-spike/layout-spike.log
