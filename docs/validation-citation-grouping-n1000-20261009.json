@@ -352,5 +352,21 @@
       "kept": "06164580515c04dfa86f275605ce0e725e4231e9d9a1f7768ee9dbf46e2c3211",
       "unwrapped": "6e55f5cdfbce618a3bf24695a2520e615a9886681668613b2b070497e3c4178b"
     }
+  },
+  "tooling_review_controls": {
+    "relative_work_directory": "complete N=1 pair; all paired audits match",
+    "complete_candidate": "complete N=1 pair with strict ownership; all paired audits match",
+    "incomplete_candidates": [
+      {
+        "missing": "tagpdf-base.sty",
+        "rejected": true,
+        "error": "/private/tmp/gfb-tagpdf-incomplete-controls-20261009/tagpdf-base.sty/tagpdf-base.sty"
+      },
+      {
+        "missing": "tagpdf-parent-child-2.csv",
+        "rejected": true,
+        "error": "Candidate build loaded tagpdf files from another installation"
+      }
+    ]
   }
 }

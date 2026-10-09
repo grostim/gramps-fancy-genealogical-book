@@ -169,7 +169,10 @@ def compare(candidate: Path, work: Path, couples: int, pairs: int) -> None:
         raise RuntimeError("LuaLaTeX is required")
     compiler = Path(compiler_name).absolute()
     candidate = candidate.resolve()
-    for name in ("tagpdf.sty", "tagpdf.lua"):
+    for name in (
+        "tagpdf.sty", "tagpdf.lua", "tagpdf-base.sty",
+        "tagpdf-luatex.def", "tagpdf-mc-code-lua.sty",
+    ):
         if not (candidate / name).is_file():
             raise FileNotFoundError(candidate / name)
     work.mkdir(parents=True)
@@ -243,12 +246,18 @@ def compare(candidate: Path, work: Path, couples: int, pairs: int) -> None:
                 }
                 assert paths["sty"] in loaded and paths["lua"] in loaded
                 if variant == "candidate":
-                    # Namespace data can be supplied by latex-lab or the TeX
-                    # distribution rather than by the candidate archive.
+                    # Only this namespace is supplied by latex-lab. All other
+                    # loaded tagpdf files must belong to the candidate bundle,
+                    # including files omitted from an incomplete archive.
                     assert all(
-                        Path(path).resolve().parent == candidate for path in loaded
-                        if (candidate / Path(path).name).is_file()
-                    )
+                        Path(path).resolve().parent == candidate
+                        or (
+                            Path(path).name == "tagpdf-ns-latex-lab.def"
+                            and Path(path).resolve().parent.name == "latex-lab"
+                            and not (candidate / Path(path).name).is_file()
+                        )
+                        for path in loaded
+                    ), "Candidate build loaded tagpdf files from another installation"
                 pdf = run_directory / "book.pdf"
                 result = {
                     "pair": pair, "variant": variant, "seconds": elapsed,
