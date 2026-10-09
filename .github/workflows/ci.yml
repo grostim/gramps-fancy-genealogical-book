@@ -264,7 +264,8 @@ jobs:
           target = SubElement(root, "com.izforge.izpack.panels.target.TargetPanel", id="install_dir")
           SubElement(target, "installpath").text = str(directory / "verapdf")
           packs = SubElement(root, "com.izforge.izpack.panels.packs.PacksPanel", id="sdk_pack_select")
-          for index, name, selected in [(0, "veraPDF GUI", "true"), (1, "veraPDF CLI", "true"), (2, "veraPDF Validation model", "false"), (3, "veraPDF Documentation", "false"), (4, "veraPDF Sample Plugins", "false")]:
+          # Component indices match veraPDF-apps v1.30.3/auto-install-tmp.xml.
+          for index, name, selected in [(0, "veraPDF GUI", "true"), (1, "veraPDF CLI", "true"), (2, "veraPDF Documentation", "false"), (3, "veraPDF Sample Plugins", "false")]:
               SubElement(packs, "pack", index=str(index), name=name, selected=selected)
           SubElement(root, "com.izforge.izpack.panels.install.InstallPanel", id="install")
           SubElement(root, "com.izforge.izpack.panels.finish.FinishPanel", id="finish")
