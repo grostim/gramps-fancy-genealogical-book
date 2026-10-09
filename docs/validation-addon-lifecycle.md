@@ -35,6 +35,14 @@ The local run above uses the CLI in a clean profile, not an install through the 
 
 The first hosted CI run associated with [PR #294](https://github.com/grostim/gramps-fancy-genealogical-book/pull/294) passed on Gramps 6.0.7 and 6.0.8 using the pinned LuaLaTeX image. Both jobs installed the archive in a temporary environment, ran native checks, and produced a tagged A4 PDF with 16 pages: 151,136 bytes on 6.0.7 and 151,180 bytes on 6.0.8. The `GrampsFancyBook-PDF-Gramps-6.0.7` and `GrampsFancyBook-PDF-Gramps-6.0.8` artifacts are retained for 14 days in the [CI run](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37515424979). The Python 3.10–3.13, Windows 3.10–3.13, macOS, Gramps 6.1 canary, and LaTeX prototype jobs also passed. This qualifies CLI export from the archive on those versions; it does not replace the graphical-install check or a full visual review.
 
+## Native Plugin Manager installer — October 9, 2026
+
+`scripts/verify_addon_installer.py` calls `gramps.gen.plug.utils.load_addon_file`, the backend used by Plugin Manager, in a fresh disposable profile. The local check used embedded Python 3.13.2 from Gramps Desktop 6.0.8-1. Two builds of commit `a5448614948a6c796dfa9fe82721de62f80a3392` produce identical bytes: SHA-256 `f11cca39c47bd6beed9f189feefec4a268b0ee0bf722c791a3e0010038e596d5`, 29 files.
+
+The installer accepts the archive and all 29 installed files match their archived bytes. Reinstallation restores a `MANIFEST` file deliberately altered in this disposable profile. A diagnostic archive targeting Gramps `99.0` is rejected without changing installed files. The [raw record](validation-native-addon-installer-20261009.json) preserves the results. The Gramps 6.0.7 and 6.0.8 CI jobs now run this check before exports and preserve its JSON with their archive; their results remain to be checked on the corresponding PR.
+
+This qualifies the installation backend, not GUI interaction, upgrades between versions or obsolete-file cleanup by the manager. The GUI recipe remains outstanding; the Mac was locked during this check.
+
 ## GUI qualification of the archive renderer baseline — October 6, 2026
 
 The test used Gramps Desktop 6.0.8-1 on macOS in the temporary profile `tmp/l8-4-gui-example-20261006/profile`, launched with an explicit `GRAMPSHOME`. The profile initially contained no tree. The `L8_4 GUI reference family 20261006` tree was created there and populated from the fictional `reference-family.gramps` fixture. Gramps recognized four people, two families, one source, three events, three citations, two places, and one repository. No personal tree was opened.

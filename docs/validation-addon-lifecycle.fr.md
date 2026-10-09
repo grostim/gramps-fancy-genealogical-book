@@ -35,6 +35,14 @@ Le test local ci-dessus utilise le CLI dans un profil neuf, pas une installation
 
 Le premier run hébergé de la CI, associé à la [PR #294](https://github.com/grostim/gramps-fancy-genealogical-book/pull/294), a réussi sous Gramps 6.0.7 et 6.0.8 avec l’image LuaLaTeX épinglée. Les deux jobs ont installé l’archive dans un environnement temporaire, exécuté les contrôles natifs, puis produit un PDF balisé A4 de 16 pages : 151 136 octets pour 6.0.7 et 151 180 octets pour 6.0.8. Les artefacts `GrampsFancyBook-PDF-Gramps-6.0.7` et `GrampsFancyBook-PDF-Gramps-6.0.8` sont conservés 14 jours dans le [run CI](https://github.com/grostim/gramps-fancy-genealogical-book/actions/runs/37515424979). Les matrices Python 3.10–3.13, Windows 3.10–3.13, macOS, la canary Gramps 6.1 et le prototype LaTeX ont également réussi. Cela qualifie l’export CLI depuis l’archive sous ces versions ; cela ne remplace pas la recette graphique ni une revue visuelle complète.
 
+## Installateur natif du gestionnaire de greffons — 9 octobre 2026
+
+Le script `scripts/verify_addon_installer.py` appelle `gramps.gen.plug.utils.load_addon_file`, le backend utilisé par le gestionnaire de greffons, dans un nouveau profil temporaire. Le contrôle local a utilisé le Python embarqué 3.13.2 de Gramps Desktop 6.0.8-1. Deux constructions du commit `a5448614948a6c796dfa9fe82721de62f80a3392` produisent les mêmes octets : SHA-256 `f11cca39c47bd6beed9f189feefec4a268b0ee0bf722c791a3e0010038e596d5`, 29 fichiers.
+
+L’installateur accepte l’archive et les 29 fichiers installés correspondent exactement à leurs octets archivés. Une réinstallation restaure le fichier `MANIFEST` volontairement altéré dans ce seul profil temporaire. Une archive diagnostique ciblant Gramps `99.0` est refusée et ne change aucun fichier installé. Le [relevé brut](validation-native-addon-installer-20261009.json) consigne ces résultats. Les jobs CI Gramps 6.0.7 et 6.0.8 exécutent désormais ce contrôle avant les exports et conservent son JSON avec leur archive ; leur résultat est à vérifier sur la PR correspondante.
+
+Cela qualifie le backend d’installation, pas la manipulation de l’interface graphique, une mise à niveau interversion ni le nettoyage de fichiers obsolètes par le gestionnaire. Le parcours graphique reste à effectuer ; l’accès au Mac était verrouillé pendant cette recette.
+
 ## Qualification graphique de la référence du renderer — 6 octobre 2026
 
 Le test a utilisé Gramps Desktop 6.0.8-1 sous macOS dans le profil temporaire `tmp/l8-4-gui-example-20261006/profile`, lancé avec `GRAMPSHOME` explicite. Ce profil ne contenait aucun arbre au départ. L’arbre `L8_4 GUI reference family 20261006` a été créé dans ce profil et alimenté avec `reference-family.gramps`, une fixture fictive que Gramps a reconnue comme 4 individus, 2 familles, 1 source, 3 événements, 3 citations, 2 lieux et 1 dépôt. Aucun arbre personnel n’a été ouvert.
