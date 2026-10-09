@@ -245,13 +245,52 @@ jobs:
         run: |
           python scripts/verify_pdf_figure_geometry.py .work/latex-spike/rendered-book.pdf --negative-controls > .work/latex-spike/figure-geometry-en.json
           python scripts/verify_pdf_figure_geometry.py .work/latex-spike/rendered-french-book.pdf > .work/latex-spike/figure-geometry-fr.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install pinned veraPDF in the runner temporary directory
+        run: |
+          curl --fail --location --retry 3 https://software.verapdf.org/releases/1.30/verapdf-greenfield-1.30.3-installer.zip -o "$RUNNER_TEMP/verapdf.zip"
+          echo "b512bf24945503a33fc10738ecffc1f2dccaaf8593a448e94ee9ac86a9559a59  $RUNNER_TEMP/verapdf.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/verapdf.zip" -d "$RUNNER_TEMP/verapdf-package"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from xml.etree.ElementTree import Element, SubElement, ElementTree
+          directory = Path(os.environ["RUNNER_TEMP"])
+          root = Element("AutomatedInstallation", langpack="eng")
+          SubElement(root, "com.izforge.izpack.panels.htmlhello.HTMLHelloPanel", id="welcome")
+          target = SubElement(root, "com.izforge.izpack.panels.target.TargetPanel", id="install_dir")
+          SubElement(target, "installpath").text = str(directory / "verapdf")
+          packs = SubElement(root, "com.izforge.izpack.panels.packs.PacksPanel", id="sdk_pack_select")
+          # Component indices match veraPDF-apps v1.30.3/auto-install-tmp.xml.
+          for index, name, selected in [(0, "veraPDF GUI", "true"), (1, "veraPDF CLI", "true"), (2, "veraPDF Documentation", "false"), (3, "veraPDF Sample Plugins", "false")]:
+              SubElement(packs, "pack", index=str(index), name=name, selected=selected)
+          SubElement(root, "com.izforge.izpack.panels.install.InstallPanel", id="install")
+          SubElement(root, "com.izforge.izpack.panels.finish.FinishPanel", id="finish")
+          ElementTree(root).write(directory / "verapdf-install.xml", encoding="utf-8")
+          PY
+          java -jar "$RUNNER_TEMP/verapdf-package/verapdf-greenfield-1.30.3/verapdf-izpack-installer-1.30.3.jar" "$RUNNER_TEMP/verapdf-install.xml"
+          "$RUNNER_TEMP/verapdf/verapdf" --version
+      - name: Audit UA-2 automatic requirements with the documented metadata exception
+        run: |
+          gfb_ua2_status=0
+          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-en --allow-missing-identification --negative-controls || gfb_ua2_status=1
+          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-french-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-fr --allow-missing-identification || gfb_ua2_status=1
+          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-sparse-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-sparse --allow-missing-identification || gfb_ua2_status=1
+          exit "$gfb_ua2_status"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lualatex-book-fixtures
           if-no-files-found: ignore
+          include-hidden-files: true
           path: |
             .work/latex-spike/figure-geometry-*.json
+            .work/latex-spike/ua2-*/**/*.xml
+            .work/latex-spike/ua2-*/**/*.json
+            .work/latex-spike/ua2-*/**/*.log
             .work/latex-spike/layout-spike.pdf
             .work/latex-spike/layout-spike.tex
             .work/latex-spike/layout-spike.log

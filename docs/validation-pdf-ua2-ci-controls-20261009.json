@@ -1,0 +1,406 @@
+{
+  "date": "2026-10-09",
+  "helper_sha256": "1aee50a1c9620c818fb259801a41ebc224a919c35a1efaa41f13e546bdb040a5",
+  "validator": "veraPDF Greenfield 1.30.3",
+  "installer_versioned_url": "https://software.verapdf.org/releases/1.30/verapdf-greenfield-1.30.3-installer.zip",
+  "installer_sha256": "b512bf24945503a33fc10738ecffc1f2dccaaf8593a448e94ee9ac86a9559a59",
+  "local_results": {
+    "english": {
+      "pdf_sha256": "38cd65a2e1f20269741951f616be27c94928f8ba0948085652a932ddf4dbabc7",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58223,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": true,
+      "accepted_automated_baseline": true,
+      "human_accessibility_qualified": false,
+      "report_sha256": "bc3a3407939014b5a2d1056ae05096f1b2f2e040aafc8c83c5c715fecf071357",
+      "rejected_corruptions": [
+        "missing_language",
+        "missing_figure_alt"
+      ]
+    },
+    "french": {
+      "pdf_sha256": "ca8738768a0d16a5f8f5d729e9b86ac8e12d50cf9204464d68c5913009fa119a",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58532,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": true,
+      "accepted_automated_baseline": true,
+      "human_accessibility_qualified": false,
+      "report_sha256": "424aac90aa69b88462aaf3dc054ce5951eba90c83b2f7fc574e4838550e90005"
+    },
+    "sparse": {
+      "pdf_sha256": "4e5f549c5049a7d04bd3373951ca1b488baa8463532389250ffef5bf99c715c8",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 3368,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": true,
+      "accepted_automated_baseline": true,
+      "human_accessibility_qualified": false,
+      "report_sha256": "3fc7207461b361fd1cd1180b976e5eb72937456895f10e877161804822b6eafa"
+    },
+    "strict_english": {
+      "pdf_sha256": "38cd65a2e1f20269741951f616be27c94928f8ba0948085652a932ddf4dbabc7",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58223,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        }
+      ],
+      "allow_missing_identification": false,
+      "known_missing_identification_permitted": false,
+      "accepted_automated_baseline": false,
+      "human_accessibility_qualified": false,
+      "report_sha256": "46041f9778bfce897ea8ea7def9c047ea0f5fe5227c17b8261b70a80da71c512"
+    },
+    "intact_clone": {
+      "pdf_sha256": "88a1c22d64e364cd3faa2336b35677119870edb5074dcf57aed719075dd014f4",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58223,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": true,
+      "accepted_automated_baseline": true,
+      "human_accessibility_qualified": false,
+      "report_sha256": "41dda557e93f75ccf89743705dfb5eddb7b1a2bffd2ff0d23725d3cd19e7f751"
+    },
+    "missing_language": {
+      "pdf_sha256": "60800e6e02244158fb72ef244b2c80b48f5d5809d59cde7654dd0c79b5930815",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1726,
+        "failedRules": 2,
+        "passedChecks": 58220,
+        "failedChecks": 2
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        },
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "8.4.4",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "lang",
+          "test": "containsLang == true",
+          "description": "The default natural language for content and text strings shall be specified using the Lang entry, with a non-empty value, in the catalog dictionary"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": false,
+      "accepted_automated_baseline": false,
+      "human_accessibility_qualified": false,
+      "report_sha256": "3f0d498c73e5a503d036f3713b26ab3cc239e5c331a7fc32212879c1630fab85"
+    },
+    "missing_figure_alt": {
+      "pdf_sha256": "90b2c3d5ec6e974abcbe5e0c8e9e72f0357650b15230037a6242e9e2dc56cd64",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1726,
+        "failedRules": 2,
+        "passedChecks": 58221,
+        "failedChecks": 2
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        },
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "8.2.5.28.2",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "structure,figure,alt-text",
+          "test": "Alt != null || ActualText != null",
+          "description": "A Figure structure element shall have at least one of the following properties: a) an alternate description (Alt property), as specified in ISO 32000-2:2020, 14.9.3; b) a replacement text (ActualText property) that represents the content enclosed by the Figure structure element"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": false,
+      "accepted_automated_baseline": false,
+      "human_accessibility_qualified": false,
+      "report_sha256": "55dcf121253dd753ab545519eac9fa06c3a793bfb9c459e317c7196d01176324"
+    },
+    "empty_alt_probe": {
+      "pdf_sha256": "447d5cec41fd8f96122ce1ed099246e0f4ae5a7f726343f9eab88753cf34736f",
+      "validator_build": [
+        {
+          "id": "core",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T10:02:00+02:00"
+        },
+        {
+          "id": "validation-model",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:44:00+02:00"
+        },
+        {
+          "id": "apps",
+          "version": "1.30.3",
+          "buildDate": "2026-10-07T13:52:00+02:00"
+        }
+      ],
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58223,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "testNumber": "1",
+          "status": "failed",
+          "failedChecks": "1",
+          "tags": "metadata",
+          "test": "containsPDFUAIdentification == true",
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema"
+        }
+      ],
+      "allow_missing_identification": true,
+      "known_missing_identification_permitted": true,
+      "accepted_automated_baseline": true,
+      "human_accessibility_qualified": false,
+      "report_sha256": "1b7cb68707f94503a712c55c23c8ede8993720998588e188fc11f5f3eeead9fb"
+    }
+  },
+  "native_gui": {
+    "pdf_sha256": "c2778863a1237840d248a1a4d9cb9cc83e1b41a0a76b3c55b3bbe829c0b1d871",
+    "pages": 103,
+    "bytes": 77489335,
+    "latex_source_sha256": "5fa4616031656e10ef24154ef7893e04551c7fe53a25d9420277a992a6b07171",
+    "source_limit": "Predates moving samepage after item; does not requalify current GUI renderer.",
+    "xml_sha256": "d9583c0825950115c434586aea43e898f867f57381f3c2e21d7a6fde3324baaf",
+    "job_end_status": "normal",
+    "is_compliant": false,
+    "reported_counts": {
+      "passedRules": 1727,
+      "failedRules": 1,
+      "passedChecks": 1002036,
+      "failedChecks": 1
+    }
+  },
+  "limits": [
+    "Automatic regression checks only; no human accessibility qualification.",
+    "Empty Alt was accepted by veraPDF; preserve independent nonempty Alt audit.",
+    "Local environment Java 25.0.1; CI requests Java 17 and is not yet qualified for this helper."
+  ]
+}

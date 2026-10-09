@@ -74,3 +74,40 @@ Avant d’annoncer la conformité ou d’activer sa déclaration en production :
 
 Les audits existants du balisage, des liens ParentTree/OBJR et des BBox
 restent utiles. Ils ne remplacent pas ces vérifications.
+
+## Contrôle continu des exigences automatiques
+
+`scripts/verify_pdf_ua2.py` lance veraPDF avec le profil explicite `ua2`,
+conserve XML et stderr, puis refuse tout défaut supplémentaire. Son mode
+par défaut exige un résultat automatique conforme. La CI utilise
+`--allow-missing-identification` pour autoriser uniquement le défaut connu
+ISO 14289-2:2024, clause 5, test 1, objet MainXMPPackage,
+`containsPDFUAIdentification == true`. Le JSON continue d’indiquer
+`is_compliant: false` et `human_accessibility_qualified: false`.
+
+Le binaire CI est fixé à 1.30.3 par URL versionnée et SHA-256. Les rapports
+FR, EN et peu documenté, ainsi que ceux des contrôles négatifs, sont
+conservés dans l’artefact CI, y compris après échec. Une erreur d’exécution,
+un rapport incomplet ou un défaut différent fait échouer le contrôle.
+
+Exemple, avec un répertoire de rapport neuf :
+
+```sh
+python scripts/verify_pdf_ua2.py book.pdf --verapdf /path/to/verapdf \
+  --report-directory /tmp/ua2-new-report --allow-missing-identification
+```
+
+Les contrôles locaux prouvent qu’un clone intact est accepté et que les
+cas langue absente et attribut Alt supprimé sont refusés, même avec
+l’exception de métadonnées. Un essai avec **Alt vide** a en revanche été
+accepté par veraPDF 1.30.3 : l’audit existant du renderer exige toujours
+un texte alternatif non vide, et la revue humaine doit en vérifier le sens.
+Ces contrôles ne constituent pas une qualification exhaustive du validateur.
+Voir le [relevé des contrôles](validation-pdf-ua2-ci-controls-20261009.json).
+
+Le PDF GUI conservé de 103 pages avec vingt portraits publics a également
+été audité : un seul échec, le même schéma PDF/UA absent, sur 1 002 036
+contrôles réussis rapportés. Il utilise le renderer antérieur au déplacement
+du groupe `samepage` après `\item` ; cette preuve ne remplace pas la
+réexportation GUI du renderer actuel. Le rapport intégral est
+[conservé](validation-pdf-accessibility-native-gui-20261009.xml).
