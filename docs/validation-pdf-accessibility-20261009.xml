@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report>
+  <buildInformation>
+    <releaseDetails id="core" version="1.30.3" buildDate="2026-10-07T10:02:00+02:00"></releaseDetails>
+    <releaseDetails id="validation-model" version="1.30.3" buildDate="2026-10-07T13:44:00+02:00"></releaseDetails>
+    <releaseDetails id="apps" version="1.30.3" buildDate="2026-10-07T13:52:00+02:00"></releaseDetails>
+  </buildInformation>
+  <jobs>
+    <job>
+      <item size="99543">
+        <name>/tmp/gfb-verapdf-audit-20261009/rendered-book.pdf</name>
+      </item>
+      <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is not compliant with Validation Profile requirements." isCompliant="false">
+        <details passedRules="1727" failedRules="1" passedChecks="58223" failedChecks="1">
+          <rule specification="ISO 14289-2:2024" clause="5" testNumber="1" status="failed" failedChecks="1" tags="metadata">
+            <description>The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema</description>
+            <object>MainXMPPackage</object>
+            <test>containsPDFUAIdentification == true</test>
+            <check status="failed">
+              <context>root/document[0]/metadata[0](1241 0 obj PDMetadata)/XMPPackage[0]</context>
+              <errorMessage>The document metadata stream doesn't contain PDF/UA Identification Schema</errorMessage>
+            </check>
+          </rule>
+        </details>
+      </validationReport>
+      <duration start="1791555653321" finish="1791555653822">00:00:00.501</duration>
+    </job>
+    <job>
+      <item size="99371">
+        <name>/tmp/gfb-verapdf-audit-20261009/rendered-french-book.pdf</name>
+      </item>
+      <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is not compliant with Validation Profile requirements." isCompliant="false">
+        <details passedRules="1727" failedRules="1" passedChecks="58532" failedChecks="1">
+          <rule specification="ISO 14289-2:2024" clause="5" testNumber="1" status="failed" failedChecks="1" tags="metadata">
+            <description>The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema</description>
+            <object>MainXMPPackage</object>
+            <test>containsPDFUAIdentification == true</test>
+            <check status="failed">
+              <context>root/document[0]/metadata[0](1235 0 obj PDMetadata)/XMPPackage[0]</context>
+              <errorMessage>The document metadata stream doesn't contain PDF/UA Identification Schema</errorMessage>
+            </check>
+          </rule>
+        </details>
+      </validationReport>
+      <duration start="1791555653834" finish="1791555653998">00:00:00.164</duration>
+    </job>
+    <job>
+      <item size="31897">
+        <name>/tmp/gfb-verapdf-audit-20261009/rendered-sparse-book.pdf</name>
+      </item>
+      <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is not compliant with Validation Profile requirements." isCompliant="false">
+        <details passedRules="1727" failedRules="1" passedChecks="3368" failedChecks="1">
+          <rule specification="ISO 14289-2:2024" clause="5" testNumber="1" status="failed" failedChecks="1" tags="metadata">
+            <description>The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema</description>
+            <object>MainXMPPackage</object>
+            <test>containsPDFUAIdentification == true</test>
+            <check status="failed">
+              <context>root/document[0]/metadata[0](127 0 obj PDMetadata)/XMPPackage[0]</context>
+              <errorMessage>The document metadata stream doesn't contain PDF/UA Identification Schema</errorMessage>
+            </check>
+          </rule>
+        </details>
+      </validationReport>
+      <duration start="1791555654002" finish="1791555654023">00:00:00.021</duration>
+    </job>
+    <job>
+      <item size="12560198">
+        <name>/tmp/gfb-tagpdf-paired-n1000-corrected-20261009/pair-1-installed/book.pdf</name>
+      </item>
+      <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is not compliant with Validation Profile requirements." isCompliant="false">
+        <details passedRules="1727" failedRules="1" passedChecks="10996605" failedChecks="1">
+          <rule specification="ISO 14289-2:2024" clause="5" testNumber="1" status="failed" failedChecks="1" tags="metadata">
+            <description>The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema</description>
+            <object>MainXMPPackage</object>
+            <test>containsPDFUAIdentification == true</test>
+            <check status="failed">
+              <context>root/document[0]/metadata[0](252693 0 obj PDMetadata)/XMPPackage[0]</context>
+              <errorMessage>The document metadata stream doesn't contain PDF/UA Identification Schema</errorMessage>
+            </check>
+          </rule>
+        </details>
+      </validationReport>
+      <duration start="1791555654381" finish="1791555749814">00:01:35.433</duration>
+    </job>
+  </jobs>
+  <batchSummary totalJobs="4" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
+    <validationReports compliant="0" nonCompliant="4" failedJobs="0">4</validationReports>
+    <featureReports failedJobs="0">0</featureReports>
+    <repairReports failedJobs="0">0</repairReports>
+    <duration start="1791555653297" finish="1791555749937">00:01:36.640</duration>
+  </batchSummary>
+</report>

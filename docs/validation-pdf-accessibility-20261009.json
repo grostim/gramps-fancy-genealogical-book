@@ -1,0 +1,200 @@
+{
+  "date": "2026-10-09",
+  "status": "complete; four PDF/UA-2 audits noncompliant only for missing identification schema",
+  "validator": {
+    "implementation": "veraPDF Greenfield",
+    "version": "1.30.3",
+    "build_information": [
+      {
+        "id": "core",
+        "version": "1.30.3",
+        "buildDate": "2026-10-07T10:02:00+02:00"
+      },
+      {
+        "id": "validation-model",
+        "version": "1.30.3",
+        "buildDate": "2026-10-07T13:44:00+02:00"
+      },
+      {
+        "id": "apps",
+        "version": "1.30.3",
+        "buildDate": "2026-10-07T13:52:00+02:00"
+      }
+    ],
+    "installer_url": "https://software.verapdf.org/releases/verapdf-installer.zip",
+    "installer_sha256": "b512bf24945503a33fc10738ecffc1f2dccaaf8593a448e94ee9ac86a9559a59",
+    "archive_signature_verified": false,
+    "installation": "temporary isolated directory; no system installation",
+    "java": "OpenJDK 25.0.1",
+    "host": "macOS 27.0 arm64",
+    "command": "verapdf --flavour ua2 --format xml INPUT_PDF ...",
+    "exit_code": 1,
+    "stderr_bytes": 0,
+    "metadata_repair": false
+  },
+  "raw_report": {
+    "file": "validation-pdf-accessibility-20261009.xml",
+    "sha256": "6a10ff95ea53acc1e698a1a0f7440adb57d3d3e8fa51b69f8e71006f2548343a"
+  },
+  "batch_summary": {
+    "totalJobs": "4",
+    "failedToParse": "0",
+    "encrypted": "0",
+    "outOfMemory": "0",
+    "veraExceptions": "0"
+  },
+  "fixtures": [
+    {
+      "fixture": "rendered-book.pdf",
+      "pdf_sha256": "38cd65a2e1f20269741951f616be27c94928f8ba0948085652a932ddf4dbabc7",
+      "bytes": 99543,
+      "pages": 16,
+      "language": "en-US",
+      "renderer_commit": "c99a3789f164f21de1b9a3321cb9aee4b7406121",
+      "profile": "PDF/UA-2 + Tagged PDF validation profile",
+      "job_end_status": "normal",
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58223,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "test_number": "1",
+          "failed_checks": 1,
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema",
+          "test": "containsPDFUAIdentification == true",
+          "checks": [
+            {
+              "context": "root/document[0]/metadata[0](1241 0 obj PDMetadata)/XMPPackage[0]",
+              "error": "The document metadata stream doesn't contain PDF/UA Identification Schema"
+            }
+          ]
+        }
+      ],
+      "duration": "00:00:00.501"
+    },
+    {
+      "fixture": "rendered-french-book.pdf",
+      "pdf_sha256": "ca8738768a0d16a5f8f5d729e9b86ac8e12d50cf9204464d68c5913009fa119a",
+      "bytes": 99371,
+      "pages": 15,
+      "language": "fr-FR",
+      "renderer_commit": "c99a3789f164f21de1b9a3321cb9aee4b7406121",
+      "profile": "PDF/UA-2 + Tagged PDF validation profile",
+      "job_end_status": "normal",
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 58532,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "test_number": "1",
+          "failed_checks": 1,
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema",
+          "test": "containsPDFUAIdentification == true",
+          "checks": [
+            {
+              "context": "root/document[0]/metadata[0](1235 0 obj PDMetadata)/XMPPackage[0]",
+              "error": "The document metadata stream doesn't contain PDF/UA Identification Schema"
+            }
+          ]
+        }
+      ],
+      "duration": "00:00:00.164"
+    },
+    {
+      "fixture": "rendered-sparse-book.pdf",
+      "pdf_sha256": "4e5f549c5049a7d04bd3373951ca1b488baa8463532389250ffef5bf99c715c8",
+      "bytes": 31897,
+      "pages": 4,
+      "language": "en-US",
+      "renderer_commit": "c99a3789f164f21de1b9a3321cb9aee4b7406121",
+      "profile": "PDF/UA-2 + Tagged PDF validation profile",
+      "job_end_status": "normal",
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 3368,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "test_number": "1",
+          "failed_checks": 1,
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema",
+          "test": "containsPDFUAIdentification == true",
+          "checks": [
+            {
+              "context": "root/document[0]/metadata[0](127 0 obj PDMetadata)/XMPPackage[0]",
+              "error": "The document metadata stream doesn't contain PDF/UA Identification Schema"
+            }
+          ]
+        }
+      ],
+      "duration": "00:00:00.021"
+    },
+    {
+      "fixture": "book.pdf",
+      "pdf_sha256": "7972c79f529ba41e60f54c5e48c850ee3218973912eb2b3a5665141cf13f20a7",
+      "bytes": 12560198,
+      "pages": 1108,
+      "language": "en-US",
+      "renderer_commit": "bf80ada2c683e0c2c392d915d29d2790147fcdc8",
+      "profile": "PDF/UA-2 + Tagged PDF validation profile",
+      "job_end_status": "normal",
+      "is_compliant": false,
+      "reported_counts": {
+        "passedRules": 1727,
+        "failedRules": 1,
+        "passedChecks": 10996605,
+        "failedChecks": 1
+      },
+      "failed_rules": [
+        {
+          "specification": "ISO 14289-2:2024",
+          "clause": "5",
+          "test_number": "1",
+          "failed_checks": 1,
+          "description": "The PDF/UA version of a file shall be specified in the value of the Metadata entry in the document catalog using the PDF/UA identification schema",
+          "test": "containsPDFUAIdentification == true",
+          "checks": [
+            {
+              "context": "root/document[0]/metadata[0](252693 0 obj PDMetadata)/XMPPackage[0]",
+              "error": "The document metadata stream doesn't contain PDF/UA Identification Schema"
+            }
+          ]
+        }
+      ],
+      "duration": "00:01:35.433"
+    }
+  ],
+  "production_source": {
+    "file": "src/gramps_fancy_book/renderers/latex.py",
+    "document_metadata": "lang=<fr-FR|en-US>,tagging=on",
+    "pdf_ua_declaration": false
+  },
+  "limits": [
+    "Machine-verifiable rules only; this does not qualify semantic reading order or screen-reader behavior.",
+    "Only four fictional fixtures; not all six paired N1000 PDFs or every native Desktop output.",
+    "No PDF/UA compliance claim or metadata standard declaration introduced."
+  ],
+  "next_steps": [
+    "Review reading order and screen-reader announcements in French and English.",
+    "Review alternative-text relevance and decorative artifacts on representative photos.",
+    "Then qualify a PDF/UA-2-declared diagnostic build before any production declaration.",
+    "Repeat on current native Desktop outputs and target environments."
+  ]
+}
