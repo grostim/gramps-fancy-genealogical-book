@@ -161,6 +161,7 @@ def _package_paths(compiler: Path) -> dict[str, str]:
 
 
 def compare(candidate: Path, work: Path, couples: int, pairs: int) -> None:
+    work = work.resolve()
     if work.exists():
         raise FileExistsError("Use a new output directory to retain every run.")
     compiler_name = _find_lualatex()
