@@ -68,3 +68,39 @@ Before claiming conformance or enabling its production declaration:
 
 Existing structure, ParentTree/OBJR link and BBox checks remain useful.
 They do not replace these checks.
+
+## Continuous machine-verifiable checks
+
+`scripts/verify_pdf_ua2.py` runs the explicit `ua2` profile, preserves XML
+and stderr and rejects additional failures. Its default mode requires an
+automatically compliant result. CI uses `--allow-missing-identification`
+to permit only the known ISO 14289-2:2024 clause 5 test 1 failure,
+MainXMPPackage object, `containsPDFUAIdentification == true`.
+JSON still reports `is_compliant: false` and
+`human_accessibility_qualified: false`.
+
+CI pins veraPDF 1.30.3 by versioned URL and SHA-256. Reports for the English,
+French and sparse fixtures, including negative controls, are uploaded even
+after failure. Execution errors, incomplete reports and other failures
+reject the baseline.
+
+Use a fresh report directory:
+
+```sh
+python scripts/verify_pdf_ua2.py book.pdf --verapdf /path/to/verapdf \
+  --report-directory /tmp/ua2-new-report --allow-missing-identification
+```
+
+Local controls show an intact clone is accepted, while missing document
+language and a removed Figure Alt attribute are rejected despite the
+metadata exception. An **empty Alt** probe was accepted by veraPDF 1.30.3:
+the existing renderer audit still requires nonempty alternative text,
+and human review must check its relevance. These controls do not qualify
+every validator rule. See the [control record](validation-pdf-ua2-ci-controls-20261009.json).
+
+The preserved 103-page GUI PDF with twenty public portraits was also
+audited: one failure for the same missing identification schema, with
+1,002,036 reported successful checks. Its renderer predates moving the
+`samepage` group after `\item`; this evidence does not replace a current
+GUI re-export. The [complete report](validation-pdf-accessibility-native-gui-20261009.xml)
+is retained.
