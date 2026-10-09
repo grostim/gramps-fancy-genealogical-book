@@ -1,0 +1,356 @@
+{
+  "scope": "N=1000 fictional branching fixture, synthetic 96x72 portraits; diagnostic full builds with extended 600s/pass and 1800s total limits; not a performance qualification or PDF/UA audit",
+  "baseline_failure": {
+    "tagpdf": "0.99y",
+    "error": "Package tagpdf Error: there is no open structure on the stack",
+    "citation": 2500,
+    "source_line": 47532,
+    "source_sha256": "d4b41f573a359193a386f3d5023dc1bab5061e88e9ad8eeb98150f2cfe58f987"
+  },
+  "controls": [
+    {
+      "variant": "without_group",
+      "status": "compiled",
+      "audit": {
+        "pages": 1096,
+        "marked": true,
+        "language": "en-US",
+        "structure_elements": 122145,
+        "role_counts": {
+          "/Document": 1,
+          "/Part": 22473,
+          "/P": 23144,
+          "/Sect": 6292,
+          "/H1": 8,
+          "/TOC": 1,
+          "/TOCI": 7,
+          "/Reference": 7,
+          "/Link": 24003,
+          "/L": 783,
+          "/LI": 9555,
+          "/Lbl": 16095,
+          "/LBody": 9555,
+          "/H2": 3014,
+          "/H3": 3270,
+          "/Note": 3270,
+          "/BlockQuote": 267,
+          "/Figure": 400
+        },
+        "named_destinations": 37981,
+        "figures_without_alt": 0,
+        "link_annotations": 24126,
+        "parenttree_objr_mismatches": 0,
+        "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+        "destination_pages_sha256": "918fcef867ff5be3fdc9a3f12e0eb55980b7aaaf792db0683e0c94ac5ba0df6c",
+        "link_signatures_sha256": "23851bce8b1de7ce02fbc929ae823bfe5a95609c01b275c4bf0b4293d37c28a3",
+        "text_nfc_sha256": "54ffa744ce33ccdfdd29f69e2959ec952ab0c789ad633230ed2aa24a550cd3c2"
+      },
+      "seconds": 364.72246191697195,
+      "source_sha256": "c375f35a32836ec5840a4d2f1295e92b1b3e7816082d2ba2ee1d1a85620ad49c",
+      "compiler_rss_status": "sampled",
+      "compiler_peak_rss_bytes": 1221132288,
+      "rss_sample_count": 3226,
+      "compiler_rss_sample_interval_ms": 100
+    },
+    {
+      "variant": "inside_item",
+      "status": "compiled",
+      "audit": {
+        "pages": 1108,
+        "marked": true,
+        "language": "en-US",
+        "structure_elements": 122145,
+        "role_counts": {
+          "/Document": 1,
+          "/Part": 22473,
+          "/P": 23144,
+          "/Sect": 6292,
+          "/H1": 8,
+          "/TOC": 1,
+          "/TOCI": 7,
+          "/Reference": 7,
+          "/Link": 24003,
+          "/L": 783,
+          "/LI": 9555,
+          "/Lbl": 16095,
+          "/LBody": 9555,
+          "/H2": 3014,
+          "/H3": 3270,
+          "/Note": 3270,
+          "/BlockQuote": 267,
+          "/Figure": 400
+        },
+        "named_destinations": 37993,
+        "figures_without_alt": 0,
+        "link_annotations": 24124,
+        "parenttree_objr_mismatches": 0,
+        "structure_shape_sha256": "4c216cb232364ae74bafa2a7e8fa2d0edd64afedc37de4c59a8bd0d623bb0c47",
+        "destination_pages_sha256": "8dc05e2fb8d9cfc8a11d9a5e4439aa1e34dd35d16dd89b721a6fd8ce05de3225",
+        "link_signatures_sha256": "3c8fa344206ec2afc3dec98cada07c3c59feeca0a7c3d44c4a5a19cddd8b1bf3",
+        "text_nfc_sha256": "5fb6b806d686a4a889fb15f9d0ab7723f34f47f226d0077d6c21923384a5b7fc"
+      },
+      "seconds": 375.0442763339961,
+      "source_sha256": "e1e9473d84bda7867a6bd3ebbc06a8d09502438e9df666438058f40ebd5134f5",
+      "compiler_rss_status": "sampled",
+      "compiler_peak_rss_bytes": 1207451648,
+      "rss_sample_count": 3305,
+      "compiler_rss_sample_interval_ms": 100
+    }
+  ],
+  "timing_scope": "seconds include PDF audit time; do not compare to compiler-only benchmarks",
+  "production_source_matches_inside_item": true,
+  "corrected_n10_pair": {
+    "descendant_couples": 10,
+    "pairs": 1,
+    "runs": [
+      {
+        "pair": 1,
+        "variant": "installed",
+        "seconds": 7.885094624944031,
+        "pdf_bytes": 182429,
+        "pdf_path": "/tmp/gfb-tagpdf-corrected-smoke-20261009/pair-1-installed/book.pdf",
+        "package_paths": {
+          "sty": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty",
+          "lua": "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "0.99y",
+        "actual_lua_module_version": "0.99y",
+        "package_sha256": {
+          "sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663",
+          "lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9"
+        },
+        "loaded_tagpdf_files": [
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-base.sty": "7969986a450976ca2ec9b38a7418e532974b6df0b8297d137c80bf87e385624d",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-luatex.def": "76cf53360b2272dd5e379fdf1e15f1287d26b6ab11d746fbcc30556446bfc730",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-mc-code-lua.sty": "0c21293a9baa46280c9b759530d376ec0cb58061dd2a8e2a7e19ee200a3d10e9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex-book.def": "85cc1ec63fc3a4e08e14667ed404b5de2a63734a3b2df58de0f2c5ccbe905181",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-latex.def": "91ec46eb8787d53e73f75a194f4337e9eda75fa65ebdeb757e47e494ea53b22e",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-mathml.def": "7e8aeb9508a025c4d9ef13fb39a1af8cb19e8e55fae75742890931e00f5cfdb0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf.def": "8d10e5c37beff649555b2a86f7a95dd9f9a3d2d3dc36db242605aa1ee11d21d0",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-ns-pdf2.def": "5662685e5f09fa43f206503a5eb2317c5ba0a27ae59df67cc546442d6372f214",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf-parent-child-2.csv": "4d026fce2b9315c5aedb6552588622fa0432f623ceb812971724d710d9e50da6",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.lua": "cb255d590dc62f8d93314c18ff3b3bdde54bfda66438289d4a7e461c3d5491d9",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/tagpdf/tagpdf.sty": "1b10bf8923ccd0610b45510c07d4e5483f49bcef91849c27bcd056d68403c663"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 212992000,
+        "rss_sample_count": 71,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 17,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 1448,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 264,
+            "/P": 262,
+            "/Sect": 82,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 276,
+            "/L": 18,
+            "/LI": 111,
+            "/Lbl": 183,
+            "/LBody": 111,
+            "/H2": 38,
+            "/H3": 36,
+            "/Note": 36,
+            "/BlockQuote": 3,
+            "/Figure": 4
+          },
+          "named_destinations": 452,
+          "figures_without_alt": 0,
+          "link_annotations": 278,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "c8cde8081e706922472656cb3cd61eb00980abd9f37519e2a03f5380a3f487e4",
+          "destination_pages_sha256": "c521815d9c37e0a5c1d21fa3ca609ceeefc2a40695df1a59627d32fa24246861",
+          "link_signatures_sha256": "1f9d9491762d70ea6277bfe6d7791cb229d7d34e58f87eec3789e2e687466426",
+          "text_nfc_sha256": "0215ab2823dca64c088702904fe0c926c33b4bbf1f9637c61c65c2bf80d3a921"
+        }
+      },
+      {
+        "pair": 1,
+        "variant": "candidate",
+        "seconds": 7.565972666954622,
+        "pdf_bytes": 182457,
+        "pdf_path": "/tmp/gfb-tagpdf-corrected-smoke-20261009/pair-1-candidate/book.pdf",
+        "package_paths": {
+          "sty": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "lua": "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua"
+        },
+        "actual_package_version": "1.0h",
+        "actual_lua_module_version": "1.0h",
+        "package_sha256": {
+          "sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655"
+        },
+        "loaded_tagpdf_files": [
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def"
+        ],
+        "loaded_tagpdf_sha256": {
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-base.sty": "cd621c34a183663e1f9f2e95549a135cd9b4651a585809fca6f8c73eb8f6c396",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-luatex.def": "11eab39f1ecc3c9dfccec6534a63201c391beeb324bca48b514d68b578114934",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-mc-code-lua.sty": "6e32f6240c6e74a05fa7a10c0021aa8367c723ebb8ef5ef7c9cd3b1b3fb75d8f",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-latex-book.def": "d3303230d0a77b98ae29a514f11b00050a919ea5f76fc5069807fffb33a3fbf0",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-mathml.def": "ab6a79d91257bd9e434401480dd7963f2c8d7951a5ab7803a6247a4ec648783e",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf.def": "3cd48ed2b0510564f9390299357e9423522a38bd6244a7057afa159a0aa3a607",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-ns-pdf2.def": "6a08dfe9146f90154d24f6470021bf862b1bd6f01007d936721d2c1b65550e36",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf-parent-child-2.csv": "e0eb944610165786aae21db9db7fd2d6c594645d408b5e84359bdc5554da4fd6",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.lua": "93d728d81c295badca6151615360cc72543851c1a593ec4129cb124d14ed5655",
+          "/private/tmp/tagpdf-latest/tagpdf/tagpdf.sty": "d595590695dbe61b2bdb969bc9b2998d3a4841554cfdba916df8321d86ca9862",
+          "/usr/local/texlive/2026basic/texmf-dist/tex/latex/latex-lab/tagpdf-ns-latex-lab.def": "b278985f1a8c41e87bde26420175626ec7a177aff147a88d5c9259a1bfe65697"
+        },
+        "compiler_rss_status": "sampled",
+        "compiler_peak_rss_bytes": 211943424,
+        "rss_sample_count": 69,
+        "compiler_rss_sample_interval_ms": 100,
+        "audit": {
+          "pages": 17,
+          "marked": true,
+          "language": "en-US",
+          "structure_elements": 1448,
+          "role_counts": {
+            "/Document": 1,
+            "/Part": 264,
+            "/P": 262,
+            "/Sect": 82,
+            "/H1": 8,
+            "/TOC": 1,
+            "/TOCI": 7,
+            "/Reference": 7,
+            "/Link": 276,
+            "/L": 18,
+            "/LI": 111,
+            "/Lbl": 183,
+            "/LBody": 111,
+            "/H2": 38,
+            "/H3": 36,
+            "/Note": 36,
+            "/BlockQuote": 3,
+            "/Figure": 4
+          },
+          "named_destinations": 452,
+          "figures_without_alt": 0,
+          "link_annotations": 278,
+          "parenttree_objr_mismatches": 0,
+          "structure_shape_sha256": "c8cde8081e706922472656cb3cd61eb00980abd9f37519e2a03f5380a3f487e4",
+          "destination_pages_sha256": "c521815d9c37e0a5c1d21fa3ca609ceeefc2a40695df1a59627d32fa24246861",
+          "link_signatures_sha256": "1f9d9491762d70ea6277bfe6d7791cb229d7d34e58f87eec3789e2e687466426",
+          "text_nfc_sha256": "0215ab2823dca64c088702904fe0c926c33b4bbf1f9637c61c65c2bf80d3a921"
+        }
+      }
+    ],
+    "python": "3.13.7 (main, Aug 14 2025, 11:12:11) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "benchmark_script_sha256": "1cf3fa83e143dfbd69cabfa0ba4153452f57d12e9a2e999ca05b4d69f381d392",
+    "fixture_generator_sha256": "f13d957a3c5984ca10d067838fd9b23eda2f228d37a02e03ad6fb05fac8b65bd",
+    "renderer_source_sha256": "fcced32db3b6656e577ee3eec6b4a34b8de3d3e276315545a360929dde14bb8c",
+    "model_sha256": "020c334d016c290b992e4055a46d180daeaa90dbec5dcbba73f74896e8850e70",
+    "instrumentation": "compiler recorder only; production source unchanged",
+    "scope": "complete converged builds; synthetic 96x72 portraits; not PDF/UA",
+    "median_seconds": {
+      "installed": 7.885094624944031,
+      "candidate": 7.565972666954622
+    },
+    "status": "complete; all paired audits match"
+  },
+  "negative_controls": {
+    "audit": {
+      "pages": 17,
+      "marked": true,
+      "language": "en-US",
+      "structure_elements": 1448,
+      "role_counts": {
+        "/Document": 1,
+        "/Part": 264,
+        "/P": 262,
+        "/Sect": 82,
+        "/H1": 8,
+        "/TOC": 1,
+        "/TOCI": 7,
+        "/Reference": 7,
+        "/Link": 276,
+        "/L": 18,
+        "/LI": 111,
+        "/Lbl": 183,
+        "/LBody": 111,
+        "/H2": 38,
+        "/H3": 36,
+        "/Note": 36,
+        "/BlockQuote": 3,
+        "/Figure": 4
+      },
+      "named_destinations": 452,
+      "figures_without_alt": 0,
+      "link_annotations": 278,
+      "parenttree_objr_mismatches": 0,
+      "structure_shape_sha256": "c8cde8081e706922472656cb3cd61eb00980abd9f37519e2a03f5380a3f487e4",
+      "destination_pages_sha256": "c521815d9c37e0a5c1d21fa3ca609ceeefc2a40695df1a59627d32fa24246861",
+      "link_signatures_sha256": "1f9d9491762d70ea6277bfe6d7791cb229d7d34e58f87eec3789e2e687466426",
+      "text_nfc_sha256": "0215ab2823dca64c088702904fe0c926c33b4bbf1f9637c61c65c2bf80d3a921"
+    },
+    "rejected_corruptions": [
+      "missing_structparent",
+      "swapped_parenttree_owners",
+      "unresolved_destination"
+    ]
+  },
+  "remaining": "three alternating N1000 pairs with corrected renderer; repeat original 103-page GUI export",
+  "pagination_boundary_control": {
+    "scope": "production preamble, one fictional compact citation, 54 filler paragraphs; production compiler limits",
+    "results": [
+      {
+        "variant": "kept",
+        "pages": 2,
+        "start_pages": [
+          2
+        ],
+        "end_pages": [
+          2
+        ]
+      },
+      {
+        "variant": "unwrapped",
+        "pages": 2,
+        "start_pages": [
+          1
+        ],
+        "end_pages": [
+          2
+        ]
+      }
+    ],
+    "source_sha256": {
+      "kept": "06164580515c04dfa86f275605ce0e725e4231e9d9a1f7768ee9dbf46e2c3211",
+      "unwrapped": "6e55f5cdfbce618a3bf24695a2520e615a9886681668613b2b070497e3c4178b"
+    }
+  }
+}
