@@ -274,9 +274,11 @@ jobs:
           "$RUNNER_TEMP/verapdf/verapdf" --version
       - name: Audit UA-2 automatic requirements with the documented metadata exception
         run: |
-          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-en --allow-missing-identification --negative-controls
-          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-french-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-fr --allow-missing-identification
-          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-sparse-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-sparse --allow-missing-identification
+          gfb_ua2_status=0
+          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-en --allow-missing-identification --negative-controls || gfb_ua2_status=1
+          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-french-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-fr --allow-missing-identification || gfb_ua2_status=1
+          python scripts/verify_pdf_ua2.py .work/latex-spike/rendered-sparse-book.pdf --verapdf "$RUNNER_TEMP/verapdf/verapdf" --report-directory .work/latex-spike/ua2-sparse --allow-missing-identification || gfb_ua2_status=1
+          exit "$gfb_ua2_status"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
