@@ -1,6 +1,6 @@
 # Proposition : rapports à sortie personnalisée dans Gramps Web
 
-**Statut :** brouillon de discussion local ; ni examiné ni accepté par les mainteneurs de Gramps Web.
+**Statut :** proposition publiée le 9 octobre 2026 dans l’[issue officielle #1048](https://github.com/gramps-project/gramps-web-api/issues/1048) ; décision des mainteneurs et qualification runtime en attente.
 
 ## Contexte
 
@@ -33,9 +33,9 @@ Sur une version épinglée de Gramps Web API et une base fictive :
 
 Ce brouillon doit être discuté avec les mainteneurs de Gramps Web avant toute implémentation. S’ils préfèrent un adaptateur maintenu ou un contrat de sortie plus restreint, la proposition devra suivre leur voie prise en charge. Ne pas revendiquer la compatibilité Gramps Web avant la réussite des vérifications runtime.
 
-## Brouillon de demande aux mainteneurs (anglais, non envoyé)
+## Demande publiée aux mainteneurs (anglais)
 
-Le guide de contribution de l’API demande de discuter les changements non triviaux dans une issue avant de les implémenter ([CONTRIBUTING.md](https://github.com/gramps-project/gramps-web-api/blob/master/CONTRIBUTING.md)). Le texte ci-dessous est prêt à adapter et soumettre ; il ne constitue pas une issue publiée.
+Le guide de contribution de l’API demande de discuter les changements non triviaux dans une issue avant de les implémenter ([CONTRIBUTING.md](https://github.com/gramps-project/gramps-web-api/blob/master/CONTRIBUTING.md)). Le texte ci-dessous a été publié le 9 octobre 2026 dans l’issue #1048, après autorisation explicite de l’utilisateur.
 
 **Title:** Supported custom-output report contract for third-party Gramps reports
 
@@ -51,4 +51,8 @@ Les constats de version ci-dessus ont été revérifiés le 30 septembre 2026 su
 
 Le 3 octobre, la dernière version publiée était v3.22.3. Le [nouvel audit épinglé sur `master`](validation-gramps-web.fr.md) au commit `375371f` ne révélait pas de contrat de sortie personnalisée.
 
-Le 6 octobre, la [version officielle la plus récente](https://github.com/gramps-project/gramps-web-api/releases) est toujours v3.23.1. La relecture des sources épinglées confirme les mêmes limites ([audit actualisé](validation-gramps-web.fr.md)). Le texte ci-dessus est désormais aligné sur cette version ; aucune issue n’a été soumise aux mainteneurs.
+Le 6 octobre, la [version officielle la plus récente](https://github.com/gramps-project/gramps-web-api/releases) est toujours v3.23.1. La relecture des sources épinglées confirme les mêmes limites ([audit actualisé](validation-gramps-web.fr.md)). Le texte ci-dessus est désormais aligné sur cette version ; à cette date, aucune issue n’avait été soumise aux mainteneurs.
+
+## Publication — 9 octobre 2026
+
+Le brouillon approuvé est maintenant publié dans l’[issue #1048](https://github.com/gramps-project/gramps-web-api/issues/1048). Son texte a été relu depuis GitHub et correspond au texte approuvé. Les recherches préalables n’ont trouvé aucune issue portant sur `custom-output` ou `CATEGORY_WEB`. La dernière release vérifiée reste v3.23.1 ; le contrôle statique du `master` `2b374c8` confirme les mêmes obstacles. Cette publication ouvre la discussion ; elle ne constitue ni une acceptation des mainteneurs ni une qualification Gramps Web. Voir le [relevé de publication et de sources](gramps-web-output-contract-issue-20261009.json).

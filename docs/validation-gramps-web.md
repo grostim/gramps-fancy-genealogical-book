@@ -56,3 +56,7 @@ The add-on declares `privacy_acknowledged` as an unchecked-by-default `BooleanOp
 This is an audit of versioned official source, not a running Gramps Web validation. The Mac has the Docker client but no Docker daemon, Docker Compose, Docker Desktop, Colima, or Podman; no Web instance was started.
 
 The add-on must not be advertised as Web-compatible in this state. The next step requires supported Gramps Web handling for `CATEGORY_WEB` reports, ZIP archives, and generated files inside `REPORT_DIR`, or a maintained server adapter providing the same guarantees. Then test report discovery, options, privacy acknowledgement, PDF/ZIP downloads, and task status against a pinned API version. Detailed progress must be part of the contract discussion because `generate_report` does not currently provide it.
+
+## Update — October 9, 2026
+
+The checked latest release remains v3.23.1. At master commit `2b374c8adbeb9d81829e1deb1c4c63207d3e1c06` from October 9, `const.py` and `api/report.py` match the release byte for byte; `api/tasks.py` changed but `generate_report` retains the same AST. The static audit blockers for category, ZIP, destination and report progress remain. With explicit user approval, the proposal was published as [issue #1048](https://github.com/gramps-project/gramps-web-api/issues/1048). No supported contract has yet been established and no Web runtime instance qualified. See the [source and publication record](gramps-web-output-contract-issue-20261009.json).

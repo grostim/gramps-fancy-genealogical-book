@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-09",
+  "status": "published; maintainer decision and runtime qualification pending",
+  "issue": {
+    "author": {
+      "id": "MDQ6VXNlcjM3MTQ3NTU=",
+      "is_bot": false,
+      "login": "grostim",
+      "name": ""
+    },
+    "body": "We maintain a third-party Gramps report that creates its own PDF or HTML ZIP instead of using the standard document output. We would like to make it usable from Gramps Web without adding a server-specific fork or writing outside the server-managed report directory.\n\nIn the current released API (v3.23.1), `get_reports()` filters reports by `REPORT_DEFAULTS`, which does not include `CATEGORY_WEB`; `MIME_TYPES` does not include `.zip`; and `run_report()` supplies its own output path through the standard `of` option. Our report currently declares `CATEGORY_WEB`, accepts PDF/ZIP, and has a separate `destination` option, so the existing endpoint cannot discover or return these outputs.\n\nIs there a supported extension point, or would the maintainers consider one, for a report to declare its output formats and receive a server-controlled destination under `REPORT_DIR`? We need the API to discover only reports that opt into this contract, validate their normal report options (including an explicit privacy confirmation), return PDF and ZIP with the declared file name and MIME type, and preserve the usual task lifecycle. We do not want to enable every `CATEGORY_WEB` plugin by default.\n\nWhat contract would fit the API best, and what security, cleanup, option-validation, and task-status requirements should a plugin meet? We can adapt the report and add integration coverage once the supported interface is agreed.\n",
+    "createdAt": "2026-10-09T15:45:31Z",
+    "number": 1048,
+    "state": "OPEN",
+    "title": "Supported custom-output report contract for third-party Gramps reports",
+    "url": "https://github.com/gramps-project/gramps-web-api/issues/1048"
+  },
+  "approved_body_sha256": "3636cf41dd8ab914f6412792ca39c2ef335ad514f3901447a2aeb9f4b673201f",
+  "source_comparison": {
+    "v3.23.1": {
+      "gramps_webapi/const.py": {
+        "sha256": "ad6c6d0dd40a8cff5159ae83bac0a6426f1ef3fe4d94616f38763cf9decdbf24",
+        "functions": {}
+      },
+      "gramps_webapi/api/report.py": {
+        "sha256": "9c1c9383020ad42a7c97c62e51f7eb0abad1327e7e0f2044ad5a797dc251ca53",
+        "functions": {
+          "get_reports": "20592728bfefad101071595457d7a6beada4d9b5739e19eded8a3e7129ce59fa",
+          "run_report": "172083b2bcb776dfa8004392481059c518c17480357eb865f7394de6dc5e4ec4"
+        }
+      },
+      "gramps_webapi/api/tasks.py": {
+        "sha256": "4b8b4136d0b42fc8055e9fb3969ad9b8ca6e557bfe8adbeba1b276d4dae33268",
+        "functions": {
+          "generate_report": "68a61c698c21842b7b10d6cfd635a762f2c9e7fa3eaaae3d81960726a8268188"
+        }
+      }
+    },
+    "2b374c8adbeb9d81829e1deb1c4c63207d3e1c06": {
+      "gramps_webapi/const.py": {
+        "sha256": "ad6c6d0dd40a8cff5159ae83bac0a6426f1ef3fe4d94616f38763cf9decdbf24",
+        "functions": {}
+      },
+      "gramps_webapi/api/report.py": {
+        "sha256": "9c1c9383020ad42a7c97c62e51f7eb0abad1327e7e0f2044ad5a797dc251ca53",
+        "functions": {
+          "get_reports": "20592728bfefad101071595457d7a6beada4d9b5739e19eded8a3e7129ce59fa",
+          "run_report": "172083b2bcb776dfa8004392481059c518c17480357eb865f7394de6dc5e4ec4"
+        }
+      },
+      "gramps_webapi/api/tasks.py": {
+        "sha256": "7906c015a7eb37e16ee43aaf271dd2c18c58c2f87d2b5cbec7ae13b75e65f6fe",
+        "functions": {
+          "generate_report": "68a61c698c21842b7b10d6cfd635a762f2c9e7fa3eaaae3d81960726a8268188"
+        }
+      }
+    }
+  },
+  "latest_release_checked": "v3.23.1",
+  "master_checked": "2b374c8adbeb9d81829e1deb1c4c63207d3e1c06",
+  "master_commit_date": "2026-10-09T11:43:11Z",
+  "findings": [
+    "const.py and api/report.py are byte-identical between release and checked master.",
+    "api/tasks.py changed, but generate_report has the same AST.",
+    "No supported output contract established; no Gramps Web runtime qualification performed."
+  ],
+  "authorization": "Explicit user approval to publish the prepared issue on October 9, 2026."
+}

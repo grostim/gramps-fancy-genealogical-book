@@ -1,6 +1,6 @@
 # Proposal: custom-output reports in Gramps Web
 
-**Status:** local discussion draft; not reviewed or accepted by Gramps Web maintainers.
+**Status:** published on October 9, 2026 as [official issue #1048](https://github.com/gramps-project/gramps-web-api/issues/1048); maintainer decision and runtime qualification are pending.
 
 ## Context
 
@@ -8,7 +8,7 @@ Gramps Fancy Genealogical Book registers as a `CATEGORY_WEB` report and generate
 
 The add-on needs to keep its Desktop flow. Gramps Web must provide a supported, safe server contract for installed reports that produce their own files.
 
-On October 3, 2026, v3.22.3 was still the latest published release. A [fresh pinned audit of `master`](validation-gramps-web.md) at commit `375371f` found the same gaps. On October 6, the [official release list](https://github.com/gramps-project/gramps-web-api/releases) still marks v3.23.1 as latest; the updated audit confirms the same limitations. No issue has been submitted to the maintainers.
+On October 3, 2026, v3.22.3 was still the latest published release. A [fresh pinned audit of `master`](validation-gramps-web.md) at commit `375371f` found the same gaps. On October 6, the [official release list](https://github.com/gramps-project/gramps-web-api/releases) still marks v3.23.1 as latest; the updated audit confirms the same limitations. No issue had been submitted at that date.
 
 ## Minimum capability to discuss
 
@@ -34,3 +34,7 @@ Against a pinned Gramps Web API version and a synthetic database:
 ## Decision needed
 
 This draft should be discussed with Gramps Web maintainers before implementation. If they prefer a maintained adapter or a narrower output contract, revise this proposal to match their supported approach. Do not claim Gramps Web compatibility until the runtime acceptance checks pass.
+
+## Publication — October 9, 2026
+
+The approved draft is now published as [issue #1048](https://github.com/gramps-project/gramps-web-api/issues/1048), following explicit user authorization. The body read back from GitHub matches the approved text. Prior searches found no issue mentioning `custom-output` or `CATEGORY_WEB`. The checked latest release remains v3.23.1; static inspection of master `2b374c8` confirms the same blockers. Publication opens the discussion; it is neither maintainer acceptance nor Gramps Web runtime qualification. See the [publication and source record](gramps-web-output-contract-issue-20261009.json).
